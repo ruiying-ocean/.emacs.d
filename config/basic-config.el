@@ -1,4 +1,6 @@
 ;;Basic Configuration
+;; This file is for basic configuration like theme, font, $home, coding system.
+
 ;;启动时最大化窗口
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 

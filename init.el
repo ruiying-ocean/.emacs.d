@@ -51,7 +51,6 @@
   (setq dired-sidebar-use-term-integration t)
   (setq dired-sidebar-use-custom-font t))
 
-
 (use-package spaceline
   :init
   (require 'spaceline-config)
@@ -60,8 +59,10 @@
  
 (use-package yasnippet
   :init
-  (add-to-list 'load-path "~/.emacs.d/elpa/yasnippet-20181015.1212")
+;; to download the latest version
+;; git clone --recursive https://github.com/joaotavora/yasnippet
   :config
+  (require 'yasnippet)
   (yas-global-mode 1)
   )
 
@@ -72,7 +73,6 @@
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
-
 
 (use-package smex
   :init (smex-initialize)
@@ -88,14 +88,6 @@
   (global-set-key "\C-s" 'swiper)
 )
 
-
-(use-package projectile
-  ;;项目文件跳转
-  :config
-  (projectile-mode +1)
-  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
-
 (use-package avy
   ;;快速跳转字符或行
   :config
@@ -104,15 +96,6 @@
   (global-set-key (kbd "M-g w") 'avy-goto-word-1)
   (global-set-key (kbd "M-g l") 'avy-goto-line))
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (all-the-icons-dired neotree doom-themes seoul256-theme dired-sidebar zenburn-theme yasnippet-snippets use-package transient swiper spaceline smex rainbow-delimiters pyim projectile plantuml-mode pdf-tools org-bullets nyan-mode nord-theme markdown-mode macrostep latex-preview-pane git-commit flycheck flucui-themes dracula-theme company avy auctex atom-one-dark-theme 0blayout))))
- 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
