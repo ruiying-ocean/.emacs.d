@@ -1,0 +1,15 @@
+* About
+ This is my emacs init file(s), I'm very happy if my configuration can help you. Happy Emacs!
+* Structure
+I divide my init files into several different elisp files and use init.el to call them.
+The concret structure is:
+#+BEGIN_SRC text
++-- ~/.emacs.d
+   +-- init.el
+   +-- config
+       +-- basic-config.el ;; configs about color theme, editor setting etc.
+       +-- package-configs.el ;; use-package configs
+       +-- package-lists.el ;; list my package
+       +-- org-config.el ;;config in org-mode
+#+END_SRC
+
