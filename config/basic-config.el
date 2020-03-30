@@ -25,7 +25,7 @@
 ;;make typing parentheses pair
 (electric-indent-mode 1)
 (electric-pair-mode 1)
-(setq electric-pair-pairs '(
+(defvar electric-pair-pairs '(
                             (?\" . ?\")
                             (?\` . ?\`)
                             (?\( . ?\))
@@ -41,7 +41,7 @@
 ;;Configure color theme
 (load-theme 'dracula t)
 ;;Set Chinese and English font
-(set-frame-font "fira code-12")
+(set-frame-font "fira code-11")
 (dolist (charset '(kana han cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font) charset
                     (font-spec :family "更纱黑体 UI SC" :size 21)))
@@ -64,18 +64,22 @@
 ;;No more backup files~
 (setq-default make-backup-files nil)
 ;;open recent files by typing F3
-(recentf-mode 1)
+(use-package recentf
+  :defer 1
+  :config
+  (recentf-mode 1))
 ;;解决emacs在windows下频繁垃圾回收而导致的卡顿问题
 (when (eq system-type 'windows-nt)
   (setq gc-cons-threshold (* 512 1024 1024)) ;;设置垃圾回收上限内存，这里是512M
   (setq gc-cons-percentage 0.5) ;;设置垃圾回收比例
-  (setq ring-bell-function 'ignore) ;;关闭win下烦人的警铃声音
+  (setq ring-bell-function 'ignore) ;;关闭windows下烦人的警铃声音
   (run-with-idle-timer 5 t #'garbage-collect)
   (setq garbage-collection-messages t)
-  (setenv "HOME" "C:/Users/Leslie_Ying")
+  (setenv "HOME" "C:/Users/Leslie_Ying/")
   (setenv "PATH" "C:/Users/Leslie_Ying/emacs-26.3-x86_64")
-  (setq default-directory "~/")
   )
+
+
 
 (provide 'basic-config)
 ;;; basic-config.el ends here

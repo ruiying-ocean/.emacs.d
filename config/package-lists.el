@@ -13,6 +13,7 @@
 	avy
 	magit
 	projectile
+	benchmark-init
 	spaceline ;;mode line
 	rainbow-delimiters ;;brackets with different colors
 	popwin

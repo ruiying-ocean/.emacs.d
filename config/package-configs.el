@@ -1,5 +1,11 @@
 ;;; This file is setting of all packages in use-package framework
 
+(use-package benchmark-init
+  :ensure t
+  :config
+  ;; To disable collection of benchmark data after init is done.
+  (add-hook 'after-init-hook 'benchmark-init/deactivate))
+
 (use-package company
   :ensure t
   :config
@@ -12,6 +18,9 @@
   ;; is displayed on top (happens near the bottom of windows)
   (setq company-tooltip-flip-when-above t)
   (global-company-mode 1))
+
+(use-package magit
+  :bind (("C-x g" . magit-status)))
 
 (use-package popwin
   :init (require 'popwin)
@@ -29,6 +38,7 @@
   (which-key-mode))
 
 (use-package projectile
+  :defer 4
   :ensure t
   :init
   (setq projectile-completion-system 'ivy)
@@ -46,14 +56,6 @@
   :ensure t
   :config
   (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode))
-
-;;auto update
-(use-package auto-package-update
-   :ensure t
-   :config
-   (setq auto-package-update-delete-old-versions t
-         auto-package-update-interval 7)
-   (auto-package-update-maybe))
 
 (use-package all-the-icons
   :ensure t
@@ -85,10 +87,7 @@
   (spaceline-emacs-theme))
  
 (use-package yasnippet
-  :init
-  (require 'yasnippet)
-  :config
-  (yas-global-mode 1)
+  :hook (after-init . yas-global-mode)
   )
 
 (use-package markdown-mode
@@ -133,6 +132,12 @@
   (global-set-key (kbd "C-'") 'avy-goto-char-2)
   (global-set-key (kbd "M-g w") 'avy-goto-word-1)
   (global-set-key (kbd "M-g l") 'avy-goto-line))
+
+(use-package elpy
+  :ensure t
+  :defer t
+  :init
+  (advice-add 'python-mode :before 'elpy-enable))
 
 (provide 'package-configs.el)
 ;;; package-configs.el ends here
