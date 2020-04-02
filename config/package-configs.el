@@ -47,7 +47,6 @@
   (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
-
 (use-package flycheck
   :ensure t
   :init (global-flycheck-mode))
@@ -87,6 +86,7 @@
   (spaceline-emacs-theme))
  
 (use-package yasnippet
+  :ensure t
   :hook (after-init . yas-global-mode)
   )
 
@@ -99,6 +99,7 @@
   :init (setq markdown-command "multimarkdown"))
 
 (use-package smex
+  :ensure t
   :init (smex-initialize)
   :bind (("M-x" . smex)
 	 ("M-x" . smex-major-mode-commands)))
@@ -127,6 +128,7 @@
 
 (use-package avy
   ;;快速跳转字符或行
+  :defer t
   :config
   (global-set-key (kbd "C-:") 'avy-goto-char)
   (global-set-key (kbd "C-'") 'avy-goto-char-2)
@@ -138,6 +140,12 @@
   :defer t
   :init
   (advice-add 'python-mode :before 'elpy-enable))
+
+;;grip mode need to run pip install grip first
+(use-package grip-mode
+  :ensure t
+  :bind (:map markdown-mode-command-map
+         ("g" . grip-mode)))
 
 (provide 'package-configs.el)
 ;;; package-configs.el ends here
