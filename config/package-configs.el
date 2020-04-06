@@ -154,6 +154,7 @@
 (use-package ess-r-mode
   :ensure ess
   :config
+  (setq inferior-ess-r-program "R")
   (defun then_R_operator ()
   "R - %>% operator or 'then' pipe operator"
   (interactive)
@@ -178,6 +179,33 @@
   :bind
   (:map org-mode-map
 	("C-c v" . cfw:open-org-calendar)))
+
+(use-package org-bullets
+  :config
+  (add-hook 'org-mode-hook 'org-bullets-mode))
+
+(use-package org
+  :config
+  ;; 默认开启标题缩进
+  (setq org-startup-indented t)
+  (add-to-list 'file-coding-system-alist
+	       '("\\.org" . utf-8))
+  ;; 网上找的todo keywords 背景色
+  (setf org-todo-keyword-faces '(("TODO" . (:foreground "white" :background "red"   :weight bold))
+                                ("HAND" . (:foreground "white" :background "#2E8B57"  :weight bold))
+                                ("DONE" . (:foreground "white" :background "#3498DB" :weight bold))))
+  (org-agenda-to-appt t);;事件提醒
+  (setq org-src-fontify-natively t) ;;高亮org代码块
+  ;;设置关键词
+  (setq org-todo-keywords
+	'((sequence "TODO" "DOING"  "|" "DONE" "CANCELED")))
+  (add-hook 'org-mode-hook 'org-toggle-pretty-entities)  ;; 默认开启自动转换特殊字符及数学公式模式
+  :bind
+  (:map org-mode-map
+	("C-c C-e" . org-edit-src-code)
+	("C-c a" . org-agenda))
+  )
+
 
 (provide 'package-configs.el)
 ;;; package-configs.el ends here

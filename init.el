@@ -34,11 +34,7 @@
 (require 'use-package)
 (require 'package-lists)
 (require 'basic-config)
-(require 'org-config)
 (require 'package-configs.el)
-
-(setq inferior-ess-r-program "R")
-
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
