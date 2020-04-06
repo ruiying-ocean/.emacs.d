@@ -11,7 +11,7 @@
 (setq system-time-locale nil)
 ;;Max the window as startup
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
-
+;(setq fancy-splash-image "~/.emacs.d/config/logo.jpg")
 ;----------------------------------
 ;Editor setting
 ;----------------------------------
@@ -36,15 +36,16 @@
 (set-face-background 'hl-line "light gray") ;(set-face-foreground 'hl-line "sea green")
 
 ;---------------------------------------
-;;color theme and font setting
+;;Font setting
 ;---------------------------------------
-;;Configure color theme
-(load-theme 'dracula t)
+(use-package base16-theme
+  :config
+  (load-theme 'base16-dracula t))
 ;;Set Chinese and English font
 (set-frame-font "fira code-11")
 (dolist (charset '(kana han cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font) charset
-                    (font-spec :family "更纱黑体 UI SC" :size 21)))
+                    (font-spec :family "更纱黑体 UI SC" :size 22)))
 
 ;------------------------------------
 ; global shortcuts
@@ -65,9 +66,9 @@
 (setq-default make-backup-files nil)
 ;;open recent files by typing F3
 (use-package recentf
-  :defer 1
+  :defer 0.5
   :config
-  (recentf-mode 1))
+  (recentf-mode t))
 ;;解决emacs在windows下频繁垃圾回收而导致的卡顿问题
 (when (eq system-type 'windows-nt)
   (setq gc-cons-threshold (* 512 1024 1024)) ;;设置垃圾回收上限内存，这里是512M
@@ -78,8 +79,6 @@
   (setenv "HOME" "C:/Users/Leslie_Ying/")
   (setenv "PATH" "C:/Users/Leslie_Ying/emacs-26.3-x86_64")
   )
-
-
 
 (provide 'basic-config)
 ;;; basic-config.el ends here

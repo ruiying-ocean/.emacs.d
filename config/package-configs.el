@@ -1,13 +1,12 @@
 ;;; This file is setting of all packages in use-package framework
+(setq use-package-always-ensure t)
 
 (use-package benchmark-init
-  :ensure t
   :config
   ;; To disable collection of benchmark data after init is done.
   (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
 (use-package company
-  :ensure t
   :config
   (setq company-idle-delay 0.5)
   (setq company-show-numbers t)
@@ -19,6 +18,9 @@
   (setq company-tooltip-flip-when-above t)
   (global-company-mode 1))
 
+(use-package transient
+  :ensure t)
+
 (use-package magit
   :bind (("C-x g" . magit-status)))
 
@@ -28,18 +30,15 @@
   (popwin-mode t))
 
 (use-package nyan-mode
-  :ensure t
   :config
   (nyan-mode t))
 
 (use-package which-key
-  :ensure
   :config
   (which-key-mode))
 
 (use-package projectile
   :defer 4
-  :ensure t
   :init
   (setq projectile-completion-system 'ivy)
   :config
@@ -48,23 +47,20 @@
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
 (use-package flycheck
-  :ensure t
   :init (global-flycheck-mode))
 
 (use-package rainbow-delimiters
-  :ensure t
   :config
   (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode))
 
 (use-package all-the-icons
-  :ensure t
   :config
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
   )
 
 (use-package dired-sidebar
-  :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
-  :ensure t
+  :ensure all-the-icons-dired
+  :bind ("C-x C-n" . dired-sidebar-toggle-sidebar)
   :commands (dired-sidebar-toggle-sidebar)
   :init
   (add-hook 'dired-sidebar-mode-hook
@@ -86,17 +82,11 @@
   (spaceline-emacs-theme))
  
 (use-package yasnippet
-  :ensure t
+  :require yasnippet-snippets
   :hook (after-init . yas-global-mode)
   )
 
-(use-package yasnippet-snippets
-  :ensure t
-  )
-
-
 (use-package markdown-mode
-  :ensure t
   :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
@@ -104,13 +94,11 @@
   :init (setq markdown-command "multimarkdown"))
 
 (use-package smex
-  :ensure t
   :init (smex-initialize)
   :bind (("M-x" . smex)
 	 ("M-x" . smex-major-mode-commands)))
 
 (use-package ivy
-  :ensure t
   :config
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t)
@@ -119,7 +107,6 @@
 )
 
 (use-package counsel
-  :ensure t
   :config
   (global-set-key (kbd "M-x") 'counsel-M-x)
   (global-set-key (kbd "C-x C-f") 'counsel-find-file)
@@ -140,21 +127,18 @@
   (global-set-key (kbd "M-g l") 'avy-goto-line))
 
 (use-package elpy
-  :ensure t
   :defer t
   :init
   (advice-add 'python-mode :before 'elpy-enable))
 
 ;;grip mode need to run pip install grip first
 (use-package grip-mode
-  :ensure t
   :bind (:map markdown-mode-command-map
          ("g" . grip-mode)))
 
 (use-package ess-r-mode
   :ensure ess
   :config
-  (setq inferior-ess-r-program "R")
   (defun then_R_operator ()
   "R - %>% operator or 'then' pipe operator"
   (interactive)
@@ -206,6 +190,26 @@
 	("C-c a" . org-agenda))
   )
 
+
+(defun my:org-agenda-time-grid-spacing ()
+  "Set different line spacing w.r.t. time duration."
+  (save-excursion
+    (let ((colors (list "#F6B1C3" "#FFFF9D" "#BEEB9F" "#ADD5F7"))
+          pos
+          duration)
+      (nconc colors colors)
+      (goto-char (point-min))
+      (while (setq pos (next-single-property-change (point) 'duration))
+        (goto-char pos)
+        (when (and (not (equal pos (point-at-eol)))
+                   (setq duration (org-get-at-bol 'duration)))
+          (let ((line-height (if (< duration 30) 1.0 (+ 0.5 (/ duration 60))))
+                (ov (make-overlay (point-at-bol) (1+ (point-at-eol)))))
+            (overlay-put ov 'face `(:background ,(car colors)))
+            (setq colors (cdr colors))
+            (overlay-put ov 'line-height line-height)
+            (overlay-put ov 'line-spacing (1- line-height))))))))
+(add-hook 'org-agenda-finalize-hook 'my:org-agenda-time-grid-spacing)
 
 (provide 'package-configs.el)
 ;;; package-configs.el ends here
