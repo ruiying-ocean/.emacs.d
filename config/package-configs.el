@@ -90,6 +90,11 @@
   :hook (after-init . yas-global-mode)
   )
 
+(use-package yasnippet-snippets
+  :ensure t
+  )
+
+
 (use-package markdown-mode
   :ensure t
   :commands (markdown-mode gfm-mode)
@@ -123,7 +128,6 @@
   (global-set-key (kbd "<f1> l") 'counsel-find-library)
   (global-set-key (kbd "C-c g") 'counsel-git)
   (global-set-key (kbd "C-c j") 'counsel-git-grep)
-  (global-set-key (kbd "C-c a") 'counsel-ag)
   (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
 
 (use-package avy
@@ -146,6 +150,34 @@
   :ensure t
   :bind (:map markdown-mode-command-map
          ("g" . grip-mode)))
+
+(use-package ess-r-mode
+  :ensure ess
+  :config
+  (defun then_R_operator ()
+  "R - %>% operator or 'then' pipe operator"
+  (interactive)
+  (just-one-space 1)
+  (insert "%>%")
+  (reindent-then-newline-and-indent))
+  :bind
+  (:map ess-mode-map
+        ("M-=" . ess-cycle-assign)
+        ("M-p" . then_R_operator))
+  (:map inferior-ess-mode-map
+        ("M-=" . ess-cycle-assign)
+	("M-p" . then_R_operator))
+  )
+
+(use-package calfw
+  :ensure calfw-org
+  :init
+  (require 'calfw-org)
+  ;:config
+  ;(setq cfw:org-overwrite-default-keybinding t)
+  :bind
+  (:map org-mode-map
+	("C-c v" . cfw:open-org-calendar)))
 
 (provide 'package-configs.el)
 ;;; package-configs.el ends here
