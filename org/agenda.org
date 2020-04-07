@@ -1,0 +1,62 @@
+#+TITLE: 我的个人中长期规划
+* Emacs
+** Use Emacs to write Markdown
+*** preview
+Use Grip-mode
+** TODO Elisp
+*** elisp语法
+*** elisp自动下载->改善configuration重用度
+(setq package-list '(package1 package2))
+
+; list the repositories containing them
+(setq package-archives '(("elpa" . "http://tromey.com/elpa/")
+                         ("gnu" . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")))
+
+; activate all the packages (in particular autoloads)
+(package-initialize)
+
+; fetch the list of packages available 
+(unless package-archive-contents
+  (package-refresh-contents))
+
+; install the missing packages
+(dolist (package package-list)
+  (unless (package-installed-p package)
+    (package-install package)))
+*** ayu-theme 重写
+; list the packages you want
+*** 新增一些command line like spacemacs
+*** 对于windows和mac下对主题、字体进行专配
+** TODO emacs welcome Logo and emacs message
+** [#B] Use org-mode manage time(GTD)
+- [X] org-caputre/refile/journal ;;You don't need to 'cause you don't have many org-agenda-files
+- [X] emacs-calfw
+- [] how to end org-pomodoro
+- [] how to set a org-clock-report
+* Math
+** 概率论与统计学
+** 贝叶斯统计学
+** 线性回归
+** 微积分
+* PhD knowledge
+** 地质学基础
+** Python Review
+* 2020 Main
+** TODO [#A] 毕业论文
+SCHEDULED: <2020-04-07 周二>
+- 修改论文细节
+- 修改论文格式
+** DOING [#A] CSC Application [1/5]
+SCHEDULED: <2020-04-10 周五>--<2020-04-30>
+*** DONE 导师推荐信
+*** TODO 外导项目
+*** TODO 研修计划
+*** TODO Research Proposal
+*** TODO 琐事
+- 导师签字
+- 单位推荐意见
+- 纸质材料打印
+** CANCELED New paper about fitting size spectra
+** [#B] 考驾照
+** [#B] 签证办理

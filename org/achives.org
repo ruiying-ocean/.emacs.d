@@ -1,0 +1,118 @@
+
+
+* From agenda.org
+
+** DONE emacs git mode(magit)
+:PROPERTIES:
+:ARCHIVE_TIME: 2020-04-06 周一 22:09
+:ARCHIVE_FILE: ~/.emacs.d/org/agenda.org
+:ARCHIVE_OLPATH: Emacs
+:ARCHIVE_CATEGORY: agenda
+:ARCHIVE_TODO: DONE
+:END:
+Main: C-x g to open git status
+then type s to stage files
+type c c to commit files
+type P to push (then u to origin master)
+type d to different
+(you can use M-x magit to see all the and functions & related shortcuts)
+
+** DONE Use Emacs as python editor
+:PROPERTIES:
+:ARCHIVE_TIME: 2020-04-06 周一 22:09
+:ARCHIVE_FILE: ~/.emacs.d/org/agenda.org
+:ARCHIVE_OLPATH: Emacs
+:ARCHIVE_CATEGORY: agenda
+:ARCHIVE_TODO: DONE
+:END:
+Key package: Elpy
+usage:
+C-c C-c to run the buffer
+C-c ret to run the current line
+C-c C-z to switch between Python script and cmd buffer
+C-c C-d to read documentation
+Others:
+IDE: Pycharm
+Script: Emacs
+DataScience: JupyterLab
+
+** DONE emacs sidebar
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2020-04-06 周一 21:54
+  :ARCHIVE_FILE: ~/.emacs.d/org/agenda.org
+  :ARCHIVE_OLPATH: Emacs
+  :ARCHIVE_CATEGORY: agenda
+  :ARCHIVE_TODO: DONE
+  :END:
+dired-sidebar + all-the-icons
+Archived entries from file c:/Users/Leslie_Ying/.emacs.d/org/agenda.org
+
+** DONE Emacs Icon
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2020-04-06 周一 21:54
+  :ARCHIVE_FILE: ~/.emacs.d/org/agenda.org
+  :ARCHIVE_OLPATH: Emacs
+  :ARCHIVE_CATEGORY: agenda
+  :ARCHIVE_TODO: DONE
+  :END:
+mac本身支持，在cmd+i 然后左上角拖动更换即可。但要用sips 命令生成icns格式文件。
+
+Archived entries from file c:/Users/Leslie_Ying/.emacs.d/org/agenda.org
+
+** DONE emacs ivy 对于部分结果不显示
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2020-04-06 周一 21:55
+  :ARCHIVE_FILE: ~/.emacs.d/org/agenda.org
+  :ARCHIVE_OLPATH: Emacs
+  :ARCHIVE_CATEGORY: agenda
+  :ARCHIVE_TODO: DONE
+  :END:
+安装不完全，需要安装counsel
+
+Archived entries from file c:/Users/Leslie_Ying/.emacs.d/org/agenda.org
+
+** DONE Use Emacs ESS to write R
+:PROPERTIES:
+:ARCHIVE_TIME: 2020-04-06 周一 22:11
+:ARCHIVE_FILE: ~/.emacs.d/org/agenda.org
+:ARCHIVE_OLPATH: Emacs
+:ARCHIVE_CATEGORY: agenda
+:ARCHIVE_TODO: DONE
+:END:
+## shortcuts
+C-c C-e C-r start a R process
+C-ret send current line
+C-c C-b send buffer
+C-x C-; comment line
+
+** CANCELED Use Emacs to write LaTeX
+:PROPERTIES:
+:ARCHIVE_TIME: 2020-04-06 周一 22:15
+:ARCHIVE_FILE: ~/.emacs.d/org/agenda.org
+:ARCHIVE_OLPATH: Emacs
+:ARCHIVE_CATEGORY: agenda
+:ARCHIVE_TODO: CANCELED
+:END:
+*** DONE 预览
+用latex-preview-pane-mode
+其中emacs默认的doc-view mode要安装ghostscript，但是在macOS下分辨率很低。
+所以可以采取使用第三方的软件来打开pdf文件。这里使用openwith包，配置如tex-config.el
+这里要注意，打开pdf文件必须要是在command line下可以的。这里使用mac自带的preview打开，但是在terminal下是open命令！
+*** DONE 自动补全
+使用yasnippet即可。
+*** DONE 导出为word
+使用pandoc，命令pandoc input.tex -o ouput.docx
+*** DONE 防止emacs导出中文后乱码
+;;设置默认读入文件编码
+(prefer-coding-system 'utf-8) 
+*** DONE 插入文献
+.bib文件: 你的文献库
+.bst文件: 参考文献格式模板
+最后通过\bibliographystyle{}和\bibliography{refs}生成文献
+*** DONE 使用latex模板
+两种方法，大同小异。
+第一种是从官网下载latex template之后，在你的文稿中使用
+#+BEGIN_SRC latex
+\documentclass{模板文件夹名}
+#+END_SRC
+第二种是直接在模板里面写。

@@ -58,22 +58,13 @@
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
   )
 
-(use-package dired-sidebar
-  :ensure all-the-icons-dired
-  :bind ("C-x C-n" . dired-sidebar-toggle-sidebar)
-  :commands (dired-sidebar-toggle-sidebar)
-  :init
-  (add-hook 'dired-sidebar-mode-hook
-            (lambda ()
-              (unless (file-remote-p default-directory)
-                (auto-revert-mode))))
+(use-package neotree
+  :ensure all-the-icons
+  :bind ("C-x C-n" . neotree-toggle)
   :config
-  (push 'toggle-window-split dired-sidebar-toggle-hidden-commands)
-  (push 'rotate-windows dired-sidebar-toggle-hidden-commands)
-  (setq dired-sidebar-subtree-line-prefix "__")
-  (setq dired-sidebar-theme 'icons)
-  (setq dired-sidebar-use-term-integration t)
-  (setq dired-sidebar-use-custom-font t))
+  (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+  (setq neo-smart-open t)
+  )
 
 (use-package spaceline
   :init
@@ -82,7 +73,7 @@
   (spaceline-emacs-theme))
  
 (use-package yasnippet
-  :require yasnippet-snippets
+  :ensure yasnippet-snippets
   :hook (after-init . yas-global-mode)
   )
 
@@ -184,19 +175,15 @@
   (setq org-todo-keywords
 	'((sequence "TODO" "DOING"  "|" "DONE" "CANCELED")))
   (add-hook 'org-mode-hook 'org-toggle-pretty-entities)  ;; 默认开启自动转换特殊字符及数学公式模式
-  :bind
-  (:map org-mode-map
-	("C-c C-e" . org-edit-src-code)
-	("C-c a" . org-agenda))
-  )
-
-
-(defun my:org-agenda-time-grid-spacing ()
+;;agenda色块函数
+  (defun my-org-agenda-time-grid-spacing ()
   "Set different line spacing w.r.t. time duration."
   (save-excursion
-    (let ((colors (list "#F6B1C3" "#FFFF9D" "#BEEB9F" "#ADD5F7"))
-          pos
-          duration)
+    (let* ((background (alist-get 'background-mode (frame-parameters)))
+           (background-dark-p (string= background "dark"))
+           (colors (list "#1ABC9C" "#2ECC71" "#3498DB" "#9966ff"))
+           pos
+           duration)
       (nconc colors colors)
       (goto-char (point-min))
       (while (setq pos (next-single-property-change (point) 'duration))
@@ -205,11 +192,31 @@
                    (setq duration (org-get-at-bol 'duration)))
           (let ((line-height (if (< duration 30) 1.0 (+ 0.5 (/ duration 60))))
                 (ov (make-overlay (point-at-bol) (1+ (point-at-eol)))))
-            (overlay-put ov 'face `(:background ,(car colors)))
+            (overlay-put ov 'face `(:background ,(car colors)
+                                                :foreground
+                                                ,(if background-dark-p "black" "white")))
             (setq colors (cdr colors))
             (overlay-put ov 'line-height line-height)
             (overlay-put ov 'line-spacing (1- line-height))))))))
-(add-hook 'org-agenda-finalize-hook 'my:org-agenda-time-grid-spacing)
+  (add-hook 'org-agenda-finalize-hook #'my-org-agenda-time-grid-spacing)
+  (setq org-default-notes-file "~/.emacs.d/org/inbox.org")
+  (setq org-archive-location "~/.emacs.d/org/achives.org::* From %s")
+  (setq org-agenda-files (list "~/.emacs.d/org/agenda.org"))
+;;(setq org-refile-targets '(("~/.emacs.d/org/agenda.org" :level . 1)))
+;;You don't need refile 'cause you have only one org-agenda-file
+  :bind
+  (:map org-mode-map
+	("C-c C-e" . org-edit-src-code)
+	("C-c a" . org-agenda)
+	("C-c c" . org-capture)
+	("C-c C-r" . org-archive-subtree))
+  )
+
+(use-package org-pomodoro
+  :bind	("C-x p" . org-pomodoro)
+  :config
+  (setq org-agenda-clockreport-parameter-plist '(:fileskip0 t :link t :maxlevel 2 :formula "$5=($3+$4)*(60/25);t"))
+  )
 
 (provide 'package-configs.el)
 ;;; package-configs.el ends here
