@@ -67,12 +67,19 @@
   (setq neo-smart-open t)
   )
 
-(use-package spaceline
-  :init
-  (require 'spaceline-config)
+;(use-package spaceline
+;  :init
+;  (require 'spaceline-config)
+;  :config
+;  (spaceline-emacs-theme))
+
+(use-package doom-modeline
+  :init (doom-modeline-mode 1)
   :config
-  (spaceline-emacs-theme))
- 
+  (setq doom-modeline-height 1)
+  (setq doom-modeline-project-detection 'project)
+  )
+
 (use-package yasnippet
   :ensure yasnippet-snippets
   :hook (after-init . yas-global-mode)

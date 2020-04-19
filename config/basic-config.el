@@ -6,7 +6,8 @@
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
 (setq-default cursor-type 'bar)
-(display-time-mode 1);;显示时间
+(add-hook 'after-init-hook 'display-time-mode)
+(add-hook 'after-init-hook 'display-battery-mode)
 (setq display-time-format "%B %H:%M %a");;时间格式
 (setq system-time-locale nil)
 ;;Max the window as startup
@@ -18,8 +19,8 @@
 ;;Set coding system
 (set-default-coding-systems 'utf-8)
 (use-package linum
-  :init (global-linum-mode t)
-  )
+  :init
+  (global-linum-mode 1))
 (electric-pair-mode t)
 (global-hl-line-mode t)
 (show-paren-mode t)
@@ -27,9 +28,28 @@
 ;---------------------------------------
 ;;Font setting
 ;---------------------------------------
-(use-package base16-theme
+;(use-package base16-theme
+;  :config (load-theme 'base16-dracula t))
+
+(use-package doom-themes
   :config
-  (load-theme 'base16-dracula t))
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-vibrant t)
+
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  (doom-themes-neotree-config)
+  ;; or for treemacs users
+  (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+  (doom-themes-treemacs-config)
+  
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
+
 ;;Set Chinese and English font
 (set-frame-font "fira code-11")
 (dolist (charset '(kana han cjk-misc bopomofo))
