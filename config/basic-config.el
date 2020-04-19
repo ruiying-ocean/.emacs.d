@@ -17,24 +17,13 @@
 ;----------------------------------
 ;;Set coding system
 (set-default-coding-systems 'utf-8)
-;;show the line number
-(require 'linum)
-(global-linum-mode t)
-;;show matching pairs of parentheses and other characters
-(show-paren-mode 1)
-;;make typing parentheses pair
-(electric-indent-mode 1)
-(electric-pair-mode 1)
-(defvar electric-pair-pairs '(
-                            (?\" . ?\")
-                            (?\` . ?\`)
-                            (?\( . ?\))
-                            (?\{ . ?\})
-                            ))
-;;highlight current line
-(global-hl-line-mode 1)
-(set-face-background 'hl-line "light gray") ;(set-face-foreground 'hl-line "sea green")
-
+(use-package linum
+  :init (global-linum-mode t)
+  )
+(electric-pair-mode t)
+(global-hl-line-mode t)
+(show-paren-mode t)
+(electric-indent-mode t)
 ;---------------------------------------
 ;;Font setting
 ;---------------------------------------
@@ -53,10 +42,12 @@
 (global-set-key (kbd "<f3>") 'recentf-open-files)
 (global-set-key (kbd "C-x g") 'magit-status)
 (global-set-key (kbd "C-x m") 'set-mark-command)
-(defun open-my-init-file()
+
+(defun open-config-file()
+  "A simple customized function from Zilongshanren."
   (interactive)
-  (find-file "~/.emacs.d/init.el"))
-(global-set-key (kbd "<f2>") 'open-my-init-file)
+  (find-file "~/.emacs.d/config/package-configs.el"))
+(global-set-key (kbd "<f2>") 'open-config-file)
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
 
 ;-------------------------------------
@@ -64,11 +55,17 @@
 ;--------------------------------------
 ;;No more backup files~
 (setq-default make-backup-files nil)
+
 ;;open recent files by typing F3
 (use-package recentf
   :defer 0.5
   :config
-  (recentf-mode t))
+  (recentf-mode t)
+  (add-hook 'after-init-hook 'recentf-mode)
+  (setq-default recentf-max-saved-items 20
+   recentf-exclude '("/tmp/" "/ssh:"))
+  )
+
 ;;解决emacs在windows下频繁垃圾回收而导致的卡顿问题
 (when (eq system-type 'windows-nt)
   (setq gc-cons-threshold (* 512 1024 1024)) ;;设置垃圾回收上限内存，这里是512M

@@ -1,9 +1,4 @@
-* Tasks Test
-** TODO test thing
-  [2020-04-06 周一]
-  [[file:~/.emacs.d/org/agenda.org::*Use%20org-mode%20manage%20time][Use org-mode manage time]]
-* anothr
 * Tasks
-** TODO TEST2  
-  [2020-04-06 周一]
-  [[file:~/.emacs.d/org/agenda.org::*%E5%BE%AE%E7%A7%AF%E5%88%86][微积分]]
+** DONE 驾校报名 [2020-04-08]
+** CANCELED spacevim/neovim  
+  [[file:~/.emacs.d/org/agenda.org]]

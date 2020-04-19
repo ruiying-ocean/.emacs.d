@@ -3,60 +3,62 @@
 ** Use Emacs to write Markdown
 *** preview
 Use Grip-mode
-** TODO Elisp
+** TODO [#C] Elisp
 *** elisp语法
-*** elisp自动下载->改善configuration重用度
-(setq package-list '(package1 package2))
-
-; list the repositories containing them
-(setq package-archives '(("elpa" . "http://tromey.com/elpa/")
-                         ("gnu" . "http://elpa.gnu.org/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")))
-
-; activate all the packages (in particular autoloads)
-(package-initialize)
-
-; fetch the list of packages available 
-(unless package-archive-contents
-  (package-refresh-contents))
-
-; install the missing packages
-(dolist (package package-list)
-  (unless (package-installed-p package)
-    (package-install package)))
-*** ayu-theme 重写
-; list the packages you want
-*** 新增一些command line like spacemacs
-*** 对于windows和mac下对主题、字体进行专配
-** TODO emacs welcome Logo and emacs message
+** emacs welcome Logo and emacs message
 ** [#B] Use org-mode manage time(GTD)
 - [X] org-caputre/refile/journal ;;You don't need to 'cause you don't have many org-agenda-files
 - [X] emacs-calfw
 - [] how to end org-pomodoro
 - [] how to set a org-clock-report
-* Math
-** 概率论与统计学
+* Mathmatic
+** [#B] 概率论与统计学
+** [#B] 线性回归
 ** 贝叶斯统计学
-** 线性回归
-** 微积分
-* PhD knowledge
+** TODO [#B] 微积分
+* [optional]Computer Science
+** 计算机组成原理
+** 操作系统
+* Coding Review
+** [#B] Python Review
+*** Python tutorial
+*** Numpy+Pandas+Matplotlib
+*** Opensource Project Study
+** [#B] R
+** [#B] Java[设计原则]
+
+* Future Research
 ** 地质学基础
-** Python Review
-* 2020 Main
-** TODO [#A] 毕业论文
-SCHEDULED: <2020-04-07 周二>
-- 修改论文细节
-- 修改论文格式
-** DOING [#A] CSC Application [1/5]
-SCHEDULED: <2020-04-10 周五>--<2020-04-30>
+* 2020 Main()
+** 毕业论文
+*** DONE 修改论文格式
+*** DONE 参考文献格式
+:LOGBOOK:
+CLOCK: [2020-04-07 周二 17:26]--[2020-04-07 周二 17:51] =>  0:25
+:END:
+*** DONE 细节审查
+*** DONE 查重
+*** TODO [#A] 制作答辩PPT
+DEADLINE: <2020-05-15 周五>
+** DONE [#A] CSC Application [5/5]
+DEADLINE: <2020-04-23 周四>
 *** DONE 导师推荐信
-*** TODO 外导项目
-*** TODO 研修计划
-*** TODO Research Proposal
-*** TODO 琐事
-- 导师签字
-- 单位推荐意见
-- 纸质材料打印
-** CANCELED New paper about fitting size spectra
-** [#B] 考驾照
+*** DONE 外导项目
+*** DONE 研修计划
+*** DONE Research Proposal
+*** DONE 琐事
+- [X] 导师推荐信签字
+- [X] 单位推荐意见
+- [cancel] 纸质材料打印
+- [X] 照片上传
+- [X] 校内申请表
+*** 流程
+单位推荐表+附件2校内申请表 -> 提交学院213 -> 学院审核 -> 研究生院审核(国内导师意见由受理单位按要求扫描上传至信息平台)
+** [#A] 考驾照 [0/0]
+*** 科目一学习 [/2]
+**** DOING [#A] 看驾校理论视频
+**** 刷科目一题库
+*** 科目二
+*** 科目三
+*** 科目四
 ** [#B] 签证办理

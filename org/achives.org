@@ -116,3 +116,67 @@ C-x C-; comment line
 \documentclass{模板文件夹名}
 #+END_SRC
 第二种是直接在模板里面写。
+
+** CANCELED New paper about fitting size spectra
+:PROPERTIES:
+:ARCHIVE_TIME: 2020-04-07 周二 22:07
+:ARCHIVE_FILE: ~/.emacs.d/org/agenda.org
+:ARCHIVE_OLPATH: 2020 Main()
+:ARCHIVE_CATEGORY: agenda
+:ARCHIVE_TODO: CANCELED
+:END:
+
+** CANCELED 新增一些command line like spacemacs
+:PROPERTIES:
+:ARCHIVE_TIME: 2020-04-12 周日 21:54
+:ARCHIVE_FILE: ~/.emacs.d/org/agenda.org
+:ARCHIVE_OLPATH: Emacs/Elisp
+:ARCHIVE_CATEGORY: agenda
+:ARCHIVE_TODO: CANCELED
+:END:
+
+** CANCELED 对于windows和mac下对主题、字体进行专配
+:PROPERTIES:
+:ARCHIVE_TIME: 2020-04-12 周日 21:54
+:ARCHIVE_FILE: ~/.emacs.d/org/agenda.org
+:ARCHIVE_OLPATH: Emacs/Elisp
+:ARCHIVE_CATEGORY: agenda
+:ARCHIVE_TODO: CANCELED
+:END:
+
+** CANCELED ayu-theme 重写
+:PROPERTIES:
+:ARCHIVE_TIME: 2020-04-12 周日 21:54
+:ARCHIVE_FILE: ~/.emacs.d/org/agenda.org
+:ARCHIVE_OLPATH: Emacs/Elisp
+:ARCHIVE_CATEGORY: agenda
+:ARCHIVE_TODO: CANCELED
+:END:
+; list the packages you want
+
+** DONE elisp自动下载->改善configuration重用度
+:PROPERTIES:
+:ARCHIVE_TIME: 2020-04-12 周日 21:54
+:ARCHIVE_FILE: ~/.emacs.d/org/agenda.org
+:ARCHIVE_OLPATH: Emacs/Elisp
+:ARCHIVE_CATEGORY: agenda
+:ARCHIVE_TODO: DONE
+:END:
+(setq package-list '(package1 package2))
+
+; list the repositories containing them
+(setq package-archives '(("elpa" . "http://tromey.com/elpa/")
+                         ("gnu" . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")))
+
+; activate all the packages (in particular autoloads)
+(package-initialize)
+
+; fetch the list of packages available 
+(unless package-archive-contents
+  (package-refresh-contents))
+
+; install the missing packages
+(dolist (package package-list)
+  (unless (package-installed-p package)
+    (package-install package)))

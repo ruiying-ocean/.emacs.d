@@ -38,13 +38,14 @@
   (which-key-mode))
 
 (use-package projectile
-  :defer 4
+  :defer 3
   :init
   (setq projectile-completion-system 'ivy)
   :config
   (projectile-mode +1)
-  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+  :bind
+  (:map projectile-mode-map
+	("C-c p" . projectile-command-map)))
 
 (use-package flycheck
   :init (global-flycheck-mode))
@@ -110,7 +111,7 @@
 
 (use-package avy
   ;;快速跳转字符或行
-  :defer t
+  :defer 2
   :config
   (global-set-key (kbd "C-:") 'avy-goto-char)
   (global-set-key (kbd "C-'") 'avy-goto-char-2)
@@ -120,7 +121,9 @@
 (use-package elpy
   :defer t
   :init
-  (advice-add 'python-mode :before 'elpy-enable))
+  (advice-add 'python-mode :before 'elpy-enable)
+  :bind
+  )
 
 ;;grip mode need to run pip install grip first
 (use-package grip-mode
@@ -160,12 +163,13 @@
   (add-hook 'org-mode-hook 'org-bullets-mode))
 
 (use-package org
+  :defer t
   :config
   ;; 默认开启标题缩进
   (setq org-startup-indented t)
   (add-to-list 'file-coding-system-alist
 	       '("\\.org" . utf-8))
-  ;; 网上找的todo keywords 背景色
+  ;; todo keywords 背景色
   (setf org-todo-keyword-faces '(("TODO" . (:foreground "white" :background "red"   :weight bold))
                                 ("HAND" . (:foreground "white" :background "#2E8B57"  :weight bold))
                                 ("DONE" . (:foreground "white" :background "#3498DB" :weight bold))))
@@ -199,11 +203,21 @@
             (overlay-put ov 'line-height line-height)
             (overlay-put ov 'line-spacing (1- line-height))))))))
   (add-hook 'org-agenda-finalize-hook #'my-org-agenda-time-grid-spacing)
+  (setq org-capture-templates
+	'(("t" "Todo" entry (file+headline "~/.emacs.d/org/inbox.org" "Tasks")
+	   "* TODO %?\n  %i\n  %a")
+	  ("j" "Journal" entry (file+datetree "~/.emacs.d/org/journal.org")
+         "* %?\nEntered on %U\n  %i\n  %a")))
   (setq org-default-notes-file "~/.emacs.d/org/inbox.org")
   (setq org-archive-location "~/.emacs.d/org/achives.org::* From %s")
-  (setq org-agenda-files (list "~/.emacs.d/org/agenda.org"))
+  (setq org-agenda-files (list  "~/.emacs.d/org/agenda.org"))
 ;;(setq org-refile-targets '(("~/.emacs.d/org/agenda.org" :level . 1)))
-;;You don't need refile 'cause you have only one org-agenda-file
+  ;;You don't need refile 'cause you have only one org-agenda-file
+  (org-babel-do-load-languages 'org-babel-load-languages
+			       '((emacs-lisp . t)
+				 (python . t)
+				 (R . t)
+				 ));;then C-c C-c can run this code block
   :bind
   (:map org-mode-map
 	("C-c C-e" . org-edit-src-code)
@@ -216,6 +230,7 @@
   :bind	("C-x p" . org-pomodoro)
   :config
   (setq org-agenda-clockreport-parameter-plist '(:fileskip0 t :link t :maxlevel 2 :formula "$5=($3+$4)*(60/25);t"))
+  (setq org-clock-sound t)
   )
 
 (provide 'package-configs.el)
