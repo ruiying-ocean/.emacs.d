@@ -24,6 +24,12 @@
 (use-package magit
   :bind (("C-x g" . magit-status)))
 
+(use-package exec-path-from-shell
+   :if (memq window-system '(mac ns))
+   :ensure t
+   :config
+   (exec-path-from-shell-initialize))
+
 (use-package popwin
   :init (require 'popwin)
   :config
