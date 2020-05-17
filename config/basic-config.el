@@ -32,6 +32,7 @@
 ;  :config (load-theme 'base16-dracula t))
 
 (use-package doom-themes
+  :ensure t
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -51,7 +52,7 @@
   (doom-themes-org-config))
 
 ;;Set Chinese and English font
-(set-frame-font "fira code-11")
+(set-frame-font "monaco-15")
 (dolist (charset '(kana han cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font) charset
                     (font-spec :family "更纱黑体 UI SC" :size 22)))
@@ -96,6 +97,9 @@
   (setenv "HOME" "C:/Users/Leslie_Ying/")
   (setenv "PATH" "C:/Users/Leslie_Ying/emacs-26.3-x86_64")
   )
+
+(if (eq system-type 'darwin)
+    (setq mac-command-modifier 'meta))
 
 (provide 'basic-config)
 ;;; basic-config.el ends here
