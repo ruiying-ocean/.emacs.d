@@ -9,7 +9,5 @@ The concret structure is:
    +-- config
        +-- basic-config.el ;; configs about color theme, editor setting etc.
        +-- package-configs.el ;; use-package configs
-       +-- package-lists.el ;; list my package
-       +-- org-config.el ;;config in org-mode
 #+END_SRC
 
