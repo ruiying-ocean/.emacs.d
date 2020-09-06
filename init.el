@@ -48,7 +48,7 @@
     ("~/.emacs.d/org/inbox.org" "~/.emacs.d/org/agenda.org")))
  '(package-selected-packages
    (quote
-    (autopair smartparens org-pomodoro color-theme-sanityinc-solarized base16-theme org-mode calfw-org calfw ess-r-mode org-caldav grip-mode company-jedi elpy ess benchmark-init all-the-icons-dired neotree seoul256-theme dired-sidebar zenburn-theme yasnippet-snippets use-package transient swiper spaceline smex rainbow-delimiters pyim projectile plantuml-mode pdf-tools org-bullets nyan-mode nord-theme markdown-mode macrostep latex-preview-pane git-commit flycheck dracula-theme company avy auctex atom-one-dark-theme 0blayout))))
+    (exec-path-from-shell cnfonts doom-themes autopair smartparens org-pomodoro color-theme-sanityinc-solarized base16-theme org-mode calfw-org calfw ess-r-mode org-caldav grip-mode company-jedi elpy ess benchmark-init all-the-icons-dired neotree seoul256-theme dired-sidebar zenburn-theme yasnippet-snippets use-package transient swiper spaceline smex rainbow-delimiters pyim projectile plantuml-mode pdf-tools org-bullets nyan-mode nord-theme markdown-mode macrostep latex-preview-pane git-commit flycheck dracula-theme company avy auctex atom-one-dark-theme 0blayout))))
  
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

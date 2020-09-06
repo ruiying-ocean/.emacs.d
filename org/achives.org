@@ -180,3 +180,73 @@ C-x C-; comment line
 (dolist (package package-list)
   (unless (package-installed-p package)
     (package-install package)))
+
+** DONE [#A] CSC Application [5/5]
+DEADLINE: <2020-04-23 周四>
+:PROPERTIES:
+:ARCHIVE_TIME: 2020-07-02 Thu 17:24
+:ARCHIVE_FILE: ~/.emacs.d/org/agenda.org
+:ARCHIVE_OLPATH: 2020 Main()
+:ARCHIVE_CATEGORY: agenda
+:ARCHIVE_TODO: DONE
+:END:
+*** DONE 导师推荐信
+*** DONE 外导项目
+*** DONE 研修计划
+*** DONE Research Proposal
+*** DONE 琐事
+- [X] 导师推荐信签字
+- [X] 单位推荐意见
+- [cancel] 纸质材料打印
+- [X] 照片上传
+- [X] 校内申请表
+*** 流程
+单位推荐表+附件2校内申请表 -> 提交学院213 -> 学院审核 -> 研究生院审核(国内导师意见由受理单位按要求扫描上传至信息平台)
+
+** DONE 毕业论文
+:PROPERTIES:
+:ARCHIVE_TIME: 2020-07-02 Thu 17:25
+:ARCHIVE_FILE: ~/.emacs.d/org/agenda.org
+:ARCHIVE_OLPATH: 2020 Main()
+:ARCHIVE_CATEGORY: agenda
+:ARCHIVE_TODO: DONE
+:END:
+*** DONE 修改论文格式
+*** DONE 参考文献格式
+:LOGBOOK:
+CLOCK: [2020-04-07 周二 17:26]--[2020-04-07 周二 17:51] =>  0:25
+:END:
+*** DONE 细节审查
+*** DONE 查重
+*** DONE 制作答辩PPT
+DEADLINE: <2020-05-15 周五>
+
+** [#A] 考驾照 [4/4]
+:PROPERTIES:
+:ARCHIVE_TIME: 2020-08-28 Fri 09:50
+:ARCHIVE_FILE: ~/.emacs.d/org/agenda.org
+:ARCHIVE_OLPATH: 2020 Main()
+:ARCHIVE_CATEGORY: agenda
+:END:
+*** DONE 科目一学习 [2/2]
+**** DONE [#A] 看驾校理论视频
+**** DONE 刷科目一题库
+*** DONE 科目二
+*** DONE 科三目
+**** 夜间灯光模拟
+通过急弯、坡路、拱桥、人行横道、无交通信号灯的路口，或者超车 -> 交替使用远近光灯
+夜间同方向近距离跟车、夜间会车、夜间直行通过路口、有路灯的道路、道路照明良好的道路、 -> 近光灯
+夜间照明条件不良的道路行驶： 远光灯
+路边临时停车： 示廓灯+双闪
+窄路、窄桥与非机动车会车：近光灯
+**** 变更车道
+右转向灯
+**** 直线行驶
+三档带点油
+**** 通过路口
+刹车+左看右看
+**** 靠边停车
+**** 掉头
+**** 超车
+**** DOING 会车
+*** DONE 科目四

@@ -5,60 +5,41 @@
 Use Grip-mode
 ** TODO [#C] Elisp
 *** elisp语法
+http://ergoemacs.org/emacs/elisp_basics.html
 ** emacs welcome Logo and emacs message
 ** [#B] Use org-mode manage time(GTD)
 - [X] org-caputre/refile/journal ;;You don't need to 'cause you don't have many org-agenda-files
 - [X] emacs-calfw
 - [] how to end org-pomodoro
 - [] how to set a org-clock-report
-* Mathmatic
-** [#B] 概率论与统计学
-** [#B] 线性回归
-** 贝叶斯统计学
-** TODO [#B] 微积分
-* [optional]Computer Science
-** 计算机组成原理
-** 操作系统
-* Coding Review
-** [#B] Python Review
-*** Python tutorial
-*** Numpy+Pandas+Matplotlib
-*** Opensource Project Study
-** [#B] R
-** [#B] Java[设计原则]
+* Studies
+** Mathmatic
+*** 概率论与统计学
+*** 线性回归
+*** 贝叶斯统计学
+*** TODO [#A] 微积分
+** English
+*** [#B] grammar
+*** listening
+*** British English speaking
+** 专业知识
+*** 模型
+*** 地球科学/海洋学知识
+* Guitar
+** 护弦
+123由左手护，456由右手护
+** 音阶练习
+不同把位，不同指型
+** 和弦练习
+** 节奏
+** 五线谱
+** 高阶技巧
+*** 扫拨
+*** 速弹
+爆发练习方法：极限速度*110%，只弹一个音，一节只加1组16分音符（1234），逐渐到4组16分音符
+耐力练习：练习5min
+右手练习：八分音符（爬音阶，每个音2下）
+*** 点弦
+*** 泛音
+** 扒谱
 
-* Future Research
-** 地质学基础
-* 2020 Main()
-** 毕业论文
-*** DONE 修改论文格式
-*** DONE 参考文献格式
-:LOGBOOK:
-CLOCK: [2020-04-07 周二 17:26]--[2020-04-07 周二 17:51] =>  0:25
-:END:
-*** DONE 细节审查
-*** DONE 查重
-*** TODO [#A] 制作答辩PPT
-DEADLINE: <2020-05-15 周五>
-** DONE [#A] CSC Application [5/5]
-DEADLINE: <2020-04-23 周四>
-*** DONE 导师推荐信
-*** DONE 外导项目
-*** DONE 研修计划
-*** DONE Research Proposal
-*** DONE 琐事
-- [X] 导师推荐信签字
-- [X] 单位推荐意见
-- [cancel] 纸质材料打印
-- [X] 照片上传
-- [X] 校内申请表
-*** 流程
-单位推荐表+附件2校内申请表 -> 提交学院213 -> 学院审核 -> 研究生院审核(国内导师意见由受理单位按要求扫描上传至信息平台)
-** [#A] 考驾照 [0/0]
-*** 科目一学习 [/2]
-**** DOING [#A] 看驾校理论视频
-**** 刷科目一题库
-*** 科目二
-*** 科目三
-*** 科目四
-** [#B] 签证办理

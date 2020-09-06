@@ -52,29 +52,25 @@
   (doom-themes-org-config))
 
 ;;Set Chinese and English font
-;(set-frame-font "monaco-15")
-;(dolist (charset '(kana han cjk-misc bopomofo))
-;  (set-fontset-font (frame-parameter nil 'font) charset
-;                    (font-spec :family "PingFang SC" :size 16)))
+(set-frame-font "monaco-15")
+(dolist (charset '(kana han cjk-misc bopomofo))
+  (set-fontset-font (frame-parameter nil 'font) charset
+                    (font-spec :family "PingFang SC" :size 16)))
 
-(use-package cnfonts
-  :ensure t
-  :config
-  (cnfonts-enable)
-  (setq cnfonts-profiles '("program" "org-mode" "others"))
-  (setq cnfonts--custom-set-fontsizes
-      '((9    9.0  9.5 )
-        (10   11.0 11.0)
-        (11.5 12.5 12.5)
-        (12.5 13.5 13.5)
-        (14   15.0 15.0)
-        (16   17.0 17.0)
-        (18   18.0 18.0)
-        (20   21.0 21.0)))
-  :bind
-  (("C-=" . cnfonts-increase-fontsize)
-   ("C--" . cnfonts-decrease-fontsize))
-)
+;.(use-package cnfonts
+;;  :ensure t
+;  :config
+;  (cnfonts-enable)
+;  (setq cnfonts-profiles '("program" "org-mode" "others"))
+;  (setq cnfonts--custom-set-fontsizes
+;      '((14   15.0 15.0)
+;        (16   17.0 17.0)
+;        (18   18.0 18.0)
+;        (20   21.0 21.0)))
+;  :bind
+;  (("C-=" . cnfonts-increase-fontsize)
+;   ("C--" . cnfonts-decrease-fontsize))
+;)
 
 ;------------------------------------
 ; global shortcuts

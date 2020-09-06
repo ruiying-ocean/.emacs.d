@@ -135,7 +135,12 @@
   :defer t
   :init
   (advice-add 'python-mode :before 'elpy-enable)
-  :bind
+  :config
+  (setq python-shell-interpreter "ipython"
+      python-shell-interpreter-args "-i --simple-prompt") ;;use ipython
+  (setq elpy-rpc-python-command "python3")
+  (setq elpy-shell-echo-output nil) ;; to solve the ^G^G^G bug
+  (setq python-shell-completion-native-enable nil)
   )
 
 ;;grip mode need to run pip install grip first
