@@ -103,6 +103,23 @@
   :bind (("M-x" . smex)
 	 ("M-x" . smex-major-mode-commands)))
 
+(use-package auctex
+  :defer t
+  :config
+  (setq TeX-auto-save t)
+  (setq TeX-parse-self t)
+  (setq-default TeX-master nil)
+  (setq TeX-PDF-mode t)
+  (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+  )
+
+(use-package latex-preview-pane
+  :defer t
+  :config
+  (setq doc-view-resolution 300) ;;make preview pdf clear
+  (add-hook 'doc-view-mode-hook 'doc-view-fit-width-to-window)
+  )
+
 (use-package ivy
   :config
   (ivy-mode 1)
@@ -137,10 +154,21 @@
   (advice-add 'python-mode :before 'elpy-enable)
   :config
   (setq python-shell-interpreter "ipython"
-      python-shell-interpreter-args "-i --simple-prompt") ;;use ipython
+	python-shell-interpreter-args "-i --simple-prompt") ;;use ipython
+  (add-hook 'python-mode-hook 'eldoc-mode)
   (setq elpy-rpc-python-command "python3")
   (setq elpy-shell-echo-output nil) ;; to solve the ^G^G^G bug
   (setq python-shell-completion-native-enable nil)
+  )
+
+(use-package pydoc
+  :bind ("C-c C-d" . pydoc)
+  )
+(use-package company-jedi
+  :config
+  (defun my/python-mode-hook ()
+  (add-to-list 'company-backends 'company-jedi))
+  (add-hook 'python-mode-hook 'my/python-mode-hook)
   )
 
 ;;grip mode need to run pip install grip first
