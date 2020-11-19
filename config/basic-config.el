@@ -5,6 +5,7 @@
 ;---------------------------------------
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
+(global-tab-line-mode t)
 (setq-default cursor-type 'bar)
 (add-hook 'after-init-hook 'display-time-mode)
 (add-hook 'after-init-hook 'display-battery-mode)
@@ -37,7 +38,7 @@
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-vibrant t)
+  (load-theme 'doom-dracula t)
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
@@ -52,7 +53,7 @@
   (doom-themes-org-config))
 
 ;;Set Chinese and English font
-(set-frame-font "monaco-15")
+(set-frame-font "Jetbrains Mono-16")
 (dolist (charset '(kana han cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font) charset
                     (font-spec :family "PingFang SC" :size 16)))
@@ -109,12 +110,15 @@
   (setq ring-bell-function 'ignore) ;;关闭windows下烦人的警铃声音
   (run-with-idle-timer 5 t #'garbage-collect)
   (setq garbage-collection-messages t)
-  (setenv "HOME" "C:/Users/Leslie_Ying/")
+  (setenv "HOME" "C:/Users/Leslie_Ying/") ;;use M-x cd change it manually
   (setenv "PATH" "C:/Users/Leslie_Ying/emacs-26.3-x86_64")
   )
 
 (if (eq system-type 'darwin)
     (setq mac-command-modifier 'meta))
+
+;;tramp mode to cache password
+(setq password-cache-expiry nil)
 
 (provide 'basic-config)
 ;;; basic-config.el ends here

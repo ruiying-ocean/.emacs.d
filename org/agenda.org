@@ -3,8 +3,8 @@
 ** Use Emacs to write Markdown
 *** preview
 Use Grip-mode
-** TODO [#C] Elisp
-*** elisp语法
+** [#C] Elisp
+*** DONE elisp语法
 http://ergoemacs.org/emacs/elisp_basics.html
 ** emacs welcome Logo and emacs message
 ** [#B] Use org-mode manage time(GTD)
@@ -14,17 +14,23 @@ http://ergoemacs.org/emacs/elisp_basics.html
 - [] how to set a org-clock-report
 * Studies
 ** Mathmatic
-*** 概率论与统计学
-*** 线性回归
-*** 贝叶斯统计学
-*** TODO [#A] 微积分
+*** Bayesin Statistic
+*** DONE [#A] Calculus
+*** TODO [#A] Partial Differntial Equation
 ** English
-*** [#B] grammar
-*** listening
-*** British English speaking
-** 专业知识
-*** 模型
-*** 地球科学/海洋学知识
+*** [#A] vocabulary
+*** [#A] listening
+*** [#C] British Accent
+** Major
+*** TODO [#A] cGEnIE
+*** TODO [#B] Micropaleontology
+*** TODO [#A] Physical Oceanography
+*** Other books
+*** Fluid Machnical
+** Coding
+*** [#B] Fortran
+*** [#C] Matlab
+*** [#C] R shiny
 * Guitar
 ** 护弦
 123由左手护，456由右手护
