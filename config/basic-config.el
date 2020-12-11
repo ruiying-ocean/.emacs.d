@@ -5,7 +5,7 @@
 ;---------------------------------------
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
-(global-tab-line-mode t)
+;(global-tab-line-mode t)
 (setq-default cursor-type 'bar)
 (add-hook 'after-init-hook 'display-time-mode)
 (add-hook 'after-init-hook 'display-battery-mode)
@@ -29,31 +29,31 @@
 ;---------------------------------------
 ;;Font setting
 ;---------------------------------------
-;(use-package base16-theme
-;  :config (load-theme 'base16-dracula t))
+(use-package base16-theme
+  :config (load-theme 'base16-dracula t))
 
-(use-package doom-themes
-  :ensure t
-  :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-dracula t)
+; (use-package doom-themes
+;   :ensure t
+;   :config
+;   ;; Global settings (defaults)
+;   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+;         doom-themes-enable-italic t) ; if nil, italics is universally disabled
+;   (load-theme 'doom-dracula t)
 
-  ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
+;   ;; Enable flashing mode-line on errors
+;   (doom-themes-visual-bell-config)
   
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
-  (doom-themes-neotree-config)
-  ;; or for treemacs users
-  (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
-  (doom-themes-treemacs-config)
+;   ;; Enable custom neotree theme (all-the-icons must be installed!)
+;   (doom-themes-neotree-config)
+;   ;; or for treemacs users
+;   (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+;   (doom-themes-treemacs-config)
   
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
+;   ;; Corrects (and improves) org-mode's native fontification.
+;   (doom-themes-org-config))
 
 ;;Set Chinese and English font
-(set-frame-font "Jetbrains Mono-16")
+(set-frame-font "Jetbrains Mono-12")
 (dolist (charset '(kana han cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font) charset
                     (font-spec :family "PingFang SC" :size 16)))
@@ -110,8 +110,6 @@
   (setq ring-bell-function 'ignore) ;;关闭windows下烦人的警铃声音
   (run-with-idle-timer 5 t #'garbage-collect)
   (setq garbage-collection-messages t)
-  (setenv "HOME" "C:/Users/Leslie_Ying/") ;;use M-x cd change it manually
-  (setenv "PATH" "C:/Users/Leslie_Ying/emacs-26.3-x86_64")
   )
 
 (if (eq system-type 'darwin)
