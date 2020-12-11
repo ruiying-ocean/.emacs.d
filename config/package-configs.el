@@ -18,6 +18,20 @@
   (setq company-tooltip-flip-when-above t)
   (global-company-mode 1))
 
+(use-package company-tabnine
+  :ensure t 
+  :after 'company-mode 
+  'company-tabnine-mode 
+  :config (add-to-list 'company-backends #'company-tabnine)
+  (setq company-idle-delay 0)
+  (setq company-show-numbers t)
+  )
+
+(use-package yasnippet
+  :ensure yasnippet-snippets
+  :hook (after-init . yas-global-mode)
+  )
+
 (use-package transient
   :ensure t)
 
@@ -82,16 +96,17 @@
 ;  :config
 ;  (spaceline-emacs-theme))
 
-; (use-package doom-modeline
-;   :init (doom-modeline-mode 1)
-;   :config
-;   (setq doom-modeline-height 1)
-;   (setq doom-modeline-project-detection 'project)
-;   )
+(use-package doom-modeline
+  :ensure t
+  :hook (after-init . doom-modeline-mode))
 
-(use-package yasnippet
-  :ensure yasnippet-snippets
-  :hook (after-init . yas-global-mode)
+(use-package awesome-tab
+  ;;not currently available on melpa
+  :load-path "~/.emacs.d/config/awesome-tab.el"
+  :config
+  (awesome-tab-mode t)
+  (setq awesome-tab-show-tab-index t)
+  (setq awesome-tab-height 100)
   )
 
 (use-package markdown-mode
@@ -156,8 +171,6 @@
   :init
   (advice-add 'python-mode :before 'elpy-enable)
   :config
-  (setq python-shell-interpreter "ipython"
-	python-shell-interpreter-args "-i --simple-prompt") ;;use ipython
   (add-hook 'python-mode-hook 'eldoc-mode)
   (setq elpy-rpc-python-command "python3")
   (setq elpy-shell-echo-output nil) ;; to solve the ^G^G^G bug
@@ -167,12 +180,13 @@
 (use-package pydoc
   :bind ("C-c C-d" . pydoc)
   )
-(use-package company-jedi
-  :config
-  (defun my/python-mode-hook ()
-  (add-to-list 'company-backends 'company-jedi))
-  (add-hook 'python-mode-hook 'my/python-mode-hook)
-  )
+
+ (use-package company-jedi
+   :config
+   (defun my/python-mode-hook ()
+   (add-to-list 'company-backends 'company-jedi))
+   (add-hook 'python-mode-hook 'my/python-mode-hook)
+   )
 
 ;;grip mode need to run pip install grip first
 (use-package grip-mode

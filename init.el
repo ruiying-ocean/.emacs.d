@@ -26,7 +26,7 @@
 (setq my-name "Rui Ying"
       my-email "Ying.Rui@outlook.com")
 
-(setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
+(setq package-archives '(("gnu"   . "http://elpa.gnu.org/packages/")
                            ("melpa" . "https://melpa.org/packages/")))
 (add-to-list 'load-path (expand-file-name "config" user-emacs-directory))
 (when (< emacs-major-version 27)
@@ -54,4 +54,4 @@
  ;; If there is more than one, they won't work right.
  '(highlight-indent-guides-method 'character)
  '(package-selected-packages
-   '(neotree base16-theme org-pomodoro org org-bullets calfw-org ess grip-mode company-jedi pydoc elpy avy counsel ivy latex-preview-pane auctex smex markdown-mode yasnippet-snippets doom-modeline all-the-icons rainbow-delimiters flycheck projectile which-key nyan-mode popwin exec-path-from-shell magit transient company benchmark-init use-package doom-themes)))
+   '(company-box company-tabnine spaceline amx neotree base16-theme org-pomodoro org org-bullets calfw-org ess grip-mode company-jedi pydoc elpy avy counsel ivy latex-preview-pane auctex smex markdown-mode yasnippet-snippets doom-modeline all-the-icons rainbow-delimiters flycheck projectile which-key nyan-mode popwin exec-path-from-shell magit transient company benchmark-init use-package doom-themes)))

@@ -4,6 +4,7 @@
 ;Interface setting
 ;---------------------------------------
 (tool-bar-mode 0)
+(menu-bar-mode 0)
 (scroll-bar-mode 0)
 ;(global-tab-line-mode t)
 (setq-default cursor-type 'bar)
@@ -22,6 +23,7 @@
 (use-package linum
   :init
   (global-linum-mode 1))
+
 (electric-pair-mode t)
 (global-hl-line-mode t)
 (show-paren-mode t)
