@@ -1,4 +1,4 @@
-;;; This file is setting of all packages in use-package framework
+; This file is setting of all packages in use-package framework
 (setq use-package-always-ensure t)
 
 (use-package benchmark-init
@@ -18,6 +18,12 @@
   (setq company-tooltip-flip-when-above t)
   (global-company-mode 1))
 
+(use-package company-quickhelp
+  :config
+  (company-quickhelp-mode 1)
+  (eval-after-load 'company
+  '(define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin)))
+
 (use-package company-tabnine
   :ensure t 
   :after 'company-mode 
@@ -33,7 +39,7 @@
   )
 
 (use-package transient
-  :ensure t)
+  :defer t)
 
 (use-package magit
   :bind (("C-x g" . magit-status)))
@@ -167,26 +173,35 @@
   (global-set-key (kbd "M-g l") 'avy-goto-line))
 
 (use-package elpy
-  :defer t
   :init
-  (advice-add 'python-mode :before 'elpy-enable)
+  (elpy-enable)
   :config
+  (setq python-shell-interpreter "ipython" ;require pip install ipython
+	python-shell-interpreter-args "-i --simple-prompt")
   (add-hook 'python-mode-hook 'eldoc-mode)
   (setq elpy-rpc-python-command "python3")
   (setq elpy-shell-echo-output nil) ;; to solve the ^G^G^G bug
   (setq python-shell-completion-native-enable nil)
+  (setq elpy-rpc-backend "jedi")
+  (setq python-indent-offset 4
+        python-indent 4)
   )
 
-(use-package pydoc
-  :bind ("C-c C-d" . pydoc)
-  )
-
- (use-package company-jedi
-   :config
-   (defun my/python-mode-hook ()
-   (add-to-list 'company-backends 'company-jedi))
-   (add-hook 'python-mode-hook 'my/python-mode-hook)
-   )
+;; (use-package company-jedi
+;;   ;;require external installation of jedi and epc in pip
+;;   :defer t
+;;   :config
+;;   (setq jedi:environment-root "jedi");;manually set virtualenv
+;;   (setq jedi:server-command (jedi:-env-server-command))
+;;   (defun config/enable-jedi ()
+;;     (add-to-list 'company-backends 'company-jedi))
+;;   (add-hook 'python-mode-hook 'jedi:setup)
+;;   (add-hook 'python-mode-hook 'config/enable-jedi)
+;;   (setq jedi:complete-on-dot t)
+;;   (setq jedi:use-shortcuts t)
+;;   (setq company-tooltip-align-annotations t)
+;;   (setq company-transformers '(company-sort-by-occurrence))
+;;  )
 
 ;;grip mode need to run pip install grip first
 (use-package grip-mode

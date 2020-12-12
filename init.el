@@ -54,4 +54,4 @@
  ;; If there is more than one, they won't work right.
  '(highlight-indent-guides-method 'character)
  '(package-selected-packages
-   '(company-box company-tabnine spaceline amx neotree base16-theme org-pomodoro org org-bullets calfw-org ess grip-mode company-jedi pydoc elpy avy counsel ivy latex-preview-pane auctex smex markdown-mode yasnippet-snippets doom-modeline all-the-icons rainbow-delimiters flycheck projectile which-key nyan-mode popwin exec-path-from-shell magit transient company benchmark-init use-package doom-themes)))
+   '(mini-modeline company-quickhelp company-anaconda company-jedi anaconda-mode lab-themes haskell-emacs-base company-box company-tabnine spaceline amx neotree base16-theme org-pomodoro org org-bullets calfw-org ess grip-mode pydoc avy counsel ivy latex-preview-pane auctex smex markdown-mode yasnippet-snippets doom-modeline all-the-icons rainbow-delimiters flycheck projectile which-key nyan-mode popwin exec-path-from-shell magit transient company benchmark-init use-package doom-themes)))

@@ -9,11 +9,8 @@
 ;(global-tab-line-mode t)
 (setq-default cursor-type 'bar)
 (add-hook 'after-init-hook 'display-time-mode)
-(add-hook 'after-init-hook 'display-battery-mode)
 (setq display-time-format "%B %H:%M %a");;时间格式
 (setq system-time-locale nil)
-;;Max the window as startup
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
 ;(setq fancy-splash-image "~/.emacs.d/config/logo.jpg")
 ;----------------------------------
 ;Editor setting
@@ -32,7 +29,7 @@
 ;;Font setting
 ;---------------------------------------
 (use-package base16-theme
-  :config (load-theme 'base16-dracula t))
+  :config (load-theme 'base16-nord t))
 
 ; (use-package doom-themes
 ;   :ensure t
@@ -80,15 +77,16 @@
 ;-----------------------------------
 (global-set-key (kbd "<f3>") 'recentf-open-files)
 (global-set-key (kbd "C-x g") 'magit-status)
-(global-set-key (kbd "C-x m") 'set-mark-command)
+;;(global-set-key (kbd "C-x m") 'set-mark-command)
 
 (defun open-config-file()
   "A simple customized function from Zilongshanren."
   (interactive)
   (find-file "~/.emacs.d/config/package-configs.el"))
 (global-set-key (kbd "<f2>") 'open-config-file)
-(global-set-key (kbd "C-x k") 'kill-this-buffer)
-
+ (global-set-key (kbd "C-x k") 'kill-this-buffer)
+;(global-set-key (kdb "M-;" 'comment-dwim))
+;; 
 ;-------------------------------------
 ;Other settings
 ;--------------------------------------
@@ -113,6 +111,8 @@
   (run-with-idle-timer 5 t #'garbage-collect)
   (setq garbage-collection-messages t)
   )
+
+(setq ring-bell-function 'ignore)
 
 (if (eq system-type 'darwin)
     (setq mac-command-modifier 'meta))
