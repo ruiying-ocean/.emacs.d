@@ -18,11 +18,17 @@
   (setq company-tooltip-flip-when-above t)
   (global-company-mode 1))
 
-(use-package company-quickhelp
+;; (use-package company-quickhelp
+;;   :config
+;;   (add-hook 'company-quickhelp-mode-hook 'python-mode)
+;;   ;(company-quickhelp-mode 1) ;;globally true
+;;   (eval-after-load 'company
+;;     '(define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin)))
+
+(use-package company-posframe ;;similar function as company-quickhelp
   :config
-  (company-quickhelp-mode 1)
-  (eval-after-load 'company
-  '(define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin)))
+  (company-posframe-mode 1)
+)
 
 (use-package company-tabnine
   :ensure t 
@@ -34,6 +40,7 @@
   )
 
 (use-package yasnippet
+  :defer t
   :ensure yasnippet-snippets
   :hook (after-init . yas-global-mode)
   )
@@ -78,7 +85,8 @@
 
 (use-package rainbow-delimiters
   :config
-  (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode))
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+  )
 
 (use-package all-the-icons-dired
   ;need to run all-the-icons-install-fonts first to avoid grabled icon
@@ -113,6 +121,8 @@
   (awesome-tab-mode t)
   (setq awesome-tab-show-tab-index t)
   (setq awesome-tab-height 100)
+  :bind
+  ("C-x i" . awesome-tab-ace-jump) ;;or TAB
   )
 
 (use-package markdown-mode
@@ -151,6 +161,17 @@
   (setq enable-recursive-minibuffers t)
   (global-set-key "\C-s" 'swiper)
 )
+
+;; (use-package ivy-posframe
+;;   :config
+;;   (setq ivy-posframe-display-functions-alist
+;; 	'((complete-symbol . ivy-posframe-display-at-point)
+;; 	  (swiper . ivy-posframe-display-at-window-center)
+;;           (counsel-M-x     . ivy-posframe-display-at-window-center)
+;;           (t               . ivy-posframe-display)))
+;;   (setq ivy-posframe-height-alist '((swiper . 15)
+;;                                     (t      . 10)))
+;;   (ivy-posframe-mode 1))
 
 (use-package counsel
   :config
@@ -309,7 +330,7 @@
 ;   :config
 ;   (setq org-agenda-clockreport-parameter-plist '(:fileskip0 t :link t :maxlevel 2 :formula "$5=($3+$4)*(60/25);t"))
 ;   (setq org-clock-sound t)
-;   )
+;;   )
 
 (provide 'package-configs.el)
 ;;; package-configs.el ends here

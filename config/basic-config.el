@@ -1,32 +1,32 @@
 ;; This file is for operation habits
-
 ;----------------------------------------
 ;Interface setting
 ;---------------------------------------
 (tool-bar-mode 0)
 (menu-bar-mode 0)
 (scroll-bar-mode 0)
+(setq inhibit-startup-screen t)
+(setq inhibit-startup-message t)
 ;(global-tab-line-mode t)
 (setq-default cursor-type 'bar)
 (add-hook 'after-init-hook 'display-time-mode)
 (setq display-time-format "%B %H:%M %a");;时间格式
 (setq system-time-locale nil)
-;(setq fancy-splash-image "~/.emacs.d/config/logo.jpg")
+;; (setq fancy-splash-image "~/.emacs.d/config/logo.jpg")
+
 ;----------------------------------
 ;Editor setting
 ;----------------------------------
-;;Set coding system
 (set-default-coding-systems 'utf-8)
-(use-package linum
-  :init
-  (global-linum-mode 1))
-
 (electric-pair-mode t)
 (global-hl-line-mode t)
+(global-display-line-numbers-mode t);;the linum-mode has been obsolete
 (show-paren-mode t)
+(setq show-paren-style 'parenthesis)
 (electric-indent-mode t)
+
 ;---------------------------------------
-;;Font setting
+;;Font and Theme setting
 ;---------------------------------------
 (use-package base16-theme
   :config (load-theme 'base16-nord t))
@@ -84,15 +84,15 @@
   (interactive)
   (find-file "~/.emacs.d/config/package-configs.el"))
 (global-set-key (kbd "<f2>") 'open-config-file)
- (global-set-key (kbd "C-x k") 'kill-this-buffer)
-;(global-set-key (kdb "M-;" 'comment-dwim))
-;; 
+(global-set-key (kbd "C-x k") 'kill-this-buffer)
+;;(global-set-key (kdb "M-;" 'comment-dwim))
+
 ;-------------------------------------
 ;Other settings
 ;--------------------------------------
 ;;No more backup files~
 (setq-default make-backup-files nil)
-
+(setq ring-bell-function 'ignore)
 ;;open recent files by typing F3
 (use-package recentf
   :defer 0.5
@@ -107,12 +107,9 @@
 (when (eq system-type 'windows-nt)
   (setq gc-cons-threshold (* 512 1024 1024)) ;;设置垃圾回收上限内存，这里是512M
   (setq gc-cons-percentage 0.5) ;;设置垃圾回收比例
-  (setq ring-bell-function 'ignore) ;;关闭windows下烦人的警铃声音
   (run-with-idle-timer 5 t #'garbage-collect)
   (setq garbage-collection-messages t)
   )
-
-(setq ring-bell-function 'ignore)
 
 (if (eq system-type 'darwin)
     (setq mac-command-modifier 'meta))
