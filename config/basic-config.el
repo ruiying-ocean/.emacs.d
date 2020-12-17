@@ -94,6 +94,7 @@
 (setq-default make-backup-files nil)
 (setq ring-bell-function 'ignore)
 ;;open recent files by typing F3
+
 (use-package recentf
   :defer 0.5
   :config

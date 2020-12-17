@@ -24,17 +24,26 @@
 (require 'package)
 
 (setq my-name "Rui Ying"
-      my-email "Ying.Rui@outlook.com")
+      my-email "ying.rui@outlook.com")
 
 (setq package-archives '(("gnu"   . "http://elpa.gnu.org/packages/")
-                           ("melpa" . "https://melpa.org/packages/")))
+                         ("melpa" . "https://melpa.org/packages/")))
+
+;; (setq package-archives
+;;       '(("melpa" . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/melpa/")
+;;         ("org"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/org/")
+;;         ("gnu"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/gnu/")))
+
 (add-to-list 'load-path (expand-file-name "config" user-emacs-directory))
+
 (when (< emacs-major-version 27)
   (package-initialize))
 
 (require 'use-package)
 (require 'basic-config)
 (require 'package-configs.el)
+(require 'init-lsp.el)
+(require 'init-python.el)
  
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -54,4 +63,4 @@
  ;; If there is more than one, they won't work right.
  '(highlight-indent-guides-method 'character)
  '(package-selected-packages
-   '(mini-modeline company-quickhelp company-anaconda company-jedi anaconda-mode lab-themes haskell-emacs-base company-box company-tabnine spaceline amx neotree base16-theme org-pomodoro org org-bullets calfw-org ess grip-mode pydoc avy counsel ivy latex-preview-pane auctex smex markdown-mode yasnippet-snippets doom-modeline all-the-icons rainbow-delimiters flycheck projectile which-key nyan-mode popwin exec-path-from-shell magit transient company benchmark-init use-package doom-themes)))
+   '(lsp-mode lsp-python-ms ccls company-lsp ivy-rich lsp-ui company-posframe ivy-posframe mini-modeline company-quickhelp company-anaconda anaconda-mode lab-themes haskell-emacs-base company-box company-tabnine spaceline amx neotree base16-theme org-pomodoro org org-bullets calfw-org ess grip-mode pydoc avy counsel ivy latex-preview-pane auctex smex markdown-mode yasnippet-snippets doom-modeline all-the-icons rainbow-delimiters flycheck projectile which-key nyan-mode popwin exec-path-from-shell magit transient company benchmark-init use-package doom-themes)))

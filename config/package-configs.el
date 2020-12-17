@@ -1,11 +1,6 @@
 ; This file is setting of all packages in use-package framework
 (setq use-package-always-ensure t)
 
-(use-package benchmark-init
-  :config
-  ;; To disable collection of benchmark data after init is done.
-  (add-hook 'after-init-hook 'benchmark-init/deactivate))
-
 (use-package company
   :config
   (setq company-idle-delay 0.5)
@@ -16,7 +11,16 @@
   ;; invert the navigation direction if the the completion popup-isearch-match
   ;; is displayed on top (happens near the bottom of windows)
   (setq company-tooltip-flip-when-above t)
-  (global-company-mode 1))
+  ;(global-company-mode 1)
+  )
+
+(use-package company-tabnine ;TabNine uses ML to provide suggestion
+  :after 'company-mode 
+  'company-tabnine-mode 
+  :config (add-to-list 'company-backends #'company-tabnine)
+  (setq company-idle-delay 0)
+  (setq company-show-numbers t)
+  )
 
 ;; (use-package company-quickhelp
 ;;   :config
@@ -25,18 +29,37 @@
 ;;   (eval-after-load 'company
 ;;     '(define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin)))
 
-(use-package company-posframe ;;similar function as company-quickhelp
-  :config
-  (company-posframe-mode 1)
-)
+;; (use-package company-posframe ;;similar function as company-quickhelp
+;;   :config
+;;   (company-posframe-mode 1)
+;;   )
 
-(use-package company-tabnine
-  :ensure t 
-  :after 'company-mode 
-  'company-tabnine-mode 
-  :config (add-to-list 'company-backends #'company-tabnine)
-  (setq company-idle-delay 0)
-  (setq company-show-numbers t)
+(use-package benchmark-init
+  :config
+  ;; To disable collection of benchmark data after init is done.
+  (add-hook 'after-init-hook 'benchmark-init/deactivate))
+
+
+(use-package which-key
+  :config
+  (which-key-mode))
+
+(use-package projectile
+  :defer 3
+  :init
+  (setq projectile-completion-system 'ivy)
+  :config
+  (projectile-mode +1)
+  :bind
+  (:map projectile-mode-map
+	("C-c p" . projectile-command-map)))
+
+(use-package flycheck
+  :init (global-flycheck-mode))
+
+(use-package rainbow-delimiters
+  :config
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
   )
 
 (use-package yasnippet
@@ -65,28 +88,6 @@
 (use-package nyan-mode
   :config
   (nyan-mode t))
-
-(use-package which-key
-  :config
-  (which-key-mode))
-
-(use-package projectile
-  :defer 3
-  :init
-  (setq projectile-completion-system 'ivy)
-  :config
-  (projectile-mode +1)
-  :bind
-  (:map projectile-mode-map
-	("C-c p" . projectile-command-map)))
-
-(use-package flycheck
-  :init (global-flycheck-mode))
-
-(use-package rainbow-delimiters
-  :config
-  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
-  )
 
 (use-package all-the-icons-dired
   ;need to run all-the-icons-install-fonts first to avoid grabled icon
@@ -162,7 +163,12 @@
   (global-set-key "\C-s" 'swiper)
 )
 
-;; (use-package ivy-posframe
+(use-package ivy-rich
+  :config
+  (ivy-rich-mode t)
+  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
+
+;; (use-package ivy-posframe ;;center your selection candidate box
 ;;   :config
 ;;   (setq ivy-posframe-display-functions-alist
 ;; 	'((complete-symbol . ivy-posframe-display-at-point)
@@ -192,42 +198,6 @@
   (global-set-key (kbd "C-'") 'avy-goto-char-2)
   (global-set-key (kbd "M-g w") 'avy-goto-word-1)
   (global-set-key (kbd "M-g l") 'avy-goto-line))
-
-(use-package elpy
-  :init
-  (elpy-enable)
-  :config
-  (setq python-shell-interpreter "ipython" ;require pip install ipython
-	python-shell-interpreter-args "-i --simple-prompt")
-  (add-hook 'python-mode-hook 'eldoc-mode)
-  (setq elpy-rpc-python-command "python3")
-  (setq elpy-shell-echo-output nil) ;; to solve the ^G^G^G bug
-  (setq python-shell-completion-native-enable nil)
-  (setq elpy-rpc-backend "jedi")
-  (setq python-indent-offset 4
-        python-indent 4)
-  )
-
-;; (use-package company-jedi
-;;   ;;require external installation of jedi and epc in pip
-;;   :defer t
-;;   :config
-;;   (setq jedi:environment-root "jedi");;manually set virtualenv
-;;   (setq jedi:server-command (jedi:-env-server-command))
-;;   (defun config/enable-jedi ()
-;;     (add-to-list 'company-backends 'company-jedi))
-;;   (add-hook 'python-mode-hook 'jedi:setup)
-;;   (add-hook 'python-mode-hook 'config/enable-jedi)
-;;   (setq jedi:complete-on-dot t)
-;;   (setq jedi:use-shortcuts t)
-;;   (setq company-tooltip-align-annotations t)
-;;   (setq company-transformers '(company-sort-by-occurrence))
-;;  )
-
-;;grip mode need to run pip install grip first
-(use-package grip-mode
-  :bind (:map markdown-mode-command-map
-         ("g" . grip-mode)))
 
 ; (use-package ess-r-mode
 ;   :ensure ess
