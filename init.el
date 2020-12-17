@@ -34,18 +34,22 @@
 ;;         ("org"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/org/")
 ;;         ("gnu"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/gnu/")))
 
-(add-to-list 'load-path (expand-file-name "config" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
 (when (< emacs-major-version 27)
   (package-initialize))
 
 (require 'use-package)
 (require 'basic-config)
-(require 'package-configs.el)
+(require 'package-configs)
+(require 'init-ui)
+(require 'init-theme)
+(require 'init-binding)
+(require 'init-recentf)
+(require 'init-company)
+(require 'init-python)
+(require 'init-eglot)
 ;;(require 'init-lsp.el)
-(require 'init-company.el)
-(require 'init-python.el)
-(require 'init-eglot.el)
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

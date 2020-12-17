@@ -1,5 +1,8 @@
+(setq python-shell-interpreter "python3")
+(setq python-indent-offset 4)
+
 (use-package elpy
-  :defer t
+  :defer 4
   :init
   (elpy-enable)
   :config
@@ -35,5 +38,5 @@
   :bind (:map markdown-mode-command-map
          ("g" . grip-mode)))
 
-(provide 'init-python.el)
+(provide 'init-python)
 

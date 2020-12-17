@@ -48,5 +48,5 @@
 ;;   :config
 ;;   (add-hook 'python-mode-hook 'eglot-ensure))
 
-(provide 'init-lsp.el)
+(provide 'init-lsp)
 ;;; init-lsp.el ends here

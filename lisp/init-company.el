@@ -32,4 +32,4 @@
   (company-posframe-mode 1)
   )
 
-(provide 'init-company.el)
+(provide 'init-company)

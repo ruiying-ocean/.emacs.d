@@ -17,5 +17,5 @@
 ;; 			  (:remove  . ("%e")))
 ;; 			:default "c++"))
 
-(provide 'init-eglot.el)
+(provide 'init-eglot)
 ;;;init-eglot.el ends here

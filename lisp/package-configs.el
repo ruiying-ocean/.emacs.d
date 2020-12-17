@@ -269,5 +269,5 @@
 ;   (setq org-clock-sound t)
 ;;   )
 
-(provide 'package-configs.el)
+(provide 'package-configs)
 ;;; package-configs.el ends here
