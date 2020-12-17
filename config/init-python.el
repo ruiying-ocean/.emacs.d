@@ -1,18 +1,18 @@
-(setq python-shell-interpreter "ipython" ;require pip install ipython
+(use-package elpy
+  :defer t
+  :init
+  (elpy-enable)
+  :config
+  (add-hook 'python-mode-hook 'eldoc-mode)
+  (setq python-shell-interpreter "ipython" ;require pip install ipython
       python-shell-interpreter-args "-i --simple-prompt")
-
-;; (use-package elpy
-;;   :init
-;;   (elpy-enable)
-;;   :config
-;;   (add-hook 'python-mode-hook 'eldoc-mode)
-;;   (setq elpy-rpc-python-command "python3")
-;;   (setq elpy-shell-echo-output nil) ;; to solve the ^G^G^G bug
-;;   (setq python-shell-completion-native-enable nil)
-;;   (setq elpy-rpc-backend "jedi")
-;;   (setq python-indent-offset 4
-;;         python-indent 4)
-;;   )
+  (setq elpy-rpc-python-command "python3")
+  (setq elpy-shell-echo-output nil) ;; to solve the ^G^G^G bug
+  (setq python-shell-completion-native-enable nil)
+  (setq elpy-rpc-backend "jedi")
+  (setq python-indent-offset 4
+        python-indent 4)
+  )
 
 ;; (use-package company-jedi
 ;;   ;;require external installation of jedi and epc in pip

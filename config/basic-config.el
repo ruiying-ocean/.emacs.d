@@ -29,7 +29,14 @@
 ;;Font and Theme setting
 ;---------------------------------------
 (use-package base16-theme
-  :config (load-theme 'base16-nord t))
+  :ensure t)
+
+(cond
+ ((eq system-type 'windows-nt)
+  (load-theme 'base-dracula t))
+ ((eq system-type 'gnu/linux)
+  (load-theme 'base-nord t))
+ )
 
 ; (use-package doom-themes
 ;   :ensure t

@@ -1,27 +1,27 @@
-(use-package lsp-mode
-  :config
-  (setq lsp-completion-provider :capf)
-  (setq read-process-output-max (* 1024 1024)) ;; 1mb
-  (setq gc-cons-threshold (* 125 1024 1024))
-  (setq lsp-idle-delay 0.500)
-  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-         (python-mode . lsp-deferred)
-         ;; if you want which-key integration
-         (lsp-mode . lsp-enable-which-key-integration))
-  :commands (lsp lsp-deferred))
+;; (use-package lsp-mode
+;;   :config
+;;   (setq lsp-completion-provider :capf)
+;;   (setq read-process-output-max (* 1024 1024)) ;; 1mb
+;;   (setq gc-cons-threshold (* 125 1024 1024))
+;;   (setq lsp-idle-delay 0.500)
+;;   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+;;          (python-mode . lsp-deferred)
+;;          ;; if you want which-key integration
+;;          (lsp-mode . lsp-enable-which-key-integration))
+;;   :commands (lsp lsp-deferred))
 
-(use-package lsp-ui
-  :commands lsp-ui-mode)
+;; (use-package lsp-ui
+;;   :commands lsp-ui-mode)
 
 ;; optionally if you want to use debugger
 ;;(use-package dap-mode)
 ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 
-(use-package lsp-treemacs
-  :commands lsp-treemacs-errors-list)
+;; (use-package lsp-treemacs
+;;   :commands lsp-treemacs-errors-list)
 
-(use-package lsp-ivy
-  :commands lsp-ivy-workspace-symbol)
+;; (use-package lsp-ivy
+;;   :commands lsp-ivy-workspace-symbol)
 
 ;;Python support
 ;; (use-package lsp-python-ms

@@ -42,9 +42,11 @@
 (require 'use-package)
 (require 'basic-config)
 (require 'package-configs.el)
-(require 'init-lsp.el)
+;;(require 'init-lsp.el)
+(require 'init-company.el)
 (require 'init-python.el)
- 
+(require 'init-eglot.el)
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
