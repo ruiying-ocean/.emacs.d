@@ -5,6 +5,15 @@
 (use-package base16-theme
   :ensure t)
 
+(use-package ayu-theme
+  :ensure t)
+
+(use-package color-theme-sanityinc-tomorrow
+  :ensure t)
+
+(use-package color-theme-sanityinc-solarized
+  :ensure t)
+
 (cond
  ((eq system-type 'windows-nt)
   (load-theme 'spacemacs-dark t))

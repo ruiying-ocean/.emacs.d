@@ -1,3 +1,5 @@
+;;recommend to use conda in Windows
+
 (setq python-shell-interpreter "python3")
 (setq python-indent-offset 4)
 

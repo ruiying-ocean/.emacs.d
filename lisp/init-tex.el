@@ -6,7 +6,8 @@
   (setq TeX-parse-self t)
   (setq-default TeX-master nil)  
   (load "preview-latex.el" nil t t);;to preview latex
-)
+  (set-default 'preview-scale-function 1.5);;preview scale
+  )
 
 (add-hook 'LaTeX-mode-hook
           (lambda ()           
@@ -14,6 +15,7 @@
 	    (LaTeX-math-mode 1)
 	    (display-line-numbers-mode -1)
 	    (flyspell-mode 1)
+	    ;;(variable-pitch-mode 1)
 	    ))
 
 (setq TeX-view-program-list 
@@ -24,6 +26,16 @@
 (setq TeX-view-program-selection
       '((output-dvi "DVI Viewer")
         (output-pdf "Sumatra PDF")))
+
+;; (custom-theme-set-faces
+;;  'user
+;;  '(font-latex-math-face ((t (:inherit fixed-pitch))))
+;;  '(font-latex-sectioning-0-face ((t (:inherit fixed-pitch))))
+;;  '(font-latex-sectioning-1-face ((t (:inherit fixed-pitch))))
+;;  '(font-latex-sectioning-2-face ((t (:inherit fixed-pitch))))
+;;  '(font-latex-sectioning-3-face ((t (:inherit fixed-pitch))))
+;; )
+
 
 ; (use-package latex-preview-pane
 ;   :defer t

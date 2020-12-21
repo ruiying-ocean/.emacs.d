@@ -21,11 +21,15 @@
   (unless (char-displayable-p ?❗)
     (setq org-fancy-priorities-list '("HIGH" "MID" "LOW" "OPTIONAL"))))
 
+(setq-default ispell-program-name "~/Hunspell/bin/hunspell.exe") ;;need to donwload hunspell and add to path
+(setq ispell-local-dictionary "en_GB")
+
 (add-hook 'org-mode-hook
           (lambda ()
             (variable-pitch-mode 1)
             (visual-line-mode 1)
 	    (display-line-numbers-mode -1)
+	    (flyspell-mode 1)
 	    ))
 
 ;;todo keywords 背景色
@@ -101,7 +105,6 @@
 				 ));;then C-c C-c can run this code block
   :bind
   (:map org-mode-map
-	("C-c C-e" . org-edit-src-code)
 	("C-c a" . org-agenda)
 	("C-c c" . org-capture)
 	("C-c C-r" . org-archive-subtree))

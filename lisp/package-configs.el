@@ -84,7 +84,6 @@
   :bind (("M-x" . smex)
 	 ("M-x" . smex-major-mode-commands)))
 
-
 (use-package ivy
   :config
   (ivy-mode 1)
@@ -92,6 +91,13 @@
   (setq enable-recursive-minibuffers t)
   (global-set-key "\C-s" 'swiper)
 )
+
+(use-package flyspell-correct-ivy
+  :after flyspell
+  :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper)))
+
+;; (use-package flyspell-correct-popup
+;;   :after flyspell-correct)
 
 (use-package ivy-rich
   :config
