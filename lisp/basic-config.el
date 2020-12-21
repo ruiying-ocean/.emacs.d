@@ -1,7 +1,12 @@
 ;----------------------------------
 ;Editor setting
 ;----------------------------------
-(set-default-coding-systems 'utf-8)
+(progn
+  (prefer-coding-system 'utf-8)
+  (set-default-coding-systems 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (setq default-buffer-file-coding-system 'utf-8))
 (electric-pair-mode t)
 (global-hl-line-mode t)
 (global-display-line-numbers-mode t);;the linum-mode has been obsolete
@@ -9,6 +14,19 @@
 (show-paren-mode t)
 (setq show-paren-style 'parenthesis)
 (electric-indent-mode t)
+
+(use-package benchmark-init
+  :config
+  ;; To disable collection of benchmark data after init is done.
+  (add-hook 'after-init-hook 'benchmark-init/deactivate))
+
+(use-package visual-fill-column
+  :config
+  (add-hook 'visual-line-mode-hook #'visual-fill-column-mode)
+  :custom
+  (visual-fill-column-center-text t)
+  (visual-fill-column-width 80)
+  )
 
 ;------------------------------------
 ;Other settings

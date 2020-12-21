@@ -1,12 +1,6 @@
 ; This file is setting of all packages in use-package framework
 (setq use-package-always-ensure t)
 
-(use-package benchmark-init
-  :config
-  ;; To disable collection of benchmark data after init is done.
-  (add-hook 'after-init-hook 'benchmark-init/deactivate))
-
-
 (use-package which-key
   :config
   (which-key-mode))
@@ -52,10 +46,6 @@
   :config
   (popwin-mode t))
 
-(use-package nyan-mode
-  :config
-  (nyan-mode t))
-
 (use-package all-the-icons-dired
   ;need to run all-the-icons-install-fonts first to avoid grabled icon
   :requires all-the-icons  
@@ -67,10 +57,6 @@
   (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
   (global-set-key [f8] 'neotree-toggle)
   )
-
-(use-package highlight-indent-guides
-  :config
-  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
 
 ;(use-package spaceline
 ;  :init
@@ -93,34 +79,11 @@
   ("C-x i" . awesome-tab-ace-jump) ;;or TAB
   )
 
-(use-package markdown-mode
-  :commands (markdown-mode gfm-mode)
-  :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode))
-  :init (setq markdown-command "multimarkdown"))
-
 (use-package smex
   :init (smex-initialize)
   :bind (("M-x" . smex)
 	 ("M-x" . smex-major-mode-commands)))
 
-; (use-package auctex
-;   :defer t
-;   :config
-;   (setq TeX-auto-save t)
-;   (setq TeX-parse-self t)
-;   (setq-default TeX-master nil)
-;   (setq TeX-PDF-mode t)
-;   (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-;   )
-
-; (use-package latex-preview-pane
-;   :defer t
-;   :config
-;   (setq doc-view-resolution 300) ;;make preview pdf clear
-;   (add-hook 'doc-view-mode-hook 'doc-view-fit-width-to-window)
-;   )
 
 (use-package ivy
   :config
@@ -183,91 +146,6 @@
 ;         ("M-=" . ess-cycle-assign)
 ; 	("M-p" . then_R_operator))
 ;   )
-
-; (use-package calfw
-;   :ensure calfw-org
-;   :init
-;   (require 'calfw-org)
-;   ;:config
-;   ;(setq cfw:org-overwrite-default-keybinding t)
-;   :bind
-;   (:map org-mode-map
-; 	("C-c v" . cfw:open-org-calendar)))
-
-; (use-package org-bullets
-;   :config
-;   (add-hook 'org-mode-hook 'org-bullets-mode))
-
-; (use-package org
-;   :defer t
-;   :config
-;   ;; 默认开启标题缩进
-;   (setq org-startup-indented t)
-;   (add-to-list 'file-coding-system-alist
-; 	       '("\\.org" . utf-8))
-;   ;; todo keywords 背景色
-;   (setf org-todo-keyword-faces '(("TODO" . (:foreground "white" :background "red"   :weight bold))
-;                                 ("HAND" . (:foreground "white" :background "#2E8B57"  :weight bold))
-;                                 ("DONE" . (:foreground "white" :background "#3498DB" :weight bold))))
-;   (org-agenda-to-appt t);;事件提醒
-;   (setq org-src-fontify-natively t) ;;高亮org代码块
-;   ;;设置关键词
-;   (setq org-todo-keywords
-; 	'((sequence "TODO" "DOING"  "|" "DONE" "CANCELED")))
-;   (add-hook 'org-mode-hook 'org-toggle-pretty-entities)  ;; 默认开启自动转换特殊字符及数学公式模式
-; ;;agenda色块函数
-;   (defun my-org-agenda-time-grid-spacing ()
-;   "Set different line spacing w.r.t. time duration."
-;   (save-excursion
-;     (let* ((background (alist-get 'background-mode (frame-parameters)))
-;            (background-dark-p (string= background "dark"))
-;            (colors (list "#1ABC9C" "#2ECC71" "#3498DB" "#9966ff"))
-;            pos
-;            duration)
-;       (nconc colors colors)
-;       (goto-char (point-min))
-;       (while (setq pos (next-single-property-change (point) 'duration))
-;         (goto-char pos)
-;         (when (and (not (equal pos (point-at-eol)))
-;                    (setq duration (org-get-at-bol 'duration)))
-;           (let ((line-height (if (< duration 30) 1.0 (+ 0.5 (/ duration 60))))
-;                 (ov (make-overlay (point-at-bol) (1+ (point-at-eol)))))
-;             (overlay-put ov 'face `(:background ,(car colors)
-;                                                 :foreground
-;                                                 ,(if background-dark-p "black" "white")))
-;             (setq colors (cdr colors))
-;             (overlay-put ov 'line-height line-height)
-;             (overlay-put ov 'line-spacing (1- line-height))))))))
-;   (add-hook 'org-agenda-finalize-hook #'my-org-agenda-time-grid-spacing)
-;   (setq org-capture-templates
-; 	'(("t" "Todo" entry (file+headline "~/.emacs.d/org/inbox.org" "Tasks")
-; 	   "* TODO %?\n  %i\n  %a")
-; 	  ("j" "Journal" entry (file+datetree "~/.emacs.d/org/journal.org")
-;          "* %?\nEntered on %U\n  %i\n  %a")))
-;   (setq org-default-notes-file "~/.emacs.d/org/inbox.org")
-;   (setq org-archive-location "~/.emacs.d/org/achives.org::* From %s")
-;   (setq org-agenda-files (list  "~/.emacs.d/org/agenda.org"))
-; ;;(setq org-refile-targets '(("~/.emacs.d/org/agenda.org" :level . 1)))
-;   ;;You don't need refile 'cause you have only one org-agenda-file
-;   (org-babel-do-load-languages 'org-babel-load-languages
-; 			       '((emacs-lisp . t)
-; 				 (python . t)
-; 				 (R . t)
-; 				 ));;then C-c C-c can run this code block
-;   :bind
-;   (:map org-mode-map
-; 	("C-c C-e" . org-edit-src-code)
-; 	("C-c a" . org-agenda)
-; 	("C-c c" . org-capture)
-; 	("C-c C-r" . org-archive-subtree))
-;   )
-
-; (use-package org-pomodoro
-;   :bind	("C-x p" . org-pomodoro)
-;   :config
-;   (setq org-agenda-clockreport-parameter-plist '(:fileskip0 t :link t :maxlevel 2 :formula "$5=($3+$4)*(60/25);t"))
-;   (setq org-clock-sound t)
-;;   )
 
 (provide 'package-configs)
 ;;; package-configs.el ends here

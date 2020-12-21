@@ -4,9 +4,9 @@
 *** preview
 Use Grip-mode
 ** [#C] Elisp
-*** DONE elisp语法
+*** elisp语法
 http://ergoemacs.org/emacs/elisp_basics.html
-** emacs welcome Logo and emacs message
+** Emacs welcome Logo and emacs message
 ** [#B] Use org-mode manage time(GTD)
 - [X] org-caputre/refile/journal ;;You don't need to 'cause you don't have many org-agenda-files
 - [X] emacs-calfw
@@ -14,9 +14,9 @@ http://ergoemacs.org/emacs/elisp_basics.html
 - [] how to set a org-clock-report
 * Studies
 ** Mathmatic
-*** Bayesin Statistic
-*** DONE [#A] Calculus
-*** TODO [#A] Partial Differntial Equation
+*** Bayesian Statistic
+*** [#A] Calculus
+*** TODO Partial Differntial Equation
 ** English
 *** [#A] vocabulary
 *** [#A] listening

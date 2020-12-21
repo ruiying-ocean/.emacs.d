@@ -35,6 +35,7 @@
 
 ;;grip mode need to run pip install grip first
 (use-package grip-mode
+  :defer t
   :bind (:map markdown-mode-command-map
          ("g" . grip-mode)))
 
