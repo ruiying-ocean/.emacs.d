@@ -6,7 +6,8 @@
   (setq TeX-parse-self t)
   (setq-default TeX-master nil)  
   (load "preview-latex.el" nil t t);;to preview latex
-  (set-default 'preview-scale-function 1.5);;preview scale
+  (set-default 'preview-scale-function 3.0);;preview scale
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 3.0)) ;;preview in org-mode
   )
 
 (add-hook 'LaTeX-mode-hook

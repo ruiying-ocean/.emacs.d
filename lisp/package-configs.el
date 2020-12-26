@@ -24,7 +24,7 @@
   )
 
 (use-package yasnippet
-  :defer t
+  :defer 4
   :ensure yasnippet-snippets
   :hook (after-init . yas-global-mode)
   )

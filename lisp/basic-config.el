@@ -1,6 +1,7 @@
 ;----------------------------------
 ;Editor setting
 ;----------------------------------
+(fset 'yes-or-no-p 'y-or-n-p)
 (progn
   (prefer-coding-system 'utf-8)
   (set-default-coding-systems 'utf-8)

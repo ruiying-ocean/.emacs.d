@@ -1,14 +1,17 @@
 ;;recommend to use conda in Windows
-
+(setq python-indent-guess-indent-offset-verbose nil)
 (setq python-shell-interpreter "python3")
 (setq python-indent-offset 4)
+(add-hook 'python-mode-hook
+	  (lambda()
+	    (flycheck-mode -1)))
 
 (use-package elpy
   :defer 4
   :init
   (elpy-enable)
   :config
-  (add-hook 'python-mode-hook 'eldoc-mode)
+ (add-hook 'python-mode-hook 'eldoc-mode)
   (setq python-shell-interpreter "ipython" ;require pip install ipython
       python-shell-interpreter-args "-i --simple-prompt")
   (setq elpy-rpc-python-command "python3")
@@ -34,12 +37,6 @@
 ;;   (setq company-tooltip-align-annotations t)
 ;;   (setq company-transformers '(company-sort-by-occurrence))
 ;;  )
-
-;;grip mode need to run pip install grip first
-(use-package grip-mode
-  :defer t
-  :bind (:map markdown-mode-command-map
-         ("g" . grip-mode)))
 
 (provide 'init-python)
 

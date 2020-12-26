@@ -41,7 +41,7 @@
 ;   ;; Corrects (and improves) org-mode's native fontification.
 ;   (doom-themes-org-config))
 
-(defun s-font()
+(defun set-font()
   (interactive)
   ;; font config for org table showing.
   (set-frame-font "Jetbrains Mono-12")
@@ -52,13 +52,24 @@
   ;; tune rescale so that Chinese character width = 2 * English character width
   (setq face-font-rescale-alist '(("Jetbrains Mono" . 1.0) ("Sarasa UI SC" . 1.0))))
 
-(add-to-list 'after-make-frame-functions
-             (lambda (new-frame)
-               (select-frame new-frame)
-               (if (display-graphic-p)
-                   (s-font))))
-(if (display-graphic-p)
-    (s-font))
+;; (add-to-list 'after-make-frame-functions
+;;              (lambda (new-frame)
+;;                (select-frame new-frame)
+;;                (if (display-graphic-p)
+;;                    (set-font))))
+;; (if (display-graphic-p)
+;;     (set-font))
+
+(set-frame-parameter (selected-frame) 'alpha '(98 100))
+(add-to-list 'default-frame-alist '(alpha 98 100))
+
+(if (daemonp)
+    (progn (message "You're now a *daemon*")
+    (add-hook 'after-make-frame-functions
+	      (lambda (frame)
+		(with-selected-frame frame
+		  (set-font)))))
+  (set-font))
 
 ;; (use-package cnfonts
 ;;   :config

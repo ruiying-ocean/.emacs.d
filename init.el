@@ -47,12 +47,12 @@
 (require 'init-binding)
 (require 'init-recentf)
 (require 'init-company)
-(require 'init-python)
-(require 'init-eglot)
 (require 'init-org)
 (require 'init-md)
 (require 'init-tex)
-;;(require 'init-lsp.el)
+(require 'init-python) ;;use this on windows, eglot in linux instead
+;;(require 'init-eglot) ;;conflict with elpy and some company packages
+;;(require 'init-lsp)
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -79,5 +79,6 @@
  '(custom-safe-themes
    '("2dff5f0b44a9e6c8644b2159414af72261e38686072e063aa66ee98a2faecf0e" "21055a064d6d673f666baaed35a69519841134829982cbbb76960575f43424db" "e6df46d5085fde0ad56a46ef69ebb388193080cc9819e2d6024c9c6e27388ba9" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "2c613514f52fb56d34d00cc074fe6b5f4769b4b7f0cc12d22787808addcef12c" "3325e2c49c8cc81a8cc94b0d57f1975e6562858db5de840b03338529c64f58d1" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" default))
  '(highlight-indent-guides-method 'character)
+ '(org-export-backends '(ascii beamer html icalendar latex md))
  '(package-selected-packages
    '(flyspell-correct-popup flyspell-correct-avy-menu flyspell-correct-ivy spacemacs-themes dracula-theme zenburn-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow ayu-theme dashboard org-fancy-priorities org-superstar org-superstar-mode visual-fill-column spacemacs-theme lsp-mode lsp-python-ms ccls company-lsp ivy-rich lsp-ui company-posframe ivy-posframe mini-modeline company-quickhelp company-anaconda anaconda-mode lab-themes haskell-emacs-base company-box company-tabnine spaceline amx neotree base16-theme org-pomodoro org calfw-org ess grip-mode pydoc avy counsel ivy latex-preview-pane auctex smex markdown-mode yasnippet-snippets doom-modeline all-the-icons rainbow-delimiters flycheck projectile which-key nyan-mode popwin exec-path-from-shell magit transient company benchmark-init use-package doom-themes)))

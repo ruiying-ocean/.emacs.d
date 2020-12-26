@@ -58,7 +58,7 @@
   :config
   ;; 默认开启标题缩进
   (setq org-startup-indented t)
-  (org-agenda-to-appt t);;事件提醒
+;;  (org-agenda-to-appt t);;事件提醒
   (setq org-src-fontify-natively t) ;;高亮org代码块
   ;;设置关键词
   (setq org-todo-keywords
