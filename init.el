@@ -21,25 +21,29 @@
 
 ;;; Code:
 
-(require 'package)
-
-(setq my-name "Rui Ying"
-      my-email "ying.rui@outlook.com")
-
 (setq package-archives '(("gnu"   . "http://elpa.gnu.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")))
+;; Load path
+;; Optimize: Force "lisp" at the head to reduce the startup time.
+(defun update-load-path (&rest _)
+  "Update `load-path'."
+  (dolist (dir '("lisp"))
+    (push (expand-file-name dir user-emacs-directory) load-path)))
+(advice-add #'package-initialize :after #'update-load-path)
+(update-load-path)
 
-;; (setq package-archives
-;;       '(("melpa" . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/melpa/")
-;;         ("org"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/org/")
-;;         ("gnu"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/gnu/")))
-
-(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+(setq gc-cons-percentage 0.6)
+(setq gc-cons-threshold most-positive-fixnum)
 
 (when (< emacs-major-version 27)
   (package-initialize))
 
-(require 'use-package)
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(eval-when-compile
+  (require 'use-package))
 (require 'basic-config)
 (require 'package-configs)
 (require 'init-ui)
@@ -53,6 +57,14 @@
 (require 'init-python) ;;use this on windows, eglot in linux instead
 ;;(require 'init-eglot) ;;conflict with elpy and some company packages
 ;;(require 'init-lsp)
+
+(defun my-cleanup-gc ()
+  "Clean up gc."
+  (setq gc-cons-threshold  (* 128 1024 1024)) ; 64M
+  (setq gc-cons-percentage 0.3) ; original value
+  (garbage-collect))
+
+(run-with-idle-timer 4 nil #'my-cleanup-gc)
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -81,4 +93,4 @@
  '(highlight-indent-guides-method 'character)
  '(org-export-backends '(ascii beamer html icalendar latex md))
  '(package-selected-packages
-   '(flyspell-correct-popup flyspell-correct-avy-menu flyspell-correct-ivy spacemacs-themes dracula-theme zenburn-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow ayu-theme dashboard org-fancy-priorities org-superstar org-superstar-mode visual-fill-column spacemacs-theme lsp-mode lsp-python-ms ccls company-lsp ivy-rich lsp-ui company-posframe ivy-posframe mini-modeline company-quickhelp company-anaconda anaconda-mode lab-themes haskell-emacs-base company-box company-tabnine spaceline amx neotree base16-theme org-pomodoro org calfw-org ess grip-mode pydoc avy counsel ivy latex-preview-pane auctex smex markdown-mode yasnippet-snippets doom-modeline all-the-icons rainbow-delimiters flycheck projectile which-key nyan-mode popwin exec-path-from-shell magit transient company benchmark-init use-package doom-themes)))
+   '(esup flyspell-correct-popup flyspell-correct-avy-menu flyspell-correct-ivy spacemacs-themes dracula-theme zenburn-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow ayu-theme dashboard org-fancy-priorities org-superstar org-superstar-mode visual-fill-column spacemacs-theme lsp-mode lsp-python-ms ccls company-lsp ivy-rich lsp-ui company-posframe ivy-posframe mini-modeline company-quickhelp company-anaconda anaconda-mode lab-themes haskell-emacs-base company-box company-tabnine spaceline amx neotree base16-theme org-pomodoro org calfw-org ess grip-mode pydoc avy counsel ivy latex-preview-pane auctex smex markdown-mode yasnippet-snippets doom-modeline all-the-icons rainbow-delimiters flycheck projectile which-key nyan-mode popwin exec-path-from-shell magit transient company doom-themes)))

@@ -27,9 +27,10 @@
 ;;   (eval-after-load 'company
 ;;     '(define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin)))
 
-(use-package company-posframe ;;similar function as company-quickhelp
-  :config
-  (company-posframe-mode 1)
-  )
-
+;; (use-package company-posframe ;;similar function as company-quickhelp
+;;   :config
+;;   (company-posframe-mode 1)
+;;   )
+(use-package company-box
+  :hook (company-mode . company-box-mode))
 (provide 'init-company)
