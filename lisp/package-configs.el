@@ -1,6 +1,4 @@
 ; This file is setting of all packages in use-package framework
-(setq use-package-always-ensure t)
-
 (use-package which-key
   :config
   (which-key-mode))
@@ -152,6 +150,38 @@
 ;         ("M-=" . ess-cycle-assign)
 ; 	("M-p" . then_R_operator))
 ;   )
+
+
+(use-package highlight-symbol
+  :config
+  :bind
+  ("C-<f9>" . highlight-symbol)
+  ("<f9>" . highlight-symbol-next)
+  ("S-<f9>" . highlight-symbol-prev)
+  ("M-<f9>" . highlight-symbol-query-replace)
+  )
+
+(use-package helpful
+  :config
+  (global-set-key (kbd "C-h f") #'helpful-callable)
+  (global-set-key (kbd "C-h v") #'helpful-variable)
+  (global-set-key (kbd "C-h k") #'helpful-key)
+  )
+(use-package rainbow-mode
+  :mode
+  "\\.R\\'"
+  )
+(use-package ace-window
+  :config
+  (global-set-key (kbd "M-o") 'ace-window))
+
+(use-package visual-fill-column
+  :config
+  (add-hook 'visual-line-mode-hook #'visual-fill-column-mode)
+  :custom
+  (visual-fill-column-center-text t)
+  (visual-fill-column-width 80)
+  )
 
 (provide 'package-configs)
 ;;; package-configs.el ends here

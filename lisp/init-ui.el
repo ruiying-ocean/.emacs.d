@@ -8,6 +8,15 @@
 (setq system-time-locale nil)
 ;;(setq inhibit-startup-screen t)
 ;;(setq inhibit-startup-message t)
+(global-hl-line-mode t)
+(global-display-line-numbers-mode t);;the linum-mode has been obsolete
+(setq display-line-numbers-width 0)
+(show-paren-mode t)
+;;(electric-indent-mode t)
+
+(use-package smartparens
+  :config
+  (smartparens-global-mode t))
 
 (use-package nyan-mode
   :config
