@@ -16,7 +16,7 @@
 
 (cond
  ((eq system-type 'windows-nt)
-  (load-theme 'spacemacs-dark t))
+  (load-theme 'sanityinc-tomorrow-night t))
  ((eq system-type 'gnu/linux)
   (load-theme 'base16-nord t))
  )
@@ -43,14 +43,14 @@
 
 (defun set-font()
   (interactive)
-  ;; font config for org table showing.
-  (set-frame-font "Jetbrains Mono-12")
+  ;;Juliamono, Jetbrains Mono, Monaco, Consolas, Inconsolata, Fira Code, even Arial
+  (set-frame-font "Juliamono-10.5")
   (dolist (charset '(kana han symbol cjk-misc bopomofo))
     (set-fontset-font (frame-parameter nil 'font)
                       charset
                       (font-spec :family "Sarasa UI SC")))
   ;; tune rescale so that Chinese character width = 2 * English character width
-  (setq face-font-rescale-alist '(("Jetbrains Mono" . 1.0) ("Sarasa UI SC" . 1.0))))
+  (setq face-font-rescale-alist '(("Juliamono" . 1.0) ("Sarasa UI SC" . 1.0))))
 
 ;; (add-to-list 'after-make-frame-functions
 ;;              (lambda (new-frame)

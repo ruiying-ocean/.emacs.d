@@ -38,11 +38,11 @@
 ;; )
 
 
-; (use-package latex-preview-pane
-;   :defer t
-;   :config
-;   (setq doc-view-resolution 300) ;;make preview pdf clear
-;   (add-hook 'doc-view-mode-hook 'doc-view-fit-width-to-window)
-;   )
+(use-package latex-preview-pane
+  :defer t
+  :config
+  (setq doc-view-resolution 300) ;;make preview pdf clear
+  (add-hook 'doc-view-mode-hook 'doc-view-fit-width-to-window)
+  )
 
 (provide 'init-tex)
