@@ -250,3 +250,75 @@ DEADLINE: <2020-05-15 周五>
 **** 超车
 **** DOING 会车
 *** DONE 科目四
+
+** DONE [#A] cGEnIE Summary
+:PROPERTIES:
+:ARCHIVE_TIME: 2020-12-29 Tue 12:21
+:ARCHIVE_FILE: ~/.emacs.d/org/agenda.org
+:ARCHIVE_OLPATH: Studies/Major
+:ARCHIVE_CATEGORY: agenda
+:ARCHIVE_TODO: DONE
+:END:
+
+** Use Emacs to write Markdown
+:PROPERTIES:
+:ARCHIVE_TIME: 2020-12-29 Tue 12:47
+:ARCHIVE_FILE: ~/.emacs.d/org/agenda.org
+:ARCHIVE_OLPATH: Emacs
+:ARCHIVE_CATEGORY: agenda
+:END:
+*** preview
+Use Grip-mode
+
+** Emacs welcome Logo and emacs message
+:PROPERTIES:
+:ARCHIVE_TIME: 2020-12-29 Tue 12:47
+:ARCHIVE_FILE: ~/.emacs.d/org/agenda.org
+:ARCHIVE_OLPATH: Emacs
+:ARCHIVE_CATEGORY: agenda
+:END:
+
+** Emacs welcome Logo and emacs message
+:PROPERTIES:
+:ARCHIVE_TIME: 2020-12-29 Tue 12:48
+:ARCHIVE_FILE: ~/.emacs.d/org/agenda.org
+:ARCHIVE_OLPATH: Emacs
+:ARCHIVE_CATEGORY: agenda
+:END:
+By dashboard
+
+** DONE Emacs welcome Logo and emacs message
+:PROPERTIES:
+:ARCHIVE_TIME: 2020-12-29 Tue 12:48
+:ARCHIVE_FILE: ~/.emacs.d/org/agenda.org
+:ARCHIVE_OLPATH: Emacs
+:ARCHIVE_CATEGORY: agenda
+:ARCHIVE_TODO: DONE
+:END:
+By dashboard
+
+** CANCELED [#B] Use org-mode manage time(GTD)
+:PROPERTIES:
+:ARCHIVE_TIME: 2020-12-29 Tue 12:48
+:ARCHIVE_FILE: ~/.emacs.d/org/agenda.org
+:ARCHIVE_OLPATH: Emacs
+:ARCHIVE_CATEGORY: agenda
+:ARCHIVE_TODO: CANCELED
+:END:
+- [X] org-caputre/refile/journal ;;You don't need to 'cause you don't have many org-agenda-files
+- [X] emacs-calfw
+- [] how to end org-pomodoro
+- [] how to set a org-clock-report
+
+** CANCELED [#B] Use org-mode manage time(GTD)
+:PROPERTIES:
+:ARCHIVE_TIME: 2020-12-29 Tue 13:01
+:ARCHIVE_FILE: ~/.emacs.d/org/agenda.org
+:ARCHIVE_OLPATH: Emacs
+:ARCHIVE_CATEGORY: agenda
+:ARCHIVE_TODO: CANCELED
+:END:
+- [X] org-caputre/refile/journal ;;You don't need to 'cause you don't have many org-agenda-files
+- [X] emacs-calfw
+- [] how to end org-pomodoro
+- [] how to set a org-clock-report

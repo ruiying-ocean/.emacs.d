@@ -1,7 +1,4 @@
-;; (use-package org-bullets
-;;   :config
-;;   (add-hook 'org-mode-hook 'org-bullets-mode))
-
+;; Beautify org-mode
 ;;use org-superstar-mode to replace org-bullets
 (use-package org-superstar
   :defer t
@@ -18,24 +15,32 @@
   (org-mode . org-fancy-priorities-mode)
   :config
   (setq org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕"))
-  (unless (char-displayable-p ?❗)
-    (setq org-fancy-priorities-list '("HIGH" "MID" "LOW" "OPTIONAL"))))
+  (setq org-fancy-priorities-list '((?A . "❗")
+                                  (?B . "⬆")
+                                  (?C . "⬇")
+                                  (?D . "☕")
+                                  (?1 . "⚡")
+                                  (?2 . "⮬")
+                                  (?3 . "⮮")
+                                  (?4 . "☕")
+                                  (?I . "Important")))
+  )
 
-(setq-default ispell-program-name "~/Hunspell/bin/hunspell.exe") ;;need to donwload hunspell and add to path
-(setq ispell-local-dictionary "en_GB")
+(use-package org-num
+  :load-path "lisp/"
+  :after org
+  :hook (org-mode . org-num-mode))
 
-(add-hook 'org-mode-hook
-          (lambda ()
-            (variable-pitch-mode 1)
-            (visual-line-mode 1)
-	    (display-line-numbers-mode -1)
-	    (flyspell-mode 1)
-	    ))
-
-;;todo keywords 背景色
-;; (setf org-todo-keyword-faces '(("TODO" . (:foreground "white" :background "red"   :weight bold))
-;;                               ("HAND" . (:foreground "white" :background "#2E8B57"  :weight bold))
-;;                               ("DONE" . (:foreground "white" :background "#3498DB" :weight bold))))
+(setq-default prettify-symbols-alist '(("#+BEGIN_SRC" . "λ")
+                                       ("#+END_SRC" . "λ")
+                                       ("#+begin_src" . "λ")
+                                       ("#+end_src" . "λ")
+				       ("[ ]" .  "☐")
+				       ("[X]" . "☑" )
+				       ("[-]" . "❍" )
+				       ))
+(setq prettify-symbols-unprettify-at-point 'right-edge)
+(add-hook 'org-mode-hook 'prettify-symbols-mode)
 
 ;;层级项目
 (setq org-list-demote-modify-bullet
@@ -47,11 +52,7 @@
               ("A)" . "-")
               ("B)" . "-")
               ("a)" . "-")
-              ("b)" . "-")
-              ("A." . "-")
-              ("B." . "-")
-              ("a." . "-")
-              ("b." . "-"))))
+              ("b)" . "-"))))
 
 (use-package org
   :defer t
@@ -110,33 +111,11 @@
 	("C-c C-r" . org-archive-subtree))
   )
 
-(use-package org-num
-  :load-path "lisp/"
-  :after org
-  :hook (org-mode . org-num-mode))
-
 (setq org-hide-emphasis-markers t)
 (setq inhibit-compacting-font-caches t)
 
-;; (let* ((variable-tuple (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
-;;                              ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
-;;                              ((x-list-fonts "Verdana")         '(:font "Verdana"))
-;;                              ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
-;;                              (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
-;;        (base-font-color     (face-foreground 'default nil 'default))
-;;        (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
 
-;;         (custom-theme-set-faces 'user
-;;                           `(org-level-8 ((t (,@headline ,@variable-tuple))))
-;;                           `(org-level-7 ((t (,@headline ,@variable-tuple))))
-;;                           `(org-level-6 ((t (,@headline ,@variable-tuple))))
-;;                           `(org-level-5 ((t (,@headline ,@variable-tuple))))
-;;                           `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
-;;                           `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
-;;                           `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
-;;                           `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
-;;                           `(org-document-title ((t (,@headline ,@variable-tuple :height 1.5 :underline nil))))))
-                          
+;;org font-face setting, if not work well, disable variable-pitch-mode
 (custom-theme-set-faces
  'user
  '(org-block ((t (:inherit fixed-pitch))))
@@ -145,11 +124,75 @@
  '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
  '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold))))
  '(org-verbatim ((t (:inherit (shadow fixed-pitch)))))
- '(org-link ((t (:foreground "royal blue" :underline t))))
- '(variable-pitch ((t (:family "ETBembo" :height 140 :weight thin))))
- '(fixed-pitch ((t ( :family "Fira Code" :height 120)))) 
+ '(org-link ((t (:foreground "steel blue" :underline t))))
 )
 
+;; use flyspell in org-mode
+(setq-default ispell-program-name "~/Hunspell/bin/hunspell.exe") ;;require donwloading hunspell and add to path
+(setq ispell-local-dictionary "en_GB")
+
+(add-hook 'org-mode-hook
+          (lambda ()
+	    (variable-pitch-mode 1)
+            (visual-line-mode 1)
+	    (display-line-numbers-mode -1)
+	    (flyspell-mode 1)
+	    ))
+
+(use-package org-super-agenda
+  :defer t
+  :config
+  (let ((org-super-agenda-groups
+       '(;; Each group has an implicit boolean OR operator between its selectors.
+         (:name "Today"  ; Optionally specify section name
+                :time-grid t  ; Items that appear on the time grid
+                :todo "TODAY")  ; Items that have this TODO keyword
+         (:name "Important"
+                ;; Single arguments given alone
+                :tag "bills"
+                :priority "A")
+         ;; Set order of multiple groups at once
+         (:order-multi (2 (:name "Shopping in town"
+                                 ;; Boolean AND group matches items that match all subgroups
+                                 :and (:tag "shopping" :tag "@town"))
+                          (:name "Food-related"
+                                 ;; Multiple args given in list with implicit OR
+                                 :tag ("food" "dinner"))
+                          (:name "Personal"
+                                 :habit t
+                                 :tag "personal")
+                          (:name "Space-related (non-moon-or-planet-related)"
+                                 ;; Regexps match case-insensitively on the entire entry
+                                 :and (:regexp ("space" "NASA")
+                                               ;; Boolean NOT also has implicit OR between selectors
+                                               :not (:regexp "moon" :tag "planet")))))
+         ;; Groups supply their own section names when none are given
+         (:todo "WAITING" :order 8)  ; Set order of this section
+         (:todo ("SOMEDAY" "TO-READ" "CHECK" "TO-WATCH" "WATCHING")
+                ;; Show this group at the end of the agenda (since it has the
+                ;; highest number). If you specified this group last, items
+                ;; with these todo keywords that e.g. have priority A would be
+                ;; displayed in that group instead, because items are grouped
+                ;; out in the order the groups are listed.
+                :order 9)
+         (:priority<= "B"
+                      ;; Show this section after "Today" and "Important", because
+                      ;; their order is unspecified, defaulting to 0. Sections
+                      ;; are displayed lowest-number-first.
+                      :order 1)
+         ;; After the last group, the agenda will display items that didn't
+         ;; match any of these groups, with the default order position of 99
+         )))
+  (org-agenda nil "a"))
+  )
+
+
+; (use-package org-pomodoro
+;   :bind	("C-x p" . org-pomodoro)
+;   :config
+;   (setq org-agenda-clockreport-parameter-plist '(:fileskip0 t :link t :maxlevel 2 :formula "$5=($3+$4)*(60/25);t"))
+;   (setq org-clock-sound t)
+;;   )
 
 ; (use-package calfw
 ;   :ensure calfw-org
@@ -160,12 +203,5 @@
 ;   :bind
 ;   (:map org-mode-map
 ; 	("C-c v" . cfw:open-org-calendar)))
-
-; (use-package org-pomodoro
-;   :bind	("C-x p" . org-pomodoro)
-;   :config
-;   (setq org-agenda-clockreport-parameter-plist '(:fileskip0 t :link t :maxlevel 2 :formula "$5=($3+$4)*(60/25);t"))
-;   (setq org-clock-sound t)
-;;   )
 
 (provide 'init-org)

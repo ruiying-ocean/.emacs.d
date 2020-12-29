@@ -2,17 +2,9 @@
 ;---------------------------------------
 ;;Font and Theme setting
 ;---------------------------------------
-(use-package base16-theme
-  :ensure t)
-
-(use-package ayu-theme
-  :ensure t)
-
-(use-package color-theme-sanityinc-tomorrow
-  :ensure t)
-
-(use-package color-theme-sanityinc-solarized
-  :ensure t)
+(use-package base16-theme)
+(use-package color-theme-sanityinc-tomorrow)
+(use-package color-theme-sanityinc-solarized)
 
 (cond
  ((eq system-type 'windows-nt)
@@ -43,8 +35,13 @@
 
 (defun set-font()
   (interactive)
-  ;;Juliamono, Jetbrains Mono, Monaco, Consolas, Inconsolata, Fira Code, even Arial
-  (set-frame-font "Juliamono-10.5")
+  ;;Choose Juliamono/Jetbrains Mono/Monaco/Consolas/Inconsolata/Fira Code
+  (set-face-attribute 'default nil
+                    :family "Juliamono"
+                    :height 105
+                    :weight 'normal
+                    :width 'normal)
+  (set-fontset-font t 'unicode "Symbola" nil 'prepend);;use Symbola to display unicode character
   (dolist (charset '(kana han symbol cjk-misc bopomofo))
     (set-fontset-font (frame-parameter nil 'font)
                       charset
@@ -52,17 +49,13 @@
   ;; tune rescale so that Chinese character width = 2 * English character width
   (setq face-font-rescale-alist '(("Juliamono" . 1.0) ("Sarasa UI SC" . 1.0))))
 
-;; (add-to-list 'after-make-frame-functions
-;;              (lambda (new-frame)
-;;                (select-frame new-frame)
-;;                (if (display-graphic-p)
-;;                    (set-font))))
-;; (if (display-graphic-p)
-;;     (set-font))
 
+;;Transprancy setting
 (set-frame-parameter (selected-frame) 'alpha '(98 100))
 (add-to-list 'default-frame-alist '(alpha 98 100))
 
+
+;daemon mode font setting
 (if (daemonp)
     (progn (message "You're now a *daemon*")
     (add-hook 'after-make-frame-functions

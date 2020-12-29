@@ -1,32 +1,20 @@
-#+TITLE: 我的个人中长期规划
+#+TITLE: My To-Do projects
 * Emacs
-** Use Emacs to write Markdown
-*** preview
-Use Grip-mode
 ** [#C] Elisp
 *** elisp语法
 http://ergoemacs.org/emacs/elisp_basics.html
-** Emacs welcome Logo and emacs message
-** [#B] Use org-mode manage time(GTD)
-- [X] org-caputre/refile/journal ;;You don't need to 'cause you don't have many org-agenda-files
-- [X] emacs-calfw
-- [] how to end org-pomodoro
-- [] how to set a org-clock-report
 * Studies
-** Mathmatic
-*** Bayesian Statistic
-*** [#A] Calculus
-*** TODO Partial Differntial Equation
-** English
-*** [#A] vocabulary
-*** [#A] listening
-*** [#C] British Accent
+** Mathematica and Physic
+*** Statistic
+**** TODO GLM [1/3]
+SCHEDULED: <2020-12-29 Tue>
+*** Calculus
+*** Partial Differntial Equation
 ** Major
-*** TODO [#A] cGEnIE
-*** TODO [#B] Micropaleontology
-*** TODO [#A] Physical Oceanography
-*** Other books
-*** Fluid Machnical
+*** Fluid Machanical
+*** Foraminifera Study
+**** TODO Read Ruby's Thesis
+SCHEDULED: <2020-12-29 Tue>
 ** Coding
 *** [#B] Fortran
 *** [#C] Matlab
@@ -42,10 +30,9 @@ http://ergoemacs.org/emacs/elisp_basics.html
 ** 高阶技巧
 *** 扫拨
 *** 速弹
-爆发练习方法：极限速度*110%，只弹一个音，一节只加1组16分音符（1234），逐渐到4组16分音符
-耐力练习：练习5min
+爆发练习方法：极限速度\times110%，只弹一个音，一节只加1组16分音符（1234），逐渐到4组16分音符
+耐力练习：练习5 min
 右手练习：八分音符（爬音阶，每个音2下）
 *** 点弦
 *** 泛音
 ** 扒谱
-

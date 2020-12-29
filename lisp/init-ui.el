@@ -12,18 +12,30 @@
 (global-display-line-numbers-mode t);;the linum-mode has been obsolete
 (setq display-line-numbers-width 0)
 (show-paren-mode t)
+(setq show-paren-style 'mixed)
 ;;(electric-indent-mode t)
 
 (use-package smartparens
   :config
-  (smartparens-global-mode t))
+  (smartparens-global-mode t)
+  (sp-pair "\{" "\}") ;; latex literal brackets (included by default)
+  (sp-pair "<#" "#>")
+  (sp-pair "$" "$")   ;; latex inline math mode. Pairs can have same opening and closing string)
+  (sp-local-pair 'LaTeX-mode "\\left(" "\\right)" :insert "C-b l" :trigger "\\l(")
+  (sp-pair "'" nil :actions :rem)
+  :bind
+  (:map smartparens-mode-map
+	("C-M-f" . sp-forward-sexp)
+	("C-M-b" . sp-backward-sexp)
+	("C-M-d" . sp-down-sexp);;down one level
+	("C-M-u" . sp-up-sexp));;up one level
+  );;more see the doc https://github.com/Fuco1/smartparens/wiki/Working-with-expressions
 
 (use-package nyan-mode
   :config
   (nyan-mode t))
 
 (use-package dashboard
-    :ensure t
     :diminish dashboard-mode
     :config
     (setq dashboard-banner-logo-title "Welcome back, Rui!")
