@@ -322,3 +322,13 @@ By dashboard
 - [X] emacs-calfw
 - [] how to end org-pomodoro
 - [] how to set a org-clock-report
+
+** DONE Read Ruby's Thesis
+SCHEDULED: <2020-12-29 Tue>
+:PROPERTIES:
+:ARCHIVE_TIME: 2020-12-29 Tue 21:11
+:ARCHIVE_FILE: ~/.emacs.d/org/agenda.org
+:ARCHIVE_OLPATH: Studies/Major/Foraminifera Study
+:ARCHIVE_CATEGORY: agenda
+:ARCHIVE_TODO: DONE
+:END:

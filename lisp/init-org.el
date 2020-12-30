@@ -113,7 +113,14 @@
 
 (setq org-hide-emphasis-markers t)
 (setq inhibit-compacting-font-caches t)
-
+(defun modify-org-done-face()
+  (setq org-fontify-done-headline t)
+  (set-face-attribute 'org-done nil :strike-through t)
+  (set-face-attribute 'org-headline-done nil
+                      :strike-through t
+                      :foreground "#363636"))
+(eval-after-load "org"
+  (add-hook 'org-add-hook 'modify-org-done-face))
 
 ;;org font-face setting, if not work well, disable variable-pitch-mode
 (custom-theme-set-faces

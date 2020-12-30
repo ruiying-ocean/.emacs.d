@@ -1,18 +1,22 @@
-
 ;---------------------------------------
 ;;Font and Theme setting
 ;---------------------------------------
 (use-package base16-theme)
 (use-package color-theme-sanityinc-tomorrow)
-(use-package color-theme-sanityinc-solarized)
+(use-package gruvbox-theme)
+(use-package spacemacs-common
+  :ensure spacemacs-theme)
 
-(cond
- ((eq system-type 'windows-nt)
-  (load-theme 'sanityinc-tomorrow-night t))
- ((eq system-type 'gnu/linux)
-  (load-theme 'base16-nord t))
- )
-
+(setq color-themes '(sanityinc-tomorrow-night base16-zenburn gruvbox-dark-soft spacemacs-dark))
+(defun random-color-theme()
+  (interactive)
+  (random t)
+  (load-theme
+   (nth (random (length color-themes)) color-themes)
+   t))
+;(add-hook 'after-init-hook 'random-color-theme)
+(global-set-key (kbd "C-z") 'random-color-theme)
+(load-theme 'base16-zenburn t)
 ; (use-package doom-themes
 ;   :ensure t
 ;   :config
