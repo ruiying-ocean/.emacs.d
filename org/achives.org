@@ -332,3 +332,22 @@ SCHEDULED: <2020-12-29 Tue>
 :ARCHIVE_CATEGORY: agenda
 :ARCHIVE_TODO: DONE
 :END:
+
+** DONE Read Wilson et al. 2018
+:PROPERTIES:
+:ARCHIVE_TIME: 2020-12-30 Wed 21:03
+:ARCHIVE_FILE: ~/.emacs.d/org/agenda.org
+:ARCHIVE_OLPATH: Studies/Major/Foraminifera Study
+:ARCHIVE_CATEGORY: agenda
+:ARCHIVE_TODO: DONE
+:END:
+
+** DONE [#B] Summarize the ideas
+SCHEDULED: <2020-12-30 Tue>
+:PROPERTIES:
+:ARCHIVE_TIME: 2020-12-30 Wed 21:03
+:ARCHIVE_FILE: ~/.emacs.d/org/agenda.org
+:ARCHIVE_OLPATH: Studies/Major/Foraminifera Study
+:ARCHIVE_CATEGORY: agenda
+:ARCHIVE_TODO: DONE
+:END:

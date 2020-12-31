@@ -21,7 +21,7 @@
 
 (use-package smartparens
   :config
-  (smartparens-global-mode t)
+  (smartparens-mode 1)
   (sp-pair "\{" "\}") ;; latex literal brackets (included by default)
   (sp-pair "<#" "#>")
   (sp-pair "$" "$")   ;; latex inline math mode. Pairs can have same opening and closing string)

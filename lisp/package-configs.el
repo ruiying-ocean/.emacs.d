@@ -1,4 +1,12 @@
 ; This file is setting of all packages in use-package framework
+
+;;visit https://github.com/jacktasia/dumb-jump to see more alternative ways
+(use-package dumb-jump
+  :config
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
+  (setq dumb-jump-default-project "~/cgenie.muffin")
+  (add-to-list 'auto-mode-alist '("\\.config\\'" . shell-script-mode)))
+
 (use-package which-key
   :config
   (which-key-mode))
@@ -151,7 +159,6 @@
 ; 	("M-p" . then_R_operator))
 ;   )
 
-
 (use-package highlight-symbol
   :config
   :bind
@@ -180,7 +187,7 @@
   (add-hook 'visual-line-mode-hook #'visual-fill-column-mode)
   :custom
   (visual-fill-column-center-text t)
-  (visual-fill-column-width 80)
+  (visual-fill-column-width 100)
   )
 
 (provide 'package-configs)

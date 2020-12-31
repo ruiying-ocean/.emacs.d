@@ -1,45 +1,34 @@
-;---------------------------------------
-;;Font and Theme setting
-;---------------------------------------
+;;Color scheme setting
 (use-package base16-theme)
 (use-package color-theme-sanityinc-tomorrow)
 (use-package gruvbox-theme)
 (use-package spacemacs-common
   :ensure spacemacs-theme)
+(use-package sublime-themes)
+(use-package doom-themes)
+(use-package ayu-theme)
 
-(setq color-themes '(sanityinc-tomorrow-night base16-zenburn gruvbox-dark-soft spacemacs-dark))
+;;Transprancy setting
+(set-frame-parameter (selected-frame) 'alpha '(98 100))
+(add-to-list 'default-frame-alist '(alpha 98 100))
+
+;;random theme
+(setq color-themes '(sanityinc-tomorrow-night base16-zenburn gruvbox-dark-soft spacemacs-dark spolsky doom-one doom-vibrant doom-dark+))
 (defun random-color-theme()
+  "randomly change color theme"
   (interactive)
   (random t)
   (load-theme
    (nth (random (length color-themes)) color-themes)
    t))
-;(add-hook 'after-init-hook 'random-color-theme)
 (global-set-key (kbd "C-z") 'random-color-theme)
-(load-theme 'base16-zenburn t)
-; (use-package doom-themes
-;   :ensure t
-;   :config
-;   ;; Global settings (defaults)
-;   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-;         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-;   (load-theme 'doom-dracula t)
+;;(add-hook 'after-init-hook 'random-color-theme)
+(load-theme 'base16-gruvbox-dark-soft t)
 
-;   ;; Enable flashing mode-line on errors
-;   (doom-themes-visual-bell-config)
-  
-;   ;; Enable custom neotree theme (all-the-icons must be installed!)
-;   (doom-themes-neotree-config)
-;   ;; or for treemacs users
-;   (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
-;   (doom-themes-treemacs-config)
-  
-;   ;; Corrects (and improves) org-mode's native fontification.
-;   (doom-themes-org-config))
-
+;;font setting
 (defun set-font()
   (interactive)
-  ;;Choose Juliamono/Jetbrains Mono/Monaco/Consolas/Inconsolata/Fira Code
+  ;;Choose Juliamono/Jetbrains Mono/Robot Mono/Monaco/Consolas/Inconsolata/Fira Code
   (set-face-attribute 'default nil
                     :family "Juliamono"
                     :height 105
@@ -53,20 +42,37 @@
   ;; tune rescale so that Chinese character width = 2 * English character width
   (setq face-font-rescale-alist '(("Juliamono" . 1.0) ("Sarasa UI SC" . 1.0))))
 
-
-;;Transprancy setting
-(set-frame-parameter (selected-frame) 'alpha '(98 100))
-(add-to-list 'default-frame-alist '(alpha 98 100))
-
+;(add-to-list 'after-init-hook 'set-font)
 
 ;daemon mode font setting
 (if (daemonp)
-    (progn (message "You're now a *daemon*")
-    (add-hook 'after-make-frame-functions
-	      (lambda (frame)
-		(with-selected-frame frame
-		  (set-font)))))
+    (progn
+      (message "You're now a *daemon*")
+      (add-hook 'after-make-frame-functions
+		(lambda (frame)
+		  (with-selected-frame frame
+		    (set-font)))))
   (set-font))
+
+;; (use-package doom-themes
+;;   :ensure t
+;;   :config
+;;   ;; Global settings (defaults)
+;;   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+;;         doom-themes-enable-italic t) ; if nil, italics is universally disabled
+;;   (load-theme 'doom-dracula t)
+
+;;   ;; Enable flashing mode-line on errors
+;;   (doom-themes-visual-bell-config)
+  
+;;   ;; Enable custom neotree theme (all-the-icons must be installed!)
+;;   (doom-themes-neotree-config)
+;;   ;; or for treemacs users
+;;   (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+;;   (doom-themes-treemacs-config)
+  
+;;   ;; Corrects (and improves) org-mode's native fontification.
+;;   (doom-themes-org-config))
 
 ;; (use-package cnfonts
 ;;   :config

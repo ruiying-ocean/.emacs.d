@@ -193,8 +193,12 @@
   (org-agenda nil "a"))
   )
 
+(use-package org-download
+  :config
+  (add-hook 'dired-mode-hook 'org-download-enable))
 
-; (use-package org-pomodoro
+
+; (Use-package org-pomodoro
 ;   :bind	("C-x p" . org-pomodoro)
 ;   :config
 ;   (setq org-agenda-clockreport-parameter-plist '(:fileskip0 t :link t :maxlevel 2 :formula "$5=($3+$4)*(60/25);t"))
