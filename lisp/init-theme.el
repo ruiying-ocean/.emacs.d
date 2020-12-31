@@ -1,30 +1,3 @@
-;;Color scheme setting
-(use-package base16-theme)
-(use-package color-theme-sanityinc-tomorrow)
-(use-package gruvbox-theme)
-(use-package spacemacs-common
-  :ensure spacemacs-theme)
-(use-package sublime-themes)
-(use-package doom-themes)
-(use-package ayu-theme)
-
-;;Transprancy setting
-(set-frame-parameter (selected-frame) 'alpha '(98 100))
-(add-to-list 'default-frame-alist '(alpha 98 100))
-
-;;random theme
-(setq color-themes '(sanityinc-tomorrow-night base16-zenburn gruvbox-dark-soft spacemacs-dark spolsky doom-one doom-vibrant doom-dark+))
-(defun random-color-theme()
-  "randomly change color theme"
-  (interactive)
-  (random t)
-  (load-theme
-   (nth (random (length color-themes)) color-themes)
-   t))
-(global-set-key (kbd "C-z") 'random-color-theme)
-;;(add-hook 'after-init-hook 'random-color-theme)
-(load-theme 'base16-gruvbox-dark-soft t)
-
 ;;font setting
 (defun set-font()
   (interactive)
@@ -53,6 +26,35 @@
 		  (with-selected-frame frame
 		    (set-font)))))
   (set-font))
+
+
+;;Color scheme setting
+(use-package base16-theme)
+(use-package color-theme-sanityinc-tomorrow)
+(use-package gruvbox-theme)
+;; (use-package spacemacs-common
+;;   :ensure spacemacs-theme)
+(use-package sublime-themes)
+(use-package doom-themes)
+(use-package ayu-theme)
+
+;;Transprancy setting
+(set-frame-parameter (selected-frame) 'alpha '(98 100))
+(add-to-list 'default-frame-alist '(alpha 98 100))
+
+;;random theme
+(setq color-themes '(sanityinc-tomorrow-night base16-zenburn gruvbox-dark-soft spacemacs-dark spolsky doom-one doom-vibrant doom-dark+))
+(defun random-color-theme()
+  "randomly change color theme"
+  (interactive)
+  (random t)
+  (load-theme
+   (nth (random (length color-themes)) color-themes)
+   t))
+(global-set-key (kbd "C-z") 'random-color-theme)
+;;(add-hook 'after-init-hook 'random-color-theme)
+(load-theme 'base16-gruvbox-dark-soft t)
+;;(add-hook 'after-init-hook (lambda () (load-theme 'base16-gruvbox-dark-soft)))
 
 ;; (use-package doom-themes
 ;;   :ensure t

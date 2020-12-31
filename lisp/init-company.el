@@ -31,6 +31,8 @@
 ;;   :config
 ;;   (company-posframe-mode 1)
 ;;   )
+
 (use-package company-box
   :hook (company-mode . company-box-mode))
+
 (provide 'init-company)

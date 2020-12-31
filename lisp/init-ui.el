@@ -19,21 +19,23 @@
 (setq show-paren-style 'mixed)
 ;;(electric-indent-mode t)
 
+;;more see the doc https://github.com/Fuco1/smartparens/wiki/Working-with-expressions
 (use-package smartparens
-  :config
-  (smartparens-mode 1)
+  :config  
   (sp-pair "\{" "\}") ;; latex literal brackets (included by default)
   (sp-pair "<#" "#>")
   (sp-pair "$" "$")   ;; latex inline math mode. Pairs can have same opening and closing string)
   (sp-local-pair 'LaTeX-mode "\\left(" "\\right)" :insert "C-b l" :trigger "\\l(")
   (sp-pair "'" nil :actions :rem)
+  (add-hook 'prog-mode-hook #'smartparens-mode)
+  (add-hook 'text-mode-hook #'smartparens-mode)
   :bind
   (:map smartparens-mode-map
 	("C-M-f" . sp-forward-sexp)
 	("C-M-b" . sp-backward-sexp)
 	("C-M-d" . sp-down-sexp);;down one level
 	("C-M-u" . sp-up-sexp));;up one level
-  );;more see the doc https://github.com/Fuco1/smartparens/wiki/Working-with-expressions
+  )
 
 (use-package nyan-mode
   :config

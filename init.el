@@ -46,9 +46,9 @@
 (eval-when-compile
   (require 'use-package))
 (require 'basic-config)
-(require 'package-configs)
-(require 'init-ui)
 (require 'init-theme)
+(require 'init-ui)
+(require 'package-configs)
 (require 'init-binding)
 (require 'init-recentf)
 (require 'init-company)
@@ -90,6 +90,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("fee4e306d9070a55dce4d8e9d92d28bd9efe92625d2ba9d4d654fc9cd8113b7f" default))
  '(highlight-indent-guides-method 'character)
  '(org-export-backends '(ascii beamer html icalendar latex md))
  '(package-selected-packages
