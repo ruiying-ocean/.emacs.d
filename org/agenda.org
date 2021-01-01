@@ -3,7 +3,6 @@
 ** [#C] Elisp
 *** elisp
 http://ergoemacs.org/emacs/elisp_basics.html
-*** Emacs Smartparenmode startup
 *** Projectile usage
 * Studies
 ** Mathematica and Physic

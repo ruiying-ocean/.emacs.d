@@ -140,7 +140,7 @@
 
 (add-hook 'org-mode-hook
           (lambda ()
-	    (variable-pitch-mode 1)
+;;	    (variable-pitch-mode 1)	;;need to manually turn on now
             (visual-line-mode 1)
 	    (display-line-numbers-mode -1)
 	    (flyspell-mode 1)

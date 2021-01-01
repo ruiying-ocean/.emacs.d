@@ -1,13 +1,12 @@
 * About
- This is my emacs init file(s), I'm very happy if my configuration can help you. Happy Emacs!
+ This is my Emacs init file(s) to achieve cross-platform use of my Emacs. Although nothing innovative, I'm happy if my configuration can help you. Happy Emacs!
 * Structure
 I divide my init files into several different elisp files and use init.el to call them.
-The concret structure is:
+The structure is like:
 #+BEGIN_SRC text
-+-- ~/.emacs.d
-   +-- init.el
-   +-- config
-       +-- basic-config.el ;; configs about color theme, editor setting etc.
-       +-- package-configs.el ;; use-package configs
+  +-- ~/.emacs.d
+     +-- init.el
+     +-- lisp folder
+         +-- init-*.el
 #+END_SRC
 

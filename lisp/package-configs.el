@@ -12,7 +12,7 @@
   (which-key-mode))
 
 (use-package projectile
-  :defer 3
+  :defer t
   :init
   (setq projectile-completion-system 'ivy)
   :config
@@ -22,7 +22,18 @@
 	("C-c p" . projectile-command-map)))
 
 (use-package flycheck
-  :init (global-flycheck-mode))
+;  :init (global-flycheck-mode)
+  :hook
+  (after-init . global-flycheck-mode)
+  :config
+ (with-eval-after-load 'flycheck
+   (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
+  )
+
+(use-package flycheck-inline
+  :config
+  (with-eval-after-load 'flycheck
+    (add-hook 'flycheck-mode-hook #'flycheck-inline-mode)))
 
 (use-package rainbow-delimiters
   :config
@@ -91,8 +102,10 @@
 	 ("M-x" . smex-major-mode-commands)))
 
 (use-package ivy
+  :hook
+  (after-init . ivy-mode)
   :config
-  (ivy-mode 1)
+  ;(ivy-mode 1)
   (setq ivy-use-virtual-buffers t)
   (setq enable-recursive-minibuffers t)
   (global-set-key "\C-s" 'swiper)
@@ -106,6 +119,7 @@
 ;;   :after flyspell-correct)
 
 (use-package ivy-rich
+  :after ivy
   :config
   (ivy-rich-mode t)
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
@@ -122,6 +136,7 @@
 ;;   (ivy-posframe-mode 1))
 
 (use-package counsel
+  :after ivy
   :config
   (global-set-key (kbd "M-x") 'counsel-M-x)
   (global-set-key (kbd "C-x C-f") 'counsel-find-file)
@@ -134,30 +149,12 @@
 
 (use-package avy
   ;;快速跳转字符或行
-  :defer 2
+  :defer t
   :config
   (global-set-key (kbd "C-:") 'avy-goto-char)
   (global-set-key (kbd "C-'") 'avy-goto-char-2)
   (global-set-key (kbd "M-g w") 'avy-goto-word-1)
   (global-set-key (kbd "M-g l") 'avy-goto-line))
-
-; (use-package ess-r-mode
-;   :ensure ess
-;   :config
-;   (defun then_R_operator ()
-;   "R - %>% operator or 'then' pipe operator"
-;   (interactive)
-;   (just-one-space 1)
-;   (insert "%>%")
-;   (reindent-then-newline-and-indent))
-;   :bind
-;   (:map ess-mode-map
-;         ("M-=" . ess-cycle-assign)
-;         ("M-p" . then_R_operator))
-;   (:map inferior-ess-mode-map
-;         ("M-=" . ess-cycle-assign)
-; 	("M-p" . then_R_operator))
-;   )
 
 (use-package highlight-symbol
   :config
@@ -174,10 +171,7 @@
   (global-set-key (kbd "C-h v") #'helpful-variable)
   (global-set-key (kbd "C-h k") #'helpful-key)
   )
-(use-package rainbow-mode
-  :mode
-  "\\.R\\'"
-  )
+
 (use-package ace-window
   :config
   (global-set-key (kbd "M-o") 'ace-window))

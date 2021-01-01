@@ -1,7 +1,7 @@
 ;; Start fullscreen (cross-platf)
-(add-hook 'window-setup-hook 'toggle-frame-fullscreen t)
+;;(add-hook 'window-setup-hook 'toggle-frame-fullscreen t)
 ;; Start maximised (cross-platf)
-;;(add-hook 'window-setup-hook 'toggle-frame-maximized t)
+(add-hook 'window-setup-hook 'toggle-frame-maximized t)
 (tool-bar-mode 0)
 (menu-bar-mode 0)
 (scroll-bar-mode 0)
@@ -21,20 +21,19 @@
 
 ;;more see the doc https://github.com/Fuco1/smartparens/wiki/Working-with-expressions
 (use-package smartparens
-  :config  
-  (sp-pair "\{" "\}") ;; latex literal brackets (included by default)
-  (sp-pair "<#" "#>")
-  (sp-pair "$" "$")   ;; latex inline math mode. Pairs can have same opening and closing string)
-  (sp-local-pair 'LaTeX-mode "\\left(" "\\right)" :insert "C-b l" :trigger "\\l(")
-  (sp-pair "'" nil :actions :rem)
-  (add-hook 'prog-mode-hook #'smartparens-mode)
-  (add-hook 'text-mode-hook #'smartparens-mode)
+  :init (smartparens-global-mode t)
   :bind
   (:map smartparens-mode-map
 	("C-M-f" . sp-forward-sexp)
 	("C-M-b" . sp-backward-sexp)
 	("C-M-d" . sp-down-sexp);;down one level
 	("C-M-u" . sp-up-sexp));;up one level
+  :config  
+  (sp-pair "\{" "\}") ;; latex literal brackets (included by default)
+  (sp-pair "<#" "#>")
+  (sp-pair "$" "$")   ;; latex inline math mode. Pairs can have same opening and closing string)
+  (sp-local-pair 'LaTeX-mode "\\left(" "\\right)" :insert "C-b l" :trigger "\\l(")
+  (sp-pair "'" nil :actions :rem)
   )
 
 (use-package nyan-mode
@@ -55,7 +54,11 @@
 
 (use-package highlight-indent-guides
   :config
-  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+;  (set-face-background 'highlight-indent-guides-character-face "dimgrey")
+  :custom
+  (highlight-indent-guides-method 'character)
+  )
 
 ;; (use-package minimap
 ;;   :custom

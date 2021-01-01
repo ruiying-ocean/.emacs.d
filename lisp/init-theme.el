@@ -1,32 +1,31 @@
+
 ;;font setting
 (defun set-font()
   (interactive)
-  ;;Choose Juliamono/Jetbrains Mono/Robot Mono/Monaco/Consolas/Inconsolata/Fira Code
-  (set-face-attribute 'default nil
-                    :family "Juliamono"
-                    :height 105
-                    :weight 'normal
-                    :width 'normal)
+  ;;Choose Iosevka/Inconsolata/Juliamono/Jetbrains Mono/Roboto Mono/Monaco/Fira Code/SF Mono
+  ;;for Chinese, there're Wenquanyi Micro Hei Mono/Sarasa UI SC Mono/Noto Sans CJK SC Mono (work perfectly with Iosevka/Inconsolata)
+  ;;for variable-pitch font, ETBembo or New York can be used
+  (set-face-attribute 'default nil :font "Iosevka 12")
   (set-fontset-font t 'unicode "Symbola" nil 'prepend);;use Symbola to display unicode character
   (dolist (charset '(kana han symbol cjk-misc bopomofo))
     (set-fontset-font (frame-parameter nil 'font)
                       charset
-                      (font-spec :family "Sarasa UI SC")))
-  ;; tune rescale so that Chinese character width = 2 * English character width
-  (setq face-font-rescale-alist '(("Juliamono" . 1.0) ("Sarasa UI SC" . 1.0))))
+                      (font-spec :family "Wenquanyi Micro Hei Mono"))))
+;; tune rescale so that Chinese character width = 2 * English character width
+;;except for Iosevka/Inconsolata, EN:CN font are basically 13/14:16
+;;  (setq face-font-rescale-alist '(("Iosevka" . 1.0) ("Wenquanyi Micro Hei Mono" . 1.0))))
 
 ;(add-to-list 'after-init-hook 'set-font)
 
 ;daemon mode font setting
 (if (daemonp)
     (progn
-      (message "You're now a *daemon*")
+      (message "A *daemon* is with you!")
       (add-hook 'after-make-frame-functions
 		(lambda (frame)
 		  (with-selected-frame frame
 		    (set-font)))))
   (set-font))
-
 
 ;;Color scheme setting
 (use-package base16-theme)
@@ -36,7 +35,6 @@
 ;;   :ensure spacemacs-theme)
 (use-package sublime-themes)
 (use-package doom-themes)
-(use-package ayu-theme)
 
 ;;Transprancy setting
 (set-frame-parameter (selected-frame) 'alpha '(98 100))
