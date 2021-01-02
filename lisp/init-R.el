@@ -14,6 +14,9 @@
   (:map inferior-ess-mode-map
         ("M-=" . ess-cycle-assign)
 	("M-p" . then_R_operator))
+  :mode
+  "\\.R\\'"
+  "\\.r\\'"
   )
 
 (use-package rainbow-mode

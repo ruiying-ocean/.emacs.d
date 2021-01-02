@@ -40,6 +40,17 @@
   :config
   (nyan-mode t))
 
+;; (use-package spaceline
+;;  :init
+;;  (require 'spaceline-config)
+;;  :config
+;;  (spaceline-emacs-theme))
+
+(use-package doom-modeline
+  :ensure t
+  :hook (after-init . doom-modeline-mode))
+
+
 (use-package dashboard
     :diminish dashboard-mode
     :config

@@ -75,16 +75,6 @@
   (global-set-key [f8] 'neotree-toggle)
   )
 
-;(use-package spaceline
-;  :init
-;  (require 'spaceline-config)
-;  :config
-;  (spaceline-emacs-theme))
-
-(use-package doom-modeline
-  :ensure t
-  :hook (after-init . doom-modeline-mode))
-
 (use-package awesome-tab
   ;;not currently available on melpa
   :load-path "~/.emacs.d/config/awesome-tab.el"

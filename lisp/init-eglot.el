@@ -1,11 +1,15 @@
 (use-package eglot
   :config
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd")) ;;install clangd first
-  (add-to-list 'eglot-server-programs '(f90-mode . ("fortls"))) ;;install fortls through pip first
-
-  (add-hook 'python-mode-hook 'eglot-ensure)
-  (add-hook 'c-mode-hook 'eglot-ensure)
-  (add-hook 'java-mode-hook 'eglot-ensure))
+  (add-to-list 'eglot-server-programs '(f90-mode . ("fortls"))) ;;pip3 install fortran-language-server
+  (add-to-list 'eglot-server-programs '((tex-mode context-mode texinfo-mode bibtex-mode)
+                                      . ("texlab"))) ;;install texlab and push to $PATH
+  :hook
+  (python-mode . eglot-ensure) ;;pip3 install python-language-server
+  (c-mode . eglot-ensure)
+  (java-mode . eglot-ensure)
+;;  (ess-r-mode . eglot-ensure);;install.packages("languageserver")
+  )
 
 ;; install quick-run if you need
 ;; (use-package quickrun
