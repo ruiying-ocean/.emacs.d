@@ -2,7 +2,7 @@
 ;;font setting
 (defun set-font()
   (interactive)
-  ;;Choose Iosevka/Inconsolata/Juliamono/Jetbrains Mono/Roboto Mono/Monaco/Fira Code/SF Mono
+  ;;Choose Iosevka/Inconsolata/Juliamono/Jetbrains Mono/Roboto Mono/Monaco/Fira Code/SF Mono/Operator Mono
   ;;for Chinese, there're Wenquanyi Micro Hei Mono/Sarasa UI SC Mono/Noto Sans CJK SC Mono (work perfectly with Iosevka/Inconsolata)
   ;;for variable-pitch font, ETBembo or New York can be used
   (set-face-attribute 'default nil :font "Iosevka 12")

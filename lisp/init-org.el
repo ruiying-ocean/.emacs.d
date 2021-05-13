@@ -123,6 +123,7 @@
   (add-hook 'org-add-hook 'modify-org-done-face))
 
 ;;org font-face setting, if not work well, disable variable-pitch-mode
+;;you might wanna try font Operator Mono
 (custom-theme-set-faces
  'user
  '(org-block ((t (:inherit fixed-pitch))))
@@ -135,8 +136,9 @@
 )
 
 ;; use flyspell in org-mode
-(setq-default ispell-program-name "~/Hunspell/bin/hunspell.exe") ;;require donwloading hunspell and add to path
-(setq ispell-local-dictionary "en_GB")
+;;(setq-default ispell-program-name "/usr/local/bin/aspell") ;;require donwloading aspell and add to path
+;;(setq ispell-local-dictionary "en_GB")
+;;(setq ispell-extra-args '("--sug-mode=fast"))
 
 (add-hook 'org-mode-hook
           (lambda ()
@@ -196,7 +198,6 @@
 (use-package org-download
   :config
   (add-hook 'dired-mode-hook 'org-download-enable))
-
 
 ; (Use-package org-pomodoro
 ;   :bind	("C-x p" . org-pomodoro)

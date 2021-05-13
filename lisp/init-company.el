@@ -9,7 +9,8 @@
   ;; invert the navigation direction if the the completion popup-isearch-match
   ;; is displayed on top (happens near the bottom of windows)
   (setq company-tooltip-flip-when-above t)
-  (global-company-mode 1)
+  :hook
+  (after-init . global-company-mode)
   )
 
 (use-package company-tabnine ;TabNine uses ML to provide suggestion

@@ -1,6 +1,30 @@
 ; This file is setting of all packages in use-package framework
 
+
+;;To specify new version of git on remote machine so I can run magit locally
+
+(use-package tramp
+  :config
+  (add-to-list 'tramp-remote-path "/usr/local/bin/git")
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+  )
+
+(use-package counsel-tramp  
+  :config
+  (setq tramp-default-method "scp")
+  (add-hook 'counsel-tramp-pre-command-hook '(lambda () (global-aggressive-indent-mode 0)
+            (projectile-mode 0)
+            (editorconfig-mode 0)))
+  (add-hook 'counsel-tramp-quit-hook '(lambda () (global-aggressive-indent-mode 1)
+            (projectile-mode 1)
+            (editorconfig-mode 1)))
+  (setq make-backup-files nil)
+  (setq create-lockfiles nil)
+  (define-key global-map (kbd "C-c s") 'counsel-tramp)
+)
+
 ;;visit https://github.com/jacktasia/dumb-jump to see more alternative ways
+;;for example, TAGS system and so on
 (use-package dumb-jump
   :config
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
@@ -9,10 +33,10 @@
 
 (use-package which-key
   :config
-  (which-key-mode))
+  (which-key-mode t))
 
 (use-package projectile
-  :defer t
+  :defer 2
   :init
   (setq projectile-completion-system 'ivy)
   :config
@@ -20,6 +44,14 @@
   :bind
   (:map projectile-mode-map
 	("C-c p" . projectile-command-map)))
+
+(use-package counsel-projectile
+;;an ivy UI for projectile
+  :bind
+  (:map projectile-mode-map
+	  ("C-c p" . projectile-command-map)
+    )
+)
 
 (use-package flycheck
 ;  :init (global-flycheck-mode)
@@ -41,6 +73,7 @@
   )
 
 (use-package yasnippet
+;you may wanna try ivy-yasnippet someday
   :defer 4
   :ensure yasnippet-snippets
   :hook (after-init . yas-global-mode)
@@ -114,6 +147,14 @@
   (ivy-rich-mode t)
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
 
+(use-package all-the-icons-ivy-rich
+  :init
+  (all-the-icons-ivy-rich-mode t)
+  :config
+  (setq all-the-icons-ivy-rich-icon-size 1.0)
+  (setq inhibit-compacting-font-caches t)
+  )
+
 ;; (use-package ivy-posframe ;;center your selection candidate box
 ;;   :config
 ;;   (setq ivy-posframe-display-functions-alist
@@ -147,12 +188,21 @@
   (global-set-key (kbd "M-g l") 'avy-goto-line))
 
 (use-package highlight-symbol
-  :config
+;; An alternative package is highlight-thing
   :bind
   ("C-<f9>" . highlight-symbol)
   ("<f9>" . highlight-symbol-next)
   ("S-<f9>" . highlight-symbol-prev)
   ("M-<f9>" . highlight-symbol-query-replace)
+  )
+
+(use-package minimap
+  :config
+  (minimap-mode nil)
+  :custom
+  (minimap-window-location 'right)
+  (minimap-width-fraction 0.05)
+  (minimap-minimum-width 15)
   )
 
 (use-package helpful
