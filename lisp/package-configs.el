@@ -25,6 +25,9 @@
 
 ;;visit https://github.com/jacktasia/dumb-jump to see more alternative ways
 ;;for example, TAGS system and so on
+;;======================================================================
+;;depends on external program The-Silver-Searcher/ripgrep and emacs package ag/rg
+;;======================================================================
 (use-package dumb-jump
   :config
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
