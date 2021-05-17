@@ -1,21 +1,25 @@
 
 ;;font setting
-(defun set-font()
-  (interactive)
-  ;;Choose Iosevka/Inconsolata/Juliamono/Jetbrains Mono/Roboto Mono/Monaco/Fira Code/SF Mono/Operator Mono
-  ;;for Chinese, there're Wenquanyi Micro Hei Mono/Sarasa UI SC Mono/Noto Sans CJK SC Mono (work perfectly with Iosevka/Inconsolata)
-  ;;for variable-pitch font, ETBembo or New York can be used
-  (set-face-attribute 'default nil :font "Iosevka 12")
-  (set-fontset-font t 'unicode "Symbola" nil 'prepend);;use Symbola to display unicode character
-  (dolist (charset '(kana han symbol cjk-misc bopomofo))
-    (set-fontset-font (frame-parameter nil 'font)
-                      charset
-                      (font-spec :family "Wenquanyi Micro Hei Mono"))))
+;; (defun set-font()
+;;   (interactive)
+;;   ;;Choose Iosevka/Inconsolata/Juliamono/Jetbrains Mono/Roboto Mono/Monaco/Fira Code/SF Mono/Operator Mono
+;;   ;;for Chinese, there're Wenquanyi Micro Hei Mono/Sarasa UI SC Mono/Noto Sans CJK SC Mono (work perfectly with Iosevka/Inconsolata)
+;;   ;;for variable-pitch font, ETBembo or New York can be used
+;;    (set-face-attribute 'default nil :font "Iosevka 12")
+;;   (set-fontset-font t 'unicode "Symbola" nil 'prepend);;use Symbola to display unicode character
+;;   (dolist (charset '(kana han symbol cjk-misc bopomofo))
+;;     (set-fontset-font (frame-parameter nil 'font)
+;;                       charset
+;;                       (font-spec :family "Wenquanyi Micro Hei Mono"))))
 ;; tune rescale so that Chinese character width = 2 * English character width
 ;;except for Iosevka/Inconsolata, EN:CN font are basically 13/14:16
 ;;  (setq face-font-rescale-alist '(("Iosevka" . 1.0) ("Wenquanyi Micro Hei Mono" . 1.0))))
 
 ;(add-to-list 'after-init-hook 'set-font)
+
+;;https://github.com/tumashu/cnfonts
+;;use cnfonts-edit-profile to configure
+(use-package cnfonts)
 
 ;daemon mode font setting
 (if (daemonp)
@@ -24,8 +28,8 @@
       (add-hook 'after-make-frame-functions
 		(lambda (frame)
 		  (with-selected-frame frame
-		    (set-font)))))
-  (set-font))
+		    (cnfonts-enable)))))
+  (cnfonts-enable))
 
 ;;Color scheme setting
 (use-package base16-theme)

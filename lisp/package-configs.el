@@ -29,6 +29,7 @@
 ;;depends on external program The-Silver-Searcher/ripgrep and emacs package ag/rg
 ;;======================================================================
 (use-package dumb-jump
+  :requires ag
   :config
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
   (setq dumb-jump-default-project "~/cgenie.muffin")
@@ -53,8 +54,7 @@
   :bind
   (:map projectile-mode-map
 	  ("C-c p" . projectile-command-map)
-    )
-)
+    ))
 
 (use-package flycheck
 ;  :init (global-flycheck-mode)

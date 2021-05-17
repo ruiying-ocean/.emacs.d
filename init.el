@@ -35,6 +35,7 @@
 
 (setq gc-cons-percentage 0.6)
 (setq gc-cons-threshold most-positive-fixnum)
+(setq read-process-output-max (* 1024 1024))
 
 (when (< emacs-major-version 27)
   (package-initialize))
@@ -47,42 +48,22 @@
   (require 'use-package))
 (require 'basic-config)
 (require 'package-configs)
-(require 'init-theme)
 (require 'init-ui)
+(require 'init-theme)
 (require 'init-binding)
 (require 'init-recentf)
 (require 'init-company)
-(require 'init-org)
+;(require 'init-org)
 (require 'init-md)
-(require 'init-tex)
-(require 'init-R)
-;;(require 'init-python) ;;use this on windows, eglot in linux instead
-(require 'init-eglot) ;;conflict with elpy and some company packages
-;;(require 'init-lsp)
+;;(require 'init-python)
+(require 'init-eglot)
 
 (defun my-cleanup-gc ()
   "Clean up gc."
   (setq gc-cons-threshold  (* 128 1024 1024)) ; 64M
   (setq gc-cons-percentage 0.3) ; original value
   (garbage-collect))
-
 (run-with-idle-timer 4 nil #'my-cleanup-gc)
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:background nil))))
- '(fixed-pitch ((t (:family "Fira Code" :height 120))))
- '(org-block ((t (:inherit fixed-pitch))))
- '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
- '(org-link ((t (:foreground "steel blue" :underline t))))
- '(org-property-value ((t (:inherit fixed-pitch))) t)
- '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
- '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold))))
- '(org-verbatim ((t (:inherit (shadow fixed-pitch)))))
- '(variable-pitch ((t (:family "ETBembo" :height 140 :weight thin)))))
 
 (provide 'init)
 ;;; init.el ends here
