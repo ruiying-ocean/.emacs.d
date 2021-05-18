@@ -23,22 +23,14 @@ The structure is like:
 # Features
 I should say *all the features are from community's efforts*, not mine.
 
-## Modern UI
-
-## Programming languages support
-
-- Python
-- Fortran
-- R
-- C
-- TeX
-
-## IDE features: auto-completion/debug/go-to-definition/document
-
-## Spellcheck (both text and programming)
-
-## Project manage
-
-## Git
-
-## Remote environment
+- Fast start-up (loading 80 packages in 1.5s)
+- Modern UI (theme, color-scheme, minimap, file icons, etc)
+- Various programming languages support (R, Python, TeX, Fortran, etc)
+- Auto-completion
+- Go-to definition
+- Document check
+- Spell check (both text and programming language)
+- Project management
+- Git integration
+- Remote file operation (as local)
+- The unique org-mode
