@@ -4,12 +4,14 @@
 ;;To specify new version of git on remote machine so I can run magit locally
 
 (use-package tramp
+  :if (memq window-system '(mac ns))
   :config
   (add-to-list 'tramp-remote-path "/usr/local/bin/git")
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
   )
 
-(use-package counsel-tramp  
+(use-package counsel-tramp
+  :requires tramp
   :config
   (setq tramp-default-method "scp")
   (add-hook 'counsel-tramp-pre-command-hook '(lambda () (global-aggressive-indent-mode 0)
@@ -28,6 +30,7 @@
 ;;======================================================================
 ;;depends on external program The-Silver-Searcher/ripgrep and emacs package ag/rg
 ;;======================================================================
+(use-package ag) ;;better research using siliver searcher ag
 (use-package dumb-jump
   :requires ag
   :config
@@ -50,6 +53,7 @@
 	("C-c p" . projectile-command-map)))
 
 (use-package counsel-projectile
+  :requires projectile
 ;;an ivy UI for projectile
   :bind
   (:map projectile-mode-map
@@ -86,11 +90,13 @@
   :defer t)
 
 (use-package magit
-  :bind (("C-x g" . magit-status)))
+  :bind
+  (("C-x g" . magit-status
+    "C-x c" . magit-checkout)))
 
 (use-package exec-path-from-shell
    :if (memq window-system '(mac ns))
-   :ensure t
+   :defer t
    :config
    (exec-path-from-shell-initialize))
 
@@ -98,12 +104,6 @@
   :init (require 'popwin)
   :config
   (popwin-mode t))
-
-(use-package all-the-icons-dired
-  ;need to run all-the-icons-install-fonts first to avoid grabled icon
-  :requires all-the-icons  
-  :config
-  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 
 (use-package neotree
   :config
@@ -144,6 +144,13 @@
 ;; (use-package flyspell-correct-popup
 ;;   :after flyspell-correct)
 
+
+(use-package all-the-icons-dired
+  ;need to run all-the-icons-install-fonts first to avoid grabled icon
+  :requires all-the-icons
+  :config
+  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
+
 (use-package ivy-rich
   :after ivy
   :config
@@ -151,6 +158,7 @@
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
 
 (use-package all-the-icons-ivy-rich
+  :after ivy-rich
   :init
   (all-the-icons-ivy-rich-mode t)
   :config
@@ -226,6 +234,11 @@
   (visual-fill-column-center-text t)
   (visual-fill-column-width 100)
   )
+
+(use-package pdf-tools
+  :magic ("%PDF" . pdf-view-mode)
+  :config
+  (pdf-tools-install :no-query))
 
 (provide 'package-configs)
 ;;; package-configs.el ends here

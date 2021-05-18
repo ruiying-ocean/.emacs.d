@@ -55,7 +55,6 @@
 (require 'init-company)
 ;(require 'init-org)
 (require 'init-md)
-;;(require 'init-python)
 (require 'init-eglot)
 
 (defun my-cleanup-gc ()

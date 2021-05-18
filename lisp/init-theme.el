@@ -19,12 +19,31 @@
 
 ;;https://github.com/tumashu/cnfonts
 ;;use cnfonts-edit-profile to configure
-(use-package cnfonts)
+(use-package cnfonts
+  :config
+  (setq cnfonts-profiles
+    '("program" "org-mode" "read-book"))
+  (setq cnfonts--custom-set-fontnames
+      '(("PragmataPro" "Ubuntu Mono" "DejaVu Sans Mono")
+        ("文泉驿等宽微米黑" "Ubuntu Mono" "隶书" "新宋体")
+        ("HanaMinB" "SimSun-ExtB" "MingLiU-ExtB")))
+  (setq cnfonts--custom-set-fontsizes
+	'((9    9.0  9.5 )
+          (10   11.0 11.0)
+          (11.5 12.5 12.5)
+          (12.5 13.5 13.5)
+          (14   15.0 15.0)
+          (16   17.0 17.0)
+          (18   18.0 18.0)
+  :bind
+  (("C-=" . cnfonts-increase-fontsize)
+   ("C--" . cnfonts-decrease-fontsize))
+  ))
 
 ;daemon mode font setting
 (if (daemonp)
     (progn
-      (message "A *daemon* is with you!")
+      (message "Daemon is forever!")
       (add-hook 'after-make-frame-functions
 		(lambda (frame)
 		  (with-selected-frame frame
@@ -78,33 +97,7 @@
 ;;   ;; Corrects (and improves) org-mode's native fontification.
 ;;   (doom-themes-org-config))
 
-;; (use-package cnfonts
-;;   :config
-;;   (cnfonts-enable)
-;;   (setq cnfonts-profiles '("program" "others")
-;;   (setq cnfonts--custom-set-fontnames
-;;       '(("PragmataPro" "Ubuntu Mono" "DejaVu Sans Mono")
-;;         ("文泉驿等宽微米黑" "Ubuntu Mono" "隶书" "新宋体")
-;;         ("HanaMinB" "SimSun-ExtB" "MingLiU-ExtB")))
-;;   (setq cnfonts--custom-set-fontsizes
-;; 	'((9    9.0  9.5 )
-;;           (10   11.0 11.0)
-;;           (11.5 12.5 12.5)
-;;           (12.5 13.5 13.5)
-;;           (14   15.0 15.0)
-;;           (16   17.0 17.0)
-;;           (18   18.0 18.0)
-;;           (20   21.0 21.0)
-;;           (22   23.0 23.0)
-;;           (24   25.5 25.5)
-;;           (26   27.0 27.0)
-;;           (28   29.0 29.0)
-;;           (30   32.0 32.0)
-;;           (32   33.0 33.0)))
-;;   :bind
-;;   (("C-=" . cnfonts-increase-fontsize)
-;;    ("C--" . cnfonts-decrease-fontsize))
-;;   ))
+
 
 (provide 'init-theme)
 

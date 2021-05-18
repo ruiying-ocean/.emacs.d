@@ -1,48 +1,51 @@
-(use-package python-mode
-  :config
-  (setq python-indent-guess-indent-offset-verbose nil)
-  (setq python-shell-interpreter "python3")
-  (setq python-indent-offset 4)
-)
+(setq python-indent-guess-indent-offset-verbose nil)
+(setq python-shell-interpreter "py")
+(setq python-shell-interpreter-args "-3.9")
+(setq python-indent-offset 4)
 
-(use-package ess-r-mode
-  :ensure ess
+;;install ESS first
+(use-package ess
   :config
-  (defun then_R_operator ()
-  "R - %>% operator or 'then' pipe operator"
+  (defun R_pipe_operator ()
+  "R pipe (%>%) in magrittr"
   (interactive)
   (just-one-space 1)
-  (insert "%>%")
-  (reindent-then-newline-and-indent))
-  :bind
-  (:map ess-mode-map
-        ("M-=" . ess-cycle-assign)
-        ("M-p" . then_R_operator))
-  (:map inferior-ess-mode-map
-        ("M-=" . ess-cycle-assign)
-	("M-p" . then_R_operator))
+  (insert "%>%"))
+  ;;(reindent-then-newline-and-indent))
+  (global-set-key (kbd "M-=") 'ess-cycle-assign)
+  (global-set-key (kbd "M-p") 'R_pipe_operator)
   :mode
-  "\\.R\\'"
-  "\\.r\\'"
+  ("\\.R\\'" . ess-r-mode)
+  ;;otherwise use
+  ;;(add-to-list 'auto-mode-alist '("\\.R\\'" . ess-r-mode))
   )
 
 (use-package rainbow-mode
-  :mode
-  "\\.R\\'"
+  :after ess
+  :hook ess-r-mode
   )
 
+;;eglot can work with tramp-mode, but you should install
+;;your server-programs on remote, not local
 (use-package eglot
   :config
-  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd")) ;;install clangd first
+  ;;============================================
+  ;;make sure every command works separately in shell environment. Note R can be tricky in zsh due to the built-in command "r"
+  (set 'ad-redefinition-action 'accept)
+  (add-to-list 'eglot-server-programs '((c++-mode c-mode) ("clangd"))) ;;install clangd first
   (add-to-list 'eglot-server-programs '(f90-mode . ("fortls"))) ;;pip3 install fortran-language-server
   (add-to-list 'eglot-server-programs '((tex-mode context-mode texinfo-mode bibtex-mode)
-                                      . ("digestif"))) ;;install digestif and export to $PATH
-  (add-to-list 'eglot-server-program '(python-mode . "pyls")) ;;pip3 install python-lsp-server
-  :hook
-  (python-mode . eglot-ensure) 
-  (c-mode . eglot-ensure)
-  (f90-mode . eglot-ensure)
-  (ess-r-mode . eglot-ensure);;install.packages("languageserver")
+                                      . ("digestif"))) ;;luarocks install digestif
+  (add-to-list 'eglot-server-programs '(python-mode . ("pylsp"))) ;;pip3 install python-lsp-server
+  (add-to-list 'eglot-server-programs '(ess-r-mode . ("R" "--slave" "-e" "languageserver::run()"))) ;;install.packages("languageserver")
+  ;;============================================
+  (add-hook 'python-mode-hook 'eglot-ensure)
+  (add-hook 'f90-mode-hook 'eglot-ensure)
+  (add-hook 'ess-r-mode-hook 'eglot-ensure)
+  :bind
+  (:map eglot-mode-map
+    ("C-c h" . eldoc)
+    ("C-c r" . elgot-rename))
 )
 
 (provide 'init-eglot)
