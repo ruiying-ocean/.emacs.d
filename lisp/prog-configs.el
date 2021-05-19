@@ -124,38 +124,6 @@
 ;; (use-package flyspell-correct-popup
 ;;   :after flyspell-correct)
 
-(use-package all-the-icons-dired
-  ;need to run all-the-icons-install-fonts first to avoid grabled icon
-  :requires all-the-icons
-  :config
-  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
-
-(use-package ivy-rich
-  :after ivy
-  :config
-  (ivy-rich-mode t)
-  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
-
-(use-package all-the-icons-ivy-rich
-  :after ivy-rich
-  :init
-  (all-the-icons-ivy-rich-mode t)
-  :config
-  (setq all-the-icons-ivy-rich-icon-size 1.0)
-  (setq inhibit-compacting-font-caches t)
-  )
-
-;; (use-package ivy-posframe ;;center your selection candidate box
-;;   :config
-;;   (setq ivy-posframe-display-functions-alist
-;; 	'((complete-symbol . ivy-posframe-display-at-point)
-;; 	  (swiper . ivy-posframe-display-at-window-center)
-;;           (counsel-M-x     . ivy-posframe-display-at-window-center)
-;;           (t               . ivy-posframe-display)))
-;;   (setq ivy-posframe-height-alist '((swiper . 15)
-;;                                     (t      . 10)))
-;;   (ivy-posframe-mode 1))
-
 (use-package counsel
   :after ivy
   :config

@@ -62,7 +62,7 @@
   (setq doom-modeline-icon (display-graphic-p))
   (setq doom-modeline-major-mode-icon t)
   (setq doom-modeline-enable-word-count nil)
-  (setq all-the-icons-scale-factor 1.1)
+  (setq all-the-icons-scale-factor 1.0)
   )
 
 (use-package dashboard
@@ -103,11 +103,53 @@
   (minimap-minimum-width 15)
   )
 
-(use-package neotree
+;;(use-package neotree
+;;  :config
+;;  (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+;;  (global-set-key [f8] 'neotree-toggle)
+;;  )
+
+(use-package treemacs
   :config
-  (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
-  (global-set-key [f8] 'neotree-toggle)
+  (global-set-key [f8] 'treemacs))
+
+(use-package treemacs-all-the-icons
+  :requires
+  (treemacs all-the-icons)
+  :config
+  (treemacs-load-theme "all-the-icons"))
+
+(use-package all-the-icons-dired
+  ;need to run all-the-icons-install-fonts first to avoid grabled icon
+  :requires all-the-icons
+  :hook
+  (dired-mode . all-the-icons-dired-mode))
+
+(use-package ivy-rich
+  :after ivy
+  :config
+  (ivy-rich-mode t)
+  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
+
+(use-package all-the-icons-ivy-rich
+  :after ivy-rich
+  :init
+  (all-the-icons-ivy-rich-mode t)
+  :config
+  (setq all-the-icons-ivy-rich-icon-size 1.0)
+  (setq inhibit-compacting-font-caches t)
   )
+
+;; (use-package ivy-posframe ;;center your selection candidate box
+;;   :config
+;;   (setq ivy-posframe-display-functions-alist
+;; 	'((complete-symbol . ivy-posframe-display-at-point)
+;; 	  (swiper . ivy-posframe-display-at-window-center)
+;;           (counsel-M-x     . ivy-posframe-display-at-window-center)
+;;           (t               . ivy-posframe-display)))
+;;   (setq ivy-posframe-height-alist '((swiper . 15)
+;;                                     (t      . 10)))
+;;   (ivy-posframe-mode 1))
 
 (use-package awesome-tab
   ;;not currently available on melpa

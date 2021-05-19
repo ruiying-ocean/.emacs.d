@@ -11,6 +11,7 @@ git clone https://github.com/Leslieying/.emacs.d.git
 Then have some beverage and wait for downloading :smile:
 
 # Structure
+
 I divide my init files into several different elisp files and use init.el to call them.
 The structure is like:
 ```text
@@ -21,10 +22,11 @@ The structure is like:
 ```
 
 # Features
+
 I should say *all the features are from community's efforts*, not mine.
 
-- Fast start-up (loading 79 packages in 1.27s under Linux environment)
-- Modern UI (theme, color-scheme, minimap, file icons, etc)
+- Fast start-up (loading 92 packages in 1.39s under Linux environment)
+- Modern UI (directory explorer, theme, color-scheme, minimap, file icons, etc)
 - Various programming languages support (R, Python, TeX, Fortran, etc)
 - Auto-completion
 - Go-to definition
