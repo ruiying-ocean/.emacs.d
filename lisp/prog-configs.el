@@ -1,13 +1,18 @@
-; This file is setting of all packages in use-package framework
+; This file is setting of all programming-related packages in use-package framework
 
+(use-package benchmark-init
+  :config
+  ;; To disable collection of benchmark data after init is done.
+  (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
 ;;To specify new version of git on remote machine so I can run magit locally
-
 (use-package tramp
   :if (memq window-system '(mac ns))
   :config
   (add-to-list 'tramp-remote-path "/usr/local/bin/git")
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+  ;;tramp mode to cache password
+  (setq password-cache-expiry nil)
   )
 
 (use-package counsel-tramp
@@ -74,11 +79,6 @@
   (with-eval-after-load 'flycheck
     (add-hook 'flycheck-mode-hook #'flycheck-inline-mode)))
 
-(use-package rainbow-delimiters
-  :config
-  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
-  )
-
 (use-package yasnippet
 ;you may wanna try ivy-yasnippet someday
   :defer 4
@@ -91,8 +91,8 @@
 
 (use-package magit
   :bind
-  (("C-x g" . magit-status
-    "C-x c" . magit-checkout)))
+  ("C-x g" . magit-status)  
+  ("C-x c" . magit-checkout))
 
 (use-package exec-path-from-shell
    :if (memq window-system '(mac ns))
@@ -104,23 +104,6 @@
   :init (require 'popwin)
   :config
   (popwin-mode t))
-
-(use-package neotree
-  :config
-  (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
-  (global-set-key [f8] 'neotree-toggle)
-  )
-
-(use-package awesome-tab
-  ;;not currently available on melpa
-  :load-path "~/.emacs.d/config/awesome-tab.el"
-  :config
-  (awesome-tab-mode t)
-  (setq awesome-tab-show-tab-index t)
-  (setq awesome-tab-height 100)
-  :bind
-  ("C-x i" . awesome-tab-ace-jump) ;;or TAB
-  )
 
 (use-package smex
   :init (smex-initialize)
@@ -143,7 +126,6 @@
 
 ;; (use-package flyspell-correct-popup
 ;;   :after flyspell-correct)
-
 
 (use-package all-the-icons-dired
   ;need to run all-the-icons-install-fonts first to avoid grabled icon
@@ -198,24 +180,6 @@
   (global-set-key (kbd "M-g w") 'avy-goto-word-1)
   (global-set-key (kbd "M-g l") 'avy-goto-line))
 
-(use-package highlight-symbol
-;; An alternative package is highlight-thing
-  :bind
-  ("C-<f9>" . highlight-symbol)
-  ("<f9>" . highlight-symbol-next)
-  ("S-<f9>" . highlight-symbol-prev)
-  ("M-<f9>" . highlight-symbol-query-replace)
-  )
-
-(use-package minimap
-  :config
-  (minimap-mode nil)
-  :custom
-  (minimap-window-location 'right)
-  (minimap-width-fraction 0.05)
-  (minimap-minimum-width 15)
-  )
-
 (use-package helpful
   :config
   (global-set-key (kbd "C-h f") #'helpful-callable)
@@ -227,18 +191,10 @@
   :config
   (global-set-key (kbd "M-o") 'ace-window))
 
-(use-package visual-fill-column
-  :config
-  (add-hook 'visual-line-mode-hook #'visual-fill-column-mode)
-  :custom
-  (visual-fill-column-center-text t)
-  (visual-fill-column-width 100)
-  )
-
 (use-package pdf-tools
   :magic ("%PDF" . pdf-view-mode)
   :config
   (pdf-tools-install :no-query))
 
-(provide 'package-configs)
-;;; package-configs.el ends here
+(provide 'prog-configs)
+;;; prog-configs.el ends here

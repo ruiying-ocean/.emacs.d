@@ -36,6 +36,11 @@
   (sp-pair "'" nil :actions :rem)
   )
 
+(use-package rainbow-delimiters
+  :config
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+  )
+
 (use-package nyan-mode
   :config
   (nyan-mode t))
@@ -49,7 +54,6 @@
 (use-package doom-modeline
   :ensure t
   :hook (after-init . doom-modeline-mode))
-
 
 (use-package dashboard
     :diminish dashboard-mode
@@ -71,13 +75,47 @@
   (highlight-indent-guides-method 'character)
   )
 
-;; (use-package minimap
-;;   :custom
-;;   (minimap-window-location "right")
-;;   (minimap-width-fraction 0.01)
-;;   (minimap-minimum-width 3)
-;;   :config
-;;   (minimap-mode 1)
-;;   )
+(use-package highlight-symbol
+;; An alternative package is highlight-thing
+  :bind
+  ("C-<f9>" . highlight-symbol)
+  ("<f9>" . highlight-symbol-next)
+  ("S-<f9>" . highlight-symbol-prev)
+  ("M-<f9>" . highlight-symbol-query-replace)
+  )
+
+(use-package minimap
+  :config
+  (minimap-mode -1)
+  :custom
+  (minimap-window-location 'right)
+  (minimap-width-fraction 0.05)
+  (minimap-minimum-width 15)
+  )
+
+(use-package neotree
+  :config
+  (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+  (global-set-key [f8] 'neotree-toggle)
+  )
+
+(use-package awesome-tab
+  ;;not currently available on melpa
+  :load-path "~/.emacs.d/config/awesome-tab.el"
+  :config
+  (awesome-tab-mode t)
+  (setq awesome-tab-show-tab-index t)
+  (setq awesome-tab-height 100)
+  :bind
+  ("C-x i" . awesome-tab-ace-jump) ;;or TAB
+  )  
+
+(use-package visual-fill-column
+  :config
+  (add-hook 'visual-line-mode-hook #'visual-fill-column-mode)
+  :custom
+  (visual-fill-column-center-text t)
+  (visual-fill-column-width 100)
+  )
 
 (provide 'init-ui)

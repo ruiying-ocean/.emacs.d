@@ -35,10 +35,11 @@
           (14   15.0 15.0)
           (16   17.0 17.0)
           (18   18.0 18.0)
+  ))
   :bind
   (("C-=" . cnfonts-increase-fontsize)
    ("C--" . cnfonts-decrease-fontsize))
-  ))
+)
 
 ;daemon mode font setting
 (if (daemonp)
@@ -50,7 +51,7 @@
 		    (cnfonts-enable)))))
   (cnfonts-enable))
 
-;;Color scheme setting
+;;Theme setting
 (use-package base16-theme)
 (use-package color-theme-sanityinc-tomorrow)
 (use-package gruvbox-theme)
@@ -66,7 +67,7 @@
 ;;random theme
 (setq color-themes '(sanityinc-tomorrow-night base16-zenburn gruvbox-dark-soft spacemacs-dark spolsky doom-one doom-vibrant doom-dark+))
 (defun random-color-theme()
-  "randomly change color theme"
+  "Want some fresh color? Run me to get some random surprises"
   (interactive)
   (random t)
   (load-theme

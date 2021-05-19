@@ -46,13 +46,14 @@
 
 (eval-when-compile
   (require 'use-package))
-(require 'basic-config)
-(require 'package-configs)
+(require 'editor-configs)
+(require 'prog-configs)
 (require 'init-ui)
 (require 'init-theme)
 (require 'init-binding)
 (require 'init-recentf)
 (require 'init-company)
+;(require 'init-tex)
 ;(require 'init-org)
 (require 'init-md)
 (require 'init-eglot)

@@ -10,10 +10,6 @@
   (set-keyboard-coding-system 'utf-8)
   (setq default-buffer-file-coding-system 'utf-8))
 
-(use-package benchmark-init
-  :config
-  ;; To disable collection of benchmark data after init is done.
-  (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
 ;------------------------------------
 ;Other settings
@@ -22,8 +18,5 @@
 (setq-default make-backup-files nil)
 (setq ring-bell-function 'ignore)
 
-;;tramp mode to cache password
-(setq password-cache-expiry nil)
-
-(provide 'basic-config)
-;;; basic-config.el ends here
+(provide 'editor-configs)
+;;; editor-config.el ends here

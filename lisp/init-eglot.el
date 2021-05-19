@@ -1,9 +1,12 @@
+;; Python setting
 (setq python-indent-guess-indent-offset-verbose nil)
 (setq python-shell-interpreter "py")
 (setq python-shell-interpreter-args "-3.9")
 (setq python-indent-offset 4)
+;;(add-hook 'python-mode-hook(lambda() (flycheck-mode -1)))
 
-;;install ESS first
+;;Rlang setting
+;;Require ESS
 (use-package ess
   :config
   (defun R_pipe_operator ()
@@ -39,9 +42,10 @@
   (add-to-list 'eglot-server-programs '(python-mode . ("pylsp"))) ;;pip3 install python-lsp-server
   (add-to-list 'eglot-server-programs '(ess-r-mode . ("R" "--slave" "-e" "languageserver::run()"))) ;;install.packages("languageserver")
   ;;============================================
-  (add-hook 'python-mode-hook 'eglot-ensure)
-  (add-hook 'f90-mode-hook 'eglot-ensure)
-  (add-hook 'ess-r-mode-hook 'eglot-ensure)
+  :hook
+  (python-mode . eglot-ensure)
+  (f90-mode . eglot-ensure)
+  (ess-r-mode . eglot-ensure)
   :bind
   (:map eglot-mode-map
     ("C-c h" . eldoc)
