@@ -52,8 +52,18 @@
 ;;  (spaceline-emacs-theme))
 
 (use-package doom-modeline
-  :ensure t
-  :hook (after-init . doom-modeline-mode))
+  ;;right fringe cut-off issue should relate to font size
+  ;;Use cnfont-decrease-size or see more methods in 
+  ;;https://github.com/hlissner/doom-emacs/blob/develop/modules/ui/modeline/README.org#the-right-side-of-the-modeline-is-cut-off
+  :after all-the-icons
+  :hook (after-init . doom-modeline-mode)
+  :config
+  (setq doom-modeline-window-width-limit fill-column)
+  (setq doom-modeline-icon (display-graphic-p))
+  (setq doom-modeline-major-mode-icon t)
+  (setq doom-modeline-enable-word-count nil)
+  (setq all-the-icons-scale-factor 1.1)
+  )
 
 (use-package dashboard
     :diminish dashboard-mode

@@ -6,8 +6,8 @@
   (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
 ;;To specify new version of git on remote machine so I can run magit locally
+;;add .ssh/config first
 (use-package tramp
-  :if (memq window-system '(mac ns))
   :config
   (add-to-list 'tramp-remote-path "/usr/local/bin/git")
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
@@ -18,13 +18,8 @@
 (use-package counsel-tramp
   :requires tramp
   :config
+  (setq counsel-tramp-custom-connections '(/scp:mogu@almond.ggy.bris.ac.uk:/home/mogu/cgenie.muffin/))
   (setq tramp-default-method "scp")
-  (add-hook 'counsel-tramp-pre-command-hook '(lambda () (global-aggressive-indent-mode 0)
-            (projectile-mode 0)
-            (editorconfig-mode 0)))
-  (add-hook 'counsel-tramp-quit-hook '(lambda () (global-aggressive-indent-mode 1)
-            (projectile-mode 1)
-            (editorconfig-mode 1)))
   (setq make-backup-files nil)
   (setq create-lockfiles nil)
   (define-key global-map (kbd "C-c s") 'counsel-tramp)
@@ -35,7 +30,9 @@
 ;;======================================================================
 ;;depends on external program The-Silver-Searcher/ripgrep and emacs package ag/rg
 ;;======================================================================
-(use-package ag) ;;better research using siliver searcher ag
+;;(use-package ripgrep)
+;;(use-package rg)
+(use-package ag)
 (use-package dumb-jump
   :requires ag
   :config

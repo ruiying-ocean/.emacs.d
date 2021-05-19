@@ -23,7 +23,7 @@ The structure is like:
 # Features
 I should say *all the features are from community's efforts*, not mine.
 
-- Fast start-up (loading 80 packages in 1.5s)
+- Fast start-up (loading 79 packages in 1.27s under Linux environment)
 - Modern UI (theme, color-scheme, minimap, file icons, etc)
 - Various programming languages support (R, Python, TeX, Fortran, etc)
 - Auto-completion
