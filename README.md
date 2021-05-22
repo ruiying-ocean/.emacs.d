@@ -30,7 +30,7 @@ The structure is like:
 
 I have to say *all features come from community's efforts*, not mine.
 
-- Fast start-up
+- Fast start-up (load 87 packages in <1s)
 - Modern UI (directory explorer, theme, color-scheme, minimap, file icons, etc)
 - Multiple programming languages support and syntax highlighting (R, Python, TeX, Fortran, etc)
 - IntelliSense

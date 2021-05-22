@@ -1,4 +1,3 @@
-
 (use-package company
   :config
   (setq company-idle-delay 0.5)
@@ -13,11 +12,13 @@
   (after-init . global-company-mode)
   )
 
-(use-package company-tabnine ;TabNine uses ML to provide suggestion
-  :after 'company-mode 
-  'company-tabnine-mode 
-  :config (add-to-list 'company-backends #'company-tabnine)
-  (setq company-idle-delay 0)
+(use-package company-tabnine
+  ;;TabNine uses ML to provide suggestion
+  ;;M-x company-tabnine-install-binary to install binary system
+  :after company
+  :config
+  (add-to-list 'company-backends #'company-tabnine)
+  (setq company-idle-delay 0.2)
   (setq company-show-numbers t)
   )
 
