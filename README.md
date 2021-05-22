@@ -44,3 +44,6 @@ I have to say *all features come from community's efforts*, not mine.
 - Perfect org-mode as lightweight markup language and todo management
 - PDF support
 - Email client
+
+# License
+The project uses [MIT license](LICENSE).
