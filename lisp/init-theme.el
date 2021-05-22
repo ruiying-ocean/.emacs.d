@@ -20,6 +20,7 @@
 ;;https://github.com/tumashu/cnfonts
 ;;use cnfonts-edit-profile to configure
 (use-package cnfonts
+  :defer t
   :config
   (setq cnfonts-profiles
     '("program" "org-mode" "read-book"))
@@ -52,14 +53,14 @@
   (cnfonts-enable))
 
 ;;Theme setting
-(use-package base16-theme)
-(use-package color-theme-sanityinc-tomorrow)
-(use-package gruvbox-theme)
+(use-package base16-theme :defer t)
+(use-package color-theme-sanityinc-tomorrow :defer t)
+(use-package gruvbox-theme :defer t)
 ;; (use-package spacemacs-common
 ;;   :ensure spacemacs-theme)
-(use-package sublime-themes)
-(use-package doom-themes)
-(use-package tao-theme)
+(use-package sublime-themes :defer t)
+(use-package doom-themes :defer t)
+(use-package tao-theme :defer t)
 
 ;;Transprancy setting
 (set-frame-parameter (selected-frame) 'alpha '(97 100))

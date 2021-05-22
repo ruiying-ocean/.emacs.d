@@ -1,4 +1,5 @@
 ; This file is setting of all programming-related packages in use-package framework
+(setq use-package-always-ensure t)
 
 (use-package benchmark-init
   :config
@@ -8,6 +9,7 @@
 ;;To specify new version of git on remote machine so I can run magit locally
 ;;add .ssh/config first
 (use-package tramp
+  :defer t
   :config
   (add-to-list 'tramp-remote-path "/usr/local/bin/git")
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
@@ -16,6 +18,7 @@
   )
 
 (use-package counsel-tramp
+  :defer t
   :requires tramp
   :config
   (setq counsel-tramp-custom-connections '(/scp:mogu@almond.ggy.bris.ac.uk:/home/mogu/cgenie.muffin/))
@@ -32,8 +35,10 @@
 ;;======================================================================
 ;;(use-package ripgrep)
 ;;(use-package rg)
-(use-package ag)
+(use-package ag
+  :defer t)
 (use-package dumb-jump
+  :defer t
   :requires ag
   :config
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
@@ -63,15 +68,16 @@
     ))
 
 (use-package flycheck
-;  :init (global-flycheck-mode)
+  :defer t
   :hook
   (after-init . global-flycheck-mode)
   :config
- (with-eval-after-load 'flycheck
-   (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
+  (with-eval-after-load 'flycheck
+    (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
   )
 
 (use-package flycheck-inline
+  :defer t
   :config
   (with-eval-after-load 'flycheck
     (add-hook 'flycheck-mode-hook #'flycheck-inline-mode)))
@@ -87,6 +93,7 @@
   :defer t)
 
 (use-package magit
+  :defer t
   :bind
   ("C-x g" . magit-status)  
   ("C-x c" . magit-checkout))
@@ -145,6 +152,7 @@
   (global-set-key (kbd "M-g l") 'avy-goto-line))
 
 (use-package helpful
+  :defer t
   :config
   (global-set-key (kbd "C-h f") #'helpful-callable)
   (global-set-key (kbd "C-h v") #'helpful-variable)
@@ -152,13 +160,9 @@
   )
 
 (use-package ace-window
+  :defer t
   :config
   (global-set-key (kbd "M-o") 'ace-window))
-
-(use-package pdf-tools
-  :magic ("%PDF" . pdf-view-mode)
-  :config
-  (pdf-tools-install :no-query))
 
 (provide 'prog-configs)
 ;;; prog-configs.el ends here

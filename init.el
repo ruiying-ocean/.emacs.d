@@ -34,8 +34,8 @@
 (update-load-path)
 
 (setq gc-cons-percentage 0.6)
-(setq gc-cons-threshold most-positive-fixnum)
 (setq read-process-output-max (* 1024 1024))
+
 
 (when (< emacs-major-version 27)
   (package-initialize))

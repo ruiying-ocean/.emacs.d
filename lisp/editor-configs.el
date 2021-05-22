@@ -1,7 +1,6 @@
 ;----------------------------------
 ;Editor setting
 ;----------------------------------
-(setq use-package-always-ensure t)
 (fset 'yes-or-no-p 'y-or-n-p)
 (progn
   (prefer-coding-system 'utf-8)

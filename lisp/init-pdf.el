@@ -5,7 +5,7 @@
   :mode ("\\.[pP][dD][fF]\\'" . pdf-view-mode)
   :magic ("%PDF" . pdf-view-mode)
   :config
-  (pdf-tools-install)
+  (pdf-tools-install :no-query)
   (define-pdf-cache-function pagelables)
   :hook
   (pdf-view-mode-hook . (lambda () (display-line-numbers -1)))

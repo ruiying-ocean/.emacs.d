@@ -1,27 +1,24 @@
-;; Start fullscreen (cross-platf)
 ;;(add-hook 'window-setup-hook 'toggle-frame-fullscreen t)
-;; Start maximised (cross-platf)
 (add-hook 'window-setup-hook 'toggle-frame-maximized t)
-(tool-bar-mode 0)
-(menu-bar-mode 0)
-(scroll-bar-mode 0)
-(setq-default cursor-type 'bar)
 (add-hook 'after-init-hook 'display-time-mode)
 (add-hook 'after-init-hook 'display-battery-mode)
-(setq display-time-format "%B %H:%M %a");;时间格式
+(setq display-time-format "%B %H:%M %a")
 (setq system-time-locale nil)
-;;(setq inhibit-startup-screen t)
-;;(setq inhibit-startup-message t)
+(setq-default cursor-type 'bar)
+(blink-cursor-mode 0)
 (global-hl-line-mode t)
 (global-display-line-numbers-mode t);;the linum-mode has been obsolete
 (setq display-line-numbers-width 0)
 (show-paren-mode t)
 (setq show-paren-style 'mixed)
 ;;(electric-indent-mode t)
+(setq frame-inhibit-implied-resize nil)
 
 ;;more see the doc https://github.com/Fuco1/smartparens/wiki/Working-with-expressions
 (use-package smartparens
-  :init (smartparens-global-mode t)
+  :defer t
+  :hook
+  (after-init . smartparens-global-mode)
   :bind
   (:map smartparens-mode-map
 	("C-M-f" . sp-forward-sexp)
@@ -37,11 +34,14 @@
   )
 
 (use-package rainbow-delimiters
+  :defer t
   :config
-  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+  :hook
+  (prog-mode . rainbow-delimiters-mode)
   )
 
 (use-package nyan-mode
+  :defer t
   :config
   (nyan-mode t))
 
@@ -55,6 +55,7 @@
   ;;right fringe cut-off issue should relate to font size
   ;;Use cnfont-decrease-size or see more methods in 
   ;;https://github.com/hlissner/doom-emacs/blob/develop/modules/ui/modeline/README.org#the-right-side-of-the-modeline-is-cut-off
+  :defer t
   :after all-the-icons
   :hook (after-init . doom-modeline-mode)
   :config
@@ -66,23 +67,23 @@
   )
 
 (use-package dashboard
-    :diminish dashboard-mode
-    :config
-    (setq dashboard-banner-logo-title "Happiness is everything. - Rui")
+  :diminish dashboard-mode
+  :config
+  (setq dashboard-banner-logo-title "Happiness is everything. - Rui")
 ;;    (setq dashboard-startup-banner 3)
-    (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/world.png")
-    (setq dashboard-center-content t)
-    (setq dashboard-items '((recents  . 3)
-			    (agenda . 3)))
-    (dashboard-setup-startup-hook)
-    (setq dashboard-set-heading-icons t)
-    (setq dashboard-set-file-icons t)
-    (setq dashboard-set-navigator t)
-    (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))) ;; show Dashboard in frames created with emacsclient -c
-    (setq dashboard-projects-switch-function 'counsel-projectile-switch-project-by-name)
-    )
+  (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/world.png")
+  (setq dashboard-center-content t)
+  (setq dashboard-items '((recents  . 3)))
+  (dashboard-setup-startup-hook)
+  (setq dashboard-set-heading-icons t)
+  (setq dashboard-set-file-icons t)
+  (setq dashboard-set-navigator t)
+  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))) ;; show Dashboard in frames created with emacsclient -c
+  (setq dashboard-projects-switch-function 'counsel-projectile-switch-project-by-name)
+  )
 
 (use-package highlight-indent-guides
+  :defer t
   :config
   (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
 ;  (set-face-background 'highlight-indent-guides-character-face "dimgrey")
@@ -91,6 +92,7 @@
   )
 
 (use-package highlight-symbol
+  :defer t
 ;; An alternative package is highlight-thing
   :bind
   ("C-<f9>" . highlight-symbol)
@@ -100,6 +102,7 @@
   )
 
 (use-package minimap
+  :defer t
   :config
   (minimap-mode -1)
   :custom
@@ -115,28 +118,33 @@
 ;;  )
 
 (use-package treemacs
+  :defer t
   :config
   (global-set-key [f8] 'treemacs))
 
 (use-package treemacs-all-the-icons
+  :defer t
   :requires
   (treemacs all-the-icons)
   :config
   (treemacs-load-theme "all-the-icons"))
 
 (use-package all-the-icons-dired
+  :defer t
   ;need to run all-the-icons-install-fonts first to avoid grabled icon
   :requires all-the-icons
   :hook
   (dired-mode . all-the-icons-dired-mode))
 
 (use-package ivy-rich
+  :defer t
   :after ivy
   :config
   (ivy-rich-mode t)
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
 
 (use-package all-the-icons-ivy-rich
+  :defer t
   :after ivy-rich
   :init
   (all-the-icons-ivy-rich-mode t)
@@ -157,6 +165,7 @@
 ;;   (ivy-posframe-mode 1))
 
 (use-package awesome-tab
+  :defer t
   ;;not currently available on melpa
   :load-path "~/.emacs.d/config/awesome-tab.el"
   :config
@@ -168,6 +177,7 @@
   )  
 
 (use-package visual-fill-column
+  :defer t
   :config
   (add-hook 'visual-line-mode-hook #'visual-fill-column-mode)
   :custom
