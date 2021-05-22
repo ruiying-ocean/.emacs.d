@@ -18,6 +18,10 @@
   :bind (:map markdown-mode-command-map
               ("g" . grip-mode))
   :hook(markdown-mode . grip-mode)
+  :config
+  (setq grip-github-user "Leslieying")
+  ;;then Creating a personal access token for the command line
+  ;;and set the new token to grip-github-password
 )
 
 (provide 'init-md)
