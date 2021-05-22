@@ -40,11 +40,6 @@
   (prog-mode . rainbow-delimiters-mode)
   )
 
-(use-package nyan-mode
-  :defer t
-  :config
-  (nyan-mode t))
-
 ;; (use-package spaceline
 ;;  :init
 ;;  (require 'spaceline-config)
@@ -65,6 +60,11 @@
   (setq doom-modeline-enable-word-count nil)
   (setq all-the-icons-scale-factor 1.0)
   )
+
+(use-package nyan-mode
+  :defer t
+  :hook
+  (doom-modeline-mode . nyan-mode))
 
 (use-package dashboard
   :diminish dashboard-mode
