@@ -19,9 +19,13 @@
               ("g" . grip-mode))
   :hook(markdown-mode . grip-mode)
   :config
-  (setq grip-github-user "Leslieying")
-  ;;then Creating a personal access token for the command line
-  ;;and set the new token to grip-github-password
+  ;;create your personal access token, then config
+  ;;your github username and token in "~/.authinfo.gpg"
+  ;;DO NOT input your password here!
+  (require 'auth-source)
+  (let ((credential (auth-source-user-and-password "api.github.com")))
+    (setq grip-github-user (car credential)
+          grip-github-password (cadr credential)))  
 )
 
 (provide 'init-md)
