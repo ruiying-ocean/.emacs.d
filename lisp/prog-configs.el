@@ -93,7 +93,6 @@
 
 (use-package exec-path-from-shell
    :if (memq window-system '(mac ns))
-   :defer t
    :config
    (exec-path-from-shell-initialize))
 

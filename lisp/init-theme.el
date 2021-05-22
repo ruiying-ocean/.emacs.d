@@ -75,7 +75,7 @@
    t))
 (global-set-key (kbd "C-z") 'random-color-theme)
 ;;(add-hook 'after-init-hook 'random-color-theme)
-(load-theme 'base16-gruvbox-dark-soft t)
+(load-theme 'doom-zenburn t)
 ;;(add-hook 'after-init-hook (lambda () (load-theme 'base16-gruvbox-dark-soft)))
 
 ;; (use-package doom-themes

@@ -68,13 +68,18 @@
 (use-package dashboard
     :diminish dashboard-mode
     :config
-    (setq dashboard-banner-logo-title "Welcome back, Rui!")
-    (setq dashboard-startup-banner 3)
+    (setq dashboard-banner-logo-title "Happiness is everything. - Rui")
+;;    (setq dashboard-startup-banner 3)
+    (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/world.png")
     (setq dashboard-center-content t)
-    (setq dashboard-items '((recents  . 10)
-                            (agenda . 5)))
+    (setq dashboard-items '((recents  . 3)
+			    (agenda . 3)))
     (dashboard-setup-startup-hook)
+    (setq dashboard-set-heading-icons t)
+    (setq dashboard-set-file-icons t)
+    (setq dashboard-set-navigator t)
     (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))) ;; show Dashboard in frames created with emacsclient -c
+    (setq dashboard-projects-switch-function 'counsel-projectile-switch-project-by-name)
     )
 
 (use-package highlight-indent-guides
