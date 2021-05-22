@@ -15,8 +15,9 @@
 
 ;;pip install grip first
 (use-package grip-mode
-  :ensure t
   :bind (:map markdown-mode-command-map
-         ("g" . grip-mode)))
+              ("g" . grip-mode))
+  :hook(markdown-mode . grip-mode)
+)
 
 (provide 'init-md)

@@ -59,10 +59,11 @@
 ;;   :ensure spacemacs-theme)
 (use-package sublime-themes)
 (use-package doom-themes)
+(use-package tao-theme)
 
 ;;Transprancy setting
-(set-frame-parameter (selected-frame) 'alpha '(98 100))
-(add-to-list 'default-frame-alist '(alpha 98 100))
+(set-frame-parameter (selected-frame) 'alpha '(97 100))
+(add-to-list 'default-frame-alist '(alpha 97 100))
 
 ;;random theme
 (setq color-themes '(sanityinc-tomorrow-night base16-zenburn gruvbox-dark-soft spacemacs-dark spolsky doom-one doom-vibrant doom-dark+))
@@ -75,7 +76,7 @@
    t))
 (global-set-key (kbd "C-z") 'random-color-theme)
 ;;(add-hook 'after-init-hook 'random-color-theme)
-(load-theme 'doom-zenburn t)
+(load-theme 'base16-zenburn t)
 ;;(add-hook 'after-init-hook (lambda () (load-theme 'base16-gruvbox-dark-soft)))
 
 ;; (use-package doom-themes
