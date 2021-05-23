@@ -2,7 +2,7 @@
 (add-hook 'window-setup-hook 'toggle-frame-maximized t)
 (add-hook 'after-init-hook 'display-time-mode)
 (add-hook 'after-init-hook 'display-battery-mode)
-(setq display-time-format "%B %H:%M %a")
+;(setq display-time-format "%I:%M %p %d %B |")
 (setq system-time-locale nil)
 (setq-default cursor-type 'bar)
 (blink-cursor-mode 0)
