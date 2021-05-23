@@ -42,41 +42,21 @@
 (use-package spacemacs-common
   :defer t
   :ensure spacemacs-theme)
-
 (use-package doom-themes
+  :defer 0.1
   :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-ayu-light t)
-
-  ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
-
   ;;treemacs setting
   (setq doom-themes-treemacs-enable-variable-pitch nil)
   (setq doom-themes-treemacs-theme "doom-color")
-  (doom-themes-treemacs-config)
-  
+  (doom-themes-treemacs-config)  
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 
+;;the core of this file, use C-c t to change
+(load-theme 'doom-ayu-light t)
 
 ;;Transprancy setting
 (set-frame-parameter (selected-frame) 'alpha '(97 100))
 (add-to-list 'default-frame-alist '(alpha 97 100))
 
-;;random theme
-(setq color-themes '(sanityinc-tomorrow-night base16-zenburn gruvbox-dark-soft spacemacs-dark spolsky doom-one doom-vibrant doom-dark+))
-(defun random-color-theme()
-  "Want some fresh color? Run me to get some random surprises"
-  (interactive)
-  (random t)
-  (load-theme
-   (nth (random (length color-themes)) color-themes)
-   t))
-(global-set-key (kbd "C-z") 'random-color-theme)
-;;(add-hook 'after-init-hook 'random-color-theme)
-
 (provide 'init-theme)
-

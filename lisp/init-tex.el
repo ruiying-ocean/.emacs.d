@@ -23,6 +23,7 @@
 	    ))
 
 (use-package magic-latex-buffer
+  :defer t
   :hook
   (latex-mode . magic-latex-buffer)
   :config

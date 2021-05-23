@@ -36,7 +36,6 @@
 
 (use-package rainbow-delimiters
   :defer t
-  :config
   :hook
   (prog-mode . rainbow-delimiters-mode)
   )
@@ -166,17 +165,22 @@
 ;;                                     (t      . 10)))
 ;;   (ivy-posframe-mode 1))
 
-(use-package awesome-tab
-  :defer t
-  ;;not currently available on melpa
-  :load-path "~/.emacs.d/config/awesome-tab.el"
+(use-package centaur-tabs
   :config
-  (awesome-tab-mode t)
-  (setq awesome-tab-show-tab-index t)
-  (setq awesome-tab-height 100)
+  (centaur-tabs-mode t)
+  (setq centaur-tabs-set-bar 'over)
+  (setq centaur-tabs-height 32)
+  (setq centaur-tabs-gray-out-icons 'buffer)
+  (setq centaur-tabs-set-icons t)
+  (setq centaur-tabs-close-button "x")
+  (setq centaur-tabs-set-modified-marker t)
+  (setq centaur-tabs-modified-marker "*")
   :bind
-  ("C-x i" . awesome-tab-ace-jump) ;;or TAB
-  )  
+  ("C-<prior>" . centaur-tabs-backward)
+  ("C-<next>" . centaur-tabs-forward)
+  :hook
+  (dired-mode . centaur-tabs-local-mode)
+)
 
 (use-package visual-fill-column
   :defer t

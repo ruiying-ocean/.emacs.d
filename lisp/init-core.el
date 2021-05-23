@@ -1,4 +1,4 @@
-; This file is setting of all programming-related packages in use-package framework
+;; This file is setting of all programming-related packages in use-package framework
 
 (use-package benchmark-init
   :config
@@ -7,10 +7,7 @@
 
 ;;auto-completion
 (use-package company
-  :defer t
   :config
-  (setq company-idle-delay 0.5)
-  (setq company-show-numbers t)
   (setq company-tooltip-limit 10)
   (setq company-minimum-prefix-length 2)
   (setq company-tooltip-align-annotations t)
@@ -22,6 +19,7 @@
   )
 
 (use-package company-tabnine
+  :defer 1
   ;;Tabnine uses ML to provide suggestion
   ;;M-x company-tabnine-install-binary to install binary system
   :after company
@@ -67,7 +65,7 @@
   (setq make-backup-files nil)
   (setq create-lockfiles nil)
   (define-key global-map (kbd "C-c s") 'counsel-tramp)
-)
+  )
 
 ;;visit https://github.com/jacktasia/dumb-jump to see more alternative ways
 ;;for example, TAGS system and so on
@@ -76,11 +74,9 @@
 ;;======================================================================
 ;;(use-package ripgrep)
 ;;(use-package rg)
-(use-package ag
-  :defer t)
 (use-package dumb-jump
-  :defer t
-  :requires ag
+  :defer 4
+  :ensure ag
   :config
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
   (setq dumb-jump-default-project "~/cgenie.muffin")
@@ -88,7 +84,8 @@
 
 (use-package which-key
   :config
-  (which-key-mode t))
+  (which-key-mode t)
+  )
 
 (use-package projectile
   :defer 2
@@ -98,40 +95,44 @@
   (projectile-mode +1)
   :bind
   (:map projectile-mode-map
-	("C-c p" . projectile-command-map)))
+	("C-c p" . projectile-command-map))
+  )
 
 (use-package counsel-projectile
   :requires projectile
-;;an ivy UI for projectile
+  ;;an ivy UI for projectile
   :bind
   (:map projectile-mode-map
-	  ("C-c p" . projectile-command-map)
-    ))
+	("C-c p" . projectile-command-map))
+  )
 
 (use-package flycheck
   :defer t
   :hook
-  (after-init . global-flycheck-mode)
+  (prog-mode . flycheck-mode)
   :config
   (with-eval-after-load 'flycheck
     (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
   )
 
 (use-package flycheck-inline
-  :defer t
   :config
   (with-eval-after-load 'flycheck
-    (add-hook 'flycheck-mode-hook #'flycheck-inline-mode)))
+    (add-hook 'flycheck-mode-hook #'flycheck-inline-mode))
+  )
 
 (use-package yasnippet
-;you may wanna try ivy-yasnippet someday
-  :defer t
-  :ensure yasnippet-snippets
+  :ensure yasnippet-snippets  ;; Collection of snippets
   :hook (after-init . yas-global-mode)
   )
 
-(use-package transient
-  :defer t)
+;;manually choose a snippet
+(use-package ivy-yasnippet
+  :requires yasnippet
+  :config
+  (global-set-key (kbd "C-c i") 'ivy-yasnippet)  
+  (setq ivy-yasnippet-expand-keys 'smart)
+  )
 
 (use-package magit
   :defer t
@@ -139,17 +140,19 @@
   ("C-x g" . magit-status)  
   ("C-x c" . magit-checkout))
 
+;;a magit prefix help page
+(use-package transient
+  :defer t)
+
 (use-package exec-path-from-shell
-  :defer t
   :if (memq window-system '(mac ns))
   :config
   (exec-path-from-shell-initialize))
 
 (use-package popwin
-  :defer t
   :init (require 'popwin)
-  :config
-  (popwin-mode t))
+  :hook
+  (after-init . popwin-mode))
 
 (use-package smex
   :init (smex-initialize)
@@ -157,36 +160,39 @@
 	 ("M-x" . smex-major-mode-commands)))
 
 (use-package ivy
+  :defer 1
   :hook
   (after-init . ivy-mode)
   :config
   (setq ivy-use-virtual-buffers t)
   (setq enable-recursive-minibuffers t)
   (global-set-key "\C-s" 'swiper)
-)
-
-(use-package flyspell-correct-ivy
-  :defer t
-  :after flyspell
-  :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper)))
-
-;; (use-package flyspell-correct-popup
-;;   :after flyspell-correct)
+  (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
+  (global-set-key (kbd "C-c v") 'ivy-push-view)
+  (global-set-key (kbd "C-c V") 'ivy-pop-view)
+  (setq ivy-wrap t)
+  (setq ivy-height 9)
+  )
 
 (use-package counsel
+  :defer 1
   :after ivy
   :config
   (global-set-key (kbd "M-x") 'counsel-M-x)
+  (global-set-key (kbd "M-y") 'counsel-yank-pop)
   (global-set-key (kbd "C-x C-f") 'counsel-find-file)
   (global-set-key (kbd "C-h f") 'counsel-describe-function)
   (global-set-key (kbd "C-h v") 'counsel-describe-variable)
-  (global-set-key (kbd "<f1> l") 'counsel-find-library)
-  (global-set-key (kbd "C-c g") 'counsel-git)
+  (global-set-key (kbd "C-c g") 'counsel-git) ;;find file in current git directory
   (global-set-key (kbd "C-c j") 'counsel-git-grep)
+  (global-set-key (kbd "C-c l") 'counsel-git-log)
+  (global-set-key (kbd "C-c k") 'counsel-fzf) ;;fzf find file
+  (global-set-key (kbd "C-c r") 'counsel-rg) ;;rg find text
+  (global-set-key (kbd "C-c t") 'counsel-load-theme)
   (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
 
 (use-package avy
-  :defer t
+  :defer 1
   :config
   (global-set-key (kbd "C-:") 'avy-goto-char)
   (global-set-key (kbd "C-'") 'avy-goto-char-2)
@@ -194,7 +200,7 @@
   (global-set-key (kbd "M-g l") 'avy-goto-line))
 
 (use-package helpful
-  :defer t
+  :defer 2
   :config
   (global-set-key (kbd "C-h f") #'helpful-callable)
   (global-set-key (kbd "C-h v") #'helpful-variable)
@@ -202,7 +208,7 @@
   )
 
 (use-package ace-window
-  :defer t
+  :defer 4
   :config
   (global-set-key (kbd "M-o") 'ace-window))
 

@@ -11,11 +11,6 @@
 (setq-default make-backup-files nil)
 (setq ring-bell-function 'ignore)
 
-;;flyspell setting
-;; (setq-default ispell-program-name "/usr/local/bin/aspell") ;;depends on aspell in the path
-;; (setq ispell-local-dictionary "en_GB")
-;; (setq ispell-extra-args '("--sug-mode=fast"))
-
 ;;Font Setting
 (setq inhibit-compacting-font-caches t)
 
@@ -47,6 +42,26 @@
 
 (when (member "Symbola" (font-family-list))
  (set-fontset-font t 'unicode "Symbola" nil 'prepend))
+
+;;flyspell setting
+(add-hook 'text-mode-hook 'flyspell-mode)
+
+;; (setq-default ispell-program-name "/usr/local/bin/aspell") ;;depends on aspell in the path
+;; (setq ispell-local-dictionary "en_GB")
+;; (setq ispell-extra-args '("--sug-mode=fast"))
+
+(use-package flyspell-correct
+  :after flyspell
+  :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper)))
+
+(use-package flyspell-correct-avy-menu
+  :after flyspell-correct)
+
+(use-package flyspell-correct-ivy
+  :after flyspell-correct)
+
+ (use-package flyspell-correct-popup
+   :after flyspell-correct)
 
 (provide 'init-editor)
 ;;; init-editor.el ends here

@@ -7,8 +7,8 @@
 
 ;set meta command and mark set keybind
 (if (eq system-type 'darwin)
-    (setq mac-command-modifier 'meta)
-    (global-set-key (kbd "C-j") 'set-mark-command))
+    (setq mac-command-modifier 'meta))
+(global-set-key (kbd "C-j") 'set-mark-command)
 ;;C-x C-x -> set mark and go back
 ;;C-x h to select all
 

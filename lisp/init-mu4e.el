@@ -35,6 +35,5 @@
   (setq mu4e-main-buffer-hide-personal-addresses t)
   )
 
-
-
 (provide 'init-mu4e)
+;;; init-mu4e ends here
