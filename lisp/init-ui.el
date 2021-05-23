@@ -1,5 +1,5 @@
-;;(add-hook 'window-setup-hook 'toggle-frame-fullscreen t)
-(add-hook 'window-setup-hook 'toggle-frame-maximized t)
+(if (eq system-type 'darwin)
+    (add-hook 'window-setup-hook 'toggle-frame-maximized t))
 (add-hook 'after-init-hook 'display-time-mode)
 (add-hook 'after-init-hook 'display-battery-mode)
 (setq display-time-default-load-average nil)
@@ -176,8 +176,8 @@
   (setq centaur-tabs-set-modified-marker t)
   (setq centaur-tabs-modified-marker "*")
   :bind
-  ("C-<prior>" . centaur-tabs-backward)
-  ("C-<next>" . centaur-tabs-forward)
+  ("C-c j" . centaur-tabs-backward)
+  ("C-c k" . centaur-tabs-forward)
   :hook
   (dired-mode . centaur-tabs-local-mode)
 )

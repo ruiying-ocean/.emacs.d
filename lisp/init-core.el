@@ -57,8 +57,7 @@
   )
 
 (use-package counsel-tramp
-  :defer t
-  :requires tramp
+  :defer 1
   :config
   (setq counsel-tramp-custom-connections '(/scp:mogu@almond.ggy.bris.ac.uk:/home/mogu/cgenie.muffin/))
   (setq tramp-default-method "scp")
