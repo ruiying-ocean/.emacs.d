@@ -1,4 +1,1 @@
 * Tasks
-** DONE 驾校报名 [2020-04-08]
-** CANCELED spacevim/neovim  
-  [[file:~/.emacs.d/org/agenda.org]]

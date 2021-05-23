@@ -34,7 +34,8 @@
 		(visual-line-mode 1)
 		(display-line-numbers-mode -1)
 		(flyspell-mode 1)
-		(org-num-mode 1)))
+		;;(org-num-mode 1)
+		))
   )
 
 ;;use org-superstar-mode to replace org-bullets

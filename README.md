@@ -28,9 +28,9 @@ The structure is like:
 
 # Features
 
-I have to say *all features come from community's efforts*, not mine.
+> *All features come from community's efforts*, not mine.
 
-- Fast start-up (load 87 packages in <1s)
+- Fast start-up (load more than 100 packages in <1s)
 - Modern UI (directory explorer, theme, color-scheme, minimap, file icons, etc)
 - Multiple programming languages support and syntax highlighting (R, Python, TeX, Fortran, etc)
 - IntelliSense
@@ -41,7 +41,7 @@ I have to say *all features come from community's efforts*, not mine.
 - Project management
 - Git integration as version control
 - Easy remote file operation as local
-- Perfect org-mode as lightweight markup language and todo management
+- Perfect org-mode as lightweight markup language and todo manager
 - PDF support
 - Email client
 

@@ -1,7 +1,5 @@
 
-
 * From agenda.org
-
 ** DONE emacs git mode(magit)
 :PROPERTIES:
 :ARCHIVE_TIME: 2020-04-06 周一 22:09

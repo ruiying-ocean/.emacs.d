@@ -71,7 +71,7 @@
   :diminish dashboard-mode
   :config
   (dashboard-setup-startup-hook)
-  (setq dashboard-banner-logo-title "Happiness is everything. - Rui")
+  (setq dashboard-banner-logo-title "Happiness is everything - Rui")
 ;;    (setq dashboard-startup-banner 3)
   (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/world.png")
   (setq dashboard-center-content t)
