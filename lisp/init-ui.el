@@ -2,7 +2,8 @@
 (add-hook 'window-setup-hook 'toggle-frame-maximized t)
 (add-hook 'after-init-hook 'display-time-mode)
 (add-hook 'after-init-hook 'display-battery-mode)
-;(setq display-time-format "%I:%M %p %d %B |")
+(setq display-time-default-load-average nil)
+(setq display-time-format "%B %d %H:%M %p")
 (setq system-time-locale nil)
 (setq-default cursor-type 'bar)
 (blink-cursor-mode 0)
@@ -69,12 +70,12 @@
 (use-package dashboard
   :diminish dashboard-mode
   :config
+  (dashboard-setup-startup-hook)
   (setq dashboard-banner-logo-title "Happiness is everything. - Rui")
 ;;    (setq dashboard-startup-banner 3)
   (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/world.png")
   (setq dashboard-center-content t)
   (setq dashboard-items '((recents  . 3)))
-  (dashboard-setup-startup-hook)
   (setq dashboard-set-heading-icons t)
   (setq dashboard-set-file-icons t)
   (setq dashboard-set-navigator t)

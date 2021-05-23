@@ -1,4 +1,5 @@
 (use-package company
+  :defer t
   :config
   (setq company-idle-delay 0.5)
   (setq company-show-numbers t)
@@ -13,6 +14,7 @@
   )
 
 (use-package company-tabnine
+  :defer t
   ;;TabNine uses ML to provide suggestion
   ;;M-x company-tabnine-install-binary to install binary system
   :after company
@@ -35,6 +37,7 @@
 ;;   )
 
 (use-package company-box
+  :defer t
   :hook (company-mode . company-box-mode))
 
 (provide 'init-company)
