@@ -1,5 +1,4 @@
 ; This file is setting of all programming-related packages in use-package framework
-(setq use-package-always-ensure t)
 
 (use-package benchmark-init
   :config

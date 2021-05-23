@@ -1,24 +1,9 @@
 #+TITLE: My To-Do projects
+
 * Emacs
 ** [#C] Elisp
-*** elisp
 http://ergoemacs.org/emacs/elisp_basics.html
-*** Projectile usage
 * Studies
-** Mathematica and Physic
-*** Statistic
-**** TODO GLM [1/3]
-*** Calculus
-*** Partial Differntial Equation
-** Major
-*** Physical Oceanography and Modelling
-*** Foraminifera Study
-**** TODO [#A] Finish Ecogem part
-SCHEDULED: <2020-12-30 -1d>
-**** TODO [#A] Write foram body size part
-SCHEDULED: <2020-12-30 Wed>-<2021-01-01 Fri>
-*** Carbon Chemistry
-**** Finish /Ocean Biogeochemical Dynamic/
 ** Coding
 *** [#B] Fortran
 *** [#C] Matlab

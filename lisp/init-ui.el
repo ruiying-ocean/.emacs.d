@@ -179,8 +179,8 @@
 
 (use-package visual-fill-column
   :defer t
-  :config
-  (add-hook 'visual-line-mode-hook #'visual-fill-column-mode)
+  :hook
+  (visual-line-mode . visual-fill-column-mode)
   :custom
   (visual-fill-column-center-text t)
   (visual-fill-column-width 100)
