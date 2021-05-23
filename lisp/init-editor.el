@@ -1,5 +1,3 @@
-(setq use-package-always-ensure t)
-
 ;;Editor coding system setting
 (fset 'yes-or-no-p 'y-or-n-p)
 (progn
@@ -17,7 +15,6 @@
 ;; (setq-default ispell-program-name "/usr/local/bin/aspell") ;;depends on aspell in the path
 ;; (setq ispell-local-dictionary "en_GB")
 ;; (setq ispell-extra-args '("--sug-mode=fast"))
-
 
 ;;Font Setting
 (setq inhibit-compacting-font-caches t)
@@ -51,5 +48,5 @@
 (when (member "Symbola" (font-family-list))
  (set-fontset-font t 'unicode "Symbola" nil 'prepend))
 
-(provide 'editor-configs)
-;;; editor-config.el ends here
+(provide 'init-editor)
+;;; init-editor.el ends here

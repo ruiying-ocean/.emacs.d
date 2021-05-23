@@ -5,6 +5,48 @@
   ;; To disable collection of benchmark data after init is done.
   (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
+;;auto-completion
+(use-package company
+  :defer t
+  :config
+  (setq company-idle-delay 0.5)
+  (setq company-show-numbers t)
+  (setq company-tooltip-limit 10)
+  (setq company-minimum-prefix-length 2)
+  (setq company-tooltip-align-annotations t)
+  ;; invert the navigation direction if the the completion popup-isearch-match
+  ;; is displayed on top (happens near the bottom of windows)
+  (setq company-tooltip-flip-when-above t)
+  :hook
+  (after-init . global-company-mode)
+  )
+
+(use-package company-tabnine
+  ;;Tabnine uses ML to provide suggestion
+  ;;M-x company-tabnine-install-binary to install binary system
+  :after company
+  :config
+  (add-to-list 'company-backends #'company-tabnine)
+  (setq company-idle-delay 0.5)
+  (setq company-show-numbers t)
+  )
+
+;; (use-package company-quickhelp
+;;   :config
+;;   (add-hook 'company-quickhelp-mode-hook 'python-mode)
+;;   ;(company-quickhelp-mode 1) ;;globally true
+;;   (eval-after-load 'company
+;;     '(define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin)))
+
+;; (use-package company-posframe ;;similar function as company-quickhelp
+;;   :config
+;;   (company-posframe-mode 1)
+;;   )
+
+(use-package company-box
+  :defer t
+  :hook (company-mode . company-box-mode))
+
 ;;To specify new version of git on remote machine so I can run magit locally
 ;;add .ssh/config first
 (use-package tramp
@@ -83,7 +125,7 @@
 
 (use-package yasnippet
 ;you may wanna try ivy-yasnippet someday
-  :defer 4
+  :defer t
   :ensure yasnippet-snippets
   :hook (after-init . yas-global-mode)
   )
@@ -98,11 +140,13 @@
   ("C-x c" . magit-checkout))
 
 (use-package exec-path-from-shell
-   :if (memq window-system '(mac ns))
-   :config
-   (exec-path-from-shell-initialize))
+  :defer t
+  :if (memq window-system '(mac ns))
+  :config
+  (exec-path-from-shell-initialize))
 
 (use-package popwin
+  :defer t
   :init (require 'popwin)
   :config
   (popwin-mode t))
@@ -116,13 +160,13 @@
   :hook
   (after-init . ivy-mode)
   :config
-  ;(ivy-mode 1)
   (setq ivy-use-virtual-buffers t)
   (setq enable-recursive-minibuffers t)
   (global-set-key "\C-s" 'swiper)
 )
 
 (use-package flyspell-correct-ivy
+  :defer t
   :after flyspell
   :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper)))
 
@@ -142,7 +186,6 @@
   (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
 
 (use-package avy
-  ;;快速跳转字符或行
   :defer t
   :config
   (global-set-key (kbd "C-:") 'avy-goto-char)
@@ -163,5 +206,5 @@
   :config
   (global-set-key (kbd "M-o") 'ace-window))
 
-(provide 'prog-configs)
-;;; prog-configs.el ends here
+(provide 'init-core)
+;;; init-core.el ends here

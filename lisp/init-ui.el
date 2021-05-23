@@ -73,7 +73,7 @@
   (dashboard-setup-startup-hook)
   (setq dashboard-banner-logo-title "Happiness is everything - Rui")
 ;;    (setq dashboard-startup-banner 3)
-  (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/world.png")
+  (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/lady.png")
   (setq dashboard-center-content t)
   (setq dashboard-items '((recents  . 3)))
   (setq dashboard-set-heading-icons t)
@@ -120,8 +120,9 @@
 
 (use-package treemacs
   :defer t
-  :config
-  (global-set-key [f8] 'treemacs))
+  :bind
+  ("<f8>" . treemacs)
+)
 
 (use-package treemacs-all-the-icons
   :defer t

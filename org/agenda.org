@@ -1,5 +1,4 @@
 #+TITLE: My To-Do projects
-
 * Table of Cotent                                                       :TOC:
 - [[#emacs][Emacs]]
   - [[#elisp][Elisp]]

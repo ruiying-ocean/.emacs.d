@@ -33,15 +33,34 @@
 		    (cnfonts-enable)))))
   (cnfonts-enable))
 
-;;Theme setting
+;;Install themes
 (use-package base16-theme :defer t)
 (use-package color-theme-sanityinc-tomorrow :defer t)
 (use-package gruvbox-theme :defer t)
-;; (use-package spacemacs-common
-;;   :ensure spacemacs-theme)
 (use-package sublime-themes :defer t)
-(use-package doom-themes :defer t)
 (use-package tao-theme :defer t)
+(use-package spacemacs-common
+  :defer t
+  :ensure spacemacs-theme)
+
+(use-package doom-themes
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-ayu-light t)
+
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+
+  ;;treemacs setting
+  (setq doom-themes-treemacs-enable-variable-pitch nil)
+  (setq doom-themes-treemacs-theme "doom-color")
+  (doom-themes-treemacs-config)
+  
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
+
 
 ;;Transprancy setting
 (set-frame-parameter (selected-frame) 'alpha '(97 100))
@@ -58,30 +77,6 @@
    t))
 (global-set-key (kbd "C-z") 'random-color-theme)
 ;;(add-hook 'after-init-hook 'random-color-theme)
-(load-theme 'base16-gruvbox-dark-soft t)
-;;(add-hook 'after-init-hook (lambda () (load-theme 'base16-gruvbox-dark-soft)))
-
-;; (use-package doom-themes
-;;   :ensure t
-;;   :config
-;;   ;; Global settings (defaults)
-;;   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-;;         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-;;   (load-theme 'doom-dracula t)
-
-;;   ;; Enable flashing mode-line on errors
-;;   (doom-themes-visual-bell-config)
-  
-;;   ;; Enable custom neotree theme (all-the-icons must be installed!)
-;;   (doom-themes-neotree-config)
-;;   ;; or for treemacs users
-;;   (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
-;;   (doom-themes-treemacs-config)
-  
-;;   ;; Corrects (and improves) org-mode's native fontification.
-;;   (doom-themes-org-config))
-
-
 
 (provide 'init-theme)
 
