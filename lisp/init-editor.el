@@ -1,5 +1,4 @@
 ;;Editor coding system setting
-(fset 'yes-or-no-p 'y-or-n-p)
 (progn
   (prefer-coding-system 'utf-8)
   (set-default-coding-systems 'utf-8)
@@ -7,14 +6,19 @@
   (set-keyboard-coding-system 'utf-8)
   (setq default-buffer-file-coding-system 'utf-8))
 
+;;We are lazy human
+(fset 'yes-or-no-p 'y-or-n-p)
+
 ;;No more backup files~
 (setq-default make-backup-files nil)
+
+;;No more strange ring bell
 (setq ring-bell-function 'ignore)
 
 ;;Font Setting
 (setq inhibit-compacting-font-caches t)
 
-;;Varialble/fixed pictch font setting
+;;Varialble/fixed pictch font setting, essential for org-mode
 (custom-theme-set-faces
  'user
  '(variable-pitch ((t (:family "New York" :height 200))))
@@ -35,10 +39,10 @@
  '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
  '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
 
-;;unicode font
+;;Unicode font setting
 (when (member "Symbola" (font-family-list))
- (set-fontset-font "fontset-default" nil
- (font-spec :size 25 :name "Symbola")))
+  (set-fontset-font "fontset-default" nil
+		    (font-spec :size 20 :name "Symbola")))
 
 (when (member "Symbola" (font-family-list))
  (set-fontset-font t 'unicode "Symbola" nil 'prepend))

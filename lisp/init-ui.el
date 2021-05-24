@@ -12,22 +12,38 @@
 (when (not (eq system-type 'gnu/linux))
   (add-hook 'window-setup-hook 'toggle-frame-maximized t))
 
-;;What to display in mode-line
+;;Display time in the mode line
 (add-hook 'after-init-hook 'display-time-mode)
 (setq display-time-format "%B %d %H:%M %p")
-(add-hook 'after-init-hook 'display-battery-mode)
-(setq display-time-default-load-average nil)
 (setq system-time-locale nil)
+
+;;If use doom-mode-line, then display battery
+(add-hook 'doom-modeline-mode-hook 'display-battery-mode)
+
+;;Don't display load average percentage
+(setq display-time-default-load-average nil)
+
 ;;Cursor
 (setq-default cursor-type 'bar)
 (blink-cursor-mode 0)
 
-(global-hl-line-mode t)
-(global-display-line-numbers-mode t);;the linum-mode has been obsolete
+;;Highlight current line
+(add-hook 'after-init-hook 'global-hl-line-mode)
+
+;;Display line number
+(global-display-line-numbers-mode t) ;;the linum-mode has been obsolete
 (setq display-line-numbers-width 0)
+
+;;Showing matching parentheses
 (show-paren-mode t)
 (setq show-paren-style 'mixed)
-;;(electric-indent-mode t)
+
+;;turn off electric-indent-mode but use aggressive-indent-mode
+(electric-indent-mode -1)
+(use-package aggressive-indent
+  :hook
+  (prog-mode . aggressive-indent-mode))
+
 (setq frame-inhibit-implied-resize nil)
 
 ;;more see the doc https://github.com/Fuco1/smartparens/wiki/Working-with-expressions
@@ -61,25 +77,25 @@
 ;;  :config
 ;;  (spaceline-emacs-theme))
 
-;; (use-package mood-line
-;;   :hook
-;;   (after-init . mood-line-mode)
-;; )
+(use-package mood-line
+  :hook
+  (after-init . mood-line-mode)
+ )
 
-(use-package doom-modeline
-  ;;right fringe cut-off issue should relate to font size
-  ;;Use cnfont-decrease-size or see more methods in 
-  ;;https://github.com/hlissner/doom-emacs/blob/develop/modules/ui/modeline/README.org#the-right-side-of-the-modeline-is-cut-off
-  :defer t
-  :after all-the-icons
-  :hook (after-init . doom-modeline-mode)
-  :config
-  (setq doom-modeline-window-width-limit fill-column)
-  (setq doom-modeline-icon (display-graphic-p))
-  (setq doom-modeline-major-mode-icon t)
-  (setq doom-modeline-enable-word-count nil)
-  (setq all-the-icons-scale-factor 1.0)
-  )
+;; (use-package doom-modeline
+;;   ;;right fringe cut-off issue should relate to font size
+;;   ;;Use cnfont-decrease-size or see more methods in 
+;;   ;;https://github.com/hlissner/doom-emacs/blob/develop/modules/ui/modeline/README.org#the-right-side-of-the-modeline-is-cut-off
+;;   :defer t
+;;   :after all-the-icons
+;;   :hook (after-init . doom-modeline-mode)
+;;   :config
+;;   (setq doom-modeline-window-width-limit fill-column)
+;;   (setq doom-modeline-icon (display-graphic-p))
+;;   (setq doom-modeline-major-mode-icon t)
+;;   (setq doom-modeline-enable-word-count nil)
+;;   (setq all-the-icons-scale-factor 1.0)
+;;   )
 
 (use-package nyan-mode
   :defer t
@@ -124,12 +140,12 @@
 
 (use-package minimap
   :defer t
-  :config
-  (minimap-mode -1)
   :custom
   (minimap-window-location 'right)
   (minimap-width-fraction 0.05)
   (minimap-minimum-width 15)
+  :bind
+  ("<f6>" . minimap-mode)
   )
 
 ;;(use-package neotree
@@ -142,14 +158,15 @@
   :defer t
   :bind
   ("<f8>" . treemacs)
-)
+  )
 
 (use-package treemacs-all-the-icons
   :defer t
   :requires
   (treemacs all-the-icons)
   :config
-  (treemacs-load-theme "all-the-icons"))
+  (treemacs-load-theme "all-the-icons")
+  )
 
 (use-package all-the-icons-dired
   :defer t

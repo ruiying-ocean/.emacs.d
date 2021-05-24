@@ -18,12 +18,13 @@
   (after-init . global-company-mode)
   )
 
+;;A match-learning based backend for company
+;;May conflict with company-flx-mode/ESS mode
 (use-package company-tabnine
   :defer 1
-  ;;Tabnine uses ML to provide suggestion
-  ;;M-x company-tabnine-install-binary to install binary system
   :after company
   :config
+  ;;M-x company-tabnine-install-binary to install binary system
   (unless (file-directory-p "~/.TabNine/")
     (company-tabnine-install-binary))
   (add-to-list 'company-backends #'company-tabnine)
@@ -38,7 +39,8 @@
 ;;   (eval-after-load 'company
 ;;     '(define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin)))
 
-;; (use-package company-posframe ;;similar function as company-quickhelp
+;;Alternative to company-quickhelp
+;; (use-package company-posframe 
 ;;   :config
 ;;   (company-posframe-mode 1)
 ;;   )
@@ -99,14 +101,15 @@
 	("C-c p" . projectile-command-map))
   )
 
+;;an ivy UI for projectile
 (use-package counsel-projectile
   :requires projectile
-  ;;an ivy UI for projectile
   :bind
   (:map projectile-mode-map
 	("C-c p" . projectile-command-map))
   )
 
+;;on-the-fly syntax checker
 (use-package flycheck
   :defer t
   :hook
@@ -134,7 +137,7 @@
   :config
   (setq ivy-yasnippet-expand-keys 'smart))
 
-
+;;Git + Emacs = boom!
 (use-package magit
   :defer t
   :bind
@@ -145,6 +148,7 @@
 (use-package transient
   :defer t)
 
+;;To read proper environment variable in MacOS
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))
   :config
@@ -192,6 +196,8 @@
   (global-set-key (kbd "C-c t") 'counsel-load-theme)
   (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
 
+
+;;Faster cursor movement - go to anywhere
 (use-package avy
   :defer 1
   :config
@@ -212,6 +218,17 @@
   :defer 4
   :config
   (global-set-key (kbd "M-o") 'ace-window))
+
+;;Another interesting package for fuzzy finding
+;; (use-package affe
+;;   :after orderless
+;;   :config
+;;   ;; Configure Orderless
+;;   (setq affe-regexp-function #'orderless-pattern-compiler
+;;         affe-highlight-function #'orderless-highlight-matches)
+
+;;   ;; Manual preview key for `affe-grep'
+;;  (consult-customize affe-grep :preview-key (kbd "M-.")))
 
 (provide 'init-core)
 ;;; init-core.el ends here
