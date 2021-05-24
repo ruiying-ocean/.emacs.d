@@ -41,6 +41,7 @@
 ;;turn off electric-indent-mode but use aggressive-indent-mode
 (electric-indent-mode -1)
 (use-package aggressive-indent
+  :defer t
   :hook
   (prog-mode . aggressive-indent-mode))
 
@@ -78,9 +79,10 @@
 ;;  (spaceline-emacs-theme))
 
 (use-package mood-line
+  :defer t
   :hook
   (after-init . mood-line-mode)
- )
+  )
 
 ;; (use-package doom-modeline
 ;;   ;;right fringe cut-off issue should relate to font size

@@ -5,7 +5,15 @@
 (global-set-key (kbd "<f2>") 'open-init-file)
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
 
-;set meta command and mark set keybind
+(defun select-current-line ()
+  "Select the current line"
+  (interactive)
+  (move-beginning-of-line 1)
+  (push-mark nil nil t)
+  (forward-line 1))
+(global-set-key (kbd "C-x l") 'select-current-line)
+
+;; set meta command and mark set keybind
 (if (eq system-type 'darwin)
     (setq mac-command-modifier 'meta))
 (global-set-key (kbd "C-j") 'set-mark-command)

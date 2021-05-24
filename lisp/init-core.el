@@ -122,9 +122,9 @@
   )
 
 (use-package flycheck-inline
-  :config
-  (with-eval-after-load 'flycheck
-    (add-hook 'flycheck-mode-hook #'flycheck-inline-mode))
+  :defer t
+  :hook
+  (flycheck-mode . flycheck-inline-mode)
   )
 
 (use-package yasnippet

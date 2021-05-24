@@ -7,8 +7,8 @@
 ;;Unicode: Symbola
 
 (use-package cnfonts
-  :if window-system
   :defer t
+  :if window-system
   :config
   ;;need to add these lists into cnfonts/program.el file
   (setq cnfonts--custom-set-fontnames
@@ -44,20 +44,21 @@
 (use-package spacemacs-common
   :defer t
   :ensure spacemacs-theme)
-(use-package doom-themes
-  :defer 0.1
-  :config
-  ;;treemacs setting
-  (setq doom-themes-treemacs-enable-variable-pitch nil)
-  (setq doom-themes-treemacs-theme "doom-color")
-  (doom-themes-treemacs-config)  
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
 
+;; (use-package doom-themes
+;;   :defer t
+;;   :config
+;;   (load-theme 'doom-ayu-light t)
+;;   ;;treemacs setting
+;;   (setq doom-themes-treemacs-enable-variable-pitch nil)
+;;   (setq doom-themes-treemacs-theme "doom-color")
+;;   (doom-themes-treemacs-config)  
+;;   ;; Corrects (and improves) org-mode's native fontification.
+;;   (doom-themes-org-config))
 
 ;;the core of this file, use C-c t to change
-;;(load-theme 'doom-ayu-light t)
 (load-theme 'humanoid-dark t)
+
 
 ;;Transprancy setting
 (set-frame-parameter (selected-frame) 'alpha '(97 100))

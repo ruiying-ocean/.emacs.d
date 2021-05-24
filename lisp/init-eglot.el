@@ -5,22 +5,22 @@
 (setq python-indent-offset 4)
 ;;(add-hook 'python-mode-hook(lambda() (flycheck-mode -1)))
 
-;;Rlang setting
-;;Require ESS
-(use-package ess
-  :config
-  (defun R_pipe_operator ()
-  "R pipe (%>%) in magrittr"
-  (interactive)
-  (just-one-space 1)
-  (insert "%>%"))
-  ;;(reindent-then-newline-and-indent))
-  (global-set-key (kbd "M-=") 'ess-cycle-assign)
-  (global-set-key (kbd "M-p") 'R_pipe_operator)
-  :mode
-  ("\\.R\\'" . ess-r-mode)
-  ;;otherwise use
-  ;;(add-to-list 'auto-mode-alist '("\\.R\\'" . ess-r-mode))
+;;R setting (ESS doesn't like use-package pretty much)
+;;Require ESS installed
+;;Lazy load ess-r-mode
+(add-to-list 'auto-mode-alist '("\\.R\\'" . ess-r-mode))
+(with-eval-after-load 'ess-r-mode
+  (defun ess_insert_pipe()
+    "R pipe (%>%) in magrittr package"
+    (interactive)
+    (just-one-space 1)
+    (insert "%>%")
+    ;;(reindent-then-newline-and-indent)
+    )
+  (define-key ess-r-mode-map (kbd "M--") 'ess-insert-assign)
+  (define-key inferior-ess-r-mode-map (kbd "M--") 'ess-insert-assign)
+  (define-key ess-r-mode-map (kbd "M-p") 'ess_insert_pipe)
+  (define-key inferior-ess-r-mode-map (kbd "M-p") 'ess_insert_pipe)			 
   )
 
 (use-package rainbow-mode
@@ -38,7 +38,7 @@
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) ("clangd"))) ;;install clangd first
   (add-to-list 'eglot-server-programs '(f90-mode . ("fortls"))) ;;pip3 install fortran-language-server
   (add-to-list 'eglot-server-programs '((tex-mode context-mode texinfo-mode bibtex-mode)
-                                      . ("digestif"))) ;;luarocks install digestif
+					. ("digestif"))) ;;luarocks install digestif
   (add-to-list 'eglot-server-programs '(python-mode . ("pylsp"))) ;;pip3 install python-lsp-server
   (add-to-list 'eglot-server-programs '(ess-r-mode . ("R" "--slave" "-e" "languageserver::run()"))) ;;install.packages("languageserver")
   ;;============================================
@@ -48,9 +48,9 @@
   (ess-r-mode . eglot-ensure)
   :bind
   (:map eglot-mode-map
-    ("C-c h" . eldoc)
-    ("C-c r" . elgot-rename))
-)
+	("C-c h" . eldoc)
+	("C-c r" . elgot-rename))
+  )
 
 (provide 'init-eglot)
 ;;;init-eglot.el ends here
