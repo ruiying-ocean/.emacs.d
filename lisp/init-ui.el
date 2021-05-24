@@ -1,13 +1,23 @@
+;;This file is for beautifying Emacs user inferfaces
+
+;;If you are running Emacs in MacOS, then I recommend you using
+;;Emacs Mac Port <--with-no-title-bars> which improves GUI performance a lot
 (when (eq system-type 'darwin)
     (progn (add-hook 'window-setup-hook 'toggle-frame-maximized t)
-	    (setq dired-use-ls-dired nil))) ;;to avoid error "ls does not support --dired" on MacOS
+	   (setq dired-use-ls-dired nil);;to avoid error "ls does not support --dired" in MacOS
+	   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t)) ;;same title bar color
+	   (add-to-list 'default-frame-alist '(ns-appearance . light))))
+
+;;what to display in mode-line
 (add-hook 'after-init-hook 'display-time-mode)
+(setq display-time-format "%B %d %H:%M %p")
 (add-hook 'after-init-hook 'display-battery-mode)
 (setq display-time-default-load-average nil)
-(setq display-time-format "%B %d %H:%M %p")
 (setq system-time-locale nil)
+;;Cursor
 (setq-default cursor-type 'bar)
 (blink-cursor-mode 0)
+
 (global-hl-line-mode t)
 (global-display-line-numbers-mode t);;the linum-mode has been obsolete
 (setq display-line-numbers-width 0)
@@ -47,6 +57,11 @@
 ;;  :config
 ;;  (spaceline-emacs-theme))
 
+;; (use-package mood-line
+;;   :hook
+;;   (after-init . mood-line-mode)
+;; )
+
 (use-package doom-modeline
   ;;right fringe cut-off issue should relate to font size
   ;;Use cnfont-decrease-size or see more methods in 
@@ -71,6 +86,7 @@
   :diminish dashboard-mode
   :config
   (dashboard-setup-startup-hook)
+  (setq dashboard-set-init-info t)
   (setq dashboard-banner-logo-title "Happiness is everything - Rui")
 ;;    (setq dashboard-startup-banner 3)
   (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/lady.png")
@@ -193,3 +209,4 @@
   )
 
 (provide 'init-ui)
+;;;init-ui.el ends here

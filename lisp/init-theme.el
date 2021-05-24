@@ -30,7 +30,7 @@
       (add-hook 'after-make-frame-functions
 		(lambda (frame)
 		  (with-selected-frame frame
-		    (cnfonts-enable)))))
+		    (add-to-list 'default-frame-alist '(font . "SF Mono-14"))))))
   (cnfonts-enable))
 
 ;;Install themes

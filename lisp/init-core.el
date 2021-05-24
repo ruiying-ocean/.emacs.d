@@ -129,11 +129,11 @@
 
 ;;manually choose a snippet
 (use-package ivy-yasnippet
-  :requires yasnippet
+  :bind
+  (("C-c i" . ivy-yasnippet))
   :config
-  (global-set-key (kbd "C-c i") 'ivy-yasnippet)  
-  (setq ivy-yasnippet-expand-keys 'smart)
-  )
+  (setq ivy-yasnippet-expand-keys 'smart))
+
 
 (use-package magit
   :defer t
