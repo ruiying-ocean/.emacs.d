@@ -1,12 +1,12 @@
 # About
- This is my Emacs init file(s) to implement a *self-use* cross-platform editor/IDE. It has been tested for Emacs 27.2 on OSX (Big Sur), Linux (Ubuntu 20). Windows_NT may not be well supported because I use WSL2.
+ This is my Emacs init file(s) to implement a *self-use* cross-platform editor/IDE. It has been tested for Emacs 27.2 on MacOS (Big Sur), Linux (Ubuntu 20). Windows may not be well supported because of possible limitations from cygwin/MSYS2. WSL2 is recommended instead.
 
 # Screenshot
 ![](screenshot.png)
 
 The splash is downloaded from [the free png image website](https://www.freepngimg.com)
 
-# Quickstart
+# Quick-start
 
 Install Emacs and download the init files in your `$HOME` directory:
 ```bash

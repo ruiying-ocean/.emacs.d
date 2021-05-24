@@ -1,5 +1,6 @@
-(if (eq system-type 'darwin)
-    (add-hook 'window-setup-hook 'toggle-frame-maximized t))
+(when (eq system-type 'darwin)
+    (progn (add-hook 'window-setup-hook 'toggle-frame-maximized t)
+	    (setq dired-use-ls-dired nil))) ;;to avoid error "ls does not support --dired" on MacOS
 (add-hook 'after-init-hook 'display-time-mode)
 (add-hook 'after-init-hook 'display-battery-mode)
 (setq display-time-default-load-average nil)
