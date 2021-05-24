@@ -24,6 +24,8 @@
   ;;M-x company-tabnine-install-binary to install binary system
   :after company
   :config
+  (unless (file-directory-p "~/.TabNine/")
+    (company-tabnine-install-binary))
   (add-to-list 'company-backends #'company-tabnine)
   (setq company-idle-delay 0.5)
   (setq company-show-numbers t)
