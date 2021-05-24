@@ -1,6 +1,6 @@
 ;;read my blog to find how to install prerequisites
 (use-package mu4e
-  :defer t
+  :defer 2
   :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e"
   :config
   ;;Emacs Mail setting

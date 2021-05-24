@@ -195,8 +195,8 @@
 (use-package avy
   :defer 1
   :config
-  (global-set-key (kbd "C-:") 'avy-goto-char)
-  (global-set-key (kbd "C-'") 'avy-goto-char-2)
+  (global-set-key (kbd "C-\"") 'avy-goto-char)  ;;input one character
+  (global-set-key (kbd "C-'") 'avy-goto-char-2) ;;input two characters
   (global-set-key (kbd "M-g w") 'avy-goto-word-1)
   (global-set-key (kbd "M-g l") 'avy-goto-line))
 
