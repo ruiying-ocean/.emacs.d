@@ -27,7 +27,7 @@
   (unless (file-directory-p "~/.TabNine/")
     (company-tabnine-install-binary))
   (add-to-list 'company-backends #'company-tabnine)
-  (setq company-idle-delay 0.5)
+  (setq company-idle-delay 1.0)
   (setq company-show-numbers t)
   )
 

@@ -39,6 +39,7 @@
 (use-package gruvbox-theme :defer t)
 (use-package sublime-themes :defer t)
 (use-package tao-theme :defer t)
+(use-package humanoid-themes :defer t)
 (use-package spacemacs-common
   :defer t
   :ensure spacemacs-theme)
@@ -52,8 +53,10 @@
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 
+
 ;;the core of this file, use C-c t to change
-(load-theme 'doom-ayu-light t)
+;;(load-theme 'doom-ayu-light t)
+(load-theme 'humanoid-dark t)
 
 ;;Transprancy setting
 (set-frame-parameter (selected-frame) 'alpha '(97 100))

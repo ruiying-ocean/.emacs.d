@@ -93,7 +93,7 @@
   (setq dashboard-set-init-info t)
   (setq dashboard-banner-logo-title "Happiness is everything - Rui")
 ;;    (setq dashboard-startup-banner 3)
-  (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/lady.png")
+  (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/world.png")
   (setq dashboard-center-content t)
   (setq dashboard-items '((recents  . 3)))
   (setq dashboard-set-heading-icons t)
@@ -197,8 +197,8 @@
   (setq centaur-tabs-set-modified-marker t)
   (setq centaur-tabs-modified-marker "*")
   :bind
-  ("C-c j" . centaur-tabs-backward)
-  ("C-c k" . centaur-tabs-forward)
+  ("M-<left>" . centaur-tabs-backward)
+  ("M-<right>" . centaur-tabs-forward)
   :hook
   (dired-mode . centaur-tabs-local-mode)
 )
