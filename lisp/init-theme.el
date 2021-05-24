@@ -7,21 +7,22 @@
 ;;Unicode: Symbola
 
 (use-package cnfonts
+  :if window-system
   :defer t
   :config
   ;;need to add these lists into cnfonts/program.el file
   (setq cnfonts--custom-set-fontnames
-      '(("Iosevka" "Inconsolata" "Jetbrains Mono" "Juliamono")
-        ("Ubuntu Mono" "WenQuanYi Micro Hei" "Sarasa Mono SC Nerd")))
+	'(("Iosevka" "Inconsolata" "Jetbrains Mono" "Juliamono")
+          ("Ubuntu Mono" "WenQuanYi Micro Hei" "Sarasa Mono SC Nerd")))
   (setq cnfonts--custom-set-fontsizes
 	'((14   14.0 14.0)
           (15   15.0 15.0)
           (16   16.0 16.0)
-  ))
+	  ))
   :bind
   (("C-=" . cnfonts-increase-fontsize)
    ("C--" . cnfonts-decrease-fontsize))
-)
+  )
 
 ;;daemon mode font setting
 (if (daemonp)

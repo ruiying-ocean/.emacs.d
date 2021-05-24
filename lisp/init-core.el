@@ -25,8 +25,8 @@
   :after company
   :config
   ;;M-x company-tabnine-install-binary to install binary system
-  (unless (file-directory-p "~/.TabNine/")
-    (company-tabnine-install-binary))
+  (if (not (file-directory-p "~/.TabNine/"))
+      (company-tabnine-install-binary))
   (add-to-list 'company-backends #'company-tabnine)
   (setq company-idle-delay 1.0)
   (setq company-show-numbers t)
@@ -50,8 +50,10 @@
   :hook (company-mode . company-box-mode))
 
 ;;To specify new version of git on remote machine so I can run magit locally
-;;add .ssh/config first
+;;add ~/.ssh/config and ~/.ssh/known_hosts first
+;;then ssh-keygen -t rsa => ssh-copy-id name@host_name
 (use-package tramp
+  :if (memq system-type '(gnu/linux darwin))
   :defer t
   :config
   (add-to-list 'tramp-remote-path "/usr/local/bin/git")
