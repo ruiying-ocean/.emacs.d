@@ -3,12 +3,16 @@
 ;;If you are running Emacs in MacOS, then I recommend you using
 ;;Emacs Mac Port <--with-no-title-bars> which improves GUI performance a lot
 (when (eq system-type 'darwin)
-    (progn (add-hook 'window-setup-hook 'toggle-frame-maximized t)
-	   (setq dired-use-ls-dired nil);;to avoid error "ls does not support --dired" in MacOS
-	   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t)) ;;same title bar color
-	   (add-to-list 'default-frame-alist '(ns-appearance . light))))
+  (progn
+    (setq dired-use-ls-dired nil);;to avoid error "ls does not support --dired" in MacOS
+    (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t)) ;;same title bar color
+    (add-to-list 'default-frame-alist '(ns-appearance . light))))
 
-;;what to display in mode-line
+;;Auto-max the frame in non-linux system
+(when (not (eq system-type 'gnu/linux))
+  (add-hook 'window-setup-hook 'toggle-frame-maximized t))
+
+;;What to display in mode-line
 (add-hook 'after-init-hook 'display-time-mode)
 (setq display-time-format "%B %d %H:%M %p")
 (add-hook 'after-init-hook 'display-battery-mode)
