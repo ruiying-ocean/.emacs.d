@@ -42,7 +42,6 @@
 (require 'init-mu4e)
 (require 'init-pdf)
 
-
 (defun my-cleanup-gc ()
   "Clean up gc."
   (setq gc-cons-threshold  (* 128 1024 1024)) ; 64M
