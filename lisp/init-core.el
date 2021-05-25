@@ -179,6 +179,7 @@
   (global-set-key (kbd "C-c V") 'ivy-pop-view)
   (setq ivy-wrap t)
   (setq ivy-height 9)
+  (setq ivy-format-function 'ivy-format-function-line)
   )
 
 (use-package counsel

@@ -30,6 +30,8 @@
 ;;Highlight current line
 (add-hook 'after-init-hook 'global-hl-line-mode)
 
+(setq x-underline-at-descent-line t)
+
 ;;Display line number
 (global-display-line-numbers-mode t) ;;the linum-mode has been obsolete
 (setq display-line-numbers-width 0)
@@ -40,12 +42,28 @@
 
 ;;turn off electric-indent-mode but use aggressive-indent-mode
 (electric-indent-mode -1)
-(use-package aggressive-indent
-  :defer t
-  :hook
-  (prog-mode . aggressive-indent-mode))
+;; (use-package aggressive-indent
+;;   :defer t
+;;   :hook
+;;   (prog-mode . aggressive-indent-mode))
 
 (setq frame-inhibit-implied-resize nil)
+
+;; (use-package mini-frame
+;;   :config
+;;   (setq mini-frame-show-parameters
+;;         `((left . 0.5)
+;;           (top . 1.0) (width . 1.0)
+;;           (height . 8)
+;;           (left-fringe . 12)
+;;           (right-fringe .12)
+;;           (child-frame-border-width . 0)
+;;           (internal-border-width . 0)
+;; 	  ))
+;;   (setq resize-mini-frames t)
+;;   (mini-frame-mode t)
+;;   )
+
 
 ;;more see the doc https://github.com/Fuco1/smartparens/wiki/Working-with-expressions
 (use-package smartparens
@@ -178,7 +196,6 @@
   (dired-mode . all-the-icons-dired-mode))
 
 (use-package ivy-rich
-  :defer t
   :after ivy
   :config
   (ivy-rich-mode t)

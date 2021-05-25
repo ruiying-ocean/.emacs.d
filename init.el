@@ -1,36 +1,16 @@
-;; This file is not part of GNU Emacs.
-;;
-;; This program is free software; you can redistribute it and/or
-;; modify it under the terms of the GNU General Public License as
-;; published by the Free Software Foundation; either version 2, or
-;; (at your option) any later version.
-;;
-;; This program is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-;; General Public License for more details.
-;;
-;; You should have received a copy of the GNU General Public License
-;; along with this program; see the file COPYING.  If not, write to
-;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth
-;; Floor, Boston, MA 02110-1301, USA.
-;;
-
-;;; Commentary:
 ;; This is Emacs init file of Rui Ying
+;; The license can be found in root directory
 
-;;; Code:
+;; Code:
 (require 'package)
-
 (setq package-archives '(("gnu"   . "https://elpa.gnu.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")))
 ;; Load path
 ;; Optimize: Force "lisp" at the head to reduce the startup time.
 (defun update-load-path (&rest _)
   "Update `load-path'."
-  (dolist (dir '("lisp" "nano-emacs"))
-    (push (expand-file-name dir user-emacs-directory) load-path))
-  )
+  (dolist (dir '("lisp"))
+    (push (expand-file-name dir user-emacs-directory) load-path)))
 (advice-add #'package-initialize :after #'update-load-path)
 (update-load-path)
 
@@ -61,9 +41,7 @@
 (require 'init-eglot)
 (require 'init-mu4e)
 (require 'init-pdf)
-;;manually choose options from nano-emacs, may conflict with init-ui/theme and font setting
-;;May need update in the future
-(require 'nano)
+
 
 (defun my-cleanup-gc ()
   "Clean up gc."
