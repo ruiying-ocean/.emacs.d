@@ -29,7 +29,11 @@
 (defun update-load-path (&rest _)
   "Update `load-path'."
   (dolist (dir '("lisp"))
-    (push (expand-file-name dir user-emacs-directory) load-path)))
+    (push (expand-file-name dir user-emacs-directory) load-path))
+  ;;Add nano-emacs to path <Experimental, tbd>
+  ;; (if (file-directory-p "~/nano-emacs")
+  ;;(add-to-list 'load-path "~/nano-emacs"))
+  )
 (advice-add #'package-initialize :after #'update-load-path)
 (update-load-path)
 

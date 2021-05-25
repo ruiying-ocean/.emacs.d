@@ -193,7 +193,7 @@
   (global-set-key (kbd "C-c g") 'counsel-git) ;;find file in current git directory
   (global-set-key (kbd "C-c j") 'counsel-git-grep)
   (global-set-key (kbd "C-c l") 'counsel-git-log)
-  (global-set-key (kbd "C-c k") 'counsel-fzf) ;;fzf find file
+  (global-set-key (kbd "C-c f") 'counsel-fzf) ;;fzf find file
   (global-set-key (kbd "C-c r") 'counsel-rg) ;;rg find text
   (global-set-key (kbd "C-c t") 'counsel-load-theme)
   (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))

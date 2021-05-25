@@ -10,7 +10,9 @@
   (interactive)
   (move-beginning-of-line 1)
   (push-mark nil nil t)
-  (forward-line 1))
+  ;;(forward-line 1)
+  (end-of-line 1)
+  )
 (global-set-key (kbd "C-x l") 'select-current-line)
 
 ;; set meta command and mark set keybind
