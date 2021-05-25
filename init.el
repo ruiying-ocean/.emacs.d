@@ -28,7 +28,7 @@
 ;; Optimize: Force "lisp" at the head to reduce the startup time.
 (defun update-load-path (&rest _)
   "Update `load-path'."
-  (dolist (dir '("lisp"))
+  (dolist (dir '("lisp" "nano-emacs"))
     (push (expand-file-name dir user-emacs-directory) load-path))
   ;;Add nano-emacs to path <Experimental, tbd>
   ;; (if (file-directory-p "~/nano-emacs")
@@ -54,16 +54,17 @@
 ;;load modules
 (require 'init-editor)
 (require 'init-core)
-(require 'init-ui)
-(require 'init-theme)
 (require 'init-binding)
 (require 'init-recentf)
+(require 'init-ui)
+(require 'init-theme)
 (require 'init-tex)
 (require 'init-org)
 (require 'init-md)
 (require 'init-eglot)
 (require 'init-mu4e)
 (require 'init-pdf)
+(require 'nano) ;;override some previous configs, might need update someday
 
 (defun my-cleanup-gc ()
   "Clean up gc."
@@ -80,7 +81,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(aggressive-indent aggressive-indent-mode affe humanoid-themes centaur-tabs rg latex-preview-pane magic-latex-buffer auctex yasnippet-snippets which-key visual-fill-column use-package unicode-fonts treemacs-all-the-icons tramp toc-org tao-theme sublime-themes spacemacs-theme smex smartparens rainbow-mode rainbow-delimiters popwin poet-theme pdf-tools org-superstar org-super-agenda org-fancy-priorities org-download nyan-mode neotree mixed-pitch minimap markdown-mode magit highlight-symbol highlight-indent-guides helpful gruvbox-theme grip-mode flyspell-correct-ivy flycheck-inline exec-path-from-shell esup ess eglot dumb-jump doom-themes doom-modeline dashboard counsel-tramp counsel-projectile company-tabnine company-box color-theme-sanityinc-tomorrow cnfonts benchmark-init base16-theme all-the-icons-ivy-rich all-the-icons-dired ag)))
+   '(aggressive-indent affe humanoid-themes centaur-tabs rg latex-preview-pane magic-latex-buffer auctex yasnippet-snippets which-key visual-fill-column use-package unicode-fonts treemacs-all-the-icons tramp toc-org tao-theme sublime-themes spacemacs-theme smex smartparens rainbow-mode rainbow-delimiters popwin poet-theme pdf-tools org-superstar org-super-agenda org-fancy-priorities org-download nyan-mode neotree mixed-pitch minimap markdown-mode magit highlight-symbol highlight-indent-guides helpful gruvbox-theme grip-mode flyspell-correct-ivy flycheck-inline exec-path-from-shell esup ess eglot dumb-jump doom-themes doom-modeline dashboard counsel-tramp counsel-projectile company-tabnine company-box color-theme-sanityinc-tomorrow cnfonts benchmark-init base16-theme all-the-icons-ivy-rich all-the-icons-dired ag)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
