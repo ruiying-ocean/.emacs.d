@@ -52,5 +52,18 @@
 	("C-c r" . elgot-rename))
   )
 
+;;================================
+;;jupyter notebook integration
+;;================================
+;;[emacs-jupyter] allow you to use org-mode to
+;;replace jupyter, while [ein] is a purer jupyter-notebook tool
+;;<find other configuration in init-org.el>
+
+;;(use-package jupyter)  
+;;Require Emacs with module-support
+
+;;(use-package ein)
+
+
 (provide 'init-eglot)
 ;;;init-eglot.el ends here

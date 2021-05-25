@@ -21,7 +21,13 @@
 			       '((emacs-lisp . t)
 				 (python . t)
 				 (R . t)
+				 (jupyter . t)
 				 ))
+
+  ;;jupyter-python setting
+  (setq org-babel-default-header-args:jupyter-python '((:async . "yes")
+                                                      (:session . "py")
+                                                      (:kernel . "python3")))
   ;;local keybinding
   :bind
   (:map org-mode-map
