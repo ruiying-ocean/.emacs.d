@@ -59,8 +59,10 @@
 ;;replace jupyter, while [ein] is a purer jupyter-notebook tool
 ;;<find other configuration in init-org.el>
 
-;;(use-package jupyter)  
-;;Require Emacs with module-support
+(use-package jupyter)  
+;;1. Require Emacs with module-support
+;;2. Make sure python3 is in your $PATH or alias python -> python3; pip -> python3
+;;3. run `pip install ipykernel` `python -m ipykernel install --user`
 
 ;;(use-package ein)
 
