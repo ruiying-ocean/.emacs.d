@@ -1,3 +1,5 @@
+;;; early-init.el --- early bird  -*- no-byte-compile: t -*-
+
 ;;gabage collection setting (temporarily)
 (setq gc-cons-threshold most-positive-fixnum)
 
@@ -16,5 +18,8 @@
                '(menu-bar-lines . 0))))
 
 (setq initial-major-mode 'fundamental-mode)
+
+;;avoid oudated byte-compile-warnings
+(setq load-prefer-newer t)
 
 (setq byte-compile-warnings '(cl-functions))
