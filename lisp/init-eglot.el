@@ -1,13 +1,42 @@
-;; Python setting
+;;==============================
+;; Python-mode setting
+;;==============================
 (setq python-indent-guess-indent-offset-verbose nil)
-(setq python-shell-interpreter "py")
-(setq python-shell-interpreter-args "-3.9")
-(setq python-indent-offset 4)
-;;(add-hook 'python-mode-hook(lambda() (flycheck-mode -1)))
+(setq python-shell-interpreter "python3")
+;;or If you use jupyter-console
+;;(setq python-shell-interpreter "jupyter-console")
+;;(setq python-shell-interpreter-args "--simple-prompt")
 
-;;R setting (ESS doesn't like use-package pretty much)
-;;Require ESS installed
-;;Lazy load ess-r-mode
+;;python-style indent
+(setq python-indent-offset 4)
+
+;;eglot doesn't like flycheck
+;;(add-hook 'python-mode-hook (lambda() (flycheck-mode -1)))
+
+;;debug setting
+(setq python-shell-completion-native-enable nil) ;;or pip3 install pyreadline to avoid warning
+(setq python-shell-prompt-detect-failure-warning nil)
+
+
+;;================================
+;;jupyter notebook integration
+;;================================
+;;[emacs-jupyter] allow you to use org-mode to
+;;replace jupyter, while [ein] is a purer jupyter-notebook tool
+;;<find other configuration in init-org.el>
+
+(use-package jupyter
+  :defer t)
+;;1. Require Emacs with module-support
+;;2. Make sure python3 is in your $PATH or alias python -> python3; pip -> python3
+;;3. run `pip install ipykernel` `python -m ipykernel install --user`
+
+;;(use-package ein)
+
+;; ==============================
+;;ESS-R-mode setting (require ESS installed)
+;;==============================
+;;Lazy load ess-r-mode (ESS doesn't like use-package pretty much)
 (add-to-list 'auto-mode-alist '("\\.R\\'" . ess-r-mode))
 (with-eval-after-load 'ess-r-mode
   (defun ess_insert_pipe()
@@ -23,11 +52,15 @@
   (define-key inferior-ess-r-mode-map (kbd "M-p") 'ess_insert_pipe)			 
   )
 
+;;display color of RGB code
 (use-package rainbow-mode
   :after ess
   :hook ess-r-mode
   )
 
+;;==============================
+;;Eglot setting, a LSP implementation
+;;==============================
 ;;eglot can work with tramp-mode, but you should install
 ;;your server-programs on remote, not local
 (use-package eglot
@@ -51,22 +84,6 @@
 	("C-c h" . eldoc)
 	("C-c r" . elgot-rename))
   )
-
-;;================================
-;;jupyter notebook integration
-;;================================
-;;[emacs-jupyter] allow you to use org-mode to
-;;replace jupyter, while [ein] is a purer jupyter-notebook tool
-;;<find other configuration in init-org.el>
-
-(use-package jupyter
-  :defer t)
-;;1. Require Emacs with module-support
-;;2. Make sure python3 is in your $PATH or alias python -> python3; pip -> python3
-;;3. run `pip install ipykernel` `python -m ipykernel install --user`
-
-;;(use-package ein)
-
 
 (provide 'init-eglot)
 ;;;init-eglot.el ends here
