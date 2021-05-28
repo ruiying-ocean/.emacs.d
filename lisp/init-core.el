@@ -28,10 +28,16 @@
   (if (not (file-directory-p "~/.TabNine/"))
       (company-tabnine-install-binary))
   (add-to-list 'company-backends #'company-tabnine)
-  (setq company-idle-delay 1.0)
+  (setq company-idle-delay 0)
   (setq company-show-numbers t)
   )
 
+;;A fuzzy matching of company
+(use-package company-flx
+  :defer t
+  :hook
+  (company-mode . company-flx-mode)
+  )
 ;; (use-package company-quickhelp
 ;;   :config
 ;;   (add-hook 'company-quickhelp-mode-hook 'python-mode)
