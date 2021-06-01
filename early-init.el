@@ -12,8 +12,9 @@
                '(internal-border-width . 20)
                '(left-fringe    . 0)
                '(right-fringe   . 0)
-               '(tool-bar-lines . 0)
-               '(menu-bar-lines . 0))))
+               '(tool-bar-lines . 0) ;;remove the tool bar
+               '(menu-bar-lines . 0) ;;remove the menu bar
+	       '(undecorated . t)))) ;;remove the title bar
 
 (setq initial-major-mode 'fundamental-mode)
 
