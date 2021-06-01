@@ -9,8 +9,8 @@
     (add-to-list 'default-frame-alist '(ns-appearance . light))))
 
 ;;Auto-max the frame in non-linux system
-(when (not (eq system-type 'gnu/linux))
-  (add-hook 'window-setup-hook 'toggle-frame-maximized t))
+;;(when (not (eq system-type 'gnu/linux))
+(add-hook 'window-setup-hook 'toggle-frame-maximized t)
 
 ;;Display time in the mode line
 (add-hook 'after-init-hook 'display-time-mode)
@@ -227,12 +227,15 @@
   :config
   (centaur-tabs-mode t)
   (setq centaur-tabs-set-bar 'over)
-  (setq centaur-tabs-height 32)
   (setq centaur-tabs-gray-out-icons 'buffer)
-  (setq centaur-tabs-set-icons t)
+  ;;(setq centaur-tabs-set-icons t)
+  (setq centaur-tabs-plain-icons t)
   (setq centaur-tabs-close-button "x")
   (setq centaur-tabs-set-modified-marker t)
   (setq centaur-tabs-modified-marker "*")
+  (setq centaur-tabs-height 22)
+  ;;(setq centaur-tabs-label-fixed-length 10) ;;fixed length
+  (centaur-tabs-change-fonts "JetBrains Mono" 130)
   :bind
   ("M-<left>" . centaur-tabs-backward)
   ("M-<right>" . centaur-tabs-forward)
