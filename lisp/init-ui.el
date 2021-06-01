@@ -12,6 +12,10 @@
 ;;(when (not (eq system-type 'gnu/linux))
 (add-hook 'window-setup-hook 'toggle-frame-maximized t)
 
+;;no more startup message/screen
+(setq inhibit-startup-screen t)
+(setq inhibit-startup-message t)
+
 ;;Display time in the mode line
 (add-hook 'after-init-hook 'display-time-mode)
 (setq display-time-format "%B %d %H:%M %p")
@@ -123,6 +127,7 @@
   (doom-modeline-mode . nyan-mode))
 
 (use-package dashboard
+  :if (< (length command-line-args) 2)
   :diminish dashboard-mode
   :config
   (dashboard-setup-startup-hook)
