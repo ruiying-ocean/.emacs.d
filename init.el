@@ -24,16 +24,16 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+(eval-when-compile
+  (require 'use-package))
+(setq use-package-always-ensure t)
+
 ;;recompile outdated .elc file
 (use-package auto-compile
   :config
   (auto-compile-on-load-mode)
   (auto-compile-on-save-mode)
 )
-
-(eval-when-compile
-  (require 'use-package))
-(setq use-package-always-ensure t)
 
 ;;load modules
 (require 'init-editor)
@@ -64,7 +64,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(company-flx dashboard jupyter yasnippet-snippets which-key visual-fill-column use-package unicode-fonts treemacs-all-the-icons tramp toc-org tao-theme sublime-themes spacemacs-theme smex smartparens simple-httpd rg rainbow-mode rainbow-delimiters popwin poet-theme pdf-tools org-superstar org-super-agenda org-fancy-priorities org-download nyan-mode neotree mood-line mixed-pitch minimap mini-frame markdown-mode magit magic-latex-buffer latex-preview-pane ivy-yasnippet humanoid-themes highlight-symbol highlight-indent-guides helpful gruvbox-theme grip-mode flyspell-correct-popup flyspell-correct-ivy flyspell-correct-avy-menu flycheck-inline exec-path-from-shell esup ess ein eglot dumb-jump doom-themes doom-modeline counsel-tramp counsel-projectile company-tabnine company-box color-theme-sanityinc-tomorrow cnfonts centaur-tabs benchmark-init base16-theme auctex all-the-icons-ivy-rich all-the-icons-dired aggressive-indent ag affe)))
+   '(auto-compile company-flx dashboard jupyter yasnippet-snippets which-key visual-fill-column use-package unicode-fonts treemacs-all-the-icons tramp toc-org tao-theme sublime-themes spacemacs-theme smex smartparens simple-httpd rg rainbow-mode rainbow-delimiters popwin poet-theme pdf-tools org-superstar org-super-agenda org-fancy-priorities org-download nyan-mode neotree mood-line mixed-pitch minimap mini-frame markdown-mode magit magic-latex-buffer latex-preview-pane ivy-yasnippet humanoid-themes highlight-symbol highlight-indent-guides helpful gruvbox-theme grip-mode flyspell-correct-popup flyspell-correct-ivy flyspell-correct-avy-menu flycheck-inline exec-path-from-shell esup ess ein eglot dumb-jump doom-themes doom-modeline counsel-tramp counsel-projectile company-tabnine company-box color-theme-sanityinc-tomorrow cnfonts centaur-tabs benchmark-init base16-theme auctex all-the-icons-dired aggressive-indent ag affe)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -198,17 +198,18 @@
 (use-package ivy-rich
   :after ivy
   :config
-  (ivy-rich-mode t)
-  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
+  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+  :hook
+  (after-init . ivy-rich))
 
 (use-package all-the-icons-ivy-rich
   :defer t
   :after ivy-rich
-  :init
-  (all-the-icons-ivy-rich-mode t)
   :config
   (setq all-the-icons-ivy-rich-icon-size 1.0)
   (setq inhibit-compacting-font-caches t)
+  :hook
+  (ivy-rich-mode . all-the-icons-ivy-rich-mode)
   )
 
 ;; (use-package ivy-posframe ;;center your selection candidate box
