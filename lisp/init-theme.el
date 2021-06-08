@@ -1,3 +1,5 @@
+;;This file customizes Emacs color scheme and themes
+
 ;;https://github.com/tumashu/cnfonts
 ;;use cnfonts-edit-profile to configure
 
@@ -38,9 +40,11 @@
 (use-package base16-theme :defer t)
 (use-package color-theme-sanityinc-tomorrow :defer t)
 (use-package gruvbox-theme :defer t)
-(use-package sublime-themes :defer t)
 (use-package tao-theme :defer t)
 (use-package humanoid-themes :defer t)
+(use-package twilight-bright-theme :defer t)
+(use-package ample-theme :defer t) ;;ample flat is a good option for dark theme
+(use-package eziam-theme :defer t) ;;almost perfect light theme
 (use-package spacemacs-common
   :defer t
   :ensure spacemacs-theme)
@@ -49,6 +53,7 @@
 ;;   :defer t
 ;;   :config
 ;;   (load-theme 'doom-ayu-light t)
+;;   (load-theme 'doom-nord-light t)
 ;;   ;;treemacs setting
 ;;   (setq doom-themes-treemacs-enable-variable-pitch nil)
 ;;   (setq doom-themes-treemacs-theme "doom-color")
@@ -57,8 +62,8 @@
 ;;   (doom-themes-org-config))
 
 ;;the core of this file, use C-c t to change
-(load-theme 'humanoid-dark t)
-
+;;(load-theme 'humanoid-dark t)
+(load-theme 'doom-nord-light t)
 
 ;;Transprancy setting
 (set-frame-parameter (selected-frame) 'alpha '(97 100))

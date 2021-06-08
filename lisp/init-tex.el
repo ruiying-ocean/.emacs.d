@@ -10,11 +10,11 @@
   (setq-default TeX-master nil)
 
   ;;Preview latex C-c C-p C-p
-  ;;(setq preview-pdf-color-adjust-method t)
-  ;;  (set-default 'preview-scale-function 3.0);;preview scale
+  (setq preview-pdf-color-adjust-method t)
+  (set-default 'preview-scale-function 1.0);;preview scale
   ;;  (setq org-format-latex-options (plist-put org-format-latex-options :scale 3.0)) ;;preview in org-mode
-  (custom-set-faces 
-   '(preview-reference-face ((t (:background "gray" :foreground "black")))))
+  ;; (custom-set-faces 
+  ;;  '(preview-reference-face ((t (:background "gray" :foreground "black")))))
 
 
   ;;sync latex <-> pdf
@@ -39,11 +39,10 @@
 	      ))
   )
 
-
 (use-package magic-latex-buffer
   :defer t
   :hook
-  (latex-mode . magic-latex-buffer)
+  (LaTeX-mode . magic-latex-buffer)
   :config
   (setq magic-latex-enable-block-highlight nil
       magic-latex-enable-suscript        t

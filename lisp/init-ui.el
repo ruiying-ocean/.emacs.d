@@ -1,4 +1,4 @@
-;;This file is for beautifying Emacs user inferfaces
+;;This file is for customizing Emacs appearance
 
 ;;If you are running Emacs in MacOS, then I recommend you using
 ;;Emacs Mac Port <--with-no-title-bars> which improves GUI performance a lot
