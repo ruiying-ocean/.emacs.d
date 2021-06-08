@@ -106,6 +106,12 @@
   (after-init . mood-line-mode)
   )
 
+;;press your keyboard fast and hard !!!
+(use-package power-mode
+  :defer t
+  :load-path "~/.emacs.d/lisp/power-mode.el"
+)
+
 ;; (use-package doom-modeline
 ;;   ;;right fringe cut-off issue should relate to font size
 ;;   ;;Use cnfont-decrease-size or see more methods in 

@@ -67,6 +67,7 @@
 ;;eglot can work with tramp-mode, but you should install
 ;;your server-programs on remote, not local
 (use-package eglot
+  :defer t
   :config
   ;;============================================
   ;;make sure every command works separately in shell environment. Note R can be tricky in zsh due to the built-in command "r"

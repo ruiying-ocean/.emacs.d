@@ -18,6 +18,14 @@
   (after-init . global-company-mode)
   )
 
+(use-package company-org-block
+  :defer t
+  :custom
+  (company-org-block-edit-style 'auto) ;; 'auto, 'prompt, or 'inline
+  :hook ((org-mode . (lambda ()
+                       (setq-local company-backends '(company-org-block))
+                       (company-mode +1)))))
+
 ;;A match-learning based backend for company
 ;;May conflict with company-flx-mode/ESS mode
 (use-package company-tabnine
