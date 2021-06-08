@@ -3,5 +3,5 @@
 * June 2021
 ** June 8
 *** Collect data
-*** Write equations
-*** Make plan of Pojrct1
+*** DONE Write equations
+*** Make a project plan

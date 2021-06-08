@@ -38,8 +38,11 @@
       magic-latex-enable-minibuffer-echo nil))
 
 
+;;Add some external PDF programs
 (setq TeX-view-program-list '(("Evince" "evince --page-index=%(outpage) %o")))
 
+;;Recommend using PDF tools to view tex output in Emacs!
+;;C-c C-v to sync forward, double click to sync backward
 (setq TeX-view-program-selection
       '((output-dvi "DVI Viewer")
         (output-pdf "PDF Tools")))

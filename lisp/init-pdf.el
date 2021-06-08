@@ -1,4 +1,4 @@
-;;read the documentation to find how to compile pdf-tools first
+;;read the documentation to find how to compile and pdf-tools first
 (use-package pdf-tools
   :defer t
   :commands (pdf-view-mode pdf-tools-install)

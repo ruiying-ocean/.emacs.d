@@ -21,7 +21,6 @@
 			       '((emacs-lisp . t)
 				 (python . t)
 				 (R . t)
-				 (jupyter . t)
 				 ))
   ;;jupyter-python setting
   (setq org-babel-default-header-args:jupyter-python '((:async . "yes")
