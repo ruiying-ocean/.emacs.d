@@ -61,7 +61,10 @@
 
 (use-package company-box
   :defer t
-  :hook (company-mode . company-box-mode))
+  :hook (company-mode . company-box-mode)
+  :config
+  (setq company-box-icons-alist 'company-box-icons-images)
+  )
 
 ;;To specify new version of git on remote machine so I can run magit locally
 ;;add ~/.ssh/config and ~/.ssh/known_hosts first
