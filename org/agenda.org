@@ -1,40 +1,7 @@
 #+TITLE: My To-Do projects
-* Table of Cotent                                                       :TOC:
-- [[#emacs][Emacs]]
-  - [[#elisp][Elisp]]
-- [[#studies][Studies]]
-  - [[#coding][Coding]]
-- [[#guitar][Guitar]]
-  - [[#护弦][护弦]]
-  - [[#音阶练习][音阶练习]]
-  - [[#和弦练习][和弦练习]]
-  - [[#节奏][节奏]]
-  - [[#五线谱][五线谱]]
-  - [[#高阶技巧][高阶技巧]]
-  - [[#扒谱][扒谱]]
 
-* Emacs
-** [#C] Elisp
-http://ergoemacs.org/emacs/elisp_basics.html
-* Studies
-** Coding
-*** [#B] Fortran
-*** [#C] Matlab
-*** [#C] R shiny
-* Guitar
-** 护弦
-123由左手护，456由右手护
-** 音阶练习
-不同把位，不同指型
-** 和弦练习
-** 节奏
-** 五线谱
-** 高阶技巧
-*** 扫拨
-*** 速弹
-爆发练习方法：极限速度\times110%，只弹一个音，一节只加1组16分音符（1234），逐渐到4组16分音符
-耐力练习：练习5 min
-右手练习：八分音符（爬音阶，每个音2下）
-*** 点弦
-*** 泛音
-** 扒谱
+* June 2021
+** June 8
+*** Collect data
+*** Write equations
+*** Make plan of Pojrct1

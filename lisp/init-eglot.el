@@ -25,13 +25,15 @@
 ;;replace jupyter, while [ein] is a purer jupyter-notebook tool
 ;;<find other configuration in init-org.el>
 
-(use-package jupyter
-  :defer t)
+;; (use-package jupyter
+;;  :defer t)
 ;;1. Require Emacs with module-support
 ;;2. Make sure python3 is in your $PATH or alias python -> python3; pip -> python3
 ;;3. run `pip install ipykernel` `python -m ipykernel install --user`
+;;4. This package use zmq which makes Emacs very slow
 
-;;(use-package ein)
+(use-package ein
+  :defer 3)
 
 ;; ==============================
 ;;ESS-R-mode setting (require ESS installed)
@@ -71,8 +73,8 @@
   (set 'ad-redefinition-action 'accept)
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) ("clangd"))) ;;install clangd first
   (add-to-list 'eglot-server-programs '(f90-mode . ("fortls"))) ;;pip3 install fortran-language-server
-  (add-to-list 'eglot-server-programs '((tex-mode context-mode texinfo-mode bibtex-mode)
-					. ("digestif"))) ;;luarocks install digestif
+  (add-to-list 'eglot-server-programs '((LaTeX-mode tex-mode context-mode texinfo-mode bibtex-mode) ;;use tex-lab or digestif as server
+					. ("texlab")))
   (add-to-list 'eglot-server-programs '(python-mode . ("pylsp"))) ;;pip3 install python-lsp-server
   (add-to-list 'eglot-server-programs '(ess-r-mode . ("R" "--slave" "-e" "languageserver::run()"))) ;;install.packages("languageserver")
   ;;============================================
@@ -80,6 +82,7 @@
   (python-mode . eglot-ensure)
   (f90-mode . eglot-ensure)
   (ess-r-mode . eglot-ensure)
+  (LaTeX-mode . eglot-ensure)
   :bind
   (:map eglot-mode-map
 	("C-c h" . eldoc)
