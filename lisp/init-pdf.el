@@ -1,3 +1,17 @@
+;;allow you to view pdf continuously
+(use-package pdf-continuous-scroll-mode
+  :defer t
+  :load-path "~/.emacs.d/extras/pdf-continuous-scroll-mode"
+  :hook
+  (pdf-view-mode-hook . pdf-continuous-scroll-mode))
+
+;; one way to download using qulepa, but too slow and annoying for me
+;; (use-package pdf-continuous-scroll-mode
+;;   :defer t
+;;   :quelpa
+;;   (pdf-continuous-scroll-mode :fetcher github
+;; 			      :repo "dalanicolai/pdf-continuous-scroll-mode.el"))
+
 ;;read the documentation to find how to compile and pdf-tools first
 (use-package pdf-tools
   :defer t

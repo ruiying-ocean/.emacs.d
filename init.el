@@ -2,23 +2,27 @@
 ;; The license can be found in root directory
 
 ;; Code:
+
+;;package manager
 (require 'package)
 (setq package-archives '(("gnu"   . "https://elpa.gnu.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")))
+;;quelpa can be found in init-core
+;;package.el
+(when (< emacs-major-version 27)
+  (package-initialize))
+
 ;; Load path
 ;; Optimize: Force "lisp" at the head to reduce the startup time.
 (defun update-load-path (&rest _)
   "Update `load-path'."
-  (dolist (dir '("lisp"))
+  (dolist (dir '("lisp" "extra"))
     (push (expand-file-name dir user-emacs-directory) load-path)))
 (advice-add #'package-initialize :after #'update-load-path)
 (update-load-path)
 
 (setq gc-cons-percentage 0.6)
 (setq read-process-output-max (* 1024 1024))
-
-(when (< emacs-major-version 27)
-  (package-initialize))
 
 (unless (package-installed-p 'use-package)  
   (package-refresh-contents)
@@ -32,8 +36,7 @@
 (use-package auto-compile
   :config
   (auto-compile-on-load-mode)
-  (auto-compile-on-save-mode)
-)
+  (auto-compile-on-save-mode))
 
 ;;load modules
 (require 'init-editor)
@@ -48,6 +51,7 @@
 (require 'init-eglot)
 (require 'init-mu4e)
 (require 'init-pdf)
+;;(require 'init-eaf) experimental stage
 
 (defun my-cleanup-gc ()
   "Clean up gc."
@@ -64,7 +68,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(power-mode bibclean-format gscholar-bibtex auto-package-update auctex dumb-jump auto-compile company-flx dashboard yasnippet-snippets which-key visual-fill-column use-package unicode-fonts treemacs-all-the-icons tramp toc-org tao-theme sublime-themes spacemacs-theme smex smartparens simple-httpd rg rainbow-mode rainbow-delimiters popwin poet-theme org-superstar org-super-agenda org-fancy-priorities org-download nyan-mode neotree mood-line mixed-pitch minimap mini-frame markdown-mode magit magic-latex-buffer latex-preview-pane ivy-yasnippet humanoid-themes highlight-symbol highlight-indent-guides helpful gruvbox-theme grip-mode flyspell-correct-popup flyspell-correct-ivy flyspell-correct-avy-menu flycheck-inline exec-path-from-shell esup ess ein eglot doom-themes doom-modeline counsel-tramp counsel-projectile company-tabnine company-box color-theme-sanityinc-tomorrow cnfonts benchmark-init base16-theme all-the-icons-dired aggressive-indent ag affe)))
+   '(eaf pdf-continuous-scroll-mode quelpa-use-package quelpa eglot power-mode bibclean-format gscholar-bibtex auto-package-update auctex dumb-jump auto-compile company-flx dashboard yasnippet-snippets which-key visual-fill-column use-package unicode-fonts treemacs-all-the-icons tramp toc-org tao-theme sublime-themes spacemacs-theme smex smartparens simple-httpd rg rainbow-mode rainbow-delimiters popwin poet-theme org-superstar org-super-agenda org-fancy-priorities org-download nyan-mode neotree mood-line mixed-pitch minimap mini-frame markdown-mode magit magic-latex-buffer latex-preview-pane ivy-yasnippet humanoid-themes highlight-symbol highlight-indent-guides helpful gruvbox-theme grip-mode flyspell-correct-popup flyspell-correct-ivy flyspell-correct-avy-menu flycheck-inline exec-path-from-shell esup ess ein doom-themes doom-modeline counsel-tramp counsel-projectile company-tabnine company-box color-theme-sanityinc-tomorrow cnfonts benchmark-init base16-theme all-the-icons-dired aggressive-indent ag affe)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

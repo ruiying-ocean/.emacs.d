@@ -109,7 +109,7 @@
 ;;press your keyboard fast and hard !!!
 (use-package power-mode
   :defer t
-  :load-path "~/.emacs.d/lisp/power-mode.el"
+  :load-path "~/.emacs.d/extra/power-mode.el"
 )
 
 ;; (use-package doom-modeline

@@ -57,6 +57,7 @@
 
 ;;display color of RGB code
 (use-package rainbow-mode
+  :defer t
   :after ess
   :hook ess-r-mode
   )
@@ -84,10 +85,15 @@
   (f90-mode . eglot-ensure)
   (ess-r-mode . eglot-ensure)
   (LaTeX-mode . eglot-ensure)
+  ;;============================================
+  ;;local keybindings
   :bind
   (:map eglot-mode-map
-	("C-c h" . eldoc)
-	("C-c r" . elgot-rename))
+	("C-c r" . eglot-rename)
+	("C-c h" . eldoc))
+  ;;or add follwing lines to :config section
+  ;;(define-key eglot-mode-map (kbd "C-c r") 'eglot-rename)
+  ;;(define-key eglot-mode-map (kbd "C-c h") 'eldoc)
   )
 
 (provide 'init-eglot)

@@ -60,7 +60,6 @@
 ;;   )
 
 (use-package company-box
-  :defer t
   :hook (company-mode . company-box-mode)
   :config
   (setq company-box-icons-alist 'company-box-icons-images)
@@ -249,6 +248,21 @@
 
 ;;   ;; Manual preview key for `affe-grep'
 ;;  (consult-customize affe-grep :preview-key (kbd "M-.")))
+
+;;Automatically upgrade packages and allow download from github (too slow)
+;; (use-package quelpa
+;;   :defer t
+;;   :config
+;;   (setq quelpa-upgrade-interval 30)
+;;   (add-hook #'after-init-hook #'quelpa-upgrade-all-maybe)
+;; )
+
+;;quela-use-package (too slow)
+;;  (quelpa
+;;   '(quelpa-use-package
+;;     :fetcher git
+;;     :url "https://github.com/quelpa/quelpa-use-package.git"))
+;; (require 'quelpa-use-package)
 
 (provide 'init-core)
 ;;; init-core.el ends here
