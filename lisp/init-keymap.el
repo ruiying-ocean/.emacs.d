@@ -15,7 +15,9 @@
   )
 (global-set-key (kbd "C-x l") 'select-current-line)
 
-;; set meta command and mark set keybind
+;; Set meta command and mark set keybind for Mac OS
+;; If you are using a external Windows keyboard, remeber to choose
+;; USB keyboard in Preference -> Keyboard -> modify keyboard -> select keyboard
 (if (eq system-type 'darwin)
     (setq mac-command-modifier 'meta))
 (global-set-key (kbd "C-j") 'set-mark-command)
@@ -26,4 +28,4 @@
 (add-hook 'prog-mode-hook #'hs-minor-mode)
 (global-set-key (kbd "<f5>") 'hs-toggle-hiding)
 
-(provide 'init-binding)
+(provide 'init-keymap)

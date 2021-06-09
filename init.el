@@ -41,7 +41,7 @@
 ;;load modules
 (require 'init-editor)
 (require 'init-core)
-(require 'init-binding)
+(require 'init-keymap)
 (require 'init-recentf)
 (require 'init-ui)
 (require 'init-theme)

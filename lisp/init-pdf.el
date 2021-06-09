@@ -21,6 +21,9 @@
   :config
   (pdf-tools-install :no-query)
   (define-pdf-cache-function pagelables)
+  ;;In case of high-resolution screen like Mac
+  (setq pdf-view-use-scaling t
+        pdf-view-use-imagemagick nil)
   :hook
   (pdf-view-mode-hook . (lambda () (display-line-numbers -1)))
   (pdf-view-mode-hook . pdf-tools-enable-minor-modes)

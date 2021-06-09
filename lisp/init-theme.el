@@ -62,8 +62,7 @@
 ;;   (doom-themes-org-config))
 
 ;;the core of this file, use C-c t to change
-;;(load-theme 'humanoid-dark t)
-(load-theme 'doom-nord-light t)
+(load-theme 'humanoid-dark t)
 
 ;;Transprancy setting
 (set-frame-parameter (selected-frame) 'alpha '(97 100))
