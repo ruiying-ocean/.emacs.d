@@ -28,6 +28,7 @@
 
   (add-hook 'LaTeX-mode-hook
             (lambda ()           
+	      (rainbow-delimiters-mode 1)
               (visual-line-mode -1)
 	      (visual-fill-column-mode -1)
 	      (LaTeX-math-mode 1)
