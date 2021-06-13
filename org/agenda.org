@@ -1,7 +1,17 @@
 #+TITLE: My To-Do projects
 
 * June 2021
-** June 8
-*** Collect data
-*** DONE Write equations
-*** Make a project plan
+** June 8-9
+*** DONE Write model description (method part)
+** June 10
+*** DONE Collect data
+*** DONE Lab meeting
+** June 11
+*** DONE Collect data, tidy data, plot data
+** June 12
+*** TODO [#B] Collect more plankton tow data
+*** Read papers
+*** Resample method
+*** Make project plan
+*** 整理note, 休息
+*** [#A] Register NHS

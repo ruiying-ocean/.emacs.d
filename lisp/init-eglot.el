@@ -39,7 +39,13 @@
 ;;ESS-R-mode setting (require ESS installed)
 ;;==============================
 ;;Lazy load ess-r-mode (ESS doesn't like use-package pretty much)
-(use-package ess) ;;install emacs-package: ess
+(unless (package-installed-p 'ess)
+  (package-refresh-contents)
+  (package-install 'ess))
+
+(use-package ess
+  :defer t)
+
 (add-to-list 'auto-mode-alist '("\\.R\\'" . ess-r-mode))
 (with-eval-after-load 'ess-r-mode
   (defun ess_insert_pipe()

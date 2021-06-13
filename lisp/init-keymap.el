@@ -25,6 +25,7 @@
 ;;C-x h to select all
 
 ;a human-friendly keymap comparing to the default ones
+;;alternatives: vimish-fold, Origami
 (add-hook 'prog-mode-hook #'hs-minor-mode)
 (global-set-key (kbd "<f5>") 'hs-toggle-hiding)
 

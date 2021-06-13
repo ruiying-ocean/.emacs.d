@@ -70,6 +70,7 @@
 
 
 ;;more see the doc https://github.com/Fuco1/smartparens/wiki/Working-with-expressions
+;;https://github.com/lujun9972/emacs-document/blob/master/emacs-common/Smartparens用法详解.org
 (use-package smartparens
   :defer t
   :hook
@@ -78,22 +79,22 @@
   (:map smartparens-mode-map
 	("C-M-f" . sp-forward-sexp)
 	("C-M-b" . sp-backward-sexp)
-	("C-M-d" . sp-down-sexp);;down one level
-	("C-M-u" . sp-up-sexp));;up one level
-  :config  
+	("C-M-h" . sp-down-sexp) ;;down one level
+	("C-M-l" . sp-up-sexp) ;;up one level
+	("M-[" . sp-backward-unwrap-sexp)
+	("C-M-k" . sp-kill-sexp))
+  :config
   (sp-pair "\{" "\}") ;; latex literal brackets (included by default)
   (sp-pair "<#" "#>")
   (sp-pair "$" "$")   ;; latex inline math mode. Pairs can have same opening and closing string)
   (sp-local-pair 'LaTeX-mode "\\left(" "\\right)" :insert "C-b l" :trigger "\\l(")
-  (sp-pair "'" nil :actions :rem)
-  )
+  (sp-pair "'" nil :actions :rem))
 
 (use-package rainbow-delimiters
   :defer t
   :hook
   (prog-mode . rainbow-delimiters-mode)
   )
-
 ;; (use-package spaceline
 ;;  :init
 ;;  (require 'spaceline-config)

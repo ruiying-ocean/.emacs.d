@@ -1,8 +1,7 @@
 ;;EAF, as its name -- Emacs application framework, 
 ;;allows better pdf view and many other GUI features on Linux platform.
 ;;However, you may not enable it if you already have good experience
-;;in your daily work such as viewing pdf
-
+;;in your daily work such as viewing pdf (especially on OS other than Linux)
 
 ;;Installation
 
@@ -27,8 +26,5 @@
   (eaf-bind-key take_photo "p" eaf-camera-keybinding)
   (eaf-bind-key nil "M-q" eaf-browser-keybinding)
 )
-
-
-
 
 (provide 'init-eaf)

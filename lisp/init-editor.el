@@ -49,10 +49,9 @@
 
 ;;flyspell setting
 (add-hook 'text-mode-hook 'flyspell-mode)
-
-;; (setq-default ispell-program-name "/usr/local/bin/aspell") ;;depends on aspell in the path
-;; (setq ispell-local-dictionary "en_GB")
-;; (setq ispell-extra-args '("--sug-mode=fast"))
+(setq-default ispell-program-name "aspell") ;;depends on aspell in the path
+(setq ispell-local-dictionary "en_GB")
+(setq ispell-extra-args '("--sug-mode=fast" "--lang=en_GB" "--camel-case" "--run-together"))
 
 (use-package flyspell-correct
   :after flyspell
