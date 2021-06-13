@@ -10,13 +10,9 @@
 ;;python-style indent
 (setq python-indent-offset 4)
 
-;;eglot doesn't like flycheck
-;;(add-hook 'python-mode-hook (lambda() (flycheck-mode -1)))
-
 ;;debug setting
 (setq python-shell-completion-native-enable nil) ;;or pip3 install pyreadline to avoid warning
 (setq python-shell-prompt-detect-failure-warning nil)
-
 
 ;;================================
 ;;jupyter notebook integration
@@ -76,6 +72,7 @@
 (use-package eglot
   :defer t
   :config
+  (add-hook 'eglot-managed-mode-hook (lambda () (flymake-mode -1))) ;;Decouple flymake and eglot
   ;;============================================
   ;;make sure every command works separately in shell environment. Note R can be tricky in zsh due to the built-in command "r"
   (set 'ad-redefinition-action 'accept)
