@@ -21,6 +21,9 @@
 (advice-add #'package-initialize :after #'update-load-path)
 (update-load-path)
 
+(setq custom-file (concat user-emacs-directory "/lisp/custom.el"))
+(load custom-file :noerror)
+
 (setq gc-cons-percentage 0.6)
 (setq read-process-output-max (* 1024 1024))
 
@@ -62,30 +65,3 @@
 
 (provide 'init)
 ;;; init.el ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(ess eaf pdf-continuous-scroll-mode quelpa-use-package quelpa eglot power-mode bibclean-format gscholar-bibtex auto-package-update auctex dumb-jump auto-compile company-flx dashboard yasnippet-snippets which-key visual-fill-column use-package unicode-fonts treemacs-all-the-icons tramp toc-org tao-theme sublime-themes spacemacs-theme smex smartparens simple-httpd rg rainbow-mode rainbow-delimiters popwin poet-theme org-superstar org-super-agenda org-fancy-priorities org-download nyan-mode neotree mood-line mixed-pitch minimap mini-frame markdown-mode magit magic-latex-buffer latex-preview-pane ivy-yasnippet humanoid-themes highlight-symbol highlight-indent-guides helpful gruvbox-theme grip-mode flyspell-correct-popup flyspell-correct-ivy flyspell-correct-avy-menu flycheck-inline exec-path-from-shell esup ein doom-themes doom-modeline counsel-tramp counsel-projectile company-tabnine company-box color-theme-sanityinc-tomorrow cnfonts benchmark-init base16-theme all-the-icons-dired aggressive-indent ag affe)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:background nil))))
- '(fixed-pitch ((t (:family "Monaco" :height 160))))
- '(org-block ((t (:inherit fixed-pitch))))
- '(org-code ((t (:inherit (shadow fixed-pitch)))))
- '(org-document-info ((t (:foreground "dark orange"))))
- '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
- '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
- '(org-link ((t (:foreground "royal blue" :underline t))))
- '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
- '(org-property-value ((t (:inherit fixed-pitch))) t)
- '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
- '(org-table ((t (:inherit fixed-pitch :foreground "#83a598"))))
- '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
- '(org-verbatim ((t (:inherit (shadow fixed-pitch)))))
- '(variable-pitch ((t (:family "New York" :height 200)))))

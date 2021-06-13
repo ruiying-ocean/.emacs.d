@@ -40,12 +40,8 @@
 (global-display-line-numbers-mode t) ;;the linum-mode has been obsolete
 (setq display-line-numbers-width 0)
 
-;;Showing matching parentheses
-(show-paren-mode t)
-(setq show-paren-style 'mixed)
-
 ;;turn off electric-indent-mode but use aggressive-indent-mode
-(electric-indent-mode -1)
+(electric-indent-mode 1)
 ;; (use-package aggressive-indent
 ;;   :defer t
 ;;   :hook
@@ -68,33 +64,90 @@
 ;;   (mini-frame-mode t)
 ;;   )
 
+;;-----------Dired enhancement-------------
+;; (use-package dired-hacks-utils
+;;   :defer t
+;;   :hook
+;;   (dired-mode . dired-utils-format-information-line-mode)
+;;   )
 
-;;more see the doc https://github.com/Fuco1/smartparens/wiki/Working-with-expressions
-;;https://github.com/lujun9972/emacs-document/blob/master/emacs-common/Smartparens用法详解.org
-(use-package smartparens
+(setq dired-listing-switches "-alFh")
+
+(use-package dired-ranger
   :defer t
   :hook
-  (after-init . smartparens-global-mode)
-  :bind
-  (:map smartparens-mode-map
-	("C-M-f" . sp-forward-sexp)
-	("C-M-b" . sp-backward-sexp)
-	("C-M-h" . sp-down-sexp) ;;down one level
-	("C-M-l" . sp-up-sexp) ;;up one level
-	("M-[" . sp-backward-unwrap-sexp)
-	("C-M-k" . sp-kill-sexp))
+  (dired-mode . dired-utils-format-information-line-mode))
+
+;; (use-package dired-collapse
+;;   :hook
+;;   (dired-mode . dired-collapse-mode))
+
+;;--------------------------------------------------
+;; Matching parenthesis
+;;--------------------------------------------------
+
+;;Showing matching parentheses (built-in)
+;;  (show-paren-mode t)
+;; (setq show-paren-delay 0)
+;; (setq show-paren-style 'parenthesis) ;;Options: parenthesis/expression/mixed
+
+(use-package highlight-parentheses
+  :defer t
+  :hook
+  (after-init . global-highlight-parentheses-mode)
   :config
-  (sp-pair "\{" "\}") ;; latex literal brackets (included by default)
-  (sp-pair "<#" "#>")
-  (sp-pair "$" "$")   ;; latex inline math mode. Pairs can have same opening and closing string)
-  (sp-local-pair 'LaTeX-mode "\\left(" "\\right)" :insert "C-b l" :trigger "\\l(")
-  (sp-pair "'" nil :actions :rem))
+  (setq highlight-parentheses-highlight-adjacent t)
+;;  (setq highlight-parentheses-colors '("BlueViolet" "DarkOrchid" "orchid" "Plum"))
+  )
+
+;;--> Option 1 (built-in)
+(electric-pair-mode t)
+(setq electric-pair-pairs '(
+                            (?\" . ?\")
+                            (?\` . ?\`)
+                            (?\( . ?\))
+                            (?\{ . ?\})
+                            ))
+
+;; --> Option 2 (Advanced but has learning curve)
+;; (use-package paredit
+;;   :config
+;;   (paredit-mode t)
+;;   )
+
+;; (use-package paredit-everywhere
+;;   :config
+;;   (add-hook 'prog-mode-hook 'paredit-everywhere-mode)
+;;   )
+
+;; --> Option 3 (ISSUE: can't close several brackets by one pressing)
+;; more see the doc https://github.com/Fuco1/smartparens/wiki/Working-with-expressions
+;; https://github.com/lujun9972/emacs-document/blob/master/emacs-common/Smartparens用法详解.org
+;; (use-package smartparens
+;;   :defer t
+;; :hook
+;;  (after-init . smartparens-global-mode)
+;; :bind
+;; (:map smartparens-mode-map
+;; 	("C-M-f" . sp-forward-sexp)
+;; 	("C-M-b" . sp-backward-sexp)
+;; 	("C-M-h" . sp-down-sexp) ;;down one level
+;; 	("C-M-l" . sp-up-sexp) ;;up one level
+;; 	("M-[" . sp-backward-unwrap-sexp)
+;; 	("C-M-k" . sp-kill-sexp))
+;; :config
+;; (sp-pair "\{" "\}") ;; latex literal brackets (included by default)
+;; (sp-pair "<#" "#>")
+;; (sp-pair "$" "$")   ;; latex inline math mode. Pairs can have same opening and closing string)
+;; (sp-local-pair 'LaTeX-mode "\\left(" "\\right)" :insert "C-b l" :trigger "\\l(")
+;; (sp-pair "'" nil :actions :rem))
 
 (use-package rainbow-delimiters
   :defer t
   :hook
   (prog-mode . rainbow-delimiters-mode)
   )
+
 ;; (use-package spaceline
 ;;  :init
 ;;  (require 'spaceline-config)
@@ -106,12 +159,6 @@
   :hook
   (after-init . mood-line-mode)
   )
-
-;;press your keyboard fast and hard !!!
-(use-package power-mode
-  :defer t
-  :load-path "~/.emacs.d/extra/power-mode.el"
-)
 
 ;; (use-package doom-modeline
 ;;   ;;right fringe cut-off issue should relate to font size
@@ -140,7 +187,7 @@
   (dashboard-setup-startup-hook)
   (setq dashboard-set-init-info t)
   (setq dashboard-banner-logo-title "Happiness is everything - Rui")
-;;    (setq dashboard-startup-banner 3)
+  ;;    (setq dashboard-startup-banner 3)
   (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/world.png")
   (setq dashboard-center-content t)
   (setq dashboard-items '((recents  . 3))) ;;add org-agenda could slow start-up speed
@@ -155,14 +202,14 @@
   :defer t
   :config
   (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
-;  (set-face-background 'highlight-indent-guides-character-face "dimgrey")
+					;  (set-face-background 'highlight-indent-guides-character-face "dimgrey")
   :custom
   (highlight-indent-guides-method 'character)
   )
 
 (use-package highlight-symbol
   :defer t
-;; An alternative package is highlight-thing
+  ;; An alternative package is highlight-thing
   :bind
   ("C-<f9>" . highlight-symbol)
   ("<f9>" . highlight-symbol-next)
@@ -202,17 +249,17 @@
 
 (use-package all-the-icons-dired
   :defer t
-  ;need to run all-the-icons-install-fonts first to avoid grabled icon
+					;need to run all-the-icons-install-fonts first to avoid grabled icon
   :requires all-the-icons
   :hook
   (dired-mode . all-the-icons-dired-mode))
 
 (use-package ivy-rich
-  :after ivy
+  :defer t
   :config
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
   :hook
-  (after-init . ivy-rich))
+  (ivy-rich . ivy-rich-mode))
 
 (use-package all-the-icons-ivy-rich
   :defer t
@@ -253,7 +300,7 @@
   ("M-<right>" . centaur-tabs-forward)
   :hook
   (dired-mode . centaur-tabs-local-mode)
-)
+  )
 
 (use-package visual-fill-column
   :defer t
@@ -262,6 +309,18 @@
   :custom
   (visual-fill-column-center-text t)
   (visual-fill-column-width 100)
+  )
+
+;;press your keyboard fast and hard !!!
+(use-package power-mode
+  :defer t
+  :load-path "~/.emacs.d/extra/power-mode.el"
+  )
+
+(use-package focus
+  :defer t
+  :hook
+  (text-mode . focus-mode)
   )
 
 (provide 'init-ui)
