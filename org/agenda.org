@@ -1,15 +1,19 @@
 #+TITLE: My To-Do projects
 
 * June 2021
-** June 8-9
+** June 8-9 <Tuesday-Wednesday>
 *** DONE Write model description (method part)
-** June 10
+** June 10 <Thursday>
 *** DONE Collect data
 *** DONE Lab meeting
-** June 11
+** June 11 <Friday>
 *** DONE Collect data, tidy data, plot data
-** June 12
-*** TODO [#B] Collect more plankton tow data
+** June 12-13 <Saturday-Sunday>
+*** DONE [#B] Collect more plankton tow data 
+** June 14 <Monday>
+*** DONE Supervisor meeting
+*** DONE Tidyup plankton tow data and symbiosis table
+** June 15 <Tuesday>
 *** Read papers
 *** Resample method
 *** Make project plan

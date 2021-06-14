@@ -57,14 +57,19 @@
   :after flyspell
   :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper)))
 
-(use-package flyspell-correct-avy-menu
-  :after flyspell-correct)
+
+;;Interface options
+;; (use-package flyspell-correct-avy-menu
+;;   :after flyspell-correct)
 
 (use-package flyspell-correct-ivy
   :after flyspell-correct)
 
- (use-package flyspell-correct-popup
-   :after flyspell-correct)
+;; (use-package flyspell-correct-ido
+;;   :after flyspell-correct)
+
+;;  (use-package flyspell-correct-popup
+;;    :after flyspell-correct)
 
 (provide 'init-editor)
 ;;; init-editor.el ends here
