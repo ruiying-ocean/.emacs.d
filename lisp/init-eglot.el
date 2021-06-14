@@ -57,6 +57,14 @@
   (define-key inferior-ess-r-mode-map (kbd "M-p") 'ess_insert_pipe)			 
   )
 
+;;C-c C-a to turn on csv-align-fields
+(use-package csv-mode
+  :defer t
+  :mode
+  "\\.csv\\'"
+  "\\.CSV\\'"
+  )
+
 ;;display color of RGB code
 (use-package rainbow-mode
   :defer t
