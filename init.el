@@ -63,5 +63,8 @@
   (garbage-collect))
 (run-with-idle-timer 4 nil #'my-cleanup-gc)
 
+(setq max-specpdl-size 100000
+        max-lisp-eval-depth 30000)
+
 (provide 'init)
 ;;; init.el ends here

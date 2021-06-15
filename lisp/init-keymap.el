@@ -13,13 +13,16 @@
   ;;(forward-line 1)
   (end-of-line 1)
   )
-(global-set-key (kbd "C-x l") 'select-current-line)
+(global-set-key (kbd "C-l") 'select-current-line)
 
 ;; Set meta command and mark set keybind for Mac OS
 ;; If you are using a external Windows keyboard, remeber to choose
 ;; USB keyboard in Preference -> Keyboard -> modify keyboard -> select keyboard
 (if (eq system-type 'darwin)
     (setq mac-command-modifier 'meta))
+;;Just found for Emacs-macport version you can swipe between buffer
+;;by using two fingers (cool!)
+
 (global-set-key (kbd "C-j") 'set-mark-command)
 ;;C-x C-x -> set mark and go back
 ;;C-x h to select all

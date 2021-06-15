@@ -166,11 +166,17 @@
 (use-package transient
   :defer t)
 
-;;To read proper environment variable in MacOS
+;;To read proper environment variable in MacOS GUI version
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))
   :config
-  (exec-path-from-shell-initialize))
+  ;;first `mv .zshrc .zshenv`
+  ;;then set a non-interactive shell to speed up this package
+  (setq exec-path-from-shell-arguments nil)
+  ;;specify some PATH
+  (setq exec-path-from-shell-copy-env "/usr/local/bin/python3")
+  (exec-path-from-shell-initialize)
+  )
 
 (use-package popwin
   :init (require 'popwin)
@@ -195,26 +201,28 @@
   (global-set-key (kbd "C-c V") 'ivy-pop-view)
   (setq ivy-wrap t)
   (setq ivy-height 9)
-  (setq ivy-format-function 'ivy-format-function-line)
+;;  (setq ivy-format-function 'ivy-format-function-line)
   )
 
 (use-package counsel
   :defer 1
   :after ivy
   :config
-  (global-set-key (kbd "M-x") 'counsel-M-x)
-  (global-set-key (kbd "M-y") 'counsel-yank-pop)
-  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-  (global-set-key (kbd "C-h f") 'counsel-describe-function)
-  (global-set-key (kbd "C-h v") 'counsel-describe-variable)
-  (global-set-key (kbd "C-c g") 'counsel-git) ;;find file in current git directory
-  (global-set-key (kbd "C-c j") 'counsel-git-grep)
-  (global-set-key (kbd "C-c l") 'counsel-git-log)
-  (global-set-key (kbd "C-c f") 'counsel-fzf) ;;fzf find file
-  (global-set-key (kbd "C-c r") 'counsel-rg) ;;rg find text
-  (global-set-key (kbd "C-c t") 'counsel-load-theme)
-  (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
-
+  (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
+  :bind
+  (("C-c b" . counsel-imenu);; something more useful for professional programmer
+   ("C-x C-f" . counsel-find-file)
+   ("M-x" . counsel-M-x)
+   ("M-y" . counsel-yank-pop) ;;something like a clipboard
+   ("C-h f" . counsel-describe-function)
+   ("C-h v" . counsel-describe-variable)
+   ("C-c t" . counsel-load-theme)
+   ("C-c j" . counsel-git-grep)
+   ("C-c g" . counsel-git) ;;find file in current git directory
+   ("C-c l" . counsel-git-log)
+   ("C-c r" . counsel-rg) ;;rg find tex
+   ("C-c f" . counsel-fzf) ;;fzf find file
+   ))
 
 ;;Faster cursor movement - go to anywhere
 (use-package avy

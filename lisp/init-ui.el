@@ -40,6 +40,12 @@
 (global-display-line-numbers-mode t) ;;the linum-mode has been obsolete
 (setq display-line-numbers-width 0)
 
+;;Disable line number for certain modes
+(dolist (mode '(org-mode-hook
+		term-mode-hook
+		eshell-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
 ;;turn off electric-indent-mode but use aggressive-indent-mode
 (electric-indent-mode 1)
 ;; (use-package aggressive-indent
@@ -249,26 +255,27 @@
 
 (use-package all-the-icons-dired
   :defer t
-					;need to run all-the-icons-install-fonts first to avoid grabled icon
+  ;;need to run all-the-icons-install-fonts first to avoid grabled icon
   :requires all-the-icons
   :hook
   (dired-mode . all-the-icons-dired-mode))
 
 (use-package ivy-rich
-  :defer t
   :config
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
-  :hook
-  (ivy-rich . ivy-rich-mode))
+  (setq ivy-rich-path-style 'absolute)
+  (ivy-rich-mode 1)
+  :custom
+  (ivy-rich-modify-columns
+   'ivy-switch-buffer
+   '((ivy-rich-switch-buffer-size (:align right)))))
 
 (use-package all-the-icons-ivy-rich
-  :defer t
   :after ivy-rich
   :config
   (setq all-the-icons-ivy-rich-icon-size 1.0)
   (setq inhibit-compacting-font-caches t)
-  :hook
-  (ivy-rich-mode . all-the-icons-ivy-rich-mode)
+  (all-the-icons-ivy-rich-mode t)
   )
 
 ;; (use-package ivy-posframe ;;center your selection candidate box

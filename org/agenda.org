@@ -12,10 +12,13 @@
 *** DONE [#B] Collect more plankton tow data 
 ** June 14 <Monday>
 *** DONE Supervisor meeting
-*** DONE Tidyup plankton tow data and symbiosis table
+*** DONE Collect and tidyup more plankton tow data
+*** DONE Check symbiosis table and correct observation data plot
 ** June 15 <Tuesday>
+*** DONE [#A] Register NHS GP
+** June 16 <Wednesday>
+*** Office work, make a project (and routine working) plan
+
 *** Read papers
 *** Resample method
-*** Make project plan
 *** 整理note, 休息
-*** [#A] Register NHS
