@@ -21,7 +21,7 @@
 (advice-add #'package-initialize :after #'update-load-path)
 (update-load-path)
 
-(setq custom-file (concat user-emacs-directory "/lisp/custom.el"))
+(setq custom-file (concat user-emacs-directory "/lisp/init-custom.el"))
 (load custom-file :noerror)
 
 (setq gc-cons-percentage 0.6)
@@ -63,8 +63,8 @@
   (garbage-collect))
 (run-with-idle-timer 4 nil #'my-cleanup-gc)
 
-(setq max-specpdl-size 100000
-        max-lisp-eval-depth 30000)
+(setq max-specpdl-size 32000
+        max-lisp-eval-depth 16000)
 
 (provide 'init)
 ;;; init.el ends here
