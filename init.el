@@ -52,6 +52,7 @@
 (require 'init-org)
 (require 'init-md)
 (require 'init-eglot)
+;;(require 'init-lsp) ;;Fancy but bloated
 (require 'init-mu4e)
 (require 'init-pdf)
 ;;(require 'init-eaf) experimental stage
