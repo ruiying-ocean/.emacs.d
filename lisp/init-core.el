@@ -25,7 +25,8 @@
   (company-org-block-edit-style 'auto) ;; 'auto, 'prompt, or 'inline
   :hook ((org-mode . (lambda ()
                        (setq-local company-backends '(company-org-block))
-                       (company-mode +1)))))
+                       (company-mode +1))))
+  )
 
 ;;A match-learning based backend for company
 ;;May conflict with company-flx-mode/ESS mode
@@ -236,7 +237,7 @@
   :hook (ivy-mode . ivy-prescient-mode)
   :config
   (setq ivy-prescient-sort-commands t
-	ivy-prescient-enable-sorting t
+	ivy-prescient-enable-sorting nil
 	ivy-prescient-retain-classic-highlighting t)  
   )
 

@@ -1,6 +1,6 @@
 ;;read my blog to find how to install prerequisites
 (use-package mu4e
-  :defer 2
+  :defer t ;;will trigger org-mode
   :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e"
   :config
   ;;Emacs Mail setting
@@ -24,7 +24,7 @@
   (setq mu4e-attachments-dir "~/Downloads")
 
   ;; Further customization:
-  (setq mu4e-html2text-command "w3m -T text/html" ; how to hanfle html-formatted emails
+  (setq m4e-html2text-command "w3m -T text/html" ; how to hanfle html-formatted emails
 	mu4e-update-interval 300                  ; seconds between each mail retrieval
 	mu4e-headers-auto-update t                ; avoid to type `g' to update
 	mu4e-view-show-images t                   ; show images in the view buffer

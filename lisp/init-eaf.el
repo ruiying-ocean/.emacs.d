@@ -27,4 +27,7 @@
   (eaf-bind-key nil "M-q" eaf-browser-keybinding)
 )
 
+
+;;https://gitlab.com/blak3mill3r/emacs-ludicrous-speed
+;;to further improve the startup speed, use this in Linux
 (provide 'init-eaf)

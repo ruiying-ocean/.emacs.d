@@ -291,7 +291,7 @@
 
 (use-package centaur-tabs
   :config
-  (centaur-tabs-mode t)
+;;  (centaur-tabs-mode t)
   (setq centaur-tabs-set-bar 'over)
   (setq centaur-tabs-gray-out-icons 'buffer)
   ;;(setq centaur-tabs-set-icons t)
@@ -307,6 +307,7 @@
   ("M-<right>" . centaur-tabs-forward)
   :hook
   (dired-mode . centaur-tabs-local-mode)
+  (dashboard-mode . centaur-tabs-mode)
   )
 
 (use-package visual-fill-column
