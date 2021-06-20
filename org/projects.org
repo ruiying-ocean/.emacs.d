@@ -17,7 +17,7 @@ grazing protection
 *** Interpolate scatter plot to contourf
 https://stackoverflow.com/questions/42426095/matplotlib-contour-contourf-of-concave-non-gridded-data
 https://stackoverflow.com/questions/48575854/a-smooth-contour-plot-covering-and-masked-by-shapefile-in-basemap
-https://stackoverflow.com/questions/44082717/limit-mask-matplotlib-contour-to-data-area
+https://stackoverflow.com/questions/44082717/limit-mask-matplotlib-contour-to-data-area  
 *** Collect data of sediment traps
 ** Size spectra
 *** Learn mechanisms and model equations
@@ -33,9 +33,8 @@ Also read papers and books about this.
 Maybe write a paper about estimating current fishery status of Daya Bay and predict how it changes under different strategy?
 *** Bayesian analysis of size spectra model parameter
 *** Merge fish into ECOGEM
-
 ** Study
 *** Statistics
 ** Entertainment
 *** Straight package manager to use github packages
-*** org-roam vs org-brain to visualise this projects.el page
+*** CANCELED org-roam vs org-brain to visualise this projects.el page

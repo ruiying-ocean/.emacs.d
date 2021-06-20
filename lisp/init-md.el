@@ -26,15 +26,15 @@
 )
 
 ;;add table of content for md/org
+;;Add :TOC: tag for org (C-c C-c) and <-- :TOC: --> for md
+;;then toc-org-insert-toc
 (use-package toc-org
   :hook
   (markdown-mode . toc-org-mode)
   (org-mode . toc-org-mode)
   :config
   (global-set-key (kbd "\C-c\C-o") 'toc-org-markdown-follow-thing-at-point)
+  (add-to-list 'org-tag-alist '("TOC" . ?T))
   )
-
-
-
 
 (provide 'init-md)

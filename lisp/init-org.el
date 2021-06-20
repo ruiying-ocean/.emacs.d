@@ -82,18 +82,22 @@
   (add-hook 'dired-mode-hook 'org-download-enable))
 
 ;;(use-package org-super-agenda)
-
 (use-package org-graph-view
+  :defer t
   :load-path ("extra/")
-  ;;:ensure-system-package graphviz
-  :bind
-  (:map org-graph-view-graph-map
-	("C-=" . org-graph-view-zoom-in)
-	("C--" . org-graph-view-zoom-out))
-  :custom
-  (org-graph-view-shape-default "oval")
-  (org-graph-view-layout "twopi")
-  (org-graph-view-overlap "scale")
+  )
+
+;; This is an Emacs package that creates graphviz directed graphs from
+;; the headings of an org file
+(use-package org-mind-map
+  :defer t
+  :load-path ("extra/")
+  :config
+  (setq org-mind-map-engine "dot")       ; Default. Directed Graph
+  ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
+  ;; (setq org-mind-map-engine "twopi")  ; Radial Layout
+  ;; (setq org-mind-map-engine "fdp")    ; Undirected Spring Force-Directed
+  ;; (setq org-mind-map-engine "sfdp")   ; Multiscale version of fdp for the layout of large graphs
   )
 
 (provide 'init-org)
