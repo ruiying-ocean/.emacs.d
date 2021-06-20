@@ -328,6 +328,10 @@
   :defer t
   :hook
   (text-mode . focus-mode)
+  :config
+  (add-to-list 'focus-mode-to-thing '((text-mode . sentence)
+				      (prog-mode . defun)
+				      (latex-mode . paragraph)))
   )
 
 (provide 'init-ui)

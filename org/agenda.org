@@ -17,8 +17,24 @@
 ** June 15 <Tuesday>
 *** DONE [#A] Register NHS GP
 ** June 16 <Wednesday>
-*** Office work, make a project (and routine working) plan
+*** DONE Merge two symbiosis tables into one, change related codes
+*** DONE Haircut
+** June 17 <Thursday>
+*** DONE ForamECOGENIE modification
+- Set same trophic tradeoff
+- Set different mortality rate (default as 0.5) but same protection
+- Add respiration for host (0.5)
+*** DONE Debug GENIE code (caused by commenting NETCDF path in user.mak and makefile.arc after merging master)
+*** DONE Run some experiments
+*** DONE SPECTRA mizer workshop
+*** DONE Update some LATEX codes
+For instance, predation part. Found the palatability is different between model and paper. In the model, it's calcification protection; in the paper, it's prey range.
+*** DONE Laundry
+** June 18 <Friday>
+*** DONE mizer session II
+** June
 
-*** Read papers
+*** GENIE experiments
 *** Resample method
-*** 整理note, 休息
+*** Have a break
+

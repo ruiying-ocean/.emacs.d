@@ -83,5 +83,18 @@
 
 ;;(use-package org-super-agenda)
 
+(use-package org-graph-view
+  :load-path ("~/.emacs.d/extra/org-graph-view.el")
+  ;;:ensure-system-package graphviz
+  :bind
+  (:map org-graph-view-graph-map
+	("C-=" . org-graph-view-zoom-in)
+	("C--" . org-graph-view-zoom-out))
+  :custom
+  (org-graph-view-shape-default "oval")
+  (org-graph-view-layout "twopi")
+  (org-graph-view-overlap "scale")
+  )
+
 (provide 'init-org)
 ;;init-org ends here

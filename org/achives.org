@@ -349,3 +349,13 @@ SCHEDULED: <2020-12-30 Tue>
 :ARCHIVE_CATEGORY: agenda
 :ARCHIVE_TODO: DONE
 :END:
+
+* From projects.org
+
+** Learn mechanisms
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-06-18 Fri 23:21
+:ARCHIVE_FILE: ~/.emacs.d/org/projects.org
+:ARCHIVE_OLPATH: Projects/Size spectra
+:ARCHIVE_CATEGORY: projects
+:END:

@@ -5,7 +5,7 @@
   ;; To disable collection of benchmark data after init is done.
   (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
-;;auto-completion
+;;auto-completion system
 (use-package company
   :config
   (setq company-tooltip-limit 10)
@@ -42,7 +42,6 @@
 
 ;;A fuzzy matching of company
 (use-package company-flx
-  :defer t
   :hook
   (company-mode . company-flx-mode)
   )
@@ -69,8 +68,8 @@
 ;;add ~/.ssh/config and ~/.ssh/known_hosts first
 ;;then ssh-keygen -t rsa => ssh-copy-id name@host_name
 (use-package tramp
-  :if (memq system-type '(gnu/linux darwin))
   :defer t
+  :if (memq system-type '(gnu/linux darwin))
   :config
   (add-to-list 'tramp-remote-path "/usr/local/bin/git")
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
@@ -109,10 +108,8 @@
   )
 
 (use-package projectile
-  :defer 2
   :init
   (setq projectile-completion-system 'ivy)
-  :config
   (projectile-mode +1)
   :bind
   (:map projectile-mode-map
@@ -177,6 +174,9 @@
   (setq exec-path-from-shell-copy-env "/usr/local/bin/python3")
   (exec-path-from-shell-initialize)
   )
+
+(use-package use-package-ensure-system-package
+  :after exec-path-from-shell) ;;extend use-package, put after exec-path-from-shell
 
 (use-package popwin
   :init (require 'popwin)

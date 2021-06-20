@@ -107,5 +107,14 @@
   ;;(define-key eglot-mode-map (kbd "C-c h") 'eldoc)
   )
 
+;; MATLAB and Emacs integration:
+;; Install
+;; cd /path/to/matlab-emacs -> make
+;; Homepage: https://sourceforge.net/p/matlab-emacs/src/ci/documentation/tree/
+(use-package matlab-mode
+  :defer t
+  :mode "\\.[mM]\\'"
+  )
+
 (provide 'init-eglot)
 ;;;init-eglot.el ends here
