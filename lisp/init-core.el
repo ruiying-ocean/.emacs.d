@@ -51,7 +51,7 @@
 (use-package company-prescient
   :hook (company-mode . company-prescient-mode)
   :config
-  (setq prescient-filter-method '(literal fuzzy regexp initialism))
+  (setq prescient-filter-method '(literal regexp initialism))
   )
 
 ;; (use-package company-quickhelp
@@ -174,12 +174,13 @@
   :defer t)
 
 ;;To read proper environment variable in MacOS GUI version
+;;To speed up this package, separate configuration into
+;;non-interactive (.zshenv) and interactive (.zshrc) part.
+;;Find out more in https://github.com/purcell/exec-path-from-shell
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))
   :config
-  ;;first `mv .zshrc .zshenv`
-  ;;then set a non-interactive shell to speed up this package
-  (setq exec-path-from-shell-arguments nil)
+  (setq exec-path-from-shell-arguments nil) ;;read non-interactive config
   ;;specify some PATH
   (setq exec-path-from-shell-copy-env "/usr/local/bin/python3")
   (exec-path-from-shell-initialize)

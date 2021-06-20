@@ -188,7 +188,6 @@
 
 (use-package dashboard
   :if (< (length command-line-args) 2)
-  :diminish dashboard-mode
   :config
   (dashboard-setup-startup-hook)
   (setq dashboard-set-init-info t)
