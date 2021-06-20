@@ -1,10 +1,5 @@
 * Project Branches
 ** ForamEcoGEnIE
-*** Interpolate scatter plot to contourf
-https://stackoverflow.com/questions/42426095/matplotlib-contour-contourf-of-concave-non-gridded-data
-https://stackoverflow.com/questions/48575854/a-smooth-contour-plot-covering-and-masked-by-shapefile-in-basemap
-https://stackoverflow.com/questions/44082717/limit-mask-matplotlib-contour-to-data-area
-*** Collect data of sediment traps
 *** TODO [#A] Resampling methods to tune parameters
 Seven parameters:
 -------------
@@ -19,6 +14,11 @@ respiration of foraminifera
 mortality protection
 grazing protection
 -------------
+*** Interpolate scatter plot to contourf
+https://stackoverflow.com/questions/42426095/matplotlib-contour-contourf-of-concave-non-gridded-data
+https://stackoverflow.com/questions/48575854/a-smooth-contour-plot-covering-and-masked-by-shapefile-in-basemap
+https://stackoverflow.com/questions/44082717/limit-mask-matplotlib-contour-to-data-area
+*** Collect data of sediment traps
 ** Size spectra
 *** Learn mechanisms and model equations
 https://sizespectrum.org/mizer/articles/mizer.html

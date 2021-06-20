@@ -49,7 +49,10 @@
 
 ;;simple and fast sorting and filtering framework for comppany
 (use-package company-prescient
-  :hook (company-mode . company-prescient-mode))
+  :hook (company-mode . company-prescient-mode)
+  :config
+  (setq prescient-filter-method '(literal fuzzy regexp initialism))
+  )
 
 ;; (use-package company-quickhelp
 ;;   :config
@@ -229,7 +232,12 @@
 
 ;;sorting and filtering framework for ivy
 (use-package ivy-prescient
-  :hook (ivy-mode . ivy-prescient-mode))
+  :hook (ivy-mode . ivy-prescient-mode)
+  :config
+  (setq ivy-prescient-sort-commands t
+	ivy-prescient-enable-sorting t
+	ivy-prescient-retain-classic-highlighting t)  
+  )
 
 ;;Faster cursor movement - go to anywhere
 (use-package avy
