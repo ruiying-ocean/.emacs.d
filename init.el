@@ -33,7 +33,11 @@
 
 (eval-when-compile
   (require 'use-package))
+(require 'bind-key)
+
 (setq use-package-always-ensure t)
+(setq use-package-verbose t) ;;report configuration info at *Message* buffer
+(setq use-package-compute-statistics t) ;;run `M-x use-package-report` to see detailed report, use S to sort
 
 ;;recompile outdated .elc file
 (use-package auto-compile

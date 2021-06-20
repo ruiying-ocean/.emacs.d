@@ -1,9 +1,10 @@
 ;; This file is setting of all programming-related packages in use-package framework
 
-(use-package benchmark-init
-  :config
-  ;; To disable collection of benchmark data after init is done.
-  (add-hook 'after-init-hook 'benchmark-init/deactivate))
+;; Can be replaced by use-package-report
+;; (use-package benchmark-init
+;;   :config
+;;   ;; To disable collection of benchmark data after init is done.
+;;   (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
 ;;auto-completion system
 (use-package company
@@ -45,6 +46,11 @@
   :hook
   (company-mode . company-flx-mode)
   )
+
+;;simple and fast sorting and filtering framework for comppany
+(use-package company-prescient
+  :hook (company-mode . company-prescient-mode))
+
 ;; (use-package company-quickhelp
 ;;   :config
 ;;   (add-hook 'company-quickhelp-mode-hook 'python-mode)
@@ -108,9 +114,10 @@
   )
 
 (use-package projectile
-  :init
+  :hook
+  (after-init . projectile-mode)
+  :config
   (setq projectile-completion-system 'ivy)
-  (projectile-mode +1)
   :bind
   (:map projectile-mode-map
 	("C-c p" . projectile-command-map))
@@ -176,17 +183,13 @@
   )
 
 (use-package use-package-ensure-system-package
+  :defer t
   :after exec-path-from-shell) ;;extend use-package, put after exec-path-from-shell
 
 (use-package popwin
-  :init (require 'popwin)
+;;  :init (require 'popwin)
   :hook
   (after-init . popwin-mode))
-
-(use-package smex
-  :init (smex-initialize)
-  :bind (("M-x" . smex)
-	 ("M-x" . smex-major-mode-commands)))
 
 (use-package ivy
   :defer 1
@@ -223,6 +226,10 @@
    ("C-c r" . counsel-rg) ;;rg find tex
    ("C-c f" . counsel-fzf) ;;fzf find file
    ))
+
+;;sorting and filtering framework for ivy
+(use-package ivy-prescient
+  :hook (ivy-mode . ivy-prescient-mode))
 
 ;;Faster cursor movement - go to anywhere
 (use-package avy

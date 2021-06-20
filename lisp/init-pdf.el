@@ -1,7 +1,7 @@
 ;;allow you to view pdf continuously
 (use-package pdf-continuous-scroll-mode
   :defer t
-  :load-path "~/.emacs.d/extras/pdf-continuous-scroll-mode"
+  :load-path "extra/"
   :hook
   (pdf-view-mode-hook . pdf-continuous-scroll-mode))
 

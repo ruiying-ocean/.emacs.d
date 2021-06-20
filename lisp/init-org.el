@@ -84,7 +84,7 @@
 ;;(use-package org-super-agenda)
 
 (use-package org-graph-view
-  :load-path ("~/.emacs.d/extra/org-graph-view.el")
+  :load-path ("extra/")
   ;;:ensure-system-package graphviz
   :bind
   (:map org-graph-view-graph-map

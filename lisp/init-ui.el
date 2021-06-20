@@ -261,10 +261,11 @@
   (dired-mode . all-the-icons-dired-mode))
 
 (use-package ivy-rich
+  :hook
+  (ivy-mode . ivy-rich-mode)
   :config
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
   (setq ivy-rich-path-style 'absolute)
-  (ivy-rich-mode 1)
   :custom
   (ivy-rich-modify-columns
    'ivy-switch-buffer
@@ -321,7 +322,7 @@
 ;;press your keyboard fast and hard !!!
 (use-package power-mode
   :defer t
-  :load-path "~/.emacs.d/extra/power-mode.el"
+  :load-path "extra/"
   )
 
 (use-package focus
