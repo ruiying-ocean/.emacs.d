@@ -175,7 +175,7 @@
   :config
   (setq exec-path-from-shell-arguments nil) ;;read non-interactive config
   ;;specify some PATH
-  (setq exec-path-from-shell-copy-env "/usr/local/bin/python3")
+  (setq exec-path-from-shell-copy-env "/usr/local/bin/python3.9")
   (exec-path-from-shell-initialize)
   )
 

@@ -1,18 +1,28 @@
 ;;==============================
 ;; Python-mode setting
 ;;==============================
-(setq python-indent-guess-indent-offset-verbose nil)
-(setq python-shell-interpreter "python3")
-;;or If you use jupyter-console
-;;(setq python-shell-interpreter "jupyter-console")
-;;(setq python-shell-interpreter-args "--simple-prompt")
+(setq python-shell-interpreter "python3.9")
+;; or ipython
+;;(setq python-shell-interpreter "ipython"
+;;        python-shell-interpreter-args "-i --simple-prompt --InteractiveShell.display_page=True")
 
 ;;python-style indent
 (setq python-indent-offset 4)
+(setq python-indent-guess-indent-offset-verbose nil) ;;don't complain about the indent anymore
 
 ;;debug setting
 (setq python-shell-completion-native-enable nil) ;;or pip3 install pyreadline to avoid warning
 (setq python-shell-prompt-detect-failure-warning nil)
+
+;;python-mode local keybinding
+(with-eval-after-load 'python
+  (defun python-run-current-line()
+    "a wrapper of python-shell-send-statement"
+    (interactive)
+    (python-shell-send-statement)
+    (forward-line))
+  (define-key python-mode-map (kbd "C-<return>") 'python-run-current-line)
+  )
 
 ;;================================
 ;;jupyter notebook integration
