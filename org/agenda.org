@@ -32,9 +32,9 @@ For instance, predation part. Found the palatability is different between model 
 *** DONE Laundry
 ** June 18 <Friday>
 *** DONE mizer session II
-** June
-
-*** GENIE experiments
-*** Resample method
-*** Have a break
-
+** June 21 <Monday>
+*** DONE Biogeo Meeting
+*** DONE Collect my Castore parcel
+*** DONE Latin hypercube sampling and write configuration files
+** June 22 <Tuesday>
+*** Collect sediment trap data

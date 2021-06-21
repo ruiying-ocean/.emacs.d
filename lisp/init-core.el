@@ -102,11 +102,9 @@
 ;;======================================================================
 ;;depends on external program The-Silver-Searcher/ripgrep and emacs package ag/rg
 ;;======================================================================
-;;(use-package ripgrep)
-;;(use-package rg)
 (use-package dumb-jump
   :defer 4
-  :ensure ag
+  :requires (ag ripgrep rg)
   :config
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
   (setq dumb-jump-default-project "~/cgenie.muffin")
@@ -118,21 +116,15 @@
   )
 
 (use-package projectile
-  :hook
-  (after-init . projectile-mode)
+  :defer t
   :config
-  (setq projectile-completion-system 'ivy)
-  :bind
-  (:map projectile-mode-map
-	("C-c p" . projectile-command-map))
-  )
+  (setq projectile-completion-system 'ivy))
 
-;;an ivy UI for projectile
+;;An ivy UI for projectile, remap some exsiting commands and add more commands
 (use-package counsel-projectile
-  :requires projectile
-  :bind
-  (:map projectile-mode-map
-	("C-c p" . projectile-command-map))
+  :hook (after-init . counsel-projectile-mode) ;;this will trigger projectile
+  :config
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   )
 
 ;;on-the-fly syntax checker

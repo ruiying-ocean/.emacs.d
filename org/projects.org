@@ -9,7 +9,6 @@ symbiont size
 symbiont number
 symbiont mortality rate
 respiration factor
-respiration of foraminifera
 -------------
 mortality protection
 grazing protection
