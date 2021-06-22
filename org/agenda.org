@@ -36,5 +36,9 @@ For instance, predation part. Found the palatability is different between model 
 *** DONE Biogeo Meeting
 *** DONE Collect my Castore parcel
 *** DONE Latin hypercube sampling and write configuration files
-** June 22 <Tuesday>
+*** DONE Run experiments (1:15)
+** June 23 <Tuesday>
+*** DONE Run experiments (16:60)
+*** DONE write a script of plotting sensitivity analysis results
+** June 24 <Wednesday>
 *** Collect sediment trap data
