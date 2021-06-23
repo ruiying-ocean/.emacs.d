@@ -1,10 +1,10 @@
 ;;==============================
 ;; Python-mode setting
 ;;==============================
-;;(setq python-shell-interpreter "python3.9")
+(setq python-shell-interpreter "python3.9")
 ;; or ipython
-(setq python-shell-interpreter "ipython"
-       python-shell-interpreter-args "-i --simple-prompt --InteractiveShell.display_page=True")
+;; (setq python-shell-interpreter "ipython"
+;;        python-shell-interpreter-args "-i --simple-prompt --InteractiveShell.display_page=True")
 
 ;;python-style indent
 (setq python-indent-offset 4)
@@ -76,6 +76,11 @@
 ;;4. This package use zmq which makes Emacs very slow
 
 (use-package ein
+  ;;specify jupyter kernel in kernel.json file
+  ;;if you don't know its path, run !jupyter kernelspec list in ipython
+  ;;Other checking commands:
+  ;;import sys; print(sys.executable); print(sys.path)
+  ;;I also recommend to use mamba to manage packages
   :defer 3)
 
 ;; ==============================

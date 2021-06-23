@@ -38,7 +38,7 @@ For instance, predation part. Found the palatability is different between model 
 *** DONE Latin hypercube sampling and write configuration files
 *** DONE Run experiments (1:15)
 ** June 23 <Tuesday>
-*** DONE Run experiments (16:60)
+*** DONE Run experiments (16:70)
 *** DONE write a script of plotting sensitivity analysis results
 ** June 24 <Wednesday>
 *** Collect sediment trap data

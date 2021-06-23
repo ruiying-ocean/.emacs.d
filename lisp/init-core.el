@@ -169,14 +169,13 @@
 ;;This package reads proper environment variable in MacOS GUI version
 ;;To speed up this package, (1) separate configuration into
 ;;non-interactive (.zshenv) and interactive (.zshrc) part;
-;;(2) use explicit path in .zshenv (which is what we will use)
+;;(2) set explicit path in .zshenv (which is what we will use, you should
+;;put your PATH variable like /usr/local/bin/python3.9 in this file)
 ;;Find out more in https://github.com/purcell/exec-path-from-shell
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))
   :config
-  (setq exec-path-from-shell-arguments nil) ;;read non-interactive config
-  ;;specify some PATH
-  (setq exec-path-from-shell-copy-env "/usr/local/bin/python3.9")
+  (setq exec-path-from-shell-arguments nil) ;;read non-interactive shell config
   (exec-path-from-shell-initialize)
   )
 
