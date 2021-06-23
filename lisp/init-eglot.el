@@ -61,29 +61,42 @@
   (define-key inferior-python-mode-map (kbd "C-l") 'comint-clear-buffer)
   )
 
-;;================================
+;;=============================
 ;;jupyter notebook integration
-;;================================
-;;[emacs-jupyter] allow you to use org-mode to
-;;replace jupyter, while [ein] is a purer jupyter-notebook tool
-;;<find other configuration in init-org.el>
-
+;;=============================
+;;>>> option 1
 ;; (use-package jupyter
 ;;  :defer t)
 ;;1. Require Emacs with module-support
-;;2. Make sure python3 is in your $PATH or alias python -> python3; pip -> python3
-;;3. run `pip install ipykernel` `python -m ipykernel install --user`
-;;4. This package use zmq which makes Emacs very slow
+;;2. run `pip install ipykernel` `python -m ipykernel install --user`
+;;3. This package use zmq which makes Emacs very slow
+
+;;>>> option 2
+;; specify jupyter kernel in kernel.json file
+;; if you don't know its path, run !jupyter kernelspec list in ipython
+;; Other checking commands:
+;; import sys; print(sys.executable); print(sys.path)
+;; I also recommend to use mamba to manage packages
+;; ---org-babel snippet---
+;;#+BEGIN_SRC ein-python :session localhost
+;;#+END_SRC
 
 (use-package ein
-  ;;specify jupyter kernel in kernel.json file
-  ;;if you don't know its path, run !jupyter kernelspec list in ipython
-  ;;Other checking commands:
-  ;;import sys; print(sys.executable); print(sys.path)
-  ;;I also recommend to use mamba to manage packages
-  :defer 3)
+  ;;ein-babel see the init-org.el
+  :defer 1
+  :config
+  (setq ein:use-company-backend t)
+  (setq ein:worksheet-enable-undo t)
+  (setq ein:output-area-inlined-images t)
+  (add-hook 'poly-ein-mode-hook 'elpy-enable)
+  (add-hook 'poly-ein-mode-hook (lambda()
+				  (display-line-numbers-mode nil)));;avoid grabled line-number
+  )
 
-;; ==============================
+(use-package elpy ;;completion system for EIN
+  :defer t)
+
+;;==============================
 ;;ESS-R-mode setting (require ESS installed)
 ;;==============================
 ;;Lazy load ess-r-mode (ESS doesn't like use-package pretty much)
@@ -153,6 +166,7 @@
   (add-to-list 'eglot-server-programs '((LaTeX-mode tex-mode context-mode texinfo-mode bibtex-mode) ;;use tex-lab or digestif as server
 					. ("texlab")))
   (add-to-list 'eglot-server-programs '(python-mode . ("pylsp"))) ;;pip3 install python-lsp-server
+  ;;jupterlab has some experimental lsp server, install and change it above: pip3 install git+https://github.com/krassowski/python-language-server.git@main
   (add-to-list 'eglot-server-programs '(ess-r-mode . ("R" "--slave" "-e" "languageserver::run()"))) ;;install.packages("languageserver")
   ;;============================================
   :hook

@@ -17,15 +17,13 @@
 
   ;;src setting
   (setq org-src-fontify-natively t)
+  ;;babel setting
   (org-babel-do-load-languages 'org-babel-load-languages
 			       '((emacs-lisp . t)
 				 (python . t)
 				 (R . t)
+				 (ein . t)
 				 ))
-  ;;jupyter-python setting
-  (setq org-babel-default-header-args:jupyter-python '((:async . "yes")
-                                                      (:session . "py")
-                                                      (:kernel . "python3")))
   :custom
   (org-support-shift-select 'alway)
   ;;local keybinding
