@@ -47,7 +47,7 @@ For instance, predation part. Found the palatability is different between model 
 *** DONE add correlation plot
 *** DONE configure and test jupyter-notebook in Emacs
 ** June 25 <Thursday>
-*** DONE Clean room
+*** DONE Room clean, laundry etc.
 *** DONE End running experiments
 *** DONE Use PO4-Biomass correlation to describe distribution pattern
 *** TODO Collect sediment trap data

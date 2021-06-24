@@ -14,7 +14,7 @@
   :config
   ;;need to add these lists into cnfonts/program.el file
   (setq cnfonts--custom-set-fontnames
-	'(("Iosevka" "Inconsolata" "Jetbrains Mono" "Juliamono")
+	'(("Iosevka" "Inconsolata" "Jetbrains Mono" "Roboto Mono" "Juliamono")
           ("Ubuntu Mono" "WenQuanYi Micro Hei" "Sarasa Mono SC Nerd")))
   (setq cnfonts--custom-set-fontsizes
 	'((14   14.0 14.0)
@@ -49,20 +49,21 @@
   :defer t
   :ensure spacemacs-theme)
 
-;; (use-package doom-themes
-;;   :defer t
-;;   :config
-;;   (load-theme 'doom-ayu-light t)
-;;   (load-theme 'doom-nord-light t)
-;;   ;;treemacs setting
-;;   (setq doom-themes-treemacs-enable-variable-pitch nil)
-;;   (setq doom-themes-treemacs-theme "doom-color")
-;;   (doom-themes-treemacs-config)  
-;;   ;; Corrects (and improves) org-mode's native fontification.
-;;   (doom-themes-org-config))
+(use-package doom-themes
+  :defer t
+  ;; :config
+  ;; ;;treemacs setting
+  ;; (setq doom-themes-treemacs-enable-variable-pitch nil)
+  ;; (setq doom-themes-treemacs-theme "doom-color")
+  ;; (doom-themes-treemacs-config)  
+  ;; ;; Corrects (and improves) org-mode's native fontification.
+  ;; (doom-themes-org-config)
+  )
 
 ;;the core of this file, use C-c t to change
-(load-theme 'humanoid-dark t)
+;;(load-theme 'humanoid-dark t)
+;;(load-theme 'doom-dark+ t)
+(load-theme 'doom-vibrant t)
 
 ;;Transprancy setting
 (set-frame-parameter (selected-frame) 'alpha '(97 100))
