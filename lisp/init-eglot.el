@@ -1,10 +1,10 @@
 ;;==============================
 ;; Python-mode setting
 ;;==============================
-(setq python-shell-interpreter "python3.9")
+;;(setq python-shell-interpreter "python3.9")
 ;; or ipython
-;; (setq python-shell-interpreter "ipython"
-;;        python-shell-interpreter-args "-i --simple-prompt --InteractiveShell.display_page=True")
+(setq python-shell-interpreter "ipython"
+       python-shell-interpreter-args "-i --simple-prompt --InteractiveShell.display_page=True")
 
 ;;python-style indent
 (setq python-indent-offset 4)
@@ -14,9 +14,9 @@
 (setq python-shell-completion-native-enable nil) ;;or pip3 install pyreadline to avoid warning
 (setq python-shell-prompt-detect-failure-warning nil)
 (setq python-shell-enable-font-lock nil) ;;make printing fast
+(setq python-shell-completion-native-enable nil) ;;don't use ipython completion, cause bug
 
-
-;;A dirty solution of showing inferior-python input
+;;A dirty solution of showing inferior-python input codes
 ;;from https://github.com/jorgenschaefer/elpy/issues/924
 (defun python-shell-append-to-output (string)
   (let ((buffer (current-buffer)))
@@ -59,6 +59,10 @@
     (forward-line))
   (define-key python-mode-map (kbd "C-<return>") 'python-run-current-line)
   (define-key inferior-python-mode-map (kbd "C-l") 'comint-clear-buffer)
+  (define-key inferior-python-mode-map (kbd "<up>") 'comint-previous-input)
+  (define-key inferior-python-mode-map (kbd "C-p") 'comint-previous-input)
+  (define-key inferior-python-mode-map (kbd "<down>") 'comint-next-input)
+  (define-key inferior-python-mode-map (kbd "C-n") 'comint-next-input)
   )
 
 ;;=============================
@@ -132,6 +136,10 @@
   (define-key inferior-ess-r-mode-map (kbd "M--") 'ess-insert-assign)
   (define-key ess-r-mode-map (kbd "M-p") 'ess-insert-pipe)
   (define-key inferior-ess-r-mode-map (kbd "M-p") 'ess-insert-pipe)
+  (define-key inferior-ess-r-mode-map (kbd "C-p") 'comint-previous-input)
+  (define-key inferior-ess-r-mode-map (kbd "up") 'comint-previous-input)
+  (define-key inferior-ess-r-mode-map (kbd "C-n") 'comint-next-input)
+  (define-key inferior-ess-r-mode-map (kbd "<down>") 'comint-next-input)
   )
 
 ;;C-c C-a to turn on csv-align-fields

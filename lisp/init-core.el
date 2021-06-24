@@ -15,6 +15,7 @@
   ;; invert the navigation direction if the the completion popup-isearch-match
   ;; is displayed on top (happens near the bottom of windows)
   (setq company-tooltip-flip-when-above t)
+  (setq company-global-modes '(not inferior-python-mode))
   :hook
   (after-init . global-company-mode)
   )

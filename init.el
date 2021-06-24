@@ -41,7 +41,7 @@
 
 ;;recompile outdated .elc file
 (use-package auto-compile
-  :config
+  :init
   (auto-compile-on-load-mode)
   (auto-compile-on-save-mode))
 

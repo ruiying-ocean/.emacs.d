@@ -41,9 +41,13 @@ For instance, predation part. Found the palatability is different between model 
 *** DONE Run experiments (16:70)
 *** DONE write a script of plotting sensitivity analysis results
 ** June 24 <Wednesday>
-*** DONE Run experiments (71:90)
+*** DONE Run experiments (71:110)
 *** DONE successfully run plot script on remote machines (after adjusting conda to create env by yml file)
 *** DONE Family phonecall
 *** DONE add correlation plot
 *** DONE configure and test jupyter-notebook in Emacs
+** June 25 <Thursday>
+*** DONE Clean room
+*** DONE End running experiments
+*** DONE Use PO4-Biomass correlation to describe distribution pattern
 *** TODO Collect sediment trap data
