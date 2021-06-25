@@ -82,7 +82,7 @@
 ;; import sys; print(sys.executable); print(sys.path)
 ;; I also recommend to use mamba to manage packages
 ;; ---org-babel snippet---
-;;#+BEGIN_SRC ein-python :session localhost
+;;#+BEGIN_SRC ein-python :session localhost:8889
 ;;#+END_SRC
 
 (use-package ein

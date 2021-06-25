@@ -63,7 +63,8 @@
 ;;the core of this file, use C-c t to change
 ;;(load-theme 'humanoid-dark t)
 ;;(load-theme 'doom-dark+ t)
-(load-theme 'doom-vibrant t)
+(load-theme 'doom-one t)
+;;(load-theme 'doom-vibrant t)
 
 ;;Transprancy setting
 (set-frame-parameter (selected-frame) 'alpha '(97 100))
