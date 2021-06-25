@@ -115,6 +115,20 @@
                             (?\{ . ?\})
                             ))
 
+;; use lispy-mode (a vi-like editing) for lisp parentheses
+;; remove electric-pair-mode first
+(add-hook 'emacs-lisp-mode-hook (lambda()
+				  (electric-pair-local-mode -1)))
+
+;; Basic lispy usage: jkhl to move, C-d to delete, f/b to foward/backward
+;; c to copy, e to evaluate, d to swith parenthesis side
+;; >/< to slurp/barf: push out/pull in
+;; s/w to move up/down
+;; M-j to split, + to join
+(use-package lispy
+  :hook
+  (emacs-lisp-mode . lispy-mode))
+
 ;; --> Option 2 (Advanced but has learning curve)
 ;; (use-package paredit
 ;;   :config

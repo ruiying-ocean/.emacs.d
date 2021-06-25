@@ -32,8 +32,8 @@
 		(lambda (frame)
 		  (with-selected-frame frame
 		    (add-to-list 'default-frame-alist '(font . "SF Mono-14"))))))
-  ;;(cnfonts-enable)
-  )
+  ;;else
+  (cnfonts-enable))
 
 ;;Install themes
 (use-package base16-theme :defer t)
