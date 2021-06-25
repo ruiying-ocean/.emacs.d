@@ -98,5 +98,10 @@
   ;; (setq org-mind-map-engine "sfdp")   ; Multiscale version of fdp for the layout of large graphs
   )
 
+(use-package valign
+  :hook (org-mode . valign-mode)
+  :config
+  (setq valign-fancy-bar t))
+
 (provide 'init-org)
 ;;init-org ends here

@@ -1,15 +1,13 @@
-;;This file customizes Emacs color scheme and themes
-
-;;https://github.com/tumashu/cnfonts
-;;use cnfonts-edit-profile to configure
+;;This file customizes Emacs font, color scheme and themes
 
 ;;English font: Iosevka/Inconsolata/Juliamono/Jetbrains Mono/Roboto Mono/Monaco/Fira Code/SF Mono/Operator Mono
 ;;Chinese font: Wenquanyi Micro Hei Mono/Sarasa UI SC Mono/Noto Sans CJK SC Mono (work perfectly with Iosevka/Inconsolata)
 ;;Variable-pitch font, ETBembo/New York
 ;;Unicode: Symbola
 
+;;https://github.com/tumashu/cnfonts
+;;use cnfonts-edit-profile to configure
 (use-package cnfonts
-  :defer t
   :if window-system
   :config
   ;;need to add these lists into cnfonts/program.el file
@@ -34,7 +32,8 @@
 		(lambda (frame)
 		  (with-selected-frame frame
 		    (add-to-list 'default-frame-alist '(font . "SF Mono-14"))))))
-  (cnfonts-enable))
+  ;;(cnfonts-enable)
+  )
 
 ;;Install themes
 (use-package base16-theme :defer t)
