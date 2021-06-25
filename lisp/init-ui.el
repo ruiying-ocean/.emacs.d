@@ -119,7 +119,6 @@
 ;; remove electric-pair-mode first
 (add-hook 'emacs-lisp-mode-hook (lambda()
 				  (electric-pair-local-mode -1)))
-
 ;; Basic lispy usage: jkhl to move, C-d to delete, f/b to foward/backward
 ;; c to copy, e to evaluate, d to swith parenthesis side
 ;; >/< to slurp/barf: push out/pull in

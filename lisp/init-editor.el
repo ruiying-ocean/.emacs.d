@@ -1,4 +1,4 @@
-;;Editor coding system setting
+;; ;;Editor coding system setting
 (progn
   (prefer-coding-system 'utf-8)
   (set-default-coding-systems 'utf-8)
@@ -57,7 +57,6 @@
   :after flyspell
   :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper)))
 
-
 ;;Interface options
 ;; (use-package flyspell-correct-avy-menu
 ;;   :after flyspell-correct)
@@ -70,6 +69,27 @@
 
 ;;  (use-package flyspell-correct-popup
 ;;    :after flyspell-correct)
+
+;; ---KEYBINDINGS---
+;; >>> OPTION1: evil (vim-like)
+;; (use-package evil
+;;   :hook
+;;   (after-init . evil-mode)
+;;   :config
+;;   (setq evil-disable-insert-state-bindings t)
+;;   )
+
+;; >>> OPTION2: viper-mode (built-in vim-like)
+;; (use-package viper
+;;   :ensure nil
+;;   :init (setq viper-mode t)
+;;   )
+
+;; >>> OPTION3: god-mode (remove prefix key)
+;; (use-package god-mode
+;;   :init
+;;   (god-mode)
+;;   )
 
 (provide 'init-editor)
 ;;; init-editor.el ends here
