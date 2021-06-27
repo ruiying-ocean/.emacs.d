@@ -4,10 +4,9 @@
   (setq-default
    recentf-max-saved-items 30
    recentf-exclude `("/tmp/", (concat package-user-dir "/.*-autoloads\\.el\\'")))
-  (global-set-key (kbd "<f3>") 'recentf-open-files)
+  (global-set-key (kbd "<f3>") 'recentf-open-files) ;;use C-c C-r to call counsel-recentf
   :hook
-  (after-init . recentf-mode)
-  )
+  (after-init . recentf-mode))
 
 ;;use undo-tree-visualize to show history
 (use-package undo-tree

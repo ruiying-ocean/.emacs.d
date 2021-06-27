@@ -64,7 +64,7 @@
 ;;     '(define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin)))
 
 ;;Alternative to company-quickhelp
-;; (use-package company-posframe 
+;; (use-package company-posframe
 ;;   :config
 ;;   (company-posframe-mode 1)
 ;;   )
@@ -112,12 +112,12 @@
   (add-to-list 'auto-mode-alist '("\\.config\\'" . shell-script-mode)))
 
 (use-package which-key
-  :config
-  (which-key-mode t)
+  :hook
+  (after-init . which-key-mode)
   )
 
 (use-package projectile
-  :defer t
+  :defer t				;defer and use counsel-projectile to trigger
   :config
   (setq projectile-completion-system 'ivy))
 
@@ -128,18 +128,25 @@
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   )
 
-;;on-the-fly syntax checker
+;; on-the-fly syntax checker,  use C-c ! as prefix, e.g., C-c ! v to verify the checkers
+;; use M-g n/p to navigate error, or use C-c e (counsel-flycheck)
 (use-package flycheck
-  :defer t
   :hook
   (prog-mode . flycheck-mode)
   :config
+  (setq-default flycheck-emacs-lisp-load-path 'inherit)
+  ;; disable some checkers
   (with-eval-after-load 'flycheck
-    (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
+    (add-to-list 'flycheck-disabled-checkers 'python-pylint)
+    (add-to-list 'flycheck-disabled-checkers 'python-mypy)
+    (add-to-list 'flycheck-disabled-checkers 'python-pyright)
+    (add-to-list 'flycheck-disabled-checkers 'python-pycompile)
+    (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-checkdoc))
+  :custom
+  (flycheck-python-flake8-executable "python3")
   )
 
 (use-package flycheck-inline
-  :defer t
   :hook
   (flycheck-mode . flycheck-inline-mode)
   )
@@ -158,9 +165,8 @@
 
 ;;Git + Emacs = boom!
 (use-package magit
-  :defer t
   :bind
-  ("C-x g" . magit-status)  
+  ("C-x g" . magit-status)
   ("C-x c" . magit-checkout))
 
 ;;a magit prefix help page
@@ -190,7 +196,6 @@
   (after-init . popwin-mode))
 
 (use-package ivy
-  :defer 1
   :hook
   (after-init . ivy-mode)
   :config
@@ -206,12 +211,11 @@
   )
 
 (use-package counsel
-  :defer 1
   :after ivy
   :config
   (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
   :bind
-  (("C-c b" . counsel-imenu);; something more useful for professional programmer
+  (("C-c b" . counsel-imenu) ;; imenus provides a list of definition
    ("C-x C-f" . counsel-find-file)
    ("M-x" . counsel-M-x)
    ("M-y" . counsel-yank-pop) ;;something like a clipboard
@@ -221,8 +225,10 @@
    ("C-c j" . counsel-git-grep)
    ("C-c g" . counsel-git) ;;find file in current git directory
    ("C-c l" . counsel-git-log)
-   ("C-c r" . counsel-rg) ;;rg find tex
-   ("C-c f" . counsel-fzf) ;;fzf find file
+   ("C-c r" . counsel-rg)	;;rg find tex
+   ("C-c f" . counsel-fzf)	;;fzf find file
+   ("C-c e" . counsel-flycheck)
+   ("C-c C-r" . counsel-recentf)
    ))
 
 ;;sorting and filtering framework for ivy
@@ -231,7 +237,7 @@
   :config
   (setq ivy-prescient-sort-commands t
 	ivy-prescient-enable-sorting nil
-	ivy-prescient-retain-classic-highlighting t)  
+	ivy-prescient-retain-classic-highlighting t)
   )
 
 ;;Faster cursor movement - go to anywhere

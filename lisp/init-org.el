@@ -12,7 +12,7 @@
 	  ("j" "Journal" entry (file+datetree "~/.emacs.d/org/journal.org")
          "* %?\nEntered on %U\n  %i\n  %a")))
   (setq org-default-notes-file "~/.emacs.d/org/inbox.org")
-  (setq org-archive-location "~/.emacs.d/org/achives.org::* From %s")
+  (setq org-archive-location "~/.emacs.d/org/archives.org::* From %s")
   (setq org-agenda-files (list  "~/.emacs.d/org/agenda.org"))
 
   ;;src setting

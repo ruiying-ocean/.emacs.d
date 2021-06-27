@@ -1,6 +1,15 @@
 * Project Branches
 ** ForamEcoGEnIE
-*** TODO [#A] Resampling methods to tune parameters
+*** Overview
+|-------------------------+----------|
+| Progress                | Deadline |
+|-------------------------+----------|
+| sediment trap data      |          |
+| parameterisation        |          |
+| uncertainty measurement |          |
+| paper writing           |          |
+
+*** DONE [#A] Resampling methods to tune parameters
 Seven parameters:
 -------------
 tradeoff
@@ -18,6 +27,7 @@ https://stackoverflow.com/questions/42426095/matplotlib-contour-contourf-of-conc
 https://stackoverflow.com/questions/48575854/a-smooth-contour-plot-covering-and-masked-by-shapefile-in-basemap
 https://stackoverflow.com/questions/44082717/limit-mask-matplotlib-contour-to-data-area  
 *** Collect data of sediment traps
+
 ** Size spectra
 *** Learn mechanisms and model equations
 https://sizespectrum.org/mizer/articles/mizer.html

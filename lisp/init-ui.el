@@ -119,11 +119,14 @@
 ;; remove electric-pair-mode first
 (add-hook 'emacs-lisp-mode-hook (lambda()
 				  (electric-pair-local-mode -1)))
-;; Basic lispy usage: jkhl to move, C-d to delete, f/b to foward/backward
-;; c to copy, e to evaluate, d to swith parenthesis side
+
+;; >>> Basic lispy usage:
+;; jkhl to move, f/b to foward/backward level
+;; c to copy, m to mark, e to evaluate, d to swith parenthesis side (C-d to delete)
 ;; >/< to slurp/barf: push out/pull in
-;; s/w to move up/down
+;; w/s to move marked regions up/down
 ;; M-j to split, + to join
+
 (use-package lispy
   :hook
   (emacs-lisp-mode . lispy-mode))
@@ -346,6 +349,12 @@
 ;;   (add-to-list 'focus-mode-to-thing '((text-mode . sentence)
 ;; 				      (prog-mode . defun)
 ;; 				      (latex-mode . paragraph))))
+
+;; (use-package smooth-scroll
+;;   :load-path "extra"
+;;   :hook
+;;   (after-init . smooth-scroll-mode)
+;;   )
 
 (provide 'init-ui)
 ;;;init-ui.el ends here
