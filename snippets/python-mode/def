@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: def
+# key: def
+# --
+def ${fun}(${arg}):
+    """
+    ${docstring}
+    """
+    $0

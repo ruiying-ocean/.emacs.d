@@ -128,8 +128,12 @@
 ;; M-j to split, + to join
 
 (use-package lispy
+  :after ace-window
   :hook
-  (emacs-lisp-mode . lispy-mode))
+  (emacs-lisp-mode . lispy-mode)
+  :bind
+  (:map lispy-mode-map
+	("M-o" . ace-window)))
 
 ;; --> Option 2 (Advanced but has learning curve)
 ;; (use-package paredit

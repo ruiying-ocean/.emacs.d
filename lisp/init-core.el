@@ -26,8 +26,7 @@
   (company-org-block-edit-style 'auto) ;; 'auto, 'prompt, or 'inline
   :hook ((org-mode . (lambda ()
                        (setq-local company-backends '(company-org-block))
-                       (company-mode +1))))
-  )
+                       (company-mode +1)))))
 
 ;;A match-learning based backend for company
 ;;May conflict with company-flx-mode/ESS mode
@@ -40,8 +39,7 @@
       (company-tabnine-install-binary))
   (add-to-list 'company-backends #'company-tabnine)
   (setq company-idle-delay 0.8)
-  (setq company-show-numbers t)
-  )
+  (setq company-show-numbers t))
 
 ;;A fuzzy matching of company
 (use-package company-flx
@@ -53,8 +51,7 @@
 (use-package company-prescient
   :hook (company-mode . company-prescient-mode)
   :config
-  (setq prescient-filter-method '(literal regexp initialism))
-  )
+  (setq prescient-filter-method '(literal regexp initialism)))
 
 ;; (use-package company-quickhelp
 ;;   :config
@@ -72,8 +69,7 @@
 (use-package company-box
   :hook (company-mode . company-box-mode)
   :config
-  (setq company-box-icons-alist 'company-box-icons-images)
-  )
+  (setq company-box-icons-alist 'company-box-icons-images))
 
 ;;To specify new version of git on remote machine so I can run magit locally
 ;;add ~/.ssh/config and ~/.ssh/known_hosts first
@@ -85,8 +81,7 @@
   (add-to-list 'tramp-remote-path "/usr/local/bin/git")
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
   ;;tramp mode to cache password
-  (setq password-cache-expiry nil)
-  )
+  (setq password-cache-expiry nil))
 
 (use-package counsel-tramp
   :defer 1
@@ -113,8 +108,7 @@
 
 (use-package which-key
   :hook
-  (after-init . which-key-mode)
-  )
+  (after-init . which-key-mode))
 
 (use-package projectile
   :defer t				;defer and use counsel-projectile to trigger
@@ -125,8 +119,7 @@
 (use-package counsel-projectile
   :hook (after-init . counsel-projectile-mode) ;;this will trigger projectile
   :config
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  )
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
 ;; on-the-fly syntax checker,  use C-c ! as prefix, e.g., C-c ! v to verify the checkers
 ;; use M-g n/p to navigate error, or use C-c e (counsel-flycheck)
