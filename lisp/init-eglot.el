@@ -49,7 +49,6 @@
       (call-interactively (ad-get-orig-definition 'python-shell-send-string))
     ad-do-it))
 
-
 ;;python-mode local keybinding
 (with-eval-after-load 'python
   (defun python-run-current-line()

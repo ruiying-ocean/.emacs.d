@@ -1,10 +1,36 @@
 ;; This file is setting of all programming-related packages in use-package framework
 
-;; Can be replaced by use-package-report
+;; Has been replaced by use-package-report
 ;; (use-package benchmark-init
 ;;   :config
 ;;   ;; To disable collection of benchmark data after init is done.
 ;;   (add-hook 'after-init-hook 'benchmark-init/deactivate))
+
+;; Terminal in Emacs
+;; Tips: you can use M-r to search in shell history
+;; History references like '!' (reference), ‘!!’ (last cmd) and ‘^’ (substituion, e.g., ^a^b) are supported
+;; If you don't know the history reference, use C-c C-l to list all (will work for most comint buffers)
+(use-package shell
+  :ensure nil
+  :config
+  (defun no-echo-input-in-shell ()
+    "Do not echo my input command"
+    (setq comint-process-echoes t))
+  (add-hook 'shell-mode-hook 'no-echo-input-in-shell)
+  ;; can't delete output text
+  (setq comint-prompt-read-only t)
+  (add-hook 'comint-preoutput-filter-functions
+            (lambda (text)
+              (propertize text 'read-only t)))
+  :bind
+  ("C-x t" . shell)
+  (:map shell-mode-map
+	("<up>" . comint-previous-input)
+	("C-p" . comint-previous-input)
+	("<down>" . comint-next-input)
+	("C-n" . comint-next-input)
+	("C-l" . comint-clear-buffer)
+	("SPC" . comint-magic-space))) ;;magically expand history reference, <TAB> also works
 
 ;;auto-completion system
 (use-package company
@@ -33,10 +59,11 @@
 (use-package company-tabnine
   :defer 1
   :after company
-  :config
+  :init
   ;;M-x company-tabnine-install-binary to install binary system
   (if (not (file-directory-p "~/.TabNine/"))
       (company-tabnine-install-binary))
+  :config
   (add-to-list 'company-backends #'company-tabnine)
   (setq company-idle-delay 0.8)
   (setq company-show-numbers t))
@@ -134,6 +161,7 @@
     (add-to-list 'flycheck-disabled-checkers 'python-mypy)
     (add-to-list 'flycheck-disabled-checkers 'python-pyright)
     (add-to-list 'flycheck-disabled-checkers 'python-pycompile)
+    (add-to-list 'flycheck-disabled-checkers 'sh-posix-dash)
     (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-checkdoc))
   :custom
   (flycheck-python-flake8-executable "python3")
