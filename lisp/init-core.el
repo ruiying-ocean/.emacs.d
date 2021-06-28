@@ -251,14 +251,17 @@
 ;; Project management tool
 (use-package projectile
   :after ivy
+  :hook
+  (prog-mode . projectile-mode)
   :config
-  (setq projectile-completion-system 'ivy))
+  (setq projectile-completion-system 'ivy)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  )
 
 ;;An ivy UI for projectile, remap some exsiting commands and add more commands
 (use-package counsel-projectile
-  :hook (after-init . counsel-projectile-mode)
-  :config
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+  :hook
+  (projectile-mode . counsel-projectile-mode))
 
 ;;Faster cursor movement - go to anywhere
 (use-package avy
