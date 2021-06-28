@@ -71,5 +71,13 @@
 (setq max-specpdl-size 32000
         max-lisp-eval-depth 16000)
 
+(defun print-init-time()
+  "Print init time of Emacs, a wrapper of emacs-init-time"
+  (interactive)
+  (message
+   (format "Init time: %ss" (float-time
+			     (time-subtract after-init-time before-init-time)))))
+(add-hook 'after-init-hook #'print-init-time)
+
 (provide 'init)
 ;;; init.el ends here
