@@ -42,9 +42,10 @@
   ;; is displayed on top (happens near the bottom of windows)
   (setq company-tooltip-flip-when-above t)
   (setq company-global-modes '(not inferior-python-mode))
+  (setq company-idle-delay 0.8)
+  (setq company-show-numbers t)
   :hook
-  (after-init . global-company-mode)
-  )
+  (after-init . global-company-mode))
 
 (use-package company-org-block
   :defer t
@@ -59,14 +60,12 @@
 (use-package company-tabnine
   :defer 1
   :after company
-  :init
-  ;;M-x company-tabnine-install-binary to install binary system
-  (if (not (file-directory-p "~/.TabNine/"))
-      (company-tabnine-install-binary))
   :config
+  (eval-after-load 'company-tabnine
+    (if (not (file-directory-p "~/.TabNine/"))
+	(company-tabnine-install-binary)))
   (add-to-list 'company-backends #'company-tabnine)
-  (setq company-idle-delay 0.8)
-  (setq company-show-numbers t))
+  )
 
 ;;A fuzzy matching of company
 (use-package company-flx
@@ -156,16 +155,14 @@
   :config
   (setq-default flycheck-emacs-lisp-load-path 'inherit)
   ;; disable some checkers
-  (with-eval-after-load 'flycheck
-    (add-to-list 'flycheck-disabled-checkers 'python-pylint)
-    (add-to-list 'flycheck-disabled-checkers 'python-mypy)
-    (add-to-list 'flycheck-disabled-checkers 'python-pyright)
-    (add-to-list 'flycheck-disabled-checkers 'python-pycompile)
-    (add-to-list 'flycheck-disabled-checkers 'sh-posix-dash)
-    (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-checkdoc))
+  (add-to-list 'flycheck-disabled-checkers 'python-pylint)
+  (add-to-list 'flycheck-disabled-checkers 'python-mypy)
+  (add-to-list 'flycheck-disabled-checkers 'python-pyright)
+  (add-to-list 'flycheck-disabled-checkers 'python-pycompile)
+  (add-to-list 'flycheck-disabled-checkers 'sh-posix-dash)
+  (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-checkdoc)
   :custom
-  (flycheck-python-flake8-executable "python3")
-  )
+  (flycheck-python-flake8-executable "python3"))
 
 (use-package flycheck-inline
   :hook

@@ -70,10 +70,13 @@ echo ">>>> All fonts downloaded :)"
 unzip \*.zip
 
 #move all font file out
-find . -type f -name '*.[ot]t[fc]' | xargs mv -f .
+find . -name '*.[ot]t[fc]' -print0 | xargs -0 -I {} mv -vn {} . &> tmp.log
 
 #delete all files other than .otf/.ttf/.ttc
 find . -type f ! -name '*.[ot]t[fc]' -delete
 
 #delete all empty folder
 find . -type d -empty -delete
+
+#remove the warning log
+rm tmp.log
