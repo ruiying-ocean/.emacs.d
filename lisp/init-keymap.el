@@ -33,5 +33,10 @@
 (add-hook 'prog-mode-hook #'hs-minor-mode)
 (global-set-key (kbd "<f5>") 'hs-toggle-hiding)
 
+;;; font size adjust
+(global-set-key (kbd "C-=") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
+(setq-default text-scale-mode-step 1.1)
+
 (provide 'init-keymap)
 ;;; init-keymap.el ends here

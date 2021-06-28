@@ -21,7 +21,7 @@
 ;;Varialble/fixed pictch font setting, essential for org-mode
 (custom-theme-set-faces
  'user
- '(variable-pitch ((t (:family "New York" :height 200))))
+ '(variable-pitch ((t (:family "Cormorant Garamond" :height 230))))
  '(fixed-pitch ((t ( :family "Monaco" :height 160)))))
 
 (custom-theme-set-faces

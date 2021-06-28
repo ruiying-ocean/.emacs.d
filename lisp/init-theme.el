@@ -5,35 +5,28 @@
 ;;Variable-pitch font, ETBembo/New York
 ;;Unicode: Symbola
 
-;;https://github.com/tumashu/cnfonts
-;;use cnfonts-edit-profile to configure
-(use-package cnfonts
-  :if window-system
-  :config
-  ;;need to add these lists into cnfonts/program.el file
-  (setq cnfonts--custom-set-fontnames
-	'(("Iosevka" "Inconsolata" "Jetbrains Mono" "Roboto Mono" "Juliamono")
-          ("Ubuntu Mono" "WenQuanYi Micro Hei" "Sarasa Mono SC Nerd")))
-  (setq cnfonts--custom-set-fontsizes
-	'((14   14.0 14.0)
-          (15   15.0 15.0)
-          (16   16.0 16.0)
-	  ))
-  :bind
-  (("C-=" . cnfonts-increase-fontsize)
-   ("C--" . cnfonts-decrease-fontsize))
-  )
+(defun better-font()
+  (interactive)
+  ;; english font
+  (if (display-graphic-p)
+      (progn
+	;; English font
+        (set-face-attribute 'default nil :font (format "%s:pixelsize=%d" "Iosevka" 16))
+        ;; CJK font
+        (dolist (charset '(kana han symbol cjk-misc bopomofo))
+          (set-fontset-font (frame-parameter nil 'font)
+                            charset
+                            (font-spec :family "Noto Sans Mono CJK SC"))))
+    ))
 
-;;daemon mode font setting
-(if (daemonp)
-    (progn
-      (message "Daemon is forever!")
-      (add-hook 'after-make-frame-functions
-		(lambda (frame)
-		  (with-selected-frame frame
-		    (add-to-list 'default-frame-alist '(font . "SF Mono-14"))))))
-  ;;else
-  (cnfonts-enable))
+(defun init-font(frame)
+  (with-selected-frame frame
+    (if (display-graphic-p)
+        (better-font))))
+
+(if (and (fboundp 'daemonp) (daemonp))
+    (add-hook 'after-make-frame-functions #'init-font)
+  (better-font))
 
 ;;Install themes
 (use-package base16-theme :defer t)
