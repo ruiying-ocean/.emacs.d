@@ -110,6 +110,7 @@
 
 (use-package counsel-tramp
   :defer 1
+  :after (counsel tramp)
   :config
   (setq counsel-tramp-custom-connections '(/scp:mogu@almond.ggy.bris.ac.uk:/home/mogu/cgenie.muffin/))
   (setq tramp-default-method "scp")
@@ -164,6 +165,7 @@
 
 ;;manually choose a snippet
 (use-package ivy-yasnippet
+  :after (ivy yasnippet)
   :bind
   (("C-c i" . ivy-yasnippet))
   :config
@@ -197,7 +199,6 @@
   :after exec-path-from-shell) ;;extend use-package, put after exec-path-from-shell
 
 (use-package popwin
-;;  :init (require 'popwin)
   :hook
   (after-init . popwin-mode))
 
@@ -217,7 +218,7 @@
   )
 
 (use-package counsel
-  :defer t
+  :defer 1
   :after ivy
   :config
   (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
@@ -250,11 +251,12 @@
 ;; Project management tool
 (use-package projectile
   :after ivy
+  :config
   (setq projectile-completion-system 'ivy))
 
 ;;An ivy UI for projectile, remap some exsiting commands and add more commands
 (use-package counsel-projectile
-  :hook (after-init . counsel-projectile-mode) ;;this will trigger projectile
+  :hook (after-init . counsel-projectile-mode)
   :config
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 

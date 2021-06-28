@@ -7,6 +7,7 @@
 
 (defun init-font()
   (interactive)
+  "Set English and CJK font for Emacs"
   ;; english font
   (if (display-graphic-p)
       (progn
@@ -22,8 +23,7 @@
 (if (daemonp)
     (add-hook 'after-make-frame-functions
 	      (lambda (frame)
-		(with-selected-frame frame
-		  (if (display-graphic-p) (init-font)))))
+		(with-selected-frame frame (init-font))))
   ;;else
   (init-font))
 

@@ -7,6 +7,7 @@
 (require 'package)
 (setq package-archives '(("gnu"   . "https://elpa.gnu.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")))
+
 ;;quelpa can be found in init-core
 ;;package.el
 (when (< emacs-major-version 27)
@@ -27,23 +28,22 @@
 (setq gc-cons-percentage 0.6)
 (setq read-process-output-max (* 1024 1024))
 
-(unless (package-installed-p 'use-package)  
+(unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
 
 (eval-when-compile
   (require 'use-package))
-(require 'bind-key)
+;; (require 'bind-key)
 
 (setq use-package-always-ensure t)
-;; (setq use-package-verbose t) ;;report configuration info at *Message* buffer
-;; (setq use-package-compute-statistics t) ;;run `M-x use-package-report` to see detailed report, use S to sort
+;; (setq use-package-verbose t)
 
-;;recompile outdated .elc file
-(use-package auto-compile
-  :init
-  (auto-compile-on-load-mode)
-  (auto-compile-on-save-mode))
+;; recompile outdated .elc file
+;; (use-package auto-compile
+;;   :init
+;;   (auto-compile-on-load-mode)
+;;   (auto-compile-on-save-mode))
 
 ;;load modules
 (require 'init-editor)
