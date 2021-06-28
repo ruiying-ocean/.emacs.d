@@ -223,21 +223,21 @@
   :config
   (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
   :bind
-  (("C-c b" . counsel-imenu) ;; imenus provides a list of definition
-   ("C-x C-f" . counsel-find-file)
-   ("M-x" . counsel-M-x)
-   ("M-y" . counsel-yank-pop) ;;something like a clipboard
-   ("C-h f" . counsel-describe-function)
-   ("C-h v" . counsel-describe-variable)
-   ("C-c t" . counsel-load-theme)
-   ("C-c j" . counsel-git-grep)
-   ("C-c g" . counsel-git) ;;find file in current git directory
-   ("C-c l" . counsel-git-log)
-   ("C-c r" . counsel-rg)  ;;rg find tex
-   ("C-c f" . counsel-fzf) ;;fzf find file
-   ("C-c e" . counsel-flycheck)
-   ("C-c C-r" . counsel-recentf)
-   ))
+  ("C-c b" . counsel-imenu) ;; imenus provides a list of definition
+  ("C-x C-f" . counsel-find-file)
+  ("M-x" . counsel-M-x)
+  ("M-y" . counsel-yank-pop) ;;something like a clipboard
+  ("C-h f" . counsel-describe-function)
+  ("C-h v" . counsel-describe-variable)
+  ("C-c t" . counsel-load-theme)
+  ("C-c j" . counsel-git-grep)
+  ("C-c g" . counsel-git) ;;find file in current git directory
+  ("C-c l" . counsel-git-log)
+  ("C-c r" . counsel-rg)  ;;rg find tex
+  ("C-c f" . counsel-fzf) ;;fzf find file
+  ("C-c e" . counsel-flycheck)
+  ("C-c C-r" . counsel-recentf)
+  )
 
 ;;sorting and filtering framework for ivy
 (use-package ivy-prescient

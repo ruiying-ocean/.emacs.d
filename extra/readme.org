@@ -1,2 +1,2 @@
 * Warning
-Files in this folder are not part of package manager so may need updated manually.
+Files in this folder are not part of package manager so may be outdated.

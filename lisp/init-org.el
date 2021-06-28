@@ -1,5 +1,7 @@
 (use-package org
+  :ensure nil
   :defer t
+  :after counsel
   :config
   (setq org-startup-indented t)
   (setq org-todo-keywords
@@ -10,7 +12,7 @@
 	'(("t" "Todo" entry (file+headline "~/.emacs.d/org/inbox.org" "Tasks")
 	   "* TODO %?\n  %i\n  %a")
 	  ("j" "Journal" entry (file+datetree "~/.emacs.d/org/journal.org")
-         "* %?\nEntered on %U\n  %i\n  %a")))
+           "* %?\nEntered on %U\n  %i\n  %a")))
   (setq org-default-notes-file "~/.emacs.d/org/inbox.org")
   (setq org-archive-location "~/.emacs.d/org/archives.org::* From %s")
   (setq org-agenda-files (list  "~/.emacs.d/org/agenda.org"))
@@ -31,7 +33,9 @@
   (:map org-mode-map
 	("C-c a" . org-agenda)
 	("C-c c" . org-capture)
-	("C-c C-r" . org-archive-subtree))
+	("C-c C-r" . org-archive-subtree)
+	("C-c t" . counsel-org-tag)
+	("C-c l" . counsel-org-link))
   :hook
   (org-mode . (lambda()
 		(variable-pitch-mode 1)

@@ -57,18 +57,10 @@
   :after flyspell
   :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper)))
 
-;;Interface options
-;; (use-package flyspell-correct-avy-menu
-;;   :after flyspell-correct)
-
+;; Flyspell interface
+;; Use M-o to do words action (e.g., save)
 (use-package flyspell-correct-ivy
   :after flyspell-correct)
-
-;; (use-package flyspell-correct-ido
-;;   :after flyspell-correct)
-
-;;  (use-package flyspell-correct-popup
-;;    :after flyspell-correct)
 
 ;; ---KEYBINDINGS---
 ;; >>> OPTION1: evil (vim-like)
