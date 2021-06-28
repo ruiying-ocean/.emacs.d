@@ -70,6 +70,7 @@ echo ">>>> All fonts downloaded :)"
 unzip \*.zip
 
 #move all font file out
+touch tmp.log
 find . -name '*.[ot]t[fc]' -print0 | xargs -0 -I {} mv -vn {} . &> tmp.log
 
 #delete all files other than .otf/.ttf/.ttc
