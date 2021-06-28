@@ -3,9 +3,9 @@
 #--------------------------------------------
 #This script installs coding fonts for Emacs
 #--------------------------------------------
-#To run this script
+#To run this script (No need to run by sudo!)
 #chmod +rx install-fonts.sh
-#sudo bash ./install-fonts.sh
+#bash ./install-fonts.sh
 #--------------------------------------------
 
 if [[ "$OSTYPE" == "msys" ]]; then
