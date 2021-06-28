@@ -128,7 +128,6 @@
 ;; M-j to split, + to join
 
 (use-package lispy
-  :after ace-window
   :hook
   (emacs-lisp-mode . lispy-mode)
   :bind
@@ -206,22 +205,22 @@
   :hook
   (doom-modeline-mode . nyan-mode))
 
-(use-package dashboard
-  :if (< (length command-line-args) 2)
-  :config
-  (dashboard-setup-startup-hook)
-  (setq dashboard-set-init-info t)
-  (setq dashboard-banner-logo-title "Happiness is everything - Rui")
-  ;;    (setq dashboard-startup-banner 3)
-  (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/world.png")
-  (setq dashboard-center-content t)
-  (setq dashboard-items '((recents  . 3))) ;;add org-agenda could slow start-up speed
-  (setq dashboard-set-heading-icons t)
-  (setq dashboard-set-file-icons t)
-  (setq dashboard-set-navigator t)
-  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))) ;; show Dashboard in frames created with emacsclient -c
-  (setq dashboard-projects-switch-function 'counsel-projectile-switch-project-by-name)
-  )
+;; (use-package dashboard
+;;   :if (< (length command-line-args) 2)
+;;   :config
+;;   (dashboard-setup-startup-hook)
+;;   (setq dashboard-set-init-info t)
+;;   (setq dashboard-banner-logo-title "Happiness is everything - Rui")
+;;   ;;    (setq dashboard-startup-banner 3)
+;;   (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/world.png")
+;;   (setq dashboard-center-content t)
+;;   (setq dashboard-items '((recents  . 3))) ;;add org-agenda could slow start-up speed
+;;   (setq dashboard-set-heading-icons t)
+;;   (setq dashboard-set-file-icons t)
+;;   (setq dashboard-set-navigator t)
+;;   (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))) ;; show Dashboard in frames created with emacsclient -c
+;;   (setq dashboard-projects-switch-function 'counsel-projectile-switch-project-by-name)
+;;   )
 
 (use-package highlight-indent-guides
   :defer t
@@ -327,7 +326,7 @@
   ("M-<right>" . centaur-tabs-forward)
   :hook
   (dired-mode . centaur-tabs-local-mode)
-  (dashboard-mode . centaur-tabs-mode)
+  (after-init . centaur-tabs-mode)
   )
 
 (use-package visual-fill-column

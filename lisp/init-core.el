@@ -1,10 +1,9 @@
 ;; This file is setting of all programming-related packages in use-package framework
 
-;; Has been replaced by use-package-report
-;; (use-package benchmark-init
-;;   :config
-;;   ;; To disable collection of benchmark data after init is done.
-;;   (add-hook 'after-init-hook 'benchmark-init/deactivate))
+(use-package benchmark-init
+  :config
+  ;; To disable collection of benchmark data after init is done.
+  (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
 ;; Terminal in Emacs
 ;; Tips: you can use M-r to search in shell history
@@ -136,17 +135,6 @@
   :hook
   (after-init . which-key-mode))
 
-(use-package projectile
-  :defer t				;defer and use counsel-projectile to trigger
-  :config
-  (setq projectile-completion-system 'ivy))
-
-;;An ivy UI for projectile, remap some exsiting commands and add more commands
-(use-package counsel-projectile
-  :hook (after-init . counsel-projectile-mode) ;;this will trigger projectile
-  :config
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
-
 ;; on-the-fly syntax checker,  use C-c ! as prefix, e.g., C-c ! v to verify the checkers
 ;; use M-g n/p to navigate error, or use C-c e (counsel-flycheck)
 (use-package flycheck
@@ -229,6 +217,7 @@
   )
 
 (use-package counsel
+  :defer t
   :after ivy
   :config
   (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
@@ -243,8 +232,8 @@
    ("C-c j" . counsel-git-grep)
    ("C-c g" . counsel-git) ;;find file in current git directory
    ("C-c l" . counsel-git-log)
-   ("C-c r" . counsel-rg)	;;rg find tex
-   ("C-c f" . counsel-fzf)	;;fzf find file
+   ("C-c r" . counsel-rg)  ;;rg find tex
+   ("C-c f" . counsel-fzf) ;;fzf find file
    ("C-c e" . counsel-flycheck)
    ("C-c C-r" . counsel-recentf)
    ))
@@ -257,6 +246,17 @@
 	ivy-prescient-enable-sorting nil
 	ivy-prescient-retain-classic-highlighting t)
   )
+
+;; Project management tool
+(use-package projectile
+  :after ivy
+  (setq projectile-completion-system 'ivy))
+
+;;An ivy UI for projectile, remap some exsiting commands and add more commands
+(use-package counsel-projectile
+  :hook (after-init . counsel-projectile-mode) ;;this will trigger projectile
+  :config
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
 ;;Faster cursor movement - go to anywhere
 (use-package avy
