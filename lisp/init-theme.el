@@ -5,7 +5,7 @@
 ;;Variable-pitch font, ETBembo/New York
 ;;Unicode: Symbola
 
-(defun better-font()
+(defun init-font()
   (interactive)
   ;; english font
   (if (display-graphic-p)
@@ -19,14 +19,13 @@
                             (font-spec :family "Noto Sans Mono CJK SC"))))
     ))
 
-(defun init-font(frame)
-  (with-selected-frame frame
-    (if (display-graphic-p)
-        (better-font))))
-
-(if (and (fboundp 'daemonp) (daemonp))
-    (add-hook 'after-make-frame-functions #'init-font)
-  (better-font))
+(if (daemonp)
+    (add-hook 'after-make-frame-functions
+	      (lambda (frame)
+		(with-selected-frame frame
+		  (if (display-graphic-p) (init-font)))))
+  ;;else
+  (init-font))
 
 ;;Install themes
 (use-package base16-theme :defer t)
