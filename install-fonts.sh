@@ -5,7 +5,7 @@
 #--------------------------------------------
 #To run this script
 #chmod +rx install-fonts.sh
-#./install-fonts.sh
+#sudo bash ./install-fonts.sh
 #--------------------------------------------
 
 if [[ "$OSTYPE" == "msys" ]]; then
@@ -26,6 +26,7 @@ fi
 #Jetbrains Mono
 #Hack
 #Dejavu
+#Ubuntu Mono Nerd
 
 #>CJK mono font (sans font)
 #WenQuanYi Micro Hei
@@ -64,11 +65,13 @@ cormorant_url="https://github.com/google/fonts/raw/main/ofl/cormorantgaramond/Co
 notosans_url="https://github.com/googlefonts/noto-cjk/raw/main/Sans/Mono/NotoSansMonoCJKsc-Regular.otf"
 monaco_url="https://github.com/todylu/monaco.ttf/raw/master/monaco.ttf"
 etbook_url="https://github.com/edwardtufte/et-book/raw/gh-pages/et-book/et-book-roman-old-style-figures/et-book-roman-old-style-figures.ttf"
+ubuntumono_url="https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/UbuntuMono/Regular/complete/Ubuntu%20Mono%20Nerd%20Font%20Complete%20Mono.ttf"
 
 font_list=($iosevka_url $inconsolata_url $jetbrainmono_url
 	   $firacode_url $robotomono_url $symbola_url $juliamono_url
 	   $newyork_rul $sarasa_url $wqy_url $cormorant_url
-	   $notosans_url $monaco_url $etbook_url $dejavu_url)
+	   $notosans_url $monaco_url $etbook_url $dejavu_url
+	   $ubuntumono_url)
 
 echo ">>>> Downloading starts..."
 for i in ${font_list[@]}; do
