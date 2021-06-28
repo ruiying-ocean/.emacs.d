@@ -1,10 +1,20 @@
 #!/bin/sh
 
-#How to run this script
+#--------------------------------------------
+#This script installs coding fonts for Emacs
+#--------------------------------------------
+#To run this script
 #chmod +rx install-fonts.sh
 #./install-fonts.sh
+#--------------------------------------------
 
-#OS=$(uname)
+if [[ "$OSTYPE" == "msys" ]]; then
+    echo ">>> Using windows, not sure whether works"
+elif [[ "$OSTYPE" == "cygwin" ]]; then
+    echo ">>> Using windows, not sure whether works"
+else
+    echo ">>> Using Linux/OSX, should work well"
+fi
 
 #--Font list--
 #>English Monospace
@@ -81,3 +91,5 @@ find . -type d -empty -delete
 
 #remove the warning log
 rm tmp.log
+
+fc-cache -f -v
