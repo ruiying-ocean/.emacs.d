@@ -1,7 +1,10 @@
 ;; This is Emacs init file of Rui Ying
 ;; The license can be found in root directory
 
-;; Code:
+;;; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+;; Always remember that it is what you are editing, rather
+;; than the editor, that is the important thing.
+;;; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 ;;package manager
 (require 'package)

@@ -23,7 +23,7 @@
 
 ;; Use emacs daemon, put following lines to shell config file
 ;; alias ed="emacs --daemon"
-;; alias ec="emacsclient -c ."
+;; alias ec="emacsclient -c"
 ;; alias eq="emacsclient -e '(save-buffers-kill-emacs)'"
 (if (daemonp)
     (add-hook 'after-make-frame-functions
