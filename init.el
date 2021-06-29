@@ -24,7 +24,7 @@
 (advice-add #'package-initialize :after #'update-load-path)
 (update-load-path)
 
-(setq custom-file (concat user-emacs-directory "/extra-lisp/init-custom.el"))
+(setq custom-file (concat user-emacs-directory "/extra-lisp/custom.el"))
 (load custom-file :noerror)
 
 (setq gc-cons-percentage 0.6)
@@ -1466,9 +1466,6 @@
    (format "Init time: %ss" (float-time
 			     (time-subtract after-init-time before-init-time)))))
 (add-hook 'after-init-hook #'print-init-time)
-
-;;(require 'init-lsp) ;;Fancy but bloated
-;;(require 'init-eaf) experimental stage
 
 (provide 'init)
 ;;; init.el ends here
