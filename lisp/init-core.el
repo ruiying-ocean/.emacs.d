@@ -143,12 +143,17 @@
   (prog-mode . flycheck-mode)
   :config
   (setq-default flycheck-emacs-lisp-load-path 'inherit)
-  ;; disable some checkers
+  ;; python checker
+  ;; conda install -c anaconda flake8
   (add-to-list 'flycheck-disabled-checkers 'python-pylint)
   (add-to-list 'flycheck-disabled-checkers 'python-mypy)
   (add-to-list 'flycheck-disabled-checkers 'python-pyright)
   (add-to-list 'flycheck-disabled-checkers 'python-pycompile)
+  ;; shell checker
+  ;; conda install -c conda-forge shellcheck
   (add-to-list 'flycheck-disabled-checkers 'sh-posix-dash)
+  (add-to-list 'flycheck-disabled-checkers 'sh-posix-bash)
+  ;; Elisp checker
   (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-checkdoc)
   :custom
   (flycheck-python-flake8-executable "python3"))
