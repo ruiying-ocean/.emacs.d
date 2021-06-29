@@ -344,7 +344,7 @@
   (global-set-key (kbd "C-c V") 'ivy-pop-view)
   (setq ivy-wrap t)
   (setq ivy-height 9)
-;;  (setq ivy-format-function 'ivy-format-function-line)
+  ;;  (setq ivy-format-function 'ivy-format-function-line)
   )
 
 (use-package counsel
@@ -573,7 +573,7 @@
   (after-init . global-highlight-parentheses-mode)
   :config
   (setq highlight-parentheses-highlight-adjacent t)
-;;  (setq highlight-parentheses-colors '("BlueViolet" "DarkOrchid" "orchid" "Plum"))
+  ;;  (setq highlight-parentheses-colors '("BlueViolet" "DarkOrchid" "orchid" "Plum"))
   )
 
 ;;--> Option 1 (built-in)
@@ -780,7 +780,7 @@
 
 (use-package centaur-tabs
   :config
-;;  (centaur-tabs-mode t)
+  ;;  (centaur-tabs-mode t)
   (setq centaur-tabs-set-bar 'over)
   (setq centaur-tabs-gray-out-icons 'buffer)
   ;;(setq centaur-tabs-set-icons t)
@@ -938,7 +938,7 @@
 		    (font-spec :size 20 :name "Symbola")))
 
 (when (member "Symbola" (font-family-list))
- (set-fontset-font t 'unicode "Symbola" nil 'prepend))
+  (set-fontset-font t 'unicode "Symbola" nil 'prepend))
 
 
 ;;; PROGRAMMING LANGUAGES & LSP
@@ -1013,17 +1013,17 @@
     (around advice-python-shell-send-string activate)
   (interactive)
   (let* ((append-string1
-         (if (string-match "import codecs, os;__pyfile = codecs.open.*$" string)
-             (replace-match "" nil nil string)
-           string))
-        (append-string2
-         (if (string-match "^# -\\*- coding: utf-8 -\\*-\n*$" append-string1)
-             (replace-match "" nil nil append-string1)
-           append-string1))
-        (append-string
-         (if (string-match "^\n*$" append-string2)
-             (replace-match "" nil nil append-string2)
-           append-string2)))  
+          (if (string-match "import codecs, os;__pyfile = codecs.open.*$" string)
+              (replace-match "" nil nil string)
+            string))
+         (append-string2
+          (if (string-match "^# -\\*- coding: utf-8 -\\*-\n*$" append-string1)
+              (replace-match "" nil nil append-string1)
+            append-string1))
+         (append-string
+          (if (string-match "^\n*$" append-string2)
+              (replace-match "" nil nil append-string2)
+            append-string2)))  
     (python-shell-append-to-output
      (concat (string-trim-right append-string) "\n")))
   (if (called-interactively-p 'any)
@@ -1177,7 +1177,7 @@
   (let ((credential (auth-source-user-and-password "api.github.com")))
     (setq grip-github-user (car credential)
           grip-github-password (cadr credential)))  
-)
+  )
 
 ;;add table of content for md/org
 ;;Add :TOC: tag for org (C-c C-c) and <-- :TOC: --> for md
@@ -1353,11 +1353,11 @@
   (LaTeX-mode . magic-latex-buffer)
   :config
   (setq magic-latex-enable-block-highlight nil
-      magic-latex-enable-suscript        t
-      magic-latex-enable-pretty-symbols  t
-      magic-latex-enable-block-align     nil
-      magic-latex-enable-inline-image    nil
-      magic-latex-enable-minibuffer-echo nil))
+	magic-latex-enable-suscript        t
+	magic-latex-enable-pretty-symbols  t
+	magic-latex-enable-block-align     nil
+	magic-latex-enable-inline-image    nil
+	magic-latex-enable-minibuffer-echo nil))
 
 ;; Retrieve BibTeX entries
 ;; Call 'gscholar-bibtex' to retrieve BibTeX entries from Google
@@ -1369,7 +1369,7 @@
 (use-package bibclean-format
   :defer t
   :bind (:map bibtex-mode-map
-         ("C-c f" . bibclean-format)))
+              ("C-c f" . bibclean-format)))
 
 
 ;;; EMAIL CLIENT
@@ -1449,15 +1449,18 @@
 	("k" . pdf-view-previous-line-or-previous-page))
   )
 
+
+;;; End
+
 (defun my-cleanup-gc ()
   "Clean up gc."
   (setq gc-cons-threshold  (* 128 1024 1024)) ; 64M
-  (setq gc-cons-percentage 0.3) ; original value
+  (setq gc-cons-percentage 0.3)		      ; original value
   (garbage-collect))
 (run-with-idle-timer 4 nil #'my-cleanup-gc)
 
 (setq max-specpdl-size 32000
-        max-lisp-eval-depth 16000)
+      max-lisp-eval-depth 16000)
 
 (defun print-init-time()
   "Print init time of Emacs, a wrapper of emacs-init-time"
