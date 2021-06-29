@@ -320,7 +320,7 @@
   (setq centaur-tabs-modified-marker "*")
   (setq centaur-tabs-height 22)
   ;;(setq centaur-tabs-label-fixed-length 10) ;;fixed length
-  (centaur-tabs-change-fonts "Roboto Mono" 130)
+  (centaur-tabs-change-fonts "Iosevka" 120)
   :bind
   ("M-<left>" . centaur-tabs-backward)
   ("M-<right>" . centaur-tabs-forward)

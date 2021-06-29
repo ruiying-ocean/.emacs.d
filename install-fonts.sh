@@ -3,6 +3,8 @@
 #--------------------------------------------
 #This script installs coding fonts for Emacs
 #--------------------------------------------
+# Dependency: wget, zip
+#--------------------------------------------
 #To run this script (No need to run by sudo!)
 #chmod +rx install-fonts.sh
 #bash ./install-fonts.sh
@@ -19,14 +21,14 @@ fi
 #--Font list--
 #>English Monospace
 #Iosevka
-#Inconsolata
+#Inconsolata Nerd Font Mono
 #Roboto Mono
 #Juliamono
 #Fira Code
 #Jetbrains Mono
 #Hack
 #Dejavu
-#Ubuntu Mono Nerd
+#UbuntuMono Nerd Font
 
 #>CJK mono font (sans font)
 #WenQuanYi Micro Hei
@@ -53,7 +55,7 @@ dejavu_url="https://github.com/dejavu-fonts/dejavu-fonts/releases/download/versi
 hack_url="https://github.com/source-foundry/Hack/releases/download/v3.003/Hack-v3.003-ttf.zip"
 symbola_url="https://dn-works.com/wp-content/uploads/2020/UFAS-Fonts/Symbola.zip"
 iosevka_url="https://github.com/be5invis/Iosevka/releases/download/v7.2.0/ttf-iosevka-7.2.0.zip"
-inconsolata_url="https://github.com/google/fonts/raw/main/ofl/inconsolata/static/Inconsolata-Regular.ttf"
+inconsolata_url="https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Inconsolata/complete/Inconsolata%20Regular%20Nerd%20Font%20Complete%20Mono.ttf"
 jetbrainmono_url="https://github.com/google/fonts/raw/main/ofl/jetbrainsmono/static/JetBrainsMono-Regular.ttf"
 firacode_url="https://github.com/google/fonts/raw/main/ofl/firacode/static/FiraCode-Regular.ttf"
 robotomono_url="https://github.com/google/fonts/raw/main/apache/robotomono/static/RobotoMono-Regular.ttf"
@@ -65,7 +67,7 @@ cormorant_url="https://github.com/google/fonts/raw/main/ofl/cormorantgaramond/Co
 notosans_url="https://github.com/googlefonts/noto-cjk/raw/main/Sans/Mono/NotoSansMonoCJKsc-Regular.otf"
 monaco_url="https://github.com/todylu/monaco.ttf/raw/master/monaco.ttf"
 etbook_url="https://github.com/edwardtufte/et-book/raw/gh-pages/et-book/et-book-roman-old-style-figures/et-book-roman-old-style-figures.ttf"
-ubuntumono_url="https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/UbuntuMono/Regular/complete/Ubuntu%20Mono%20Nerd%20Font%20Complete%20Mono.ttf"
+ubuntumono_url="https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/UbuntuMono/Regular/complete/Ubuntu%20Mono%20Nerd%20Font%20Complete.ttf"
 
 font_list=($iosevka_url $inconsolata_url $jetbrainmono_url
 	   $firacode_url $robotomono_url $symbola_url $juliamono_url
@@ -73,11 +75,11 @@ font_list=($iosevka_url $inconsolata_url $jetbrainmono_url
 	   $notosans_url $monaco_url $etbook_url $dejavu_url
 	   $ubuntumono_url)
 
-echo ">>>> Downloading starts..."
+echo ">>>> Downloading"
 for i in ${font_list[@]}; do
     wget --quiet "$i";
 done
-echo ">>>> All fonts downloaded :)"
+echo ">>>> Successful! :)"
 
 #extract all zip archives
 unzip \*.zip
