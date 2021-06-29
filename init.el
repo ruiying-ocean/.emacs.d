@@ -19,12 +19,12 @@
 ;; Optimize: Force "lisp" at the head to reduce the startup time.
 (defun update-load-path (&rest _)
   "Update `load-path'."
-  (dolist (dir '("lisp" "extra"))
+  (dolist (dir '("extra-lisp"))
     (push (expand-file-name dir user-emacs-directory) load-path)))
 (advice-add #'package-initialize :after #'update-load-path)
 (update-load-path)
 
-(setq custom-file (concat user-emacs-directory "/lisp/init-custom.el"))
+(setq custom-file (concat user-emacs-directory "/extra-lisp/init-custom.el"))
 (load custom-file :noerror)
 
 (setq gc-cons-percentage 0.6)
@@ -811,7 +811,7 @@
 ;;press your keyboard fast and hard !!!
 (use-package power-mode
   :defer t
-  :load-path "extra/"
+  :load-path "extra-lisp/"
   )
 
 ;; to display ^L page break
@@ -830,7 +830,7 @@
 ;; 				      (latex-mode . paragraph))))
 
 ;; (use-package smooth-scroll
-;;   :load-path "extra"
+;;   :load-path "extra-lisp/"
 ;;   :hook
 ;;   (after-init . smooth-scroll-mode)
 ;;   )
@@ -1281,14 +1281,14 @@
 ;;(use-package org-super-agenda)
 (use-package org-graph-view
   :defer t
-  :load-path ("extra/")
+  :load-path "extra-lisp/"
   )
 
 ;; This is an Emacs package that creates graphviz directed graphs from
 ;; the headings of an org file
 (use-package org-mind-map
   :defer t
-  :load-path ("extra/")
+  :load-path "extra-lisp/"
   :config
   (setq org-mind-map-engine "dot")       ; Default. Directed Graph
   ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
@@ -1416,7 +1416,7 @@
 ;;allow you to view pdf continuously
 (use-package pdf-continuous-scroll-mode
   :defer t
-  :load-path "extra/"
+  :load-path "extra-lisp/"
   :hook
   (pdf-view-mode-hook . pdf-continuous-scroll-mode))
 
