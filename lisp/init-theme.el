@@ -6,9 +6,9 @@
 ;;Unicode: Symbola
 
 (defun init-font()
-  (interactive)
-  "Set English and CJK font for Emacs"
-  ;; english font
+   (interactive)
+   "Set English and CJK font for Emacs"
+  ;; English font
   (if (display-graphic-p)
       (progn
 	;; English font
@@ -20,7 +20,6 @@
                             (font-spec :family "Noto Sans Mono CJK SC"))))
     ))
 
-
 ;; Use emacs daemon, put following lines to shell config file
 ;; alias ed="emacs --daemon"
 ;; alias ec="emacsclient -c"
@@ -29,8 +28,8 @@
     (add-hook 'after-make-frame-functions
 	      (lambda (frame)
 		(with-selected-frame frame (init-font))))
-  ;;else
-  (init-font))
+  (add-hook 'after-init-hook 'init-font)
+  )
 
 ;;Install themes
 (use-package base16-theme :defer t)
