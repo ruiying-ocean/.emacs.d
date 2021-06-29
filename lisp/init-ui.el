@@ -10,7 +10,7 @@
 
 ;;Auto-max the frame in non-linux system
 ;;(when (not (eq system-type 'gnu/linux))
-(add-hook 'window-setup-hook 'toggle-frame-maximized t)
+(add-hook 'window-setup-hook 'toggle-frame-fullscreen t)
 
 ;;no more startup message/screen
 (setq inhibit-startup-screen t)

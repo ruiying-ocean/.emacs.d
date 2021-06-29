@@ -24,10 +24,14 @@
 ;; alias ed="emacs --daemon"
 ;; alias ec="emacsclient -c"
 ;; alias eq="emacsclient -e '(save-buffers-kill-emacs)'"
+
+;; Set font and auto-fullscreen in daemon-mode
 (if (daemonp)
     (add-hook 'after-make-frame-functions
 	      (lambda (frame)
-		(with-selected-frame frame (init-font))))
+		(with-selected-frame frame
+		  (init-font)
+		  (toggle-frame-fullscreen))))
   (add-hook 'after-init-hook 'init-font)
   )
 
