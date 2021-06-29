@@ -8,9 +8,14 @@
     (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t)) ;;same title bar color
     (add-to-list 'default-frame-alist '(ns-appearance . light))))
 
-;;Auto-max the frame in non-linux system
-;;(when (not (eq system-type 'gnu/linux))
-(add-hook 'window-setup-hook 'toggle-frame-fullscreen t)
+;;Auto-max the frame at startup
+(defun auto-max-frame()
+  "Maxize/full screen the frame according to OS type"
+  (interactive)
+  (if (eq system-type 'darwin)
+      (toggle-frame-maximized)
+    (toggle-frame-fullscreen)))
+(add-hook 'after-init-hook #'auto-max-frame)
 
 ;;no more startup message/screen
 (setq inhibit-startup-screen t)
@@ -344,6 +349,13 @@
   :load-path "extra/"
   )
 
+(use-package page-break-lines
+  :hook
+  (emacs-lisp-mode . page-break-lines-modes)
+  :config
+  (set-fontset-font "fontset-default"
+                    (cons page-break-lines-char page-break-lines-char)
+                    (face-attribute 'default :family)))
 ;; (use-package focus
 ;;   :defer t
 ;;   :hook

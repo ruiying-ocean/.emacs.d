@@ -6,8 +6,8 @@
 ;;Unicode: Symbola
 
 (defun init-font()
-   (interactive)
-   "Set English and CJK font for Emacs"
+  "Set English and CJK font for Emacs."
+  (interactive)
   ;; English font
   (if (display-graphic-p)
       (progn
@@ -25,13 +25,13 @@
 ;; alias ec="emacsclient -c"
 ;; alias eq="emacsclient -e '(save-buffers-kill-emacs)'"
 
-;; Set font and auto-fullscreen in daemon-mode
+;; Set font and auto-fullscreen in daemon-mode, put after init-ui.el
 (if (daemonp)
     (add-hook 'after-make-frame-functions
 	      (lambda (frame)
 		(with-selected-frame frame
 		  (init-font)
-		  (toggle-frame-fullscreen))))
+		  (auto-max-frame))))
   (add-hook 'after-init-hook 'init-font)
   )
 
