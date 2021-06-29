@@ -11,7 +11,6 @@
 (setq package-archives '(("gnu"   . "https://elpa.gnu.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")))
 
-;;quelpa can be found in init-core
 ;;package.el
 (when (< emacs-major-version 27)
   (package-initialize))
@@ -420,21 +419,6 @@
 
 ;;   ;; Manual preview key for `affe-grep'
 ;;  (consult-customize affe-grep :preview-key (kbd "M-.")))
-
-;;Automatically upgrade packages and allow download from github (too slow)
-;; (use-package quelpa
-;;   :defer t
-;;   :config
-;;   (setq quelpa-upgrade-interval 30)
-;;   (add-hook #'after-init-hook #'quelpa-upgrade-all-maybe)
-;; )
-
-;;quela-use-package (too slow)
-;;  (quelpa
-;;   '(quelpa-use-package
-;;     :fetcher git
-;;     :url "https://github.com/quelpa/quelpa-use-package.git"))
-;; (require 'quelpa-use-package)
 
 
 ;;; KEYBINDING
