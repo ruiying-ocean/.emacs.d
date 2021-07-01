@@ -27,6 +27,15 @@
 (setq custom-file (concat user-emacs-directory "/extra-lisp/custom.el"))
 (load custom-file :noerror)
 
+;; Native compilation support
+(when (and (fboundp 'native-comp-available-p)
+           (native-comp-available-p))
+  (progn
+    (message "Native comp is enabled")
+    (setq comp-deferred-compilation t)
+    (setq comp-async-report-warning-errors nil)
+    (add-to-list 'native-comp-eln-load-path (expand-file-name "eln-cache/" user-emacs-directory))))
+
 (setq gc-cons-percentage 0.6)
 (setq read-process-output-max (* 1024 1024))
 
@@ -39,7 +48,6 @@
 ;; (require 'bind-key)
 
 (setq use-package-always-ensure t)
-;; (setq use-package-verbose t)
 
 ;; recompile outdated .elc file
 ;; (use-package auto-compile
@@ -47,6 +55,9 @@
 ;;   (auto-compile-on-load-mode)
 ;;   (auto-compile-on-save-mode))
 
+;; Benchmark init time
+;; Alternative: (setq use-package-verbose t)/(use-package-statistic-mode)
+;; or simply `time emacs -e kill-emacs`
 (use-package benchmark-init
   :config
   ;; To disable collection of benchmark data after init is done.
@@ -171,6 +182,18 @@
   :hook
   (after-init . global-company-mode))
 
+;;A machine-learning based backend for company
+;;May conflict with company-flx-mode/ESS mode
+;; (use-package company-tabnine
+;;   :defer 1
+;;   :after company
+;;   :config
+;;   (eval-after-load 'company-tabnine
+;;     (if (not (file-directory-p "~/.TabNine/"))
+;; 	(company-tabnine-install-binary)))
+;;   (add-to-list 'company-backends #'company-tabnine)
+;;   )
+
 (use-package company-org-block
   :defer t
   :custom
@@ -178,18 +201,6 @@
   :hook ((org-mode . (lambda ()
                        (setq-local company-backends '(company-org-block))
                        (company-mode +1)))))
-
-;;A match-learning based backend for company
-;;May conflict with company-flx-mode/ESS mode
-(use-package company-tabnine
-  :defer 1
-  :after company
-  :config
-  (eval-after-load 'company-tabnine
-    (if (not (file-directory-p "~/.TabNine/"))
-	(company-tabnine-install-binary)))
-  (add-to-list 'company-backends #'company-tabnine)
-  )
 
 ;;A fuzzy matching of company
 (use-package company-flx
@@ -423,13 +434,19 @@
 
 ;;; KEYBINDING
 
+;; Set meta command for Mac OS
+;; If you are using a external Windows keyboard, remeber to choose
+;; USB keyboard in Preference -> Keyboard -> modify keyboard -> select keyboard
+(if (eq system-type 'darwin)
+    (setq mac-command-modifier 'meta))
+
+(global-set-key (kbd "C-x k") 'kill-this-buffer)
+
 (defun open-init-file()
   "Open the init.el file under .emacs.d directory."
   (interactive)
   (find-file "~/.emacs.d/init.el"))
-
 (global-set-key (kbd "<f2>") 'open-init-file)
-(global-set-key (kbd "C-x k") 'kill-this-buffer)
 
 (defun select-current-line ()
   "Select the current line."
@@ -440,27 +457,31 @@
   (end-of-line 1))
 (global-set-key (kbd "C-l") 'select-current-line)
 
-;; Set meta command and mark set keybind for Mac OS
-;; If you are using a external Windows keyboard, remeber to choose
-;; USB keyboard in Preference -> Keyboard -> modify keyboard -> select keyboard
-(if (eq system-type 'darwin)
-    (setq mac-command-modifier 'meta))
-
-;;; In case you can't use C-SPEC to do markset, change it to C-j
+;; Martset
+;; In case you can't use C-SPEC to do markset, change it to C-j
 ;; (global-set-key (kbd "C-j") 'set-mark-command)
-;;C-x C-x -> set mark and go back
-;;C-x h to select all
+;; C-x C-x -> set mark and go back
+;; C-x h to select all
 
-;;a human-friendly keymap comparing to the default ones
-;;alternatives: vimish-fold, Origami
+;; a human-friendly keymap of built-in code-folding package
+;; alternatives: vimish-fold, Origami
 (add-hook 'prog-mode-hook #'hs-minor-mode)
 (global-set-key (kbd "<f5>") 'hs-toggle-hiding)
 
-;;; font size adjust
+;; adjust font size
 (global-set-key (kbd "C-=") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 (setq-default text-scale-mode-step 1.1)
 
+;; find and replace
+(global-set-key (kbd "C-c h") 'query-replace)
+
+;; select one and edit all (https://github.com/victorhge/iedit)
+;; iedit is also dependency of lispy, use M-i to toggle 
+(use-package iedit
+  :bind
+  ("M-i" . iedit-mode)
+  )
 
 ;;; UI & APPEARANCE
 
@@ -652,8 +673,7 @@
 (use-package mood-line
   :defer t
   :hook
-  (after-init . mood-line-mode)
-  )
+  (after-init . mood-line-mode))
 
 ;; (use-package doom-modeline
 ;;   ;;right fringe cut-off issue should relate to font size
@@ -1074,7 +1094,9 @@
   (setq ein:output-area-inlined-images t)
   (add-hook 'poly-ein-mode-hook 'elpy-enable)
   (add-hook 'poly-ein-mode-hook (lambda()
-				  (display-line-numbers-mode nil)));;avoid grabled line-number
+				  (display-line-numbers-mode nil))) ;;avoid grabled line-number
+  (with-eval-after-load 'ein-notebook
+    (define-key ein:notebook-mode-map "\C-c\C-d" 'ein:worksheet-delete-cell))
   )
 
 (use-package elpy ;;completion system for EIN
@@ -1203,7 +1225,6 @@
   (setq org-todo-keywords
 	'((sequence "TODO" "DOING"  "|" "DONE" "CANCELED")))
   (add-hook 'org-mode-hook 'org-toggle-pretty-entities)
-  (add-hook 'org-agenda-finalize-hook #'my-org-agenda-time-grid-spacing)
   (setq org-capture-templates
 	'(("t" "Todo" entry (file+headline "~/.emacs.d/org/inbox.org" "Tasks")
 	   "* TODO %?\n  %i\n  %a")
@@ -1440,7 +1461,7 @@
   (setq pdf-view-use-scaling t
         pdf-view-use-imagemagick nil)
   :hook
-  (pdf-view-mode-hook . (lambda () (display-line-numbers -1)))
+  (pdf-view-mode-hook . (lambda () (display-line-numbers-mode -1)))
   (pdf-view-mode-hook . pdf-tools-enable-minor-modes)
   :bind
   (:map pdf-view-mode-map
@@ -1462,13 +1483,15 @@
 (setq max-specpdl-size 32000
       max-lisp-eval-depth 16000)
 
-(defun print-init-time()
+(defun display-init-info()
   "Print init time of Emacs, a wrapper of emacs-init-time"
   (interactive)
   (message
-   (format "Init time: %ss" (float-time
-			     (time-subtract after-init-time before-init-time)))))
-(add-hook 'after-init-hook #'print-init-time)
+   (format "Start up in %.2fs with %d features and %d GCs"
+	   (float-time (time-subtract after-init-time before-init-time))
+	   (length features)
+	   gcs-done)))
+(add-hook 'after-init-hook #'display-init-info)
 
 (provide 'init)
 ;;; init.el ends here
