@@ -527,7 +527,7 @@
 
 
 (defun open-init-file()
-  "Open my init.el"
+  "Open my init.el."
   (interactive)
   (find-file "~/.emacs.d/init.el"))
 (global-set-key (kbd "<f2>") 'open-init-file)
@@ -903,7 +903,7 @@
   (setq centaur-tabs-modified-marker "*")
   (setq centaur-tabs-height 20)
   ;;(setq centaur-tabs-label-fixed-length 10) ;;fixed length
-  (centaur-tabs-change-fonts "Roboto Mono" 120)
+  (centaur-tabs-change-fonts "Roboto Mono" 130)
   :bind
   ("M-<left>" . centaur-tabs-backward)
   ("M-<right>" . centaur-tabs-forward)
@@ -997,11 +997,7 @@
 (use-package twilight-bright-theme :defer t :straight t)
 (use-package ample-theme :defer t :straight t) ;;ample flat is a good option for dark theme
 (use-package eziam-theme :defer t :straight t) ;;almost perfect light theme
-(use-package spacemacs-common
-  :defer t
-  :straight spacemacs-theme
-  )
-
+(use-package spacemacs-common :defer t :straight spacemacs-theme)
 (use-package doom-themes
   :straight t
   :defer t
@@ -1014,12 +1010,31 @@
   ;; (doom-themes-org-config)
   )
 
+;; loading theme
 (setq custom-safe-themes t)
-;;the core of this file, use C-c t to change
-;;(load-theme 'humanoid-dark t)
-;;(load-theme 'doom-dark+ t)
-(load-theme 'doom-one t)
-;;(load-theme 'doom-vibrant t)
+(setq-default custom-enabled-themes '(doom-one))
+;; Ensure that themes will be applied even if they have not been customized
+(defun reapply-themes ()
+  "Forcibly load the themes listed in `custom-enabled-themes'."
+  (dolist (theme custom-enabled-themes)
+    (unless (custom-theme-p theme)
+      (load-theme theme)))
+  (custom-set-variables `(custom-enabled-themes (quote ,custom-enabled-themes))))
+
+(add-hook 'after-init-hook 'reapply-themes)
+
+;; Toggle between light and dark
+(defun light-theme ()
+  "Activate a light color theme.  Recommendation: leuven, spacemacs-light, eziam."
+  (interactive)
+  (setq custom-enabled-themes '(leuven))
+  (reapply-themes))
+
+(defun dark-theme ()
+  "Activate a dark color theme.  Recommendation: humanoid-dark, doom-one, doom-dark+, ample-flat."
+  (interactive)
+  (setq custom-enabled-themes '(doom-one))
+  (reapply-themes))
 
 ;;Transprancy setting
 (set-frame-parameter (selected-frame) 'alpha '(97 100))
@@ -1585,7 +1600,7 @@
 ;;; End
 
 (defun my-cleanup-gc ()
-  "Clean up gc. From user redguardtoo"
+  "Clean up gc.  From user redguardtoo."
   (setq gc-cons-threshold  67108864) ; 64M
   (setq gc-cons-percentage 0.1) ; original value
   (garbage-collect))
@@ -1596,10 +1611,10 @@
       max-lisp-eval-depth 16000)
 
 (defun display-init-info()
-  "Print init time of Emacs, a wrapper of emacs-init-time"
+  "Print init time of Emacs, a wrapper of 'emacs-init-time."
   (interactive)
   (message
-   (format "Start up in %.2fs with %d features and %d GCs"
+   (format "Start up in %.2fs with %d features and %d GC(s)"
 	   (float-time (time-subtract after-init-time before-init-time))
 	   (length features)
 	   gcs-done)))
