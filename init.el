@@ -15,6 +15,17 @@
 (when (< emacs-major-version 27)
   (package-initialize))
 
+;; Native compilation support
+(when (and (fboundp 'native-comp-available-p)
+           (native-comp-available-p))
+  (progn
+    (message "Native comp is enabled")
+    (setq comp-deferred-compilation t)
+    (setq native-comp-async-report-warning-errors nil)
+    (add-to-list 'native-comp-eln-load-path (expand-file-name "eln-cache/" user-emacs-directory))
+    (setq package-native-compile t)
+    ))
+
 ;; Load path
 ;; Optimize: Force "lisp" at the head to reduce the startup time.
 (defun update-load-path (&rest _)
@@ -26,15 +37,6 @@
 
 (setq custom-file (concat user-emacs-directory "/extra-lisp/custom.el"))
 (load custom-file :noerror)
-
-;; Native compilation support
-(when (and (fboundp 'native-comp-available-p)
-           (native-comp-available-p))
-  (progn
-    (message "Native comp is enabled")
-    (setq comp-deferred-compilation t)
-    (setq comp-async-report-warning-errors nil)
-    (add-to-list 'native-comp-eln-load-path (expand-file-name "eln-cache/" user-emacs-directory))))
 
 (setq gc-cons-percentage 0.6)
 (setq read-process-output-max (* 1024 1024))
@@ -808,9 +810,9 @@
   (setq centaur-tabs-close-button "x")
   (setq centaur-tabs-set-modified-marker t)
   (setq centaur-tabs-modified-marker "*")
-  (setq centaur-tabs-height 22)
+  (setq centaur-tabs-height 20)
   ;;(setq centaur-tabs-label-fixed-length 10) ;;fixed length
-  (centaur-tabs-change-fonts "Roboto Mono" 140)
+  (centaur-tabs-change-fonts "Roboto Mono" 120)
   :bind
   ("M-<left>" . centaur-tabs-backward)
   ("M-<right>" . centaur-tabs-forward)
