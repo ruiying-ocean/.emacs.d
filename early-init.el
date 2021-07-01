@@ -22,3 +22,6 @@
 (setq load-prefer-newer t)
 
 (setq byte-compile-warnings '(cl-functions))
+
+;; if you use straight.el
+(setq package-enable-at-startup nil)

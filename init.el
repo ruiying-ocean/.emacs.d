@@ -1,27 +1,39 @@
+;;; init.el --- Load the full configuration -*- lexical-binding: t -*-
+;;; Commentary:
+
+;; This file contains customized configuration codes, which
+;; have been divided into multiple sections by ^L character.
+
 ;;; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-;; Always remember that it is what you are editing, rather
-;; than the editor, that is the important thing.
+;; Always remember that it is WHAT YOU ARE EDITING, rather
+;; than the editor, that is the key.
 ;;; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+;;; Code:
 
 
 ;;; FUNDEMENTAL
 
-;;package manager
-(require 'package)
-(setq package-archives '(("gnu"   . "https://elpa.gnu.org/packages/")
-                         ("melpa" . "https://melpa.org/packages/")))
-
-;;package.el
-(when (< emacs-major-version 27)
-  (package-initialize))
+;;package manager: straight.el
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
 ;; Native compilation support
 (when (and (fboundp 'native-comp-available-p)
            (native-comp-available-p))
   (progn
-    (message "Native comp is enabled")
+    (setq native-comp-async-report-warnings-errors nil)
     (setq comp-deferred-compilation t)
-    (setq native-comp-async-report-warning-errors nil)
     (add-to-list 'native-comp-eln-load-path (expand-file-name "eln-cache/" user-emacs-directory))
     (setq package-native-compile t)
     ))
@@ -38,18 +50,18 @@
 (setq custom-file (concat user-emacs-directory "/extra-lisp/custom.el"))
 (load custom-file :noerror)
 
+;; Garbage collection setting at startup
 (setq gc-cons-percentage 0.6)
+(setq gc-cons-threshold most-positive-fixnum)
 (setq read-process-output-max (* 1024 1024))
 
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+;; Avoid matching file name with regrex list during startup
+(let ((file-name-handler-alist nil)) "~/.emacs.d/init.el")
 
-(eval-when-compile
-  (require 'use-package))
+(straight-use-package 'use-package)
+;; (setq straight-use-package-by-default t)
+
 ;; (require 'bind-key)
-
-(setq use-package-always-ensure t)
 
 ;; recompile outdated .elc file
 ;; (use-package auto-compile
@@ -58,13 +70,24 @@
 ;;   (auto-compile-on-save-mode))
 
 ;; Benchmark init time
-;; Alternative: (setq use-package-verbose t)/(use-package-statistic-mode)
-;; or simply `time emacs -e kill-emacs`
-(use-package benchmark-init
-  :config
-  ;; To disable collection of benchmark data after init is done.
-  (add-hook 'after-init-hook 'benchmark-init/deactivate))
+;; Option 1
+;; `time emacs -e kill-emacs`
 
+;; Option 2
+;; (setq use-package-verbose t)
+;; (use-package-statistic-mode)
+
+;; Option 3
+;; (use-package benchmark-init
+;;   :straight t
+;;   :config
+;;   ;; To disable collection of benchmark data after init is done.
+;;   (add-hook 'after-init-hook 'benchmark-init/deactivate))
+
+;; Option 4
+(use-package esup
+  :straight t
+  )
 
 ;;; EDITOR SECTION
 
@@ -91,12 +114,14 @@
 (setq ispell-extra-args '("--sug-mode=fast" "--lang=en_GB" "--camel-case" "--run-together"))
 
 (use-package flyspell-correct
+  :straight t
   :after flyspell
   :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper)))
 
 ;; Flyspell interface
 ;; Use M-o to do words action (e.g., save)
 (use-package flyspell-correct-ivy
+  :straight t
   :after flyspell-correct)
 
 ;; ---Edit keybinding style---
@@ -126,18 +151,40 @@
   (setq-default
    recentf-max-saved-items 30
    recentf-exclude `("/tmp/", (concat package-user-dir "/.*-autoloads\\.el\\'")))
-  (global-set-key (kbd "<f3>") 'recentf-open-files) ;;use C-c C-r to call counsel-recentf
+  (global-set-key (kbd "<f3>") #'recentf-open-files)
   :hook
   (after-init . recentf-mode))
 
 ;;use undo-tree-visualize to show history
 (use-package undo-tree
   :defer t
+  :straight t
   :hook
   (after-init . global-undo-tree-mode)
   :bind
   ("C-c u" . undo-tree-visualize)
   )
+
+;;; Auto-save
+(use-package super-save
+  :straight t
+  :config
+  (super-save-mode +1)
+  ;; turn off the buil-in auto-save
+  (setq auto-save-default nil)
+  (add-to-list 'super-save-triggers 'ace-window)
+  (add-to-list 'super-save-hook-triggers 'find-file-hook)
+  (setq super-save-remote-files nil)
+  (setq super-save-exclude '(".gpg"))
+  )
+
+;; A replacement to buil-tin M-w, now you can
+;; save word/sexp/list/defun/file by M-w w/s/l/d/f
+(use-package easy-kill
+  :straight t
+  :config
+  (global-set-key [remap kill-ring-save] 'easy-kill)
+  (global-set-key [remap mark-sexp] 'easy-mark))
 
 
 ;;; TERMINAL, COMPLETION, LINT, SNIPPET
@@ -171,6 +218,7 @@
 
 ;;auto-completion system
 (use-package company
+  :straight t
   :config
   (setq company-tooltip-limit 10)
   (setq company-minimum-prefix-length 2)
@@ -197,6 +245,7 @@
 ;;   )
 
 (use-package company-org-block
+  :straight t
   :defer t
   :custom
   (company-org-block-edit-style 'auto) ;; 'auto, 'prompt, or 'inline
@@ -206,12 +255,14 @@
 
 ;;A fuzzy matching of company
 (use-package company-flx
+  :straight t
   :hook
   (company-mode . company-flx-mode)
   )
 
 ;;simple and fast sorting and filtering framework for comppany
 (use-package company-prescient
+  :straight t
   :hook (company-mode . company-prescient-mode)
   :config
   (setq prescient-filter-method '(literal regexp initialism)))
@@ -230,6 +281,7 @@
 ;;   )
 
 (use-package company-box
+  :straight t
   :hook (company-mode . company-box-mode)
   :config
   (setq company-box-icons-alist 'company-box-icons-images))
@@ -238,6 +290,7 @@
 ;;add ~/.ssh/config and ~/.ssh/known_hosts first
 ;;then ssh-keygen -t rsa => ssh-copy-id name@host_name
 (use-package tramp
+  :ensure nil
   :defer t
   :if (memq system-type '(gnu/linux darwin))
   :config
@@ -247,6 +300,7 @@
   (setq password-cache-expiry nil))
 
 (use-package counsel-tramp
+  :straight t
   :defer 1
   :after (counsel tramp)
   :config
@@ -263,6 +317,7 @@
 ;;depends on external program The-Silver-Searcher/ripgrep and emacs package ag/rg
 ;;======================================================================
 (use-package dumb-jump
+  :straight t
   :defer 4
   :requires (ag ripgrep rg)
   :config
@@ -271,12 +326,14 @@
   (add-to-list 'auto-mode-alist '("\\.config\\'" . shell-script-mode)))
 
 (use-package which-key
+  :straight t
   :hook
   (after-init . which-key-mode))
 
 ;; on-the-fly syntax checker,  use C-c ! as prefix, e.g., C-c ! v to verify the checkers
 ;; use M-g n/p to navigate error, or use C-c e (counsel-flycheck)
 (use-package flycheck
+  :straight t
   :hook
   (prog-mode . flycheck-mode)
   :config
@@ -297,17 +354,20 @@
   (flycheck-python-flake8-executable "python3"))
 
 (use-package flycheck-inline
+  :straight t
   :hook
   (flycheck-mode . flycheck-inline-mode)
   )
 
 (use-package yasnippet
-  :ensure yasnippet-snippets  ;; Collection of snippets
+  :straight t
+  :ensure yasnippet-snippets ;; Collection of snippets
   :hook (after-init . yas-global-mode)
   )
 
 ;;manually choose a snippet
 (use-package ivy-yasnippet
+  :straight t
   :after (ivy yasnippet)
   :bind
   (("C-c i" . ivy-yasnippet))
@@ -316,12 +376,14 @@
 
 ;;Git + Emacs = boom!
 (use-package magit
+  :straight t
   :bind
   ("C-x g" . magit-status)
   ("C-x c" . magit-checkout))
 
 ;;a magit prefix help page
 (use-package transient
+  :straight t
   :defer t)
 
 ;;This package reads proper environment variable in MacOS GUI version
@@ -331,6 +393,7 @@
 ;;put your PATH variable like /usr/local/bin/python3.9 in this file)
 ;;Find out more in https://github.com/purcell/exec-path-from-shell
 (use-package exec-path-from-shell
+  :straight t
   :if (memq window-system '(mac ns))
   :config
   (setq exec-path-from-shell-arguments nil) ;;read non-interactive shell config
@@ -338,14 +401,17 @@
   )
 
 (use-package use-package-ensure-system-package
+  :straight t
   :defer t
   :after exec-path-from-shell) ;;extend use-package, put after exec-path-from-shell
 
 (use-package popwin
+  :straight t
   :hook
   (after-init . popwin-mode))
 
 (use-package ivy
+  :straight t
   :hook
   (after-init . ivy-mode)
   :config
@@ -361,6 +427,7 @@
   )
 
 (use-package counsel
+  :straight t
   :defer 1
   :after ivy
   :config
@@ -384,6 +451,7 @@
 
 ;;sorting and filtering framework for ivy
 (use-package ivy-prescient
+  :straight t
   :hook (ivy-mode . ivy-prescient-mode)
   :config
   (setq ivy-prescient-sort-commands t
@@ -393,6 +461,7 @@
 
 ;; Project management tool
 (use-package projectile
+  :straight t
   :after ivy
   :config
   (projectile-mode +1)
@@ -402,6 +471,7 @@
 
 ;;Faster cursor movement - go to anywhere
 (use-package avy
+  :straight t
   :defer 1
   :config
   (global-set-key (kbd "C-\"") 'avy-goto-char)  ;;input one character
@@ -410,6 +480,7 @@
   (global-set-key (kbd "M-g l") 'avy-goto-line))
 
 (use-package helpful
+  :straight t
   :defer 2
   :config
   (global-set-key (kbd "C-h f") #'helpful-callable)
@@ -418,6 +489,7 @@
   )
 
 (use-package ace-window
+  :straight t
   :defer 4
   :config
   (global-set-key (kbd "M-o") 'ace-window))
@@ -444,12 +516,6 @@
 
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
 
-(defun open-init-file()
-  "Open the init.el file under .emacs.d directory."
-  (interactive)
-  (find-file "~/.emacs.d/init.el"))
-(global-set-key (kbd "<f2>") 'open-init-file)
-
 (defun select-current-line ()
   "Select the current line."
   (interactive)
@@ -458,6 +524,13 @@
   ;;(forward-line 1)
   (end-of-line 1))
 (global-set-key (kbd "C-l") 'select-current-line)
+
+
+(defun open-init-file()
+  "Open my init.el"
+  (interactive)
+  (find-file "~/.emacs.d/init.el"))
+(global-set-key (kbd "<f2>") 'open-init-file)
 
 ;; Martset
 ;; In case you can't use C-SPEC to do markset, change it to C-j
@@ -481,9 +554,11 @@
 ;; select one and edit all (https://github.com/victorhge/iedit)
 ;; iedit is also dependency of lispy, use M-i to toggle 
 (use-package iedit
+  :straight t
   :bind
   ("M-i" . iedit-mode)
   )
+
 
 ;;; UI & APPEARANCE
 
@@ -573,6 +648,7 @@
 (setq dired-listing-switches "-alFh")
 
 (use-package dired-ranger
+  :straight t
   :defer t
   :hook
   (dired-mode . dired-utils-format-information-line-mode))
@@ -591,6 +667,7 @@
 ;; (setq show-paren-style 'parenthesis) ;;Options: parenthesis/expression/mixed
 
 (use-package highlight-parentheses
+  :straight t
   :defer t
   :hook
   (after-init . global-highlight-parentheses-mode)
@@ -621,9 +698,11 @@
 ;; M-j to split, + to join
 
 (use-package lispy
+  :straight t
   :hook
   (emacs-lisp-mode . lispy-mode)
   :bind
+  ("C-M-l" . lispy-mode)
   (:map lispy-mode-map
 	("M-o" . ace-window)))
 
@@ -661,6 +740,7 @@
 ;; (sp-pair "'" nil :actions :rem))
 
 (use-package rainbow-delimiters
+  :straight t
   :defer t
   :hook
   (prog-mode . rainbow-delimiters-mode)
@@ -673,6 +753,7 @@
 ;;  (spaceline-emacs-theme))
 
 (use-package mood-line
+  :straight t
   :defer t
   :hook
   (after-init . mood-line-mode))
@@ -693,6 +774,7 @@
 ;;   )
 
 (use-package nyan-mode
+  :straight t
   :defer t
   :hook
   (doom-modeline-mode . nyan-mode))
@@ -715,6 +797,7 @@
 ;;   )
 
 (use-package highlight-indent-guides
+  :straight t
   :defer t
   :config
   (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
@@ -724,6 +807,7 @@
   )
 
 (use-package highlight-symbol
+  :straight t
   :defer t
   ;; An alternative package is highlight-thing
   :bind
@@ -734,6 +818,7 @@
   )
 
 (use-package minimap
+  :straight t
   :defer t
   :custom
   (minimap-window-location 'right)
@@ -750,12 +835,14 @@
 ;;  )
 
 (use-package treemacs
+  :straight t
   :defer t
   :bind
   ("<f8>" . treemacs)
   )
 
 (use-package treemacs-all-the-icons
+  :straight t
   :defer t
   :requires
   (treemacs all-the-icons)
@@ -764,6 +851,7 @@
   )
 
 (use-package all-the-icons-dired
+  :straight t
   :defer t
   ;;need to run all-the-icons-install-fonts first to avoid grabled icon
   :requires all-the-icons
@@ -771,6 +859,7 @@
   (dired-mode . all-the-icons-dired-mode))
 
 (use-package ivy-rich
+  :straight t
   :hook
   (ivy-mode . ivy-rich-mode)
   :config
@@ -782,6 +871,7 @@
    '((ivy-rich-switch-buffer-size (:align right)))))
 
 (use-package all-the-icons-ivy-rich
+  :straight t
   :after ivy-rich
   :config
   (setq all-the-icons-ivy-rich-icon-size 1.0)
@@ -801,6 +891,7 @@
 ;;   (ivy-posframe-mode 1))
 
 (use-package centaur-tabs
+  :straight t
   :config
   ;;  (centaur-tabs-mode t)
   (setq centaur-tabs-set-bar 'over)
@@ -822,6 +913,7 @@
   )
 
 (use-package visual-fill-column
+  :straight t
   :defer t
   :hook
   (visual-line-mode . visual-fill-column-mode)
@@ -838,6 +930,7 @@
 
 ;; to display ^L page break
 (use-package form-feed
+  :straight t
   :hook
   (emacs-lisp-mode . form-feed-mode)
   )
@@ -896,19 +989,21 @@
   )
 
 ;;Install themes
-(use-package base16-theme :defer t)
-(use-package color-theme-sanityinc-tomorrow :defer t)
-(use-package gruvbox-theme :defer t)
-(use-package tao-theme :defer t)
-(use-package humanoid-themes :defer t)
-(use-package twilight-bright-theme :defer t)
-(use-package ample-theme :defer t) ;;ample flat is a good option for dark theme
-(use-package eziam-theme :defer t) ;;almost perfect light theme
+(use-package base16-theme :defer t :straight t)
+(use-package color-theme-sanityinc-tomorrow :defer t :straight t)
+(use-package gruvbox-theme :defer t :straight t)
+(use-package tao-theme :defer t :straight t)
+(use-package humanoid-themes :defer t :straight t)
+(use-package twilight-bright-theme :defer t :straight t)
+(use-package ample-theme :defer t :straight t) ;;ample flat is a good option for dark theme
+(use-package eziam-theme :defer t :straight t) ;;almost perfect light theme
 (use-package spacemacs-common
   :defer t
-  :ensure spacemacs-theme)
+  :straight spacemacs-theme
+  )
 
 (use-package doom-themes
+  :straight t
   :defer t
   ;; :config
   ;; ;;treemacs setting
@@ -971,6 +1066,7 @@
 ;;eglot can work with tramp-mode, but you should install
 ;;your server-programs on remote, not local
 (use-package eglot
+  :straight t
   :defer t
   :config
   (add-hook 'eglot-managed-mode-hook (lambda () (flymake-mode -1))) ;;Decouple flymake and eglot
@@ -1088,6 +1184,7 @@
 ;;#+END_SRC
 
 (use-package ein
+  :straight t
   ;;ein-babel see the init-org.el
   :defer 1
   :config
@@ -1102,6 +1199,7 @@
   )
 
 (use-package elpy ;;completion system for EIN
+  :straight t
   :defer t)
 
 ;;==============================
@@ -1109,11 +1207,8 @@
 ;;==============================
 ;; require ESS installed
 ;;Lazy load ess-r-mode (ESS doesn't like use-package pretty much)
-(unless (package-installed-p 'ess)
-  (package-refresh-contents)
-  (package-install 'ess))
-
 (use-package ess
+  :straight t
   :defer t)
 
 (add-to-list 'auto-mode-alist '("\\.R\\'" . ess-r-mode))
@@ -1149,6 +1244,7 @@
 
 ;;C-c C-a to turn on csv-align-fields
 (use-package csv-mode
+  :straight t
   :defer t
   :mode
   "\\.csv\\'"
@@ -1157,6 +1253,7 @@
 
 ;;display color of RGB code
 (use-package rainbow-mode
+  :straight t
   :defer t
   :after ess
   :hook ess-r-mode
@@ -1168,6 +1265,7 @@
 ;; cd /path/to/matlab-emacs -> make
 ;; Homepage: https://sourceforge.net/p/matlab-emacs/src/ci/documentation/tree/
 (use-package matlab-mode
+  :straight t
   :defer t
   :mode "\\.[mM]\\'"
   )
@@ -1177,6 +1275,7 @@
 ;; ==============================
 
 (use-package markdown-mode
+  :straight t
   :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
@@ -1190,6 +1289,7 @@
 
 ;;pip install grip first
 (use-package grip-mode
+  :straight t
   :bind (:map markdown-mode-command-map
               ("g" . grip-mode))
   :hook (markdown-mode . grip-mode)
@@ -1207,6 +1307,7 @@
 ;;Add :TOC: tag for org (C-c C-c) and <-- :TOC: --> for md
 ;;then toc-org-insert-toc
 (use-package toc-org
+  :straight t
   :hook
   (markdown-mode . toc-org-mode)
   (org-mode . toc-org-mode)
@@ -1219,6 +1320,7 @@
 ;;           Org-mode          ;;
 ;; ==============================
 (use-package org
+  :straight t
   :ensure nil
   :defer t
   :after counsel
@@ -1267,6 +1369,7 @@
 
 ;;use org-superstar-mode to replace org-bullets
 (use-package org-superstar
+  :straight t
   :defer t
   :config
   (setq org-superstar-special-todo-items t)
@@ -1289,6 +1392,7 @@
 (setq prettify-symbols-unprettify-at-point 'right-edge)
 
 (use-package org-fancy-priorities
+  :straight t
   :defer t
   :hook
   (org-mode . org-fancy-priorities-mode)
@@ -1297,6 +1401,7 @@
 
 ;;Image drag-and-drop for org-mode
 (use-package org-download
+  :straight t
   :defer t
   :config
   (add-hook 'dired-mode-hook 'org-download-enable))
@@ -1313,7 +1418,7 @@
   :defer t
   :load-path "extra-lisp/"
   :config
-  (setq org-mind-map-engine "dot")       ; Default. Directed Graph
+  (setq org-mind-map-engine "dot")	; Default. Directed Graph
   ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
   ;; (setq org-mind-map-engine "twopi")  ; Radial Layout
   ;; (setq org-mind-map-engine "fdp")    ; Undirected Spring Force-Directed
@@ -1321,6 +1426,7 @@
   )
 
 (use-package valign
+  :straight t
   :hook (org-mode . valign-mode)
   :config
   (setq valign-fancy-bar t))
@@ -1371,6 +1477,7 @@
   )
 
 (use-package magic-latex-buffer
+  :straight t
   :defer t
   :hook
   (LaTeX-mode . magic-latex-buffer)
@@ -1385,14 +1492,14 @@
 ;; Retrieve BibTeX entries
 ;; Call 'gscholar-bibtex' to retrieve BibTeX entries from Google
 ;; Scholar, ACM Digital Library, IEEE Xplore and DBLP.
-(use-package gscholar-bibtex
-  :defer t)
+;; (use-package gscholar-bibtex 
+;;   :defer t)
 
 ;; Reformat BibTeX using bibclean
-(use-package bibclean-format
-  :defer t
-  :bind (:map bibtex-mode-map
-              ("C-c f" . bibclean-format)))
+;; (use-package bibclean-format
+;;   :defer t
+;;   :bind (:map bibtex-mode-map
+;;               ("C-c f" . bibclean-format)))
 
 
 ;;; EMAIL CLIENT
@@ -1433,6 +1540,7 @@
   ;;Others
   (setq mu4e-main-buffer-hide-personal-addresses t)
   )
+
 
 ;;; PDF READER
 
@@ -1452,6 +1560,7 @@
 
 ;;read the documentation to find how to compile and pdf-tools first
 (use-package pdf-tools
+  :straight t
   :defer t
   :commands (pdf-view-mode pdf-loader-install)
   :mode ("\\.[pP][dD][fF]\\'" . pdf-view-mode)
@@ -1476,10 +1585,11 @@
 ;;; End
 
 (defun my-cleanup-gc ()
-  "Clean up gc."
-  (setq gc-cons-threshold  (* 128 1024 1024)) ; 64M
-  (setq gc-cons-percentage 0.3)		      ; original value
+  "Clean up gc. From user redguardtoo"
+  (setq gc-cons-threshold  67108864) ; 64M
+  (setq gc-cons-percentage 0.1) ; original value
   (garbage-collect))
+;; collect gc during free time
 (run-with-idle-timer 4 nil #'my-cleanup-gc)
 
 (setq max-specpdl-size 32000
