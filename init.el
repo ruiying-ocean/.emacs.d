@@ -14,7 +14,9 @@
 
 ;;; FUNDEMENTAL
 
-;;package manager: straight.el
+;; package manager: straight.el
+;; if the boostrap doesn't work, manually run
+;; git clone https://github.com/raxod502/straight.el.git ~/.emacs.d/straight/repos/straight.el
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -88,6 +90,7 @@
 (use-package esup
   :straight t
   )
+
 
 ;;; EDITOR SECTION
 
@@ -647,6 +650,8 @@
 ;;   )
 
 (setq dired-listing-switches "-alFh")
+(with-eval-after-load 'dired
+  (define-key dired-mode-map [mouse-2] 'dired-mouse-find-file))
 
 (use-package dired-ranger
   :straight t
@@ -1290,6 +1295,8 @@
 ;;            Markdown         ;;
 ;; ==============================
 
+;; Major mode for markdown
+;; preview included but reply on multimarkdown
 (use-package markdown-mode
   :straight t
   :commands (markdown-mode gfm-mode)
@@ -1303,20 +1310,39 @@
 		     (visual-line-mode 1)))
   )
 
-;;pip install grip first
-(use-package grip-mode
+;; Advanced preview
+
+;; >>> Option 1
+;; depend on grip (pip install grip) and manual changing of github api limit
+;; Not work for SSH git repository
+
+;; (use-package grip-mode
+;;   :straight t
+;;   :bind (:map markdown-mode-command-map
+;;               ("g" . grip-mode))
+;;   :hook (markdown-mode . grip-mode)
+;;   :config
+;;   ;;create your personal access token, then config
+;;   ;;your github username and token in "~/.authinfo.gpg"
+;;   ;;DO NOT input your password here!
+;;   (require 'auth-source)
+;;   (let ((credential (auth-source-user-and-password "api.github.com")))
+;;     (setq grip-github-user (car credential)
+;;           grip-github-password (cadr credential)))  
+;;   )
+
+;; >>> Option 2
+(use-package markdown-preview-mode
   :straight t
-  :bind (:map markdown-mode-command-map
-              ("g" . grip-mode))
-  :hook (markdown-mode . grip-mode)
+  :hook (markdown-mode . markdown-preview-mode)
+  :bind
+  (:map markdown-mode-map
+	("C-c C-c p" . markdown-preview-open-browser))
   :config
-  ;;create your personal access token, then config
-  ;;your github username and token in "~/.authinfo.gpg"
-  ;;DO NOT input your password here!
-  (require 'auth-source)
-  (let ((credential (auth-source-user-and-password "api.github.com")))
-    (setq grip-github-user (car credential)
-          grip-github-password (cadr credential)))  
+  ;; extra css element
+  (add-to-list 'markdown-preview-stylesheets "https://raw.githubusercontent.com/richleland/pygments-css/master/emacs.css")
+  ;; enable mathjax
+  (add-to-list 'markdown-preview-javascript "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML")
   )
 
 ;;add table of content for md/org
