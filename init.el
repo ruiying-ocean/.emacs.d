@@ -92,11 +92,12 @@
 ;;; EDITOR SECTION
 
 ;;Coding system
+(defvar default-buffer-file-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
-(setq default-buffer-file-coding-system 'utf-8)
+
 
 ;;We are lazy human :)
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -1025,9 +1026,9 @@
 
 ;; Toggle between light and dark
 (defun light-theme ()
-  "Activate a light color theme.  Recommendation: leuven, spacemacs-light, eziam."
+  "Activate a light color theme.  Recommendation: leuven, spacemacs-light, eziam, twilight-bright."
   (interactive)
-  (setq custom-enabled-themes '(leuven))
+  (setq custom-enabled-themes '(twilight-bright))
   (reapply-themes))
 
 (defun dark-theme ()
