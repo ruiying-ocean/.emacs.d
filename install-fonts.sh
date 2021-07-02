@@ -46,7 +46,7 @@ font_dir="$HOME/.local/share/fonts"
 
 if [ ! -d $font_dir ]
 then
-    mkdir $font_dir;
+    mkdir -p $font_dir;
 fi
 
 cd $font_dir
