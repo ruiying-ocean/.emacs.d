@@ -136,7 +136,7 @@
 
 ;; >>> OPTION2: viper-mode (built-in vim-like)
 ;; (use-package viper
-;;   :ensure nil
+;;   :straight (:type built-in)
 ;;   :init (setq viper-mode t)
 ;;   )
 
@@ -147,7 +147,7 @@
 ;;   )
 
 (use-package recentf
-  :ensure nil
+  :straight (:type built-in)
   :config
   (setq-default
    recentf-max-saved-items 30
@@ -192,7 +192,7 @@
 ;; History references like '!' (reference), ‘!!’ (last cmd) and ‘^’ (substituion, e.g., ^a^b) are supported
 ;; If you don't know the history reference, use C-c C-l to list all (will work for most comint buffers)
 (use-package shell
-  :ensure nil
+  :straight (:type built-in)
   :config
   (defun no-echo-input-in-shell ()
     "Do not echo my input command"
@@ -283,7 +283,7 @@
 ;;then ssh-keygen -t rsa => ssh-copy-id name@host_name
 (use-package tramp
   :defer t
-  :ensure nil
+  :straight (:type built-in)
   :if (memq system-type '(gnu/linux darwin))
   :config
   (add-to-list 'tramp-remote-path "/usr/local/bin/git")
@@ -1301,7 +1301,7 @@
 ;;           Org-mode          ;;
 ;; ==============================
 (use-package org
-  :ensure nil
+  :straight (:type built-in)
   :defer t
   :after counsel
   :config
@@ -1417,7 +1417,6 @@
 ;;             LaTeX           ;;
 ;; ==============================
 (use-package tex ;;not auctex instead!
-  :ensure nil
   :straight auctex
   :defer t
   :mode ("\\.tex\\'" . latex-mode)
