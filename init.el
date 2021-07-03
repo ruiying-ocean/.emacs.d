@@ -52,18 +52,20 @@
 (setq custom-file (concat user-emacs-directory "/extra-lisp/custom.el"))
 (load custom-file :noerror)
 
-;; Garbage collection setting at startup
+;; Increase garbage collection threshold at startup
 (setq gc-cons-percentage 0.6)
 (setq gc-cons-threshold most-positive-fixnum)
-(setq read-process-output-max (* 1024 1024))
+
+;; Increase read max limit to 3 mb
+(setq read-process-output-max (* 3 1024 1024))
 
 ;; Avoid matching file name with regrex list during startup
 (let ((file-name-handler-alist nil)) "~/.emacs.d/init.el")
 
 (straight-use-package 'use-package)
-;; (setq straight-use-package-by-default t)
+(setq straight-use-package-by-default t)
 
-;; (require 'bind-key)
+(require 'bind-key)
 
 ;; recompile outdated .elc file
 ;; (use-package auto-compile
@@ -81,15 +83,13 @@
 
 ;; Option 3
 ;; (use-package benchmark-init
-;;   :straight t
+;;   
 ;;   :config
 ;;   ;; To disable collection of benchmark data after init is done.
 ;;   (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
 ;; Option 4
-(use-package esup
-  :straight t
-  )
+(use-package esup)
 
 
 ;;; EDITOR SECTION
@@ -100,7 +100,6 @@
 (set-default-coding-systems 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
-
 
 ;;We are lazy human :)
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -118,14 +117,12 @@
 (setq ispell-extra-args '("--sug-mode=fast" "--lang=en_GB" "--camel-case" "--run-together"))
 
 (use-package flyspell-correct
-  :straight t
   :after flyspell
   :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper)))
 
 ;; Flyspell interface
 ;; Use M-o to do words action (e.g., save)
 (use-package flyspell-correct-ivy
-  :straight t
   :after flyspell-correct)
 
 ;; ---Edit keybinding style---
@@ -162,7 +159,6 @@
 ;;use undo-tree-visualize to show history
 (use-package undo-tree
   :defer t
-  :straight t
   :hook
   (after-init . global-undo-tree-mode)
   :bind
@@ -171,7 +167,6 @@
 
 ;;; Auto-save
 (use-package super-save
-  :straight t
   :config
   (super-save-mode +1)
   ;; turn off the buil-in auto-save
@@ -185,7 +180,6 @@
 ;; A replacement to buil-tin M-w, now you can
 ;; save word/sexp/list/defun/file by M-w w/s/l/d/f
 (use-package easy-kill
-  :straight t
   :config
   (global-set-key [remap kill-ring-save] 'easy-kill)
   (global-set-key [remap mark-sexp] 'easy-mark))
@@ -219,10 +213,8 @@
 	("C-l" . comint-clear-buffer)
 	("SPC" . comint-magic-space))) ;;magically expand history reference, <TAB> also works
 
-
 ;;auto-completion system
 (use-package company
-  :straight t
   :config
   (setq company-tooltip-limit 10)
   (setq company-minimum-prefix-length 2)
@@ -249,7 +241,6 @@
 ;;   )
 
 (use-package company-org-block
-  :straight t
   :defer t
   :custom
   (company-org-block-edit-style 'auto) ;; 'auto, 'prompt, or 'inline
@@ -259,14 +250,12 @@
 
 ;;A fuzzy matching of company
 (use-package company-flx
-  :straight t
   :hook
   (company-mode . company-flx-mode)
   )
 
 ;;simple and fast sorting and filtering framework for comppany
 (use-package company-prescient
-  :straight t
   :hook (company-mode . company-prescient-mode)
   :config
   (setq prescient-filter-method '(literal regexp initialism)))
@@ -285,7 +274,6 @@
 ;;   )
 
 (use-package company-box
-  :straight t
   :hook (company-mode . company-box-mode)
   :config
   (setq company-box-icons-alist 'company-box-icons-images))
@@ -294,8 +282,8 @@
 ;;add ~/.ssh/config and ~/.ssh/known_hosts first
 ;;then ssh-keygen -t rsa => ssh-copy-id name@host_name
 (use-package tramp
-  :ensure nil
   :defer t
+  :ensure nil
   :if (memq system-type '(gnu/linux darwin))
   :config
   (add-to-list 'tramp-remote-path "/usr/local/bin/git")
@@ -304,7 +292,6 @@
   (setq password-cache-expiry nil))
 
 (use-package counsel-tramp
-  :straight t
   :defer 1
   :after (counsel tramp)
   :config
@@ -315,29 +302,29 @@
   (define-key global-map (kbd "C-c s") 'counsel-tramp)
   )
 
-;;visit https://github.com/jacktasia/dumb-jump to see more alternative ways
-;;for example, TAGS system and so on
+;; visit https://github.com/jacktasia/dumb-jump to see more alternative ways
+;; like TAGS system
 ;;======================================================================
-;;depends on external program The-Silver-Searcher/ripgrep and emacs package ag/rg
+;;depends on external programs: The-Silver-Searcher/ripgrep and emacs package ag/rg
 ;;======================================================================
 (use-package dumb-jump
-  :straight t
   :defer 4
-  :requires (ag ripgrep rg)
   :config
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
   (setq dumb-jump-default-project "~/cgenie.muffin")
   (add-to-list 'auto-mode-alist '("\\.config\\'" . shell-script-mode)))
 
+(use-package ag :defer t)
+(use-package rg :defer t)
+(use-package ripgrep :defer t)
+
 (use-package which-key
-  :straight t
   :hook
   (after-init . which-key-mode))
 
 ;; on-the-fly syntax checker,  use C-c ! as prefix, e.g., C-c ! v to verify the checkers
 ;; use M-g n/p to navigate error, or use C-c e (counsel-flycheck)
 (use-package flycheck
-  :straight t
   :hook
   (prog-mode . flycheck-mode)
   :config
@@ -358,20 +345,17 @@
   (flycheck-python-flake8-executable "python3"))
 
 (use-package flycheck-inline
-  :straight t
   :hook
   (flycheck-mode . flycheck-inline-mode)
   )
 
 (use-package yasnippet
-  :straight t
-  :ensure yasnippet-snippets ;; Collection of snippets
+  :straight yasnippet-snippets ;; Collection of snippets
   :hook (after-init . yas-global-mode)
   )
 
 ;;manually choose a snippet
 (use-package ivy-yasnippet
-  :straight t
   :after (ivy yasnippet)
   :bind
   (("C-c i" . ivy-yasnippet))
@@ -380,14 +364,12 @@
 
 ;;Git + Emacs = boom!
 (use-package magit
-  :straight t
   :bind
   ("C-x g" . magit-status)
   ("C-x c" . magit-checkout))
 
 ;;a magit prefix help page
 (use-package transient
-  :straight t
   :defer t)
 
 ;;This package reads proper environment variable in MacOS GUI version
@@ -397,7 +379,6 @@
 ;;put your PATH variable like /usr/local/bin/python3.9 in this file)
 ;;Find out more in https://github.com/purcell/exec-path-from-shell
 (use-package exec-path-from-shell
-  :straight t
   :if (memq window-system '(mac ns))
   :config
   (setq exec-path-from-shell-arguments nil) ;;read non-interactive shell config
@@ -405,17 +386,14 @@
   )
 
 (use-package use-package-ensure-system-package
-  :straight t
   :defer t
   :after exec-path-from-shell) ;;extend use-package, put after exec-path-from-shell
 
 (use-package popwin
-  :straight t
   :hook
   (after-init . popwin-mode))
 
 (use-package ivy
-  :straight t
   :hook
   (after-init . ivy-mode)
   :config
@@ -431,7 +409,6 @@
   )
 
 (use-package counsel
-  :straight t
   :defer 1
   :after ivy
   :config
@@ -455,7 +432,6 @@
 
 ;;sorting and filtering framework for ivy
 (use-package ivy-prescient
-  :straight t
   :hook (ivy-mode . ivy-prescient-mode)
   :config
   (setq ivy-prescient-sort-commands t
@@ -465,7 +441,6 @@
 
 ;; Project management tool
 (use-package projectile
-  :straight t
   :after ivy
   :config
   (projectile-mode +1)
@@ -475,7 +450,6 @@
 
 ;;Faster cursor movement - go to anywhere
 (use-package avy
-  :straight t
   :defer 1
   :config
   (global-set-key (kbd "C-\"") 'avy-goto-char)  ;;input one character
@@ -484,7 +458,6 @@
   (global-set-key (kbd "M-g l") 'avy-goto-line))
 
 (use-package helpful
-  :straight t
   :defer 2
   :config
   (global-set-key (kbd "C-h f") #'helpful-callable)
@@ -493,8 +466,7 @@
   )
 
 (use-package ace-window
-  :straight t
-  :defer 4
+  :defer 2
   :config
   (global-set-key (kbd "M-o") 'ace-window))
 
@@ -558,7 +530,6 @@
 ;; select one and edit all (https://github.com/victorhge/iedit)
 ;; iedit is also dependency of lispy, use M-i to toggle 
 (use-package iedit
-  :straight t
   :bind
   ("M-i" . iedit-mode)
   )
@@ -577,7 +548,7 @@
 
 ;;Auto-max the frame at startup
 (defun auto-max-frame()
-  "Maxize/full screen the frame according to OS type"
+  "Maxize/full screen the frame according to the OS type"
   (interactive)
   (if (eq system-type 'darwin)
       (toggle-frame-maximized)
@@ -654,7 +625,6 @@
   (define-key dired-mode-map [mouse-2] 'dired-mouse-find-file))
 
 (use-package dired-ranger
-  :straight t
   :defer t
   :hook
   (dired-mode . dired-utils-format-information-line-mode))
@@ -673,7 +643,6 @@
 ;; (setq show-paren-style 'parenthesis) ;;Options: parenthesis/expression/mixed
 
 (use-package highlight-parentheses
-  :straight t
   :defer t
   :hook
   (after-init . global-highlight-parentheses-mode)
@@ -704,7 +673,6 @@
 ;; M-j to split, + to join
 
 (use-package lispy
-  :straight t
   :hook
   (emacs-lisp-mode . lispy-mode)
   :bind
@@ -746,7 +714,6 @@
 ;; (sp-pair "'" nil :actions :rem))
 
 (use-package rainbow-delimiters
-  :straight t
   :defer t
   :hook
   (prog-mode . rainbow-delimiters-mode)
@@ -759,7 +726,6 @@
 ;;  (spaceline-emacs-theme))
 
 (use-package mood-line
-  :straight t
   :defer t
   :hook
   (after-init . mood-line-mode))
@@ -780,7 +746,6 @@
 ;;   )
 
 (use-package nyan-mode
-  :straight t
   :defer t
   :hook
   (doom-modeline-mode . nyan-mode))
@@ -803,17 +768,15 @@
 ;;   )
 
 (use-package highlight-indent-guides
-  :straight t
   :defer t
   :config
   (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
-					;  (set-face-background 'highlight-indent-guides-character-face "dimgrey")
+  ;;  (set-face-background 'highlight-indent-guides-character-face "dimgrey")
   :custom
   (highlight-indent-guides-method 'character)
   )
 
 (use-package highlight-symbol
-  :straight t
   :defer t
   ;; An alternative package is highlight-thing
   :bind
@@ -824,7 +787,6 @@
   )
 
 (use-package minimap
-  :straight t
   :defer t
   :custom
   (minimap-window-location 'right)
@@ -841,23 +803,18 @@
 ;;  )
 
 (use-package treemacs
-  :straight t
   :defer t
   :bind
-  ("<f8>" . treemacs)
-  )
+  ("<f8>" . treemacs))
 
 (use-package treemacs-all-the-icons
-  :straight t
   :defer t
   :requires
   (treemacs all-the-icons)
   :config
-  (treemacs-load-theme "all-the-icons")
-  )
+  (treemacs-load-theme "all-the-icons"))
 
 (use-package all-the-icons-dired
-  :straight t
   :defer t
   ;;need to run all-the-icons-install-fonts first to avoid grabled icon
   :requires all-the-icons
@@ -865,7 +822,6 @@
   (dired-mode . all-the-icons-dired-mode))
 
 (use-package ivy-rich
-  :straight t
   :hook
   (ivy-mode . ivy-rich-mode)
   :config
@@ -877,13 +833,11 @@
    '((ivy-rich-switch-buffer-size (:align right)))))
 
 (use-package all-the-icons-ivy-rich
-  :straight t
   :after ivy-rich
   :config
   (setq all-the-icons-ivy-rich-icon-size 1.0)
   (setq inhibit-compacting-font-caches t)
-  (all-the-icons-ivy-rich-mode t)
-  )
+  (all-the-icons-ivy-rich-mode t))
 
 ;; (use-package ivy-posframe ;;center your selection candidate box
 ;;   :config
@@ -896,8 +850,7 @@
 ;;                                     (t      . 10)))
 ;;   (ivy-posframe-mode 1))
 
-(use-package centaur-tabs
-  :straight t
+(use-package centaur-tabs 
   :config
   ;;  (centaur-tabs-mode t)
   (setq centaur-tabs-set-bar 'over)
@@ -919,7 +872,6 @@
   )
 
 (use-package visual-fill-column
-  :straight t
   :defer t
   :hook
   (visual-line-mode . visual-fill-column-mode)
@@ -931,15 +883,13 @@
 ;;press your keyboard fast and hard !!!
 (use-package power-mode
   :defer t
-  :load-path "extra-lisp/"
-  )
+  :straight (power-mode :type git :host github
+			:repo "elizagamedev/power-mode.el"))
 
 ;; to display ^L page break
 (use-package form-feed
-  :straight t
   :hook
-  (emacs-lisp-mode . form-feed-mode)
-  )
+  (emacs-lisp-mode . form-feed-mode))
 
 ;; (use-package focus
 ;;   :defer t
@@ -995,17 +945,16 @@
   )
 
 ;;Install themes
-(use-package base16-theme :defer t :straight t)
-(use-package color-theme-sanityinc-tomorrow :defer t :straight t)
-(use-package gruvbox-theme :defer t :straight t)
-(use-package tao-theme :defer t :straight t)
-(use-package humanoid-themes :defer t :straight t)
-(use-package twilight-bright-theme :defer t :straight t)
-(use-package ample-theme :defer t :straight t) ;;ample flat is a good option for dark theme
-(use-package eziam-theme :defer t :straight t) ;;almost perfect light theme
+(use-package base16-theme :defer t )
+(use-package color-theme-sanityinc-tomorrow :defer t )
+(use-package gruvbox-theme :defer t )
+(use-package tao-theme :defer t )
+(use-package humanoid-themes :defer t )
+(use-package twilight-bright-theme :defer t )
+(use-package ample-theme :defer t ) ;;ample flat is a good option for dark theme
+(use-package eziam-theme :defer t ) ;;almost perfect light theme
 (use-package spacemacs-common :defer t :straight spacemacs-theme)
 (use-package doom-themes
-  :straight t
   :defer t
   ;; :config
   ;; ;;treemacs setting
@@ -1087,7 +1036,6 @@
 ;;eglot can work with tramp-mode, but you should install
 ;;your server-programs on remote, not local
 (use-package eglot
-  :straight t
   :defer t
   :config
   (add-hook 'eglot-managed-mode-hook (lambda () (flymake-mode -1))) ;;Decouple flymake and eglot
@@ -1203,12 +1151,12 @@
 ;; ---org-babel snippet---
 ;;#+BEGIN_SRC ein-python :session localhost:8889
 ;;#+END_SRC
+;; Change cell type by C-c C-t
 
 (use-package ein
-  :straight t
-  ;;ein-babel see the init-org.el
   :defer 1
   :config
+  ;;ein-babel config see the org-mode block
   (setq ein:use-company-backend t)
   (setq ein:worksheet-enable-undo t)
   (setq ein:output-area-inlined-images t)
@@ -1217,20 +1165,17 @@
 				  (display-line-numbers-mode nil))) ;;avoid grabled line-number
   (with-eval-after-load 'ein-notebook
     (define-key ein:notebook-mode-map "\C-c\C-d" 'ein:worksheet-delete-cell))
+  (setq ein:worksheet-enable-undo t)
   )
 
-(use-package elpy ;;completion system for EIN
-  :straight t
-  :defer t)
+(use-package elpy :defer t) 		;;a completion system for ein
 
 ;;==============================
 ;;           Rlang            ;;
 ;;==============================
 ;; require ESS installed
 ;;Lazy load ess-r-mode (ESS doesn't like use-package pretty much)
-(use-package ess
-  :straight t
-  :defer t)
+(use-package ess :defer t)
 
 (add-to-list 'auto-mode-alist '("\\.R\\'" . ess-r-mode))
 (with-eval-after-load 'ess-r-mode
@@ -1265,7 +1210,6 @@
 
 ;;C-c C-a to turn on csv-align-fields
 (use-package csv-mode
-  :straight t
   :defer t
   :mode
   "\\.csv\\'"
@@ -1274,7 +1218,6 @@
 
 ;;display color of RGB code
 (use-package rainbow-mode
-  :straight t
   :defer t
   :after ess
   :hook ess-r-mode
@@ -1286,7 +1229,6 @@
 ;; cd /path/to/matlab-emacs -> make
 ;; Homepage: https://sourceforge.net/p/matlab-emacs/src/ci/documentation/tree/
 (use-package matlab-mode
-  :straight t
   :defer t
   :mode "\\.[mM]\\'"
   )
@@ -1298,7 +1240,6 @@
 ;; Major mode for markdown
 ;; preview included but reply on multimarkdown
 (use-package markdown-mode
-  :straight t
   :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
@@ -1317,7 +1258,7 @@
 ;; Not work for SSH git repository
 
 ;; (use-package grip-mode
-;;   :straight t
+;;   
 ;;   :bind (:map markdown-mode-command-map
 ;;               ("g" . grip-mode))
 ;;   :hook (markdown-mode . grip-mode)
@@ -1333,7 +1274,6 @@
 
 ;; >>> Option 2
 (use-package markdown-preview-mode
-  :straight t
   :hook (markdown-mode . markdown-preview-mode)
   :bind
   (:map markdown-mode-map
@@ -1349,7 +1289,6 @@
 ;;Add :TOC: tag for org (C-c C-c) and <-- :TOC: --> for md
 ;;then toc-org-insert-toc
 (use-package toc-org
-  :straight t
   :hook
   (markdown-mode . toc-org-mode)
   (org-mode . toc-org-mode)
@@ -1362,7 +1301,6 @@
 ;;           Org-mode          ;;
 ;; ==============================
 (use-package org
-  :straight t
   :ensure nil
   :defer t
   :after counsel
@@ -1382,15 +1320,19 @@
 
   ;;src setting
   (setq org-src-fontify-natively t)
-  ;;babel setting
-  (org-babel-do-load-languages 'org-babel-load-languages
-			       '((emacs-lisp . t)
-				 (python . t)
-				 (R . t)
-				 (ein . t)
-				 ))
+
+  ;; (with-eval-after-load 'ein
+  ;;   (org-babel-do-load-languages 'org-babel-load-languages
+  ;; 				 (append org-babel-load-languages
+  ;; 					 '((ein . t)))))
+  
   :custom
   (org-support-shift-select 'alway)
+  (org-babel-load-languages '((emacs-lisp . t)
+			      (python . t)
+			      (R . t)
+			      (ein . t)
+			      ))
   ;;local keybinding
   :bind
   (:map org-mode-map
@@ -1411,7 +1353,6 @@
 
 ;;use org-superstar-mode to replace org-bullets
 (use-package org-superstar
-  :straight t
   :defer t
   :config
   (setq org-superstar-special-todo-items t)
@@ -1434,7 +1375,6 @@
 (setq prettify-symbols-unprettify-at-point 'right-edge)
 
 (use-package org-fancy-priorities
-  :straight t
   :defer t
   :hook
   (org-mode . org-fancy-priorities-mode)
@@ -1443,7 +1383,6 @@
 
 ;;Image drag-and-drop for org-mode
 (use-package org-download
-  :straight t
   :defer t
   :config
   (add-hook 'dired-mode-hook 'org-download-enable))
@@ -1451,15 +1390,16 @@
 ;;(use-package org-super-agenda)
 (use-package org-graph-view
   :defer t
-  :load-path "extra-lisp/"
-  )
+  :straight (org-graph-view :type git :host github
+			    :repo "alphapapa/org-graph-view"))
 
 ;; This is an Emacs package that creates graphviz directed graphs from
 ;; the headings of an org file
 (use-package org-mind-map
   :defer t
-  :load-path "extra-lisp/"
-  :config
+  :straight (org-mind-map :type git :host github
+			    :repo "the-ted/org-mind-map")
+  :config 
   (setq org-mind-map-engine "dot")	; Default. Directed Graph
   ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
   ;; (setq org-mind-map-engine "twopi")  ; Radial Layout
@@ -1467,8 +1407,8 @@
   ;; (setq org-mind-map-engine "sfdp")   ; Multiscale version of fdp for the layout of large graphs
   )
 
+;; perfectly alian English/CJK fonts in the same table
 (use-package valign
-  :straight t
   :hook (org-mode . valign-mode)
   :config
   (setq valign-fancy-bar t))
@@ -1477,7 +1417,8 @@
 ;;             LaTeX           ;;
 ;; ==============================
 (use-package tex ;;not auctex instead!
-  :ensure auctex
+  :ensure nil
+  :straight auctex
   :defer t
   :mode ("\\.tex\\'" . latex-mode)
   :config
@@ -1493,8 +1434,7 @@
   ;;  (setq org-format-latex-options (plist-put org-format-latex-options :scale 3.0)) ;;preview in org-mode
   ;; (custom-set-faces 
   ;;  '(preview-reference-face ((t (:background "gray" :foreground "black")))))
-
-
+  
   ;;sync latex <-> pdf
   (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer) ;;auto revert PDF buffer
 
@@ -1519,7 +1459,6 @@
   )
 
 (use-package magic-latex-buffer
-  :straight t
   :defer t
   :hook
   (LaTeX-mode . magic-latex-buffer)
@@ -1589,20 +1528,13 @@
 ;;allow you to view pdf continuously
 (use-package pdf-continuous-scroll-mode
   :defer t
-  :load-path "extra-lisp/"
+  :straight (pdf-continuous-scroll-mode :type git :host github
+					:repo "dalanicolai/pdf-continuous-scroll-mode.el")
   :hook
   (pdf-view-mode-hook . pdf-continuous-scroll-mode))
 
-;; one way to download using qulepa, but too slow and annoying for me
-;; (use-package pdf-continuous-scroll-mode
-;;   :defer t
-;;   :quelpa
-;;   (pdf-continuous-scroll-mode :fetcher github
-;; 			      :repo "dalanicolai/pdf-continuous-scroll-mode.el"))
-
 ;;read the documentation to find how to compile and pdf-tools first
 (use-package pdf-tools
-  :straight t
   :defer t
   :commands (pdf-view-mode pdf-loader-install)
   :mode ("\\.[pP][dD][fF]\\'" . pdf-view-mode)
@@ -1628,9 +1560,8 @@
 
 (defun my-cleanup-gc ()
   "Clean up gc.  From user redguardtoo."
-  (setq gc-cons-threshold  67108864) ; 64M
-  (setq gc-cons-percentage 0.1) ; original value
-  (garbage-collect))
+  (setq gc-cons-threshold 100000000)
+  (setq gc-cons-percentage 0.1))
 ;; collect gc during free time
 (run-with-idle-timer 4 nil #'my-cleanup-gc)
 
