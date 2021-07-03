@@ -10,13 +10,26 @@
 #bash ./install-fonts.sh
 #--------------------------------------------
 
-if [[ "$OSTYPE" == "msys" ]]; then
-    echo ">>> Using windows, not sure whether works"
-elif [[ "$OSTYPE" == "cygwin" ]]; then
-    echo ">>> Using windows, not sure whether works"
+if [ "$OSTYPE" = "msys" -o "$OSTYPE" = "cygwin" ]; then
+    echo ">>> Sorry, Windows are not supported, exiting"
+    exit
+elif test "$(uname)" = "Darwin" ; then
+    echo ">>> Using OSX, should work well"
+    font_dir="$HOME/Library/Fonts"
+elif test "$(uname)" = "Linux" ; then
+    echo ">>> Using Linux, should work well"
+    font_dir="$HOME/.local/share/fonts"
 else
-    echo ">>> Using Linux/OSX, should work well"
+    echo "Unknown OS type: $OSTYPE"
+    exit
 fi
+
+if [ ! -d $font_dir ]
+then
+    mkdir -p $font_dir;
+fi
+
+cd $font_dir
 
 #--Font list--
 #>English Monospace
@@ -41,15 +54,6 @@ fi
 #Cormorant Garamond
 #ET Book
 #---End----
-
-font_dir="$HOME/.local/share/fonts"
-
-if [ ! -d $font_dir ]
-then
-    mkdir -p $font_dir;
-fi
-
-cd $font_dir
 
 dejavu_url="https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_2_37/dejavu-fonts-ttf-2.37.zip"
 hack_url="https://github.com/source-foundry/Hack/releases/download/v3.003/Hack-v3.003-ttf.zip"
@@ -97,4 +101,5 @@ find . -type d -empty -delete
 #remove the warning log
 rm tmp.log
 
+#refresh
 fc-cache -f -v
