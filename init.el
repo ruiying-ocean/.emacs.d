@@ -14,7 +14,7 @@
 
 ;;; FUNDEMENTAL
 
-;; package manager: straight.el
+;; Package Manager: straight.el
 ;; if the boostrap doesn't work, manually run
 ;; git clone https://github.com/raxod502/straight.el.git ~/.emacs.d/straight/repos/straight.el
 (defvar bootstrap-version)
@@ -30,7 +30,15 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-;; Native compilation support
+;; customize when to check package modification
+(setq straight-check-for-modifications '(check-on-save))
+
+
+;; Intergration with use-package
+(straight-use-package 'use-package)
+(setq straight-use-package-by-default t)
+
+;; Emacs Native Compilation Feature support
 (when (and (fboundp 'native-comp-available-p)
            (native-comp-available-p))
   (progn
@@ -40,7 +48,7 @@
     (setq package-native-compile t)
     ))
 
-;; Load path
+;; Update user load path
 ;; Optimize: Force "lisp" at the head to reduce the startup time.
 (defun update-load-path (&rest _)
   "Update `load-path'."
@@ -49,12 +57,11 @@
 (advice-add #'package-initialize :after #'update-load-path)
 (update-load-path)
 
+;; Custom file
 (setq custom-file (concat user-emacs-directory "/extra-lisp/custom.el"))
 (load custom-file :noerror)
 
-;; Increase garbage collection threshold at startup
-(setq gc-cons-percentage 0.6)
-(setq gc-cons-threshold most-positive-fixnum)
+;;; Speed up launching Emacs
 
 ;; Increase read max limit to 3 mb
 (setq read-process-output-max (* 3 1024 1024))
@@ -62,12 +69,20 @@
 ;; Avoid matching file name with regrex list during startup
 (let ((file-name-handler-alist nil)) "~/.emacs.d/init.el")
 
-(straight-use-package 'use-package)
-(setq straight-use-package-by-default t)
+;; Temporaily increase garbage collection threshold at startup
+(setq gc-cons-percentage 0.6)
+(setq gc-cons-threshold most-positive-fixnum)
+
+;; Another package to automatically optimise garbage collector
+;; (use-package gcmh
+;;   :straight (gcmh :type git :host gitlab :repo "koral/gcmh")
+;;   :config
+;;   (gcmh-mode +1)
+;;   (setq gcmh-verbose t))
 
 (require 'bind-key)
 
-;; recompile outdated .elc file
+;; Recompile outdated .elc file
 ;; (use-package auto-compile
 ;;   :init
 ;;   (auto-compile-on-load-mode)
@@ -671,6 +686,7 @@
 ;; >/< to slurp/barf: push out/pull in
 ;; w/s to move marked regions up/down
 ;; M-j to split, + to join
+;; To insert a single parenthsis, use a C-q prefix
 
 (use-package lispy
   :hook
@@ -1565,11 +1581,13 @@
 
 ;;; End
 
+;; Back to normal GC level
 (defun my-cleanup-gc ()
   "Clean up gc.  From user redguardtoo."
   (setq gc-cons-threshold 100000000)
   (setq gc-cons-percentage 0.1))
-;; collect gc during free time
+
+;; Collect gc during free time
 (run-with-idle-timer 4 nil #'my-cleanup-gc)
 
 (setq max-specpdl-size 32000
