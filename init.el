@@ -30,9 +30,11 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-;; customize when to check package modification
+;; Customize when to check package modification
 (setq straight-check-for-modifications '(check-on-save))
-
+;; Cause straight.el to cache the autoloads of all used packages in a single
+;; file on disk thus reduce IO operations
+(setq straight-cache-autoloads t)
 
 ;; Intergration with use-package
 (straight-use-package 'use-package)
