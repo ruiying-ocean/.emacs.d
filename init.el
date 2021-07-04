@@ -678,7 +678,10 @@
   :bind
   ("C-M-l" . lispy-mode)
   (:map lispy-mode-map
-	("M-o" . ace-window)))
+	("M-o" . ace-window))
+  :config
+  ;; allow delete single parenthesis
+  (define-key lispy-mode-map-lispy (kbd "C-d") nil))
 
 ;; --> Option 2 (Advanced but has learning curve)
 ;; (use-package paredit
@@ -1207,6 +1210,11 @@
   (define-key inferior-ess-r-mode-map (kbd "C-n") 'comint-next-input)
   (define-key inferior-ess-r-mode-map (kbd "<down>") 'comint-next-input)
   )
+
+;; view R data frame
+;; https://github.com/ShuguangSun/ess-view-data
+(use-package ess-view-data
+  :defer t)
 
 ;;C-c C-a to turn on csv-align-fields
 (use-package csv-mode
