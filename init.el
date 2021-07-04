@@ -106,7 +106,9 @@
 ;;   (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
 ;; Option 4
-(use-package esup)
+(use-package esup
+  :config
+  (setq esup-depth 0))
 
 
 ;;; EDITOR SECTION
@@ -309,14 +311,14 @@
   (setq password-cache-expiry nil))
 
 (use-package counsel-tramp
-  :defer 1
   :after (counsel tramp)
   :config
   (setq counsel-tramp-custom-connections '(/scp:mogu@almond.ggy.bris.ac.uk:/home/mogu/cgenie.muffin/))
   (setq tramp-default-method "scp")
   (setq make-backup-files nil)
   (setq create-lockfiles nil)
-  (define-key global-map (kbd "C-c s") 'counsel-tramp)
+  :bind
+  ("C-c s" . counsel-tramp)
   )
 
 ;; visit https://github.com/jacktasia/dumb-jump to see more alternative ways
