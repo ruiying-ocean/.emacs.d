@@ -110,6 +110,9 @@
   :config
   (setq esup-depth 0))
 
+;; Option 5 (Run time not start up)
+;; profile-start -> profile-stop -> profile-report
+
 
 ;;; EDITOR SECTION
 
@@ -203,6 +206,14 @@
   (global-set-key [remap kill-ring-save] 'easy-kill)
   (global-set-key [remap mark-sexp] 'easy-mark))
 
+;; some useful interactive commands
+(use-package crux
+  :defer t
+  :config
+  (global-set-key [remap move-beginning-of-line] #'crux-move-beginning-of-line)
+  (global-set-key [remap kill-whole-line] #'crux-kill-whole-line)
+  )
+
 
 ;;; TERMINAL, COMPLETION, LINT, SNIPPET
 
@@ -210,27 +221,41 @@
 ;; Tips: you can use M-r to search in shell history
 ;; History references like '!' (reference), ‘!!’ (last cmd) and ‘^’ (substituion, e.g., ^a^b) are supported
 ;; If you don't know the history reference, use C-c C-l to list all (will work for most comint buffers)
-(use-package shell
-  :straight (:type built-in)
-  :config
-  (defun no-echo-input-in-shell ()
-    "Do not echo my input command"
-    (setq comint-process-echoes t))
-  (add-hook 'shell-mode-hook 'no-echo-input-in-shell)
-  ;; can't delete output text
-  (setq comint-prompt-read-only t)
-  (add-hook 'comint-preoutput-filter-functions
-            (lambda (text)
-              (propertize text 'read-only t)))
+;; (use-package shell
+;;   :straight (:type built-in)
+;;   :config
+;;   (defun no-echo-input-in-shell ()
+;;     "Do not echo my input command"
+;;     (setq comint-process-echoes t))
+;;   (add-hook 'shell-mode-hook 'no-echo-input-in-shell)
+;;   ;; can't delete output text
+;;   (setq comint-prompt-read-only t)
+;;   (add-hook 'comint-preoutput-filter-functions
+;;             (lambda (text)
+;;               (propertize text 'read-only t)))
+;;   :bind
+;;   ("C-x t" . shell)
+;;   (:map shell-mode-map
+;; 	("<up>" . comint-previous-input)
+;; 	("C-p" . comint-previous-input)
+;; 	("<down>" . comint-next-input)
+;; 	("C-n" . comint-next-input)
+;; 	("C-l" . comint-clear-buffer)
+;; 	("SPC" . comint-magic-space)))
+;;magically expand history reference, <TAB> also works
+
+
+;; enable this superior terminal emulator if you have installed related requirements
+;; read more on https://github.com/akermu/emacs-libvterm
+(use-package vterm
   :bind
-  ("C-x t" . shell)
-  (:map shell-mode-map
-	("<up>" . comint-previous-input)
-	("C-p" . comint-previous-input)
-	("<down>" . comint-next-input)
-	("C-n" . comint-next-input)
-	("C-l" . comint-clear-buffer)
-	("SPC" . comint-magic-space))) ;;magically expand history reference, <TAB> also works
+  ("C-x t" . vterm)
+  )
+
+;; get better rendering experience for terminal
+;; (use-package eterm-256color
+;;   :hook
+;;   (term-mode . eterm-256color-mode))
 
 ;;auto-completion system
 (use-package company
@@ -1002,16 +1027,16 @@
 (add-hook 'after-init-hook 'reapply-themes)
 
 ;; Toggle between light and dark
-(defun light-theme ()
+(defun day-theme ()
   "Activate a light color theme.  Recommendation: leuven, spacemacs-light, eziam, twilight-bright."
   (interactive)
   (setq custom-enabled-themes '(twilight-bright))
   (reapply-themes))
 
-(defun dark-theme ()
+(defun night-theme ()
   "Activate a dark color theme.  Recommendation: humanoid-dark, doom-one, doom-dark+, ample-flat."
   (interactive)
-  (setq custom-enabled-themes '(doom-one))
+  (setq custom-enabled-themes '(doom-dark+))
   (reapply-themes))
 
 ;;Transprancy setting
@@ -1207,8 +1232,10 @@
     (interactive)
     (just-one-space 1)
     (insert "%>%")
+    (just-one-space 1)
     ;;(reindent-then-newline-and-indent)
     )
+  
   (defun ess-clear-REPL-buffer ()
     "Clear outputs in the REPL buffer"
     (interactive)
