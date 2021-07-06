@@ -85,7 +85,7 @@ for i in ${font_list[@]}; do
     wget --quiet "$i";
 done
 
-if [ "$1" -eq "more"]
+if [ "$1" == "more" ]
 then
     git clone https://github.com/supercomputra/SF-Mono-Font.git
 fi
