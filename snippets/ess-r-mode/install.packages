@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: install.packages
+# key: install
+# --
+install.packages(${1:package})

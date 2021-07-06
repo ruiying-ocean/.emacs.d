@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: ggplot2
+# key: ggp
+# --
+${1:name} <- ggplot(${2:data}, aes(x = $3, y = $0))

@@ -100,7 +100,6 @@
 
 ;; Option 3
 ;; (use-package benchmark-init
-;;   
 ;;   :config
 ;;   ;; To disable collection of benchmark data after init is done.
 ;;   (add-hook 'after-init-hook 'benchmark-init/deactivate))
@@ -136,7 +135,8 @@
 (add-hook 'text-mode-hook 'flyspell-mode)
 (setq-default ispell-program-name "aspell") ;;depends on aspell in the path
 (setq ispell-local-dictionary "en_GB")
-(setq ispell-extra-args '("--sug-mode=fast" "--lang=en_GB" "--camel-case" "--run-together"))
+(setq ispell-extra-args '("--sug-mode=fast" "--lang=en_GB"
+			  "--camel-case" "--run-together"))
 
 (use-package flyspell-correct
   :after flyspell
@@ -173,7 +173,8 @@
   :config
   (setq-default
    recentf-max-saved-items 30
-   recentf-exclude `("/tmp/", (concat package-user-dir "/.*-autoloads\\.el\\'")))
+   recentf-exclude `("/tmp/",
+		     (concat package-user-dir "/.*-autoloads\\.el\\'")))
   (global-set-key (kbd "<f3>") #'recentf-open-files)
   :hook
   (after-init . recentf-mode))
@@ -206,13 +207,19 @@
   (global-set-key [remap kill-ring-save] 'easy-kill)
   (global-set-key [remap mark-sexp] 'easy-mark))
 
-;; some useful interactive commands
-(use-package crux
-  :defer t
-  :config
-  (global-set-key [remap move-beginning-of-line] #'crux-move-beginning-of-line)
-  (global-set-key [remap kill-whole-line] #'crux-kill-whole-line)
-  )
+;; Smartly clean whitespace
+;; (use-package whitespace-cleanup-mode
+;;   :hook
+;;   (prog-mode . whitespace-mode))
+
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+;; An alternative way to cleanup whitespace
+(use-package ws-butler
+  :straight (:type git :host github
+		   :repo "lewang/ws-butler")
+  :hook
+  (prog-mode . ws-butler-mode))
 
 
 ;;; TERMINAL, COMPLETION, LINT, SNIPPET
@@ -241,7 +248,7 @@
 	("<down>" . comint-next-input)
 	("C-n" . comint-next-input)
 	("C-l" . comint-clear-buffer)
-	("SPC" . comint-magic-space)))     ;magically expand history reference, <TAB> also works
+	("SPC" . comint-magic-space)))     ;magically expand history reference
 
 
 ;; Enable this to get a superior terminal emulator (a true application like iTerm)
@@ -570,7 +577,7 @@
 (global-set-key (kbd "C-c h") 'query-replace)
 
 ;; select one and edit all (https://github.com/victorhge/iedit)
-;; iedit is also dependency of lispy, use M-i to toggle 
+;; iedit is also dependency of lispy, use M-i to toggle
 (use-package iedit
   :bind
   ("M-i" . iedit-mode)
@@ -778,7 +785,7 @@
 
 ;; (use-package doom-modeline
 ;;   ;;right fringe cut-off issue should relate to font size
-;;   ;;Use cnfont-decrease-size or see more methods in 
+;;   ;;Use cnfont-decrease-size or see more methods in
 ;;   ;;https://github.com/hlissner/doom-emacs/blob/develop/modules/ui/modeline/README.org#the-right-side-of-the-modeline-is-cut-off
 ;;   :defer t
 ;;   :after all-the-icons
@@ -896,7 +903,7 @@
 ;;                                     (t      . 10)))
 ;;   (ivy-posframe-mode 1))
 
-(use-package centaur-tabs 
+(use-package centaur-tabs
   :config
   ;;  (centaur-tabs-mode t)
   (setq centaur-tabs-set-bar 'over)
@@ -1006,7 +1013,7 @@
   ;; ;;treemacs setting
   ;; (setq doom-themes-treemacs-enable-variable-pitch nil)
   ;; (setq doom-themes-treemacs-theme "doom-color")
-  ;; (doom-themes-treemacs-config)  
+  ;; (doom-themes-treemacs-config)
   ;; ;; Corrects (and improves) org-mode's native fontification.
   ;; (doom-themes-org-config)
   )
@@ -1156,7 +1163,7 @@
          (append-string
           (if (string-match "^\n*$" append-string2)
               (replace-match "" nil nil append-string2)
-            append-string2)))  
+            append-string2)))
     (python-shell-append-to-output
      (concat (string-trim-right append-string) "\n")))
   (if (called-interactively-p 'any)
@@ -1233,7 +1240,7 @@
     (just-one-space 1)
     ;;(reindent-then-newline-and-indent)
     )
-  
+
   (defun ess-clear-REPL-buffer ()
     "Clear outputs in the REPL buffer"
     (interactive)
@@ -1311,7 +1318,7 @@
 ;; Not work for SSH git repository
 
 ;; (use-package grip-mode
-;;   
+;;
 ;;   :bind (:map markdown-mode-command-map
 ;;               ("g" . grip-mode))
 ;;   :hook (markdown-mode . grip-mode)
@@ -1322,7 +1329,7 @@
 ;;   (require 'auth-source)
 ;;   (let ((credential (auth-source-user-and-password "api.github.com")))
 ;;     (setq grip-github-user (car credential)
-;;           grip-github-password (cadr credential)))  
+;;           grip-github-password (cadr credential)))
 ;;   )
 
 ;; >>> Option 2
@@ -1378,7 +1385,7 @@
   ;;   (org-babel-do-load-languages 'org-babel-load-languages
   ;; 				 (append org-babel-load-languages
   ;; 					 '((ein . t)))))
-  
+
   :custom
   (org-support-shift-select 'alway)
   (org-babel-load-languages '((emacs-lisp . t)
@@ -1452,7 +1459,7 @@
   :defer t
   :straight (org-mind-map :type git :host github
 			    :repo "the-ted/org-mind-map")
-  :config 
+  :config
   (setq org-mind-map-engine "dot")	; Default. Directed Graph
   ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
   ;; (setq org-mind-map-engine "twopi")  ; Radial Layout
@@ -1484,9 +1491,9 @@
   (setq preview-pdf-color-adjust-method t)
   (set-default 'preview-scale-function 1.0) ;;preview scale
   ;;  (setq org-format-latex-options (plist-put org-format-latex-options :scale 3.0)) ;;preview in org-mode
-  ;; (custom-set-faces 
+  ;; (custom-set-faces
   ;;  '(preview-reference-face ((t (:background "gray" :foreground "black")))))
-  
+
   ;;sync latex <-> pdf
   (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer) ;;auto revert PDF buffer
 
@@ -1497,7 +1504,7 @@
 	TeX-source-correlate-method 'auto) ;;Method to use for enabling forward and inverse search
 
   (add-hook 'LaTeX-mode-hook
-            (lambda ()           
+            (lambda ()
 	      (rainbow-delimiters-mode 1)
               (visual-line-mode -1)
 	      (visual-fill-column-mode -1)
@@ -1525,7 +1532,7 @@
 ;; Retrieve BibTeX entries
 ;; Call 'gscholar-bibtex' to retrieve BibTeX entries from Google
 ;; Scholar, ACM Digital Library, IEEE Xplore and DBLP.
-;; (use-package gscholar-bibtex 
+;; (use-package gscholar-bibtex
 ;;   :defer t)
 
 ;; Reformat BibTeX using bibclean
