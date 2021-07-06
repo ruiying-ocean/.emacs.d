@@ -42,6 +42,7 @@ cd $font_dir
 #Hack
 #Dejavu
 #UbuntuMono Nerd Font
+#SF Mono (optional)
 
 #>CJK mono font (sans font)
 #WenQuanYi Micro Hei
@@ -83,6 +84,12 @@ echo ">>>> Downloading"
 for i in ${font_list[@]}; do
     wget --quiet "$i";
 done
+
+if [ "$1" -eq "more"]
+then
+    git clone https://github.com/supercomputra/SF-Mono-Font.git
+fi
+
 echo ">>>> Successful! :)"
 
 #extract all zip archives
