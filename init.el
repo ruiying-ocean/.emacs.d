@@ -217,40 +217,38 @@
 
 ;;; TERMINAL, COMPLETION, LINT, SNIPPET
 
-;; Running Shells in Emacs
+;; Shells in Emacs (more of an interface)
 ;; Tips: you can use M-r to search in shell history
 ;; History references like '!' (reference), ‘!!’ (last cmd) and ‘^’ (substituion, e.g., ^a^b) are supported
 ;; If you don't know the history reference, use C-c C-l to list all (will work for most comint buffers)
-;; (use-package shell
-;;   :straight (:type built-in)
-;;   :config
-;;   (defun no-echo-input-in-shell ()
-;;     "Do not echo my input command"
-;;     (setq comint-process-echoes t))
-;;   (add-hook 'shell-mode-hook 'no-echo-input-in-shell)
-;;   ;; can't delete output text
-;;   (setq comint-prompt-read-only t)
-;;   (add-hook 'comint-preoutput-filter-functions
-;;             (lambda (text)
-;;               (propertize text 'read-only t)))
-;;   :bind
-;;   ("C-x t" . shell)
-;;   (:map shell-mode-map
-;; 	("<up>" . comint-previous-input)
-;; 	("C-p" . comint-previous-input)
-;; 	("<down>" . comint-next-input)
-;; 	("C-n" . comint-next-input)
-;; 	("C-l" . comint-clear-buffer)
-;; 	("SPC" . comint-magic-space)))
-;;magically expand history reference, <TAB> also works
+(use-package shell
+  :straight (:type built-in)
+  :config
+  (defun no-echo-input-in-shell ()
+    "Do not echo my input command"
+    (setq comint-process-echoes t))
+  (add-hook 'shell-mode-hook 'no-echo-input-in-shell)
+  ;; can't delete output text
+  (setq comint-prompt-read-only t)
+  (add-hook 'comint-preoutput-filter-functions
+	    (lambda (text)
+	      (propertize text 'read-only t)))
+  :bind
+  ("C-x s" . shell)
+  (:map shell-mode-map
+	("<up>" . comint-previous-input)
+	("C-p" . comint-previous-input)
+	("<down>" . comint-next-input)
+	("C-n" . comint-next-input)
+	("C-l" . comint-clear-buffer)
+	("SPC" . comint-magic-space)))     ;magically expand history reference, <TAB> also works
 
 
-;; enable this superior terminal emulator if you have installed related requirements
-;; read more on https://github.com/akermu/emacs-libvterm
+;; Enable this to get a superior terminal emulator (a true application like iTerm)
+;; read more on https://github.com/akermu/emacs-libvterm to see the external dependencies
 (use-package vterm
   :bind
-  ("C-x t" . vterm)
-  )
+  ("C-x t" . vterm))
 
 ;; get better rendering experience for terminal
 ;; (use-package eterm-256color
