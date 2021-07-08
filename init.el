@@ -1258,11 +1258,10 @@
   (define-key ess-r-mode-map (kbd "M-p") 'ess-insert-pipe)
   (define-key inferior-ess-r-mode-map (kbd "M-p") 'ess-insert-pipe)
   (define-key inferior-ess-r-mode-map (kbd "C-p") 'comint-previous-input)
-  (define-key inferior-ess-r-mode-map (kbd "up") 'comint-previous-input)
+  (define-key inferior-ess-r-mode-map (kbd "<up>") 'comint-previous-input)
   (define-key inferior-ess-r-mode-map (kbd "C-n") 'comint-next-input)
   (define-key inferior-ess-r-mode-map (kbd "<down>") 'comint-next-input)
-  )
-
+)
 ;; view R data frame
 ;; https://github.com/ShuguangSun/ess-view-data
 (use-package ess-view-data
