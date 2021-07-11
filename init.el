@@ -221,6 +221,13 @@
   :hook
   (prog-mode . ws-butler-mode))
 
+;; Automatically add spacing around operators
+(use-package electric-operator
+  :hook
+  (python-mode . electric-operator-mode)
+  (ess-r-mode . electric-operator-mode)
+  (emacs-lisp-mode . electric-operator-mode))
+
 
 ;;; TERMINAL, COMPLETION, LINT, SNIPPET
 
@@ -381,8 +388,9 @@
 ;; Alternative
 ;; pip install prospector -> don't check code style but relatively slower
 ;; (use-package flycheck-prospector
-;;   :init
-;;   (flycheck-prospector-setup))
+;;   :config
+;;   (flycheck-prospector-setup)
+;;   )
 
 (use-package flycheck
   :hook
