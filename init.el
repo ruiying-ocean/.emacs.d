@@ -373,13 +373,24 @@
 
 ;; on-the-fly syntax checker,  use C-c ! as prefix, e.g., C-c ! v to verify the checkers
 ;; use M-g n/p to navigate error, or use C-c e (counsel-flycheck)
+
+;; python flycheck depdencies
+;; pip install pyflakes -> fast and don't check code style
+(use-package flycheck-pyflakes)
+
+;; Alternative
+;; pip install prospector -> don't check code style but relatively slower
+;; (use-package flycheck-prospector
+;;   :init
+;;   (flycheck-prospector-setup))
+
 (use-package flycheck
   :hook
   (prog-mode . flycheck-mode)
   :config
   (setq-default flycheck-emacs-lisp-load-path 'inherit)
   ;; python checker
-  ;; conda install -c anaconda flake8
+  (add-to-list 'flycheck-disabled-checkers 'python-flake8)
   (add-to-list 'flycheck-disabled-checkers 'python-pylint)
   (add-to-list 'flycheck-disabled-checkers 'python-mypy)
   (add-to-list 'flycheck-disabled-checkers 'python-pyright)
@@ -390,8 +401,9 @@
   (add-to-list 'flycheck-disabled-checkers 'sh-posix-bash)
   ;; Elisp checker
   (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-checkdoc)
-  :custom
-  (flycheck-python-flake8-executable "python3"))
+  ;; :custom (may cause warning)
+  ;; (flycheck-python-pyflakes-executable "python3")
+  )
 
 (use-package flycheck-inline
   :hook
