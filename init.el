@@ -231,9 +231,9 @@
 ;; Automatically add spacing around operators
 (use-package electric-operator
   :hook
-  (python-mode . electric-operator-mode)
-  (ess-r-mode . electric-operator-mode)
-  (emacs-lisp-mode . electric-operator-mode))
+  ;; (python-mode . electric-operator-mode)
+  ;; (emacs-lisp-mode . electric-operator-mode)
+  (ess-r-mode . electric-operator-mode))
 
 
 ;;; TERMINAL, COMPLETION, LINT, SNIPPET
@@ -629,7 +629,9 @@
   (if (eq system-type 'darwin)
       (toggle-frame-maximized)
     (toggle-frame-fullscreen)))
-(add-hook 'after-init-hook #'auto-max-frame)
+
+(if (display-graphic-p)
+    (add-hook 'after-init-hook #'auto-max-frame))
 
 ;;no more startup message/screen
 (setq inhibit-startup-screen t)
