@@ -131,12 +131,11 @@
 ;;No more strange ring bell
 (setq ring-bell-function 'ignore)
 
-;;;; Mouse scrolling in terminal emacs
+;;;; Enable mouse operation in terminal emacs
 (unless (display-graphic-p)
   (xterm-mouse-mode 1)
   (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
-  (global-set-key (kbd "<mouse-5>") 'scroll-up-line)
-  )
+  (global-set-key (kbd "<mouse-5>") 'scroll-up-line))
 
 ;;flyspell setting
 (add-hook 'text-mode-hook 'flyspell-mode)
@@ -865,8 +864,7 @@
   ("C-<f9>" . highlight-symbol)
   ("<f9>" . highlight-symbol-next)
   ("S-<f9>" . highlight-symbol-prev)
-  ("M-<f9>" . highlight-symbol-query-replace)
-  )
+  ("M-<f9>" . highlight-symbol-query-replace))
 
 (use-package minimap
   :defer t
@@ -875,8 +873,7 @@
   (minimap-width-fraction 0.05)
   (minimap-minimum-width 15)
   :bind
-  ("<f6>" . minimap-mode)
-  )
+  ("<f6>" . minimap-mode))
 
 ;;(use-package neotree
 ;;  :config
@@ -897,9 +894,7 @@
   (treemacs-load-theme "all-the-icons"))
 
 (use-package all-the-icons-dired
-  :defer t
   ;;need to run all-the-icons-install-fonts first to avoid grabled icon
-  :requires all-the-icons
   :hook
   (dired-mode . all-the-icons-dired-mode))
 
@@ -952,6 +947,10 @@
   (dired-mode . centaur-tabs-local-mode)
   (after-init . centaur-tabs-mode)
   )
+
+(use-package icons-in-terminal
+  :straight (icons-in-terminal :type git :host github
+			       :repo "seagle0128/icons-in-terminal.el"))
 
 (use-package visual-fill-column
   :defer t
