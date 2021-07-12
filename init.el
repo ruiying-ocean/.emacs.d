@@ -290,6 +290,11 @@
   :hook
   (after-init . global-company-mode))
 
+;; company for shell script
+(use-package company-shell
+  :config
+  (add-to-list 'company-backends 'company-shell-env))
+
 ;;A machine-learning based backend for company
 ;;May conflict with company-flx-mode/ESS mode
 ;; (use-package company-tabnine
@@ -518,10 +523,13 @@
 (use-package projectile
   :after ivy
   :config
-  (projectile-mode +1)
   (setq projectile-completion-system 'ivy)
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   )
+
+(use-package counsel-projectile
+  :config
+  (counsel-projectile-mode +1))
 
 ;;Faster cursor movement - go to anywhere
 (use-package avy
@@ -576,13 +584,14 @@
   (end-of-line 1))
 (global-set-key (kbd "C-l") 'select-current-line)
 
-
 (defun open-init-file()
   "Open my init.el."
   (interactive)
   (find-file "~/.emacs.d/init.el"))
 (global-set-key (kbd "<f2>") 'open-init-file)
 
+;; ibuffer
+(global-set-key (kbd "C-x C-b") 'ibuffer)
 ;; Martset
 ;; In case you can't use C-SPEC to do markset, change it to C-j
 ;; (global-set-key (kbd "C-j") 'set-mark-command)
@@ -910,6 +919,7 @@
    '((ivy-rich-switch-buffer-size (:align right)))))
 
 (use-package all-the-icons-ivy-rich
+  :if window-system
   :after ivy-rich
   :config
   (setq all-the-icons-ivy-rich-icon-size 1.0)
@@ -950,7 +960,25 @@
 
 (use-package icons-in-terminal
   :straight (icons-in-terminal :type git :host github
-			       :repo "seagle0128/icons-in-terminal.el"))
+			       :repo "seagle0128/icons-in-terminal.el")
+  :config
+  (icons-in-terminal-icon-for-mode 'emacs-lisp-mode)
+  )
+
+;; Enable icons in the ibuffer
+(use-package all-the-icons-ibuffer
+  :config
+  (setq inhibit-compacting-font-caches t))
+
+;; A terminal fork of last package, enable according to GUI/TUI
+(use-package icons-in-terminal-ibuffer
+  :straight (icons-in-terminal-ibuffer :type git :host github
+				       :repo "rhdxmr/icons-in-terminal-ibuffer")
+  :config
+  (add-hook 'ibuffer-mode-hook (lambda ()
+				 (if (display-graphic-p)
+				     (all-the-icons-ibuffer-mode)
+				   (icons-in-terminal-ibuffer-mode)))))
 
 (use-package visual-fill-column
   :defer t
