@@ -131,6 +131,13 @@
 ;;No more strange ring bell
 (setq ring-bell-function 'ignore)
 
+;;;; Mouse scrolling in terminal emacs
+(unless (display-graphic-p)
+  (xterm-mouse-mode 1)
+  (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
+  (global-set-key (kbd "<mouse-5>") 'scroll-up-line)
+  )
+
 ;;flyspell setting
 (add-hook 'text-mode-hook 'flyspell-mode)
 (setq-default ispell-program-name "aspell") ;;depends on aspell in the path
@@ -617,7 +624,7 @@
 
 ;;Auto-max the frame at startup
 (defun auto-max-frame()
-  "Maxize/full screen the frame according to the OS type"
+  "Maxize/full screen the frame according to the OS type."
   (interactive)
   (if (eq system-type 'darwin)
       (toggle-frame-maximized)
