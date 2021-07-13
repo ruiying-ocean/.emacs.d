@@ -745,11 +745,11 @@
   (define-key dired-mode-map [mouse-2] 'dired-mouse-find-file))
 
 (use-package dired-ranger
-  :ensure t
-  :bind (:map dired-mode-map
-              ("W" . dired-ranger-copy)
-              ("X" . dired-ranger-move)
-              ("Y" . dired-ranger-paste)))
+  :bind
+  (:map dired-mode-map
+        ("W" . dired-ranger-copy)
+        ("X" . dired-ranger-move)
+        ("Y" . dired-ranger-paste)))
 
 ;; (use-package dired-collapse
 ;;   :hook
@@ -896,8 +896,6 @@
 (use-package highlight-indent-guides
   :hook
   (prog-mode . highlight-indent-guides-mode)
-  ;; :config
-  ;;  (set-face-background 'highlight-indent-guides-character-face "dimgrey")
   :custom
   (highlight-indent-guides-method 'character))
 
