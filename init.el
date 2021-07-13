@@ -137,41 +137,23 @@
   (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
   (global-set-key (kbd "<mouse-5>") 'scroll-up-line))
 
-;; (use-package flycheck-languagetool
-;;   :after flycheck
-;;   :if (eq system-type 'darwin)
-;;   :hook (text-mode . (lambda ()
-;;                        (require 'flycheck-languagetool)))
-;;   :init
-;;   (setq flycheck-languagetool--start-server t)
-;;   (setq flycheck-languagetool-server-jar (concat (getenv "HOME") "/LanguageTool-5.4/languagetool-server.jar"))
-;;   (flycheck-languagetool--verify)
-;;   )
-
-;; (use-package langtool
-;;   :if (eq system-type 'darwin)
-;;   :config
-;;   (setq langtool-language-tool-jar
-;; 	(concat (getenv "HOME") "/LanguageTool-5.4/languagetool-commandline.jar"))
-;;   (setq langtool-language-tool-server-jar
-;; 	(concat (getenv "HOME") "/LanguageTool-5.4/languagetool-server.jar"))
-;;   (setq langtool-server-user-arguments '("-p" "8082"))
-;;   (setq langtool-default-language "en-GB")
-;;   (setq langtool-java-bin "/usr/bin/java")
-;;   ;; show popup
-;;   (defun langtool-autoshow-detail-popup (overlays)
-;;     (when (require 'popup nil t)
-;;       ;; Do not interrupt current popup
-;;       (unless (or popup-instances
-;;                   ;; suppress popup after type `C-g` .
-;;                   (memq last-command '(keyboard-quit)))
-;; 	(let ((msg (langtool-details-error-message overlays)))
-;;           (popup-tip msg)))))
-;;   (setq langtool-autoshow-message-function
-;; 	'langtool-autoshow-detail-popup)
-;;   :bind
-;;   ("C-;" . langtool-check)
-;;   )
+(use-package languagetool
+  :config
+  (setq languagetool-language-tool-jar
+	(concat (getenv "HOME") "/LanguageTool-5.4/languagetool-commandline.jar"))
+  (setq languagetool-language-tool-server-jar
+	(concat (getenv "HOME") "/LanguageTool-5.4/languagetool-server.jar"))
+  (setq languagetool-server-user-arguments '("-p" "8082"))
+  (setq languagetool-default-language "en-GB")
+  (setq languagetool-java-bin "/usr/bin/java")
+  (setq languagetool-java-arguments '("-Dfile.encoding=UTF-8"))
+  :bind
+  ("C-c C-; c" . languagetool-check)
+  ("C-c C-; d" . languagetool-clear-buffer)
+  ("C-c C-; i" . languagetool-correct-at-point)
+  ("C-c C-; b" . languagetool-buffer)
+  ("C-c C-; l" . languagetool-set-language)
+  )
 
 ;;flyspell setting
 (use-package flyspell
