@@ -903,6 +903,7 @@
   (treemacs-load-theme "all-the-icons"))
 
 (use-package all-the-icons-dired
+  :if window-system
   ;;need to run all-the-icons-install-fonts first to avoid grabled icon
   :hook
   (dired-mode . all-the-icons-dired-mode))
@@ -925,6 +926,12 @@
   (setq all-the-icons-ivy-rich-icon-size 1.0)
   (setq inhibit-compacting-font-caches t)
   (all-the-icons-ivy-rich-mode t))
+
+;; Enable icons in the ibuffer
+(use-package all-the-icons-ibuffer
+  :if window-system
+  :config
+  (setq inhibit-compacting-font-caches t))
 
 ;; (use-package ivy-posframe ;;center your selection candidate box
 ;;   :config
@@ -957,28 +964,6 @@
   (dired-mode . centaur-tabs-local-mode)
   (after-init . centaur-tabs-mode)
   )
-
-(use-package icons-in-terminal
-  :straight (icons-in-terminal :type git :host github
-			       :repo "seagle0128/icons-in-terminal.el")
-  :config
-  (icons-in-terminal-icon-for-mode 'emacs-lisp-mode)
-  )
-
-;; Enable icons in the ibuffer
-(use-package all-the-icons-ibuffer
-  :config
-  (setq inhibit-compacting-font-caches t))
-
-;; A terminal fork of last package, enable according to GUI/TUI
-(use-package icons-in-terminal-ibuffer
-  :straight (icons-in-terminal-ibuffer :type git :host github
-				       :repo "rhdxmr/icons-in-terminal-ibuffer")
-  :config
-  (add-hook 'ibuffer-mode-hook (lambda ()
-				 (if (display-graphic-p)
-				     (all-the-icons-ibuffer-mode)
-				   (icons-in-terminal-ibuffer-mode)))))
 
 (use-package visual-fill-column
   :defer t
