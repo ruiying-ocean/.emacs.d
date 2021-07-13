@@ -353,6 +353,7 @@
   :straight (:type built-in)
   :if (memq system-type '(gnu/linux darwin))
   :config
+  (setq tramp-verbose 6)
   (add-to-list 'tramp-remote-path "/usr/local/bin/git")
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
   ;;tramp mode to cache password
@@ -528,8 +529,8 @@
   )
 
 (use-package counsel-projectile
-  :config
-  (counsel-projectile-mode +1))
+  :hook
+  (after-init . counsel-projectile-mode))
 
 ;;Faster cursor movement - go to anywhere
 (use-package avy
