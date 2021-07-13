@@ -137,12 +137,54 @@
   (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
   (global-set-key (kbd "<mouse-5>") 'scroll-up-line))
 
+;; (use-package flycheck-languagetool
+;;   :after flycheck
+;;   :if (eq system-type 'darwin)
+;;   :hook (text-mode . (lambda ()
+;;                        (require 'flycheck-languagetool)))
+;;   :init
+;;   (setq flycheck-languagetool--start-server t)
+;;   (setq flycheck-languagetool-server-jar (concat (getenv "HOME") "/LanguageTool-5.4/languagetool-server.jar"))
+;;   (flycheck-languagetool--verify)
+;;   )
+
+;; (use-package langtool
+;;   :if (eq system-type 'darwin)
+;;   :config
+;;   (setq langtool-language-tool-jar
+;; 	(concat (getenv "HOME") "/LanguageTool-5.4/languagetool-commandline.jar"))
+;;   (setq langtool-language-tool-server-jar
+;; 	(concat (getenv "HOME") "/LanguageTool-5.4/languagetool-server.jar"))
+;;   (setq langtool-server-user-arguments '("-p" "8082"))
+;;   (setq langtool-default-language "en-GB")
+;;   (setq langtool-java-bin "/usr/bin/java")
+;;   ;; show popup
+;;   (defun langtool-autoshow-detail-popup (overlays)
+;;     (when (require 'popup nil t)
+;;       ;; Do not interrupt current popup
+;;       (unless (or popup-instances
+;;                   ;; suppress popup after type `C-g` .
+;;                   (memq last-command '(keyboard-quit)))
+;; 	(let ((msg (langtool-details-error-message overlays)))
+;;           (popup-tip msg)))))
+;;   (setq langtool-autoshow-message-function
+;; 	'langtool-autoshow-detail-popup)
+;;   :bind
+;;   ("C-;" . langtool-check)
+;;   )
+
 ;;flyspell setting
-(add-hook 'text-mode-hook 'flyspell-mode)
-(setq-default ispell-program-name "aspell") ;;depends on aspell in the path
-(setq ispell-local-dictionary "en_GB")
-(setq ispell-extra-args '("--sug-mode=fast" "--lang=en_GB"
-			  "--camel-case" "--run-together"))
+(use-package flyspell
+  :straight (:type built-in)
+  :hook
+  (text-mode . flyspell-mode)
+  (org-mode . flyspell-mode)
+  (LaTeX-mode . flyspell-mode)
+  :config
+  (setq-default ispell-program-name "aspell") ;;depends on aspell in the path
+  (setq ispell-local-dictionary "en_GB")
+  (setq ispell-extra-args '("--sug-mode=fast" "--lang=en_GB"
+			    "--camel-case" "--run-together")))
 
 (use-package flyspell-correct
   :after flyspell
@@ -187,7 +229,6 @@
 
 ;;use undo-tree-visualize to show history
 (use-package undo-tree
-  :defer t
   :hook
   (after-init . global-undo-tree-mode)
   :bind
@@ -263,7 +304,6 @@
 	("C-l" . comint-clear-buffer)
 	("SPC" . comint-magic-space)))     ;magically expand history reference
 
-
 ;; Enable this to get a superior terminal emulator (a true application like iTerm)
 ;; read more on https://github.com/akermu/emacs-libvterm to see the external dependencies
 (use-package vterm
@@ -318,12 +358,12 @@
 ;;A fuzzy matching of company
 (use-package company-flx
   :hook
-  (company-mode . company-flx-mode)
-  )
+  (company-mode . company-flx-mode))
 
 ;;simple and fast sorting and filtering framework for comppany
 (use-package company-prescient
-  :hook (company-mode . company-prescient-mode)
+  :hook
+  (company-mode . company-prescient-mode)
   :config
   (setq prescient-filter-method '(literal regexp initialism)))
 
@@ -341,7 +381,8 @@
 ;;   )
 
 (use-package company-box
-  :hook (company-mode . company-box-mode)
+  :hook
+  (company-mode . company-box-mode)
   :config
   (setq company-box-icons-alist 'company-box-icons-images))
 
@@ -353,7 +394,8 @@
   :straight (:type built-in)
   :if (memq system-type '(gnu/linux darwin))
   :config
-  (setq tramp-verbose 6)
+  ;; use for debug
+  ;; (setq tramp-verbose 6)
   (add-to-list 'tramp-remote-path "/usr/local/bin/git")
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
   ;;tramp mode to cache password
@@ -405,8 +447,6 @@
 ;;   )
 
 (use-package flycheck
-  :hook
-  (prog-mode . flycheck-mode)
   :config
   (setq-default flycheck-emacs-lisp-load-path 'inherit)
   ;; python checker
@@ -423,12 +463,13 @@
   (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-checkdoc)
   ;; :custom (may cause warning)
   ;; (flycheck-python-pyflakes-executable "python3")
+  :hook
+  (prog-mode . flycheck-mode)
   )
 
 (use-package flycheck-inline
   :hook
-  (flycheck-mode . flycheck-inline-mode)
-  )
+  (flycheck-mode . flycheck-inline-mode))
 
 (use-package yasnippet
   :straight yasnippet-snippets ;; Collection of snippets
@@ -490,7 +531,6 @@
   )
 
 (use-package counsel
-  :defer 1
   :after ivy
   :config
   (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
@@ -525,8 +565,7 @@
   :after ivy
   :config
   (setq projectile-completion-system 'ivy)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  )
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
 (use-package counsel-projectile
   :hook
@@ -534,25 +573,21 @@
 
 ;;Faster cursor movement - go to anywhere
 (use-package avy
-  :defer 1
-  :config
-  (global-set-key (kbd "C-\"") 'avy-goto-char)  ;;input one character
-  (global-set-key (kbd "C-'") 'avy-goto-char-2) ;;input two characters
-  (global-set-key (kbd "M-g w") 'avy-goto-word-1)
-  (global-set-key (kbd "M-g l") 'avy-goto-line))
+  :bind
+  ("C-\"" . avy-goto-char)		;input: one character
+  ("C-'" . avy-goto-char-2)		;input: two characters
+  ("M-g w" . avy-goto-word-1)
+  ("M-g l" . avy-goto-line))
 
 (use-package helpful
-  :defer 2
-  :config
-  (global-set-key (kbd "C-h f") #'helpful-callable)
-  (global-set-key (kbd "C-h v") #'helpful-variable)
-  (global-set-key (kbd "C-h k") #'helpful-key)
-  )
+  :bind
+  ("C-h f" . helpful-callable)
+  ("C-h v" . helpful-variable)
+  ("C-h k" . helpful-key))
 
 (use-package ace-window
-  :defer 2
-  :config
-  (global-set-key (kbd "M-o") 'ace-window))
+  :bind
+  ("M-o" . ace-window))
 
 ;;Another interesting package for fuzzy finding
 ;; (use-package affe
@@ -616,8 +651,7 @@
 ;; iedit is also dependency of lispy, use M-i to toggle
 (use-package iedit
   :bind
-  ("M-i" . iedit-mode)
-  )
+  ("M-i" . iedit-mode))
 
 
 ;;; UI & APPEARANCE
@@ -678,8 +712,8 @@
 
 ;;turn off electric-indent-mode but use aggressive-indent-mode
 (electric-indent-mode 1)
+
 ;; (use-package aggressive-indent
-;;   :defer t
 ;;   :hook
 ;;   (prog-mode . aggressive-indent-mode))
 
@@ -702,7 +736,6 @@
 
 ;;-----------Dired enhancement-------------
 ;; (use-package dired-hacks-utils
-;;   :defer t
 ;;   :hook
 ;;   (dired-mode . dired-utils-format-information-line-mode)
 ;;   )
@@ -712,9 +745,11 @@
   (define-key dired-mode-map [mouse-2] 'dired-mouse-find-file))
 
 (use-package dired-ranger
-  :defer t
-  :hook
-  (dired-mode . dired-utils-format-information-line-mode))
+  :ensure t
+  :bind (:map dired-mode-map
+              ("W" . dired-ranger-copy)
+              ("X" . dired-ranger-move)
+              ("Y" . dired-ranger-paste)))
 
 ;; (use-package dired-collapse
 ;;   :hook
@@ -730,7 +765,6 @@
 ;; (setq show-paren-style 'parenthesis) ;;Options: parenthesis/expression/mixed
 
 (use-package highlight-parentheses
-  :defer t
   :hook
   (after-init . global-highlight-parentheses-mode)
   :config
@@ -786,7 +820,6 @@
 ;; more see the doc https://github.com/Fuco1/smartparens/wiki/Working-with-expressions
 ;; https://github.com/lujun9972/emacs-document/blob/master/emacs-common/Smartparens用法详解.org
 ;; (use-package smartparens
-;;   :defer t
 ;; :hook
 ;;  (after-init . smartparens-global-mode)
 ;; :bind
@@ -805,19 +838,23 @@
 ;; (sp-pair "'" nil :actions :rem))
 
 (use-package rainbow-delimiters
-  :defer t
   :hook
-  (prog-mode . rainbow-delimiters-mode)
+  (prog-mode . rainbow-delimiters-mode))
+
+(use-package minions
+  :config
+  (minions-mode 1)
+  :bind
+  ([S-down-mouse-3] . minions-minor-modes-menu)
   )
 
 ;; (use-package spaceline
-;;  :init
+;;  :config
 ;;  (require 'spaceline-config)
 ;;  :config
 ;;  (spaceline-emacs-theme))
 
 (use-package mood-line
-  :defer t
   :hook
   (after-init . mood-line-mode))
 
@@ -825,7 +862,6 @@
 ;;   ;;right fringe cut-off issue should relate to font size
 ;;   ;;Use cnfont-decrease-size or see more methods in
 ;;   ;;https://github.com/hlissner/doom-emacs/blob/develop/modules/ui/modeline/README.org#the-right-side-of-the-modeline-is-cut-off
-;;   :defer t
 ;;   :after all-the-icons
 ;;   :hook (after-init . doom-modeline-mode)
 ;;   :config
@@ -837,7 +873,6 @@
 ;;   )
 
 (use-package nyan-mode
-  :defer t
   :hook
   (doom-modeline-mode . nyan-mode))
 
@@ -859,16 +894,14 @@
 ;;   )
 
 (use-package highlight-indent-guides
-  :defer t
-  :config
-  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+  :hook
+  (prog-mode . highlight-indent-guides-mode)
+  ;; :config
   ;;  (set-face-background 'highlight-indent-guides-character-face "dimgrey")
   :custom
-  (highlight-indent-guides-method 'character)
-  )
+  (highlight-indent-guides-method 'character))
 
 (use-package highlight-symbol
-  :defer t
   ;; An alternative package is highlight-thing
   :bind
   ("C-<f9>" . highlight-symbol)
@@ -877,7 +910,6 @@
   ("M-<f9>" . highlight-symbol-query-replace))
 
 (use-package minimap
-  :defer t
   :custom
   (minimap-window-location 'right)
   (minimap-width-fraction 0.05)
@@ -892,7 +924,6 @@
 ;;  )
 
 (use-package treemacs
-  :defer t
   :bind
   ("<f8>" . treemacs))
 
@@ -967,7 +998,6 @@
   )
 
 (use-package visual-fill-column
-  :defer t
   :hook
   (visual-line-mode . visual-fill-column-mode)
   :custom
@@ -1228,13 +1258,16 @@
   )
 
 (use-package conda
-  :hook
-  (shell-mode . conda-env-autoactivate-mode)
-  (python-mode . conda-env-autoactivate-mode)
   :config
+  (conda-env-initialize-interactive-shells)
   (setq conda-anaconda-home (expand-file-name "~/miniconda3"))
   (setq conda-env-home-directory (expand-file-name "~/miniconda3"))
-  (conda-env-initialize-interactive-shells))
+  ;; when in conda-project-env-name or has environmental.yml auto activate
+  (conda-env-autoactivate-mode t)
+  :bind
+  ("C-c c a" . conda-env-activate)
+  ("C-c c d" . conda-env-deactivate)
+  )
 
 ;;jupyter notebook integration
 
@@ -1319,11 +1352,9 @@
 
 ;;C-c C-a to turn on csv-align-fields
 (use-package csv-mode
-  :defer t
   :mode
   "\\.csv\\'"
-  "\\.CSV\\'"
-  )
+  "\\.CSV\\'")
 
 ;;display color of RGB code
 (use-package rainbow-mode
@@ -1455,7 +1486,6 @@
 		(variable-pitch-mode 1)
 		(visual-line-mode 1)
 		(display-line-numbers-mode -1)
-		(flyspell-mode 1)
 		;;(org-num-mode 1)
 		))
   )
@@ -1559,7 +1589,6 @@
 	      (visual-fill-column-mode -1)
 	      (LaTeX-math-mode 1)
 	      (display-line-numbers-mode 1)
-	      (flyspell-mode 1)
 	      (flycheck-mode -1)
 	      ;;(variable-pitch-mode 1)
 	      (TeX-source-correlate-mode 1) ;;Needed to sync TeX and PDF
@@ -1635,7 +1664,6 @@
 
 ;;allow you to view pdf continuously
 (use-package pdf-continuous-scroll-mode
-  :defer t
   :straight (pdf-continuous-scroll-mode :type git :host github
 					:repo "dalanicolai/pdf-continuous-scroll-mode.el")
   :hook
