@@ -361,8 +361,8 @@
 (use-package counsel-tramp
   :after (counsel tramp)
   :config
-  (setq counsel-tramp-custom-connections '(/scp:mogu@almond.ggy.bris.ac.uk:/home/mogu/cgenie.muffin/))
-  (setq tramp-default-method "scp")
+  (setq counsel-tramp-custom-connections '(/ssh:mogu@almond.ggy.bris.ac.uk:/home/mogu/cgenie.muffin/))
+  (setq tramp-default-method "ssh")
   (setq make-backup-files nil)
   (setq create-lockfiles nil)
   :bind
