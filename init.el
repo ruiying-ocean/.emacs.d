@@ -180,7 +180,7 @@
   (setq-default
    recentf-max-saved-items 30
    recentf-exclude `("/tmp/",
-		     (concat package-user-dir "/.*-autoloads\\.el\\'")))
+		     (concat "~/.emacs.d/straight/build" "/.*-autoloads\\.el\\'")))
   (global-set-key (kbd "<f3>") #'recentf-open-files)
   :hook
   (after-init . recentf-mode))
