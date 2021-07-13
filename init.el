@@ -1117,7 +1117,7 @@
 ;;Unicode font setting
 (when (member "Symbola" (font-family-list))
   (set-fontset-font "fontset-default" nil
-		    (font-spec :size 20 :name "Symbola")))
+		    (font-spec :size 16 :name "Symbola")))
 
 (when (member "Symbola" (font-family-list))
   (set-fontset-font t 'unicode "Symbola" nil 'prepend))
@@ -1228,6 +1228,9 @@
   )
 
 (use-package conda
+  :hook
+  (shell-mode . conda-env-autoactivate-mode)
+  (python-mode . conda-env-autoactivate-mode)
   :config
   (setq conda-anaconda-home (expand-file-name "~/miniconda3"))
   (setq conda-env-home-directory (expand-file-name "~/miniconda3"))
