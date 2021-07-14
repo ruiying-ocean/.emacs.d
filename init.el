@@ -428,25 +428,23 @@
 ;;   (flycheck-prospector-setup)
 ;;   )
 
+;; shell -> shell-checker
+;; python -> pyflakes
+;; R -> disabled
+;; Elisp -> default
 (use-package flycheck
-  :config
-  (setq-default flycheck-emacs-lisp-load-path 'inherit)
-  ;; python checker
-  (add-to-list 'flycheck-disabled-checkers 'python-flake8)
-  (add-to-list 'flycheck-disabled-checkers 'python-pylint)
-  (add-to-list 'flycheck-disabled-checkers 'python-mypy)
-  (add-to-list 'flycheck-disabled-checkers 'python-pyright)
-  (add-to-list 'flycheck-disabled-checkers 'python-pycompile)
-  ;; shell checker
-  ;; conda install -c conda-forge shellcheck
-  (add-to-list 'flycheck-disabled-checkers 'sh-posix-dash)
-  (add-to-list 'flycheck-disabled-checkers 'sh-posix-bash)
-  ;; Elisp checker
-  (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-checkdoc)
-  ;; :custom (may cause warning)
-  ;; (flycheck-python-pyflakes-executable "python3")
   :hook
   (prog-mode . flycheck-mode)
+  :config
+  (setq-default flycheck-emacs-lisp-load-path 'inherit)
+  (setq-default flycheck-disabled-checkers '(sh-posix-dash
+					     sh-posix-bash
+					     python-flake8
+					     python-pylint
+					     python-mypy
+					     python-pyright
+					     python-pycompile
+					     emacs-lisp-checkdoc))
   )
 
 (use-package flycheck-inline
@@ -1141,19 +1139,25 @@
 ;;eglot can work with tramp-mode, but you should install
 ;;your server-programs on remote, not local
 (use-package eglot
-  :defer t
   :config
   (add-hook 'eglot-managed-mode-hook (lambda () (flymake-mode -1))) ;;Decouple flymake and eglot
   ;;============================================
-  ;;make sure every command works separately in shell environment. Note R can be tricky in zsh due to the built-in command "r"
+  ;; make sure every command works separately in shell environment
   (set 'ad-redefinition-action 'accept)
-  (add-to-list 'eglot-server-programs '((c++-mode c-mode) ("clangd"))) ;;install clangd first
-  (add-to-list 'eglot-server-programs '(f90-mode . ("fortls"))) ;;pip3 install fortran-language-server
-  (add-to-list 'eglot-server-programs '((LaTeX-mode tex-mode context-mode texinfo-mode bibtex-mode) ;;use tex-lab or digestif as server
+  ;; install clangd first
+  (add-to-list 'eglot-server-programs '((c++-mode c-mode) ("clangd")))
+  ;; pip3 install fortran-language-server
+  (add-to-list 'eglot-server-programs '(f90-mode . ("fortls")))
+  ;; use tex-lab or digestif as TeX server
+  (add-to-list 'eglot-server-programs '((LaTeX-mode tex-mode context-mode texinfo-mode bibtex-mode)
 					. ("texlab")))
-  (add-to-list 'eglot-server-programs '(python-mode . ("pylsp"))) ;;pip3 install python-lsp-server
-  ;;jupterlab has some experimental lsp server, install and change it above: pip3 install git+https://github.com/krassowski/python-language-server.git@main
-  (add-to-list 'eglot-server-programs '(ess-r-mode . ("R" "--slave" "-e" "languageserver::run()"))) ;;install.packages("languageserver")
+  ;; pip3 install python-lsp-server
+  ;; jupterlab has some experimental lsp server, install and change it above: pip3 install git+https://github.com/krassowski/python-language-server.git@main
+  (add-to-list 'eglot-server-programs '(python-mode . ("pylsp")))
+  ;; install.packages("languageserver")
+  ;; Note R can be tricky in zsh due to the built-in command "r"
+  ;; more R lsp server setting can be done in .Rprofile or .lintr file
+  (add-to-list 'eglot-server-programs '(ess-r-mode . ("R" "--slave" "-e" "languageserver::run()")))
   ;;============================================
   :hook
   (python-mode . eglot-ensure)
@@ -1304,6 +1308,9 @@
     ;;(reindent-then-newline-and-indent)
     )
 
+  ;; disable flycheck because lsp has linter already
+  (add-hook 'ess-r-mode-hook (lambda () (flycheck-mode -1)))
+
   (defun ess-clear-REPL-buffer ()
     "Clear outputs in the REPL buffer"
     (interactive)
@@ -1314,6 +1321,7 @@
           (with-current-buffer r-repl-buffer
             (comint-clear-buffer))
 	(user-error "No R REPL buffers found"))))
+
   (define-key ess-r-mode-map (kbd "C-l") 'ess-clear-REPL-buffer)
   (define-key inferior-ess-r-mode-map (kbd "C-l") 'ess-clear-REPL-buffer) ;;inferior-* is the shell one
   (define-key ess-r-mode-map (kbd "M--") 'ess-insert-assign)
@@ -1324,7 +1332,7 @@
   (define-key inferior-ess-r-mode-map (kbd "<up>") 'comint-previous-input)
   (define-key inferior-ess-r-mode-map (kbd "C-n") 'comint-next-input)
   (define-key inferior-ess-r-mode-map (kbd "<down>") 'comint-next-input)
-)
+  )
 ;; view R data frame
 ;; https://github.com/ShuguangSun/ess-view-data
 (use-package ess-view-data
@@ -1338,9 +1346,9 @@
 
 ;;display color of RGB code
 (use-package rainbow-mode
-  :defer t
   :after ess
-  :hook ess-r-mode
+  :hook
+  (ess-r-mode . rainbow-mode)
   )
 
 ;;==============================

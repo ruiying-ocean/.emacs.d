@@ -2,6 +2,6 @@
 # name: function
 # key: fun
 # --
-function (${1:args}) {
+function(${1:args}) {
 	`yas/selected-text`$0
 }
