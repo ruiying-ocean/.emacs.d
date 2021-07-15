@@ -65,9 +65,6 @@
 
 ;;; Speed up launching Emacs
 
-;; Increase read max limit to 3 mb
-(setq read-process-output-max (* 3 1024 1024))
-
 ;; Avoid matching file name with regrex list during startup
 (let ((file-name-handler-alist nil)) "~/.emacs.d/init.el")
 

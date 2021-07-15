@@ -1,7 +1,11 @@
 ;;; early-init.el --- early bird  -*- no-byte-compile: t -*-
 
-;;gabage collection setting (temporarily)
+;; Temporaily increase garbage collection threshold at startup
+(setq gc-cons-percentage 0.6)
 (setq gc-cons-threshold most-positive-fixnum)
+
+;; Increase read max limit to 3 mb
+(setq read-process-output-max (* 3 1024 1024))
 
 ;;frame setting
 (setq default-frame-alist
@@ -25,7 +29,3 @@
 
 ;; straight.el doesn't need package.el setting
 (setq package-enable-at-startup nil)
-
-;; Temporaily increase garbage collection threshold at startup
-(setq gc-cons-percentage 0.6)
-(setq gc-cons-threshold most-positive-fixnum)
