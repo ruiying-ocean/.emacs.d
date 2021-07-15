@@ -23,5 +23,9 @@
 
 (setq byte-compile-warnings '(cl-functions))
 
-;; if you use straight.el
+;; straight.el doesn't need package.el setting
 (setq package-enable-at-startup nil)
+
+;; Temporaily increase garbage collection threshold at startup
+(setq gc-cons-percentage 0.6)
+(setq gc-cons-threshold most-positive-fixnum)

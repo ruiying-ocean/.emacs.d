@@ -71,10 +71,6 @@
 ;; Avoid matching file name with regrex list during startup
 (let ((file-name-handler-alist nil)) "~/.emacs.d/init.el")
 
-;; Temporaily increase garbage collection threshold at startup
-(setq gc-cons-percentage 0.6)
-(setq gc-cons-threshold most-positive-fixnum)
-
 ;; Another package to automatically optimise garbage collector
 ;; (use-package gcmh
 ;;   :straight (gcmh :type git :host gitlab :repo "koral/gcmh")
@@ -214,20 +210,18 @@
   :hook
   (after-init . global-undo-tree-mode)
   :bind
-  ("C-c u" . undo-tree-visualize)
-  )
+  ("C-c u" . undo-tree-visualize))
 
 ;;; Auto-save
 (use-package super-save
   :config
-  (super-save-mode +1)
+  (super-save-mode 1)
   ;; turn off the buil-in auto-save
   (setq auto-save-default nil)
   (add-to-list 'super-save-triggers 'ace-window)
   (add-to-list 'super-save-hook-triggers 'find-file-hook)
   (setq super-save-remote-files nil)
-  (setq super-save-exclude '(".gpg"))
-  )
+  (setq super-save-exclude '(".gpg")))
 
 ;; A replacement to buil-tin M-w, now you can
 ;; save word/sexp/list/defun/file by M-w w/s/l/d/f
@@ -256,6 +250,14 @@
   ;; (python-mode . electric-operator-mode)
   ;; (emacs-lisp-mode . electric-operator-mode)
   (ess-r-mode . electric-operator-mode))
+
+(use-package smart-newline
+  :straight (:type git :host github
+		   :repo "ainame/smart-newline.el")
+  :config
+  (smart-newline-mode 1)
+  :bind
+  ("C-j" . smart-newline))
 
 
 ;;; TERMINAL, COMPLETION, LINT, SNIPPET
@@ -334,8 +336,8 @@
   :custom
   (company-org-block-edit-style 'auto) ;; 'auto, 'prompt, or 'inline
   :hook ((org-mode . (lambda ()
-                       (setq-local company-backends '(company-org-block))
-                       (company-mode +1)))))
+		       (setq-local company-backends '(company-org-block))
+		       (company-mode 1)))))
 
 ;;A fuzzy matching of company
 (use-package company-flx
@@ -391,8 +393,7 @@
   (setq make-backup-files nil)
   (setq create-lockfiles nil)
   :bind
-  ("C-c s" . counsel-tramp)
-  )
+  ("C-c s" . counsel-tramp))
 
 ;; visit https://github.com/jacktasia/dumb-jump to see more alternative ways
 ;; like TAGS system
@@ -444,8 +445,7 @@
 					     python-mypy
 					     python-pyright
 					     python-pycompile
-					     emacs-lisp-checkdoc))
-  )
+					     emacs-lisp-checkdoc)))
 
 (use-package flycheck-inline
   :hook
@@ -453,8 +453,7 @@
 
 (use-package yasnippet
   :straight yasnippet-snippets ;; Collection of snippets
-  :hook (after-init . yas-global-mode)
-  )
+  :hook (after-init . yas-global-mode))
 
 ;;manually choose a snippet
 (use-package ivy-yasnippet
@@ -537,8 +536,7 @@
   :config
   (setq ivy-prescient-sort-commands t
 	ivy-prescient-enable-sorting nil
-	ivy-prescient-retain-classic-highlighting t)
-  )
+	ivy-prescient-retain-classic-highlighting t))
 
 ;; Project management tool
 (use-package projectile
@@ -646,7 +644,7 @@
     (add-to-list 'default-frame-alist '(ns-appearance . light))))
 
 ;;Auto-max the frame at startup
-(defun auto-max-frame()
+(defun auto-max-frame ()
   "Maxize/full screen the frame according to the OS type."
   (interactive)
   (if (eq system-type 'darwin)
@@ -724,12 +722,13 @@
 (with-eval-after-load 'dired
   (define-key dired-mode-map [mouse-2] 'dired-mouse-find-file))
 
+;; W -> X to move, W -> Y to copy
 (use-package dired-ranger
   :bind
   (:map dired-mode-map
-        ("W" . dired-ranger-copy)
-        ("X" . dired-ranger-move)
-        ("Y" . dired-ranger-paste)))
+	("W" . dired-ranger-copy)
+	("X" . dired-ranger-move)
+	("Y" . dired-ranger-paste)))
 
 ;; (use-package dired-collapse
 ;;   :hook
@@ -755,15 +754,14 @@
 ;;--> Option 1 (built-in)
 (electric-pair-mode t)
 (setq electric-pair-pairs '(
-                            (?\" . ?\")
-                            (?\` . ?\`)
-                            (?\( . ?\))
-                            (?\{ . ?\})
-                            ))
+			    (?\" . ?\")
+			    (?\` . ?\`)
+			    (?\( . ?\))
+			    (?\{ . ?\})))
 
 ;; use lispy-mode (a vi-like editing) for lisp parentheses
 ;; remove electric-pair-mode first
-(add-hook 'emacs-lisp-mode-hook (lambda()
+(add-hook 'emacs-lisp-mode-hook (lambda ()
 				  (electric-pair-local-mode -1)))
 
 ;; >>> Basic lispy usage:
@@ -825,8 +823,7 @@
   :config
   (minions-mode 1)
   :bind
-  ([S-down-mouse-3] . minions-minor-modes-menu)
-  )
+  ([S-down-mouse-3] . minions-minor-modes-menu))
 
 ;; (use-package spaceline
 ;;  :config
@@ -972,16 +969,14 @@
   ("M-<right>" . centaur-tabs-forward)
   :hook
   (dired-mode . centaur-tabs-local-mode)
-  (after-init . centaur-tabs-mode)
-  )
+  (after-init . centaur-tabs-mode))
 
 (use-package visual-fill-column
   :hook
   (visual-line-mode . visual-fill-column-mode)
   :custom
   (visual-fill-column-center-text t)
-  (visual-fill-column-width 100)
-  )
+  (visual-fill-column-width 100))
 
 ;;press your keyboard fast and hard !!!
 (use-package power-mode
@@ -1017,20 +1012,19 @@
 ;;Variable-pitch font, ETBembo/New York
 ;;Unicode: Symbola
 
-(defun init-font()
+(defun init-font ()
   "Set English and CJK font for Emacs."
   (interactive)
   ;; English font
   (if (display-graphic-p)
       (progn
 	;; English font
-        (set-face-attribute 'default nil :font (format "%s:pixelsize=%d" "Iosevka" 16))
-        ;; CJK font
-        (dolist (charset '(kana han symbol cjk-misc bopomofo))
-          (set-fontset-font (frame-parameter nil 'font)
-                            charset
-                            (font-spec :family "Noto Sans Mono CJK SC"))))
-    ))
+	(set-face-attribute 'default nil :font (format "%s:pixelsize=%d" "Iosevka" 16))
+	;; CJK font
+	(dolist (charset '(kana han symbol cjk-misc bopomofo))
+	  (set-fontset-font (frame-parameter nil 'font)
+			    charset
+			    (font-spec :family "Noto Sans Mono CJK SC"))))))
 
 ;; Use emacs daemon, put following lines to shell config file
 ;; alias ed="emacs --daemon"
@@ -1044,8 +1038,7 @@
 		(with-selected-frame frame
 		  (init-font)
 		  (auto-max-frame))))
-  (add-hook 'after-init-hook 'init-font)
-  )
+  (add-hook 'after-init-hook 'init-font))
 
 ;;Install themes
 (use-package base16-theme :defer t )
@@ -1077,7 +1070,7 @@
   (dolist (theme custom-enabled-themes)
     (unless (custom-theme-p theme)
       (load-theme theme)))
-  (custom-set-variables `(custom-enabled-themes (quote ,custom-enabled-themes))))
+  (custom-set-variables `(custom-enabled-themes ',custom-enabled-themes)))
 
 (add-hook 'after-init-hook 'reapply-themes)
 
@@ -1250,8 +1243,7 @@
   (conda-env-autoactivate-mode t)
   :bind
   ("C-c c a" . conda-env-activate)
-  ("C-c c d" . conda-env-deactivate)
-  )
+  ("C-c c d" . conda-env-deactivate))
 
 ;;jupyter notebook integration
 
@@ -1281,12 +1273,11 @@
   (setq ein:worksheet-enable-undo t)
   (setq ein:output-area-inlined-images t)
   (add-hook 'poly-ein-mode-hook 'elpy-enable)
-  (add-hook 'poly-ein-mode-hook (lambda()
+  (add-hook 'poly-ein-mode-hook (lambda ()
 				  (display-line-numbers-mode nil))) ;;avoid grabled line-number
   (with-eval-after-load 'ein-notebook
     (define-key ein:notebook-mode-map "\C-c\C-d" 'ein:worksheet-delete-cell))
-  (setq ein:worksheet-enable-undo t)
-  )
+  (setq ein:worksheet-enable-undo t))
 
 (use-package elpy :defer t) 		;;a completion system for ein
 
@@ -1299,7 +1290,7 @@
 
 (add-to-list 'auto-mode-alist '("\\.R\\'" . ess-r-mode))
 (with-eval-after-load 'ess-r-mode
-  (defun ess-insert-pipe()
+  (defun ess-insert-pipe ()
     "Insert a R pipe (%>%)"
     (interactive)
     (just-one-space 1)
@@ -1315,11 +1306,11 @@
     "Clear outputs in the REPL buffer"
     (interactive)
     (let ((r-repl-buffer (seq-find (lambda (buf)
-                                     (string-prefix-p "*R" (buffer-name buf)))
-                                   (buffer-list))))
+				     (string-prefix-p "*R" (buffer-name buf)))
+				   (buffer-list))))
       (if r-repl-buffer
-          (with-current-buffer r-repl-buffer
-            (comint-clear-buffer))
+	  (with-current-buffer r-repl-buffer
+	    (comint-clear-buffer))
 	(user-error "No R REPL buffers found"))))
 
   (define-key ess-r-mode-map (kbd "C-l") 'ess-clear-REPL-buffer)
@@ -1331,8 +1322,8 @@
   (define-key inferior-ess-r-mode-map (kbd "C-p") 'comint-previous-input)
   (define-key inferior-ess-r-mode-map (kbd "<up>") 'comint-previous-input)
   (define-key inferior-ess-r-mode-map (kbd "C-n") 'comint-next-input)
-  (define-key inferior-ess-r-mode-map (kbd "<down>") 'comint-next-input)
-  )
+  (define-key inferior-ess-r-mode-map (kbd "<down>") 'comint-next-input))
+
 ;; view R data frame
 ;; https://github.com/ShuguangSun/ess-view-data
 (use-package ess-view-data
@@ -1348,8 +1339,7 @@
 (use-package rainbow-mode
   :after ess
   :hook
-  (ess-r-mode . rainbow-mode)
-  )
+  (ess-r-mode . rainbow-mode))
 
 ;;==============================
 ;;           Matlab           ;;
@@ -1358,8 +1348,7 @@
 ;; Homepage: https://sourceforge.net/p/matlab-emacs/src/ci/documentation/tree/
 (use-package matlab-mode
   :defer t
-  :mode "\\.[mM]\\'"
-  )
+  :mode "\\.[mM]\\'")
 
 ;; ==============================
 ;;            Markdown         ;;
@@ -1370,14 +1359,13 @@
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode))
+	 ("\\.md\\'" . markdown-mode)
+	 ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown")
   :hook
-  (markdown-mode . (lambda()
+  (markdown-mode . (lambda ()
 		     (display-line-numbers-mode -1)
-		     (visual-line-mode 1)))
-  )
+		     (visual-line-mode 1))))
 
 ;; Advanced preview
 
@@ -1410,8 +1398,7 @@
   ;; extra css element
   (add-to-list 'markdown-preview-stylesheets "https://raw.githubusercontent.com/richleland/pygments-css/master/emacs.css")
   ;; enable mathjax
-  (add-to-list 'markdown-preview-javascript "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML")
-  )
+  (add-to-list 'markdown-preview-javascript "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"))
 
 ;;add table of content for md/org
 ;;Add :TOC: tag for org (C-c C-c) and <-- :TOC: --> for md
@@ -1422,8 +1409,7 @@
   (org-mode . toc-org-mode)
   :config
   (global-set-key (kbd "\C-c\C-o") 'toc-org-markdown-follow-thing-at-point)
-  (add-to-list 'org-tag-alist '("TOC" . ?T))
-  )
+  (add-to-list 'org-tag-alist '("TOC" . ?T)))
 
 ;; ==============================
 ;;           Org-mode          ;;
@@ -1435,16 +1421,16 @@
   :config
   (setq org-startup-indented t)
   (setq org-todo-keywords
-	'((sequence "TODO" "DOING"  "|" "DONE" "CANCELED")))
+	'((sequence "TODO" "DOING" "|" "DONE" "CANCELED")))
   (add-hook 'org-mode-hook 'org-toggle-pretty-entities)
   (setq org-capture-templates
 	'(("t" "Todo" entry (file+headline "~/.emacs.d/org/inbox.org" "Tasks")
 	   "* TODO %?\n  %i\n  %a")
 	  ("j" "Journal" entry (file+datetree "~/.emacs.d/org/journal.org")
-           "* %?\nEntered on %U\n  %i\n  %a")))
+	   "* %?\nEntered on %U\n  %i\n  %a")))
   (setq org-default-notes-file "~/.emacs.d/org/inbox.org")
   (setq org-archive-location "~/.emacs.d/org/archives.org::* From %s")
-  (setq org-agenda-files (list  "~/.emacs.d/org/agenda.org"))
+  (setq org-agenda-files (list "~/.emacs.d/org/agenda.org"))
 
   ;;src setting
   (setq org-src-fontify-natively t)
@@ -1459,8 +1445,7 @@
   (org-babel-load-languages '((emacs-lisp . t)
 			      (python . t)
 			      (R . t)
-			      (ein . t)
-			      ))
+			      (ein . t)))
   ;;local keybinding
   :bind
   (:map org-mode-map
@@ -1470,13 +1455,12 @@
 	("C-c t" . counsel-org-tag)
 	("C-c l" . counsel-org-link))
   :hook
-  (org-mode . (lambda()
+  (org-mode . (lambda ()
 		(variable-pitch-mode 1)
 		(visual-line-mode 1)
 		(display-line-numbers-mode -1)
 		;;(org-num-mode 1)
-		))
-  )
+		)))
 
 ;;use org-superstar-mode to replace org-bullets
 (use-package org-superstar
@@ -1549,7 +1533,7 @@
   :mode ("\\.tex\\'" . latex-mode)
   :config
   (setq TeX-auto-save t
-        TeX-parse-self t)
+	TeX-parse-self t)
   (setq-default TeX-engine 'xetex) ;;default engine
   (setq-default TeX-PDF-mode t)	   ;;PDF output
   (setq-default TeX-master nil)
@@ -1571,17 +1555,16 @@
 	TeX-source-correlate-method 'auto) ;;Method to use for enabling forward and inverse search
 
   (add-hook 'LaTeX-mode-hook
-            (lambda ()
+	    (lambda ()
 	      (rainbow-delimiters-mode 1)
-              (visual-line-mode -1)
+	      (visual-line-mode -1)
 	      (visual-fill-column-mode -1)
 	      (LaTeX-math-mode 1)
 	      (display-line-numbers-mode 1)
 	      (flycheck-mode -1)
 	      ;;(variable-pitch-mode 1)
 	      (TeX-source-correlate-mode 1) ;;Needed to sync TeX and PDF
-	      ))
-  )
+	      )))
 
 (use-package magic-latex-buffer
   :defer t
@@ -1589,10 +1572,10 @@
   (LaTeX-mode . magic-latex-buffer)
   :config
   (setq magic-latex-enable-block-highlight nil
-	magic-latex-enable-suscript        t
-	magic-latex-enable-pretty-symbols  t
-	magic-latex-enable-block-align     nil
-	magic-latex-enable-inline-image    nil
+	magic-latex-enable-suscript t
+	magic-latex-enable-pretty-symbols t
+	magic-latex-enable-block-align nil
+	magic-latex-enable-inline-image nil
 	magic-latex-enable-minibuffer-echo nil))
 
 ;; Retrieve BibTeX entries
@@ -1668,7 +1651,7 @@
   (define-pdf-cache-function pagelables)
   ;;In case of high-resolution screen like Mac
   (setq pdf-view-use-scaling t
-        pdf-view-use-imagemagick nil)
+	pdf-view-use-imagemagick nil)
   :hook
   (pdf-view-mode-hook . (lambda () (display-line-numbers-mode -1)))
   (pdf-view-mode-hook . pdf-tools-enable-minor-modes)
@@ -1676,8 +1659,7 @@
   (:map pdf-view-mode-map
 	("C-s" . isearch-forward-regexp)
 	("j" . pdf-view-next-line-or-next-page)
-	("k" . pdf-view-previous-line-or-previous-page))
-  )
+	("k" . pdf-view-previous-line-or-previous-page)))
 
 
 ;;; End
@@ -1694,7 +1676,7 @@
 (setq max-specpdl-size 32000
       max-lisp-eval-depth 16000)
 
-(defun display-init-info()
+(defun display-init-info ()
   "Print init time of Emacs, a wrapper of 'emacs-init-time."
   (interactive)
   (message
@@ -1705,4 +1687,4 @@
 (add-hook 'after-init-hook #'display-init-info)
 
 (provide 'init)
-;;; init.el ends here
+;;; Init.el ends here
