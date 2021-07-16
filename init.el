@@ -154,6 +154,13 @@
   ("C-c C-; l" . languagetool-set-language)
   )
 
+;; A dictionary inside Emacs, by abo-abo!
+(use-package define-word
+  :bind
+  ("C-c d" . define-word-at-point)
+  :config
+  (setq define-word-default-service 'webster))
+
 ;;flyspell setting
 (use-package flyspell
   :straight (:type built-in)
