@@ -579,12 +579,6 @@
   ("M-g w" . avy-goto-word-1)
   ("M-g l" . avy-goto-line))
 
-(use-package helpful
-  :bind
-  ("C-h f" . helpful-callable)
-  ("C-h v" . helpful-variable)
-  ("C-h k" . helpful-key))
-
 (use-package ace-window
   :bind
   ("M-o" . ace-window))
@@ -640,9 +634,148 @@
 (global-set-key (kbd "<f5>") 'hs-toggle-hiding)
 
 ;; adjust font size
-(global-set-key (kbd "C-c =") 'text-scale-increase)
-(global-set-key (kbd "C-c -") 'text-scale-decrease)
 (setq-default text-scale-mode-step 1.1)
+
+;; one "BODY", many "HEADs", try "C-c 5 =" to know the magic
+(use-package hydra
+  :config
+  (defhydra hydra-zoom (global-map "C-c")
+    "zoom in/out windows, or increase/decrease text"
+    ("=" text-scale-increase "in")
+    ("-" text-scale-decrease "out"))
+  (defhydra hydra-vi (:pre (set-cursor-color "#40e0d0")
+			   :post (progn
+				   (set-cursor-color "#ffffff")
+				   (message
+				    "Thank you, come again.")))
+    "vi-style movement in Emacs"
+    ("l" forward-char)
+    ("h" backward-char)
+    ("j" next-line)
+    ("k" previous-line)
+    ("q" nil "quit"))
+  (global-set-key (kbd "C-c v") 'hydra-vi/body))
+
+;; a center-floating posframe for hydra
+(use-package hydra-posframe
+  :straight
+  (:type git :host github
+	 :repo "Ladicle/hydra-posframe")
+  :hook
+  (after-init . hydra-posframe-mode))
+
+;; define a hydra-leader-key for major mode, something like C-c
+(use-package major-mode-hydra
+  :after all-the-icons
+  :bind
+  ("S-SPC" . major-mode-hydra)
+  :config
+  (defvar hydra-r-title (s-concat
+			 (s-repeat 20 " ")
+			 (all-the-icons-icon-for-file "f.R")
+			 " "
+			 "ESS R commands"))
+  (defvar hydra-py-title (s-concat
+			  (s-repeat 20 " ")
+			  (all-the-icons-icon-for-file "f.py")
+			  " "
+			  "Python mode commands"))
+  (defvar hydra-el-title (s-concat
+			  (s-repeat 8 " ")
+			  (all-the-icons-icon-for-file "f.el")
+			  " "
+			  "Emacs-lisp commands"))
+  (major-mode-hydra-define emacs-lisp-mode
+    (:foreign-keys warn :quit-key "q"
+		   :title hydra-el-title :separator "-")
+    ("Eval"
+     (("b" eval-buffer "buffer")
+      ("e" eval-defun "defun")
+      ("r" eval-region "region"))
+     "REPL"
+     (("I" ielm "ielm"))
+     "Doc"
+     (("d" describe-foo-at-point "thing-at-pt")
+      ("f" counsel-describe-function "function")
+      ("v" counsel-describe-variable "variable")
+      ("i" info-lookup-symbol "info lookup"))))
+  (major-mode-hydra-define python-mode
+    (:foreign-keys warn :quit-key "q"
+		   :title hydra-py-title :separator "-")
+    ("Execute"
+     (("b" python-shell-send-buffer "buffer")
+      ("r" python-shell-send-region "region")
+      ("f" python-shell-send-file "file"))
+     "Jupyter"
+     (("j" ein:run "Start"))
+     "Power"
+     (("c" run-python "console")
+      ("s" shell "shell")
+      ("u" undo-tree-mode "undo-tree")
+      ("y" ivy-yasnippet "yasnippet")
+      ("g" magit-status "git"))
+     "Find"
+     (("i" counsel-imenu "function")
+      ("r" counsel-rg "ripgrep")
+      ("F" counsel-fzf "find"))
+     "Check"
+     (("l" flycheck-list-errors "all")
+      ("c" flycheck-clear "clear")
+      ("v" flycheck-verify-setup "setup"))))
+  (major-mode-hydra-define ess-r-mode
+    (:foreign-keys warn :quit-key "q"
+		   :separator "-"
+		   :title hydra-r-title)
+    ("Run"
+     (("b" ess-eval-buffer-and-go "buffer")
+      ("r" ess-eval-region-and-go "region")
+      ("f" ess-eval-function-and-go "function"))
+     "Power"
+     (("c" run-ess-r "console")
+      ("s" shell "terminal")
+      ("u" undo-tree-mode "undo-tree")
+      ("y" ivy-yasnippet "yasnippet")
+      ("g" magit-status "git"))
+     "Find"
+     (("i" counsel-imenu "function")
+      ("r" counsel-rg "ripgrep")
+      ("F" counsel-fzf "find"))
+     "Check"
+     (("l" flycheck-list-errors "all")
+      ("c" flycheck-clear "clear")
+      ("v" flycheck-verify-setup "setup")))))
+
+;; beautify hydra
+(use-package pretty-hydra
+  :after all-the-icons
+  :config
+  (defvar hydra-ui-title (s-concat (s-repeat 10 " ")
+				   (all-the-icons-faicon "windows")
+				   " Apperance"))
+  (pretty-hydra-define hydra-ui
+    (:foreign-keys warn :title hydra-ui-title :quit-key "q")
+    ("Theme"
+     (("d" night-theme "dark-theme")
+      ("l" day-theme "light-theme")
+      ("t" counsel-load-theme "choose"))
+     "Window"
+     (("b" split-window-right "split horizontally")
+      ("v" split-window-below "split vertically")
+      ("f" toggle-frame-fullscreen "toggle fullscreen")
+      ("m" ace-delete-other-windows "maximize"))))
+  (global-set-key (kbd "C-c w") 'hydra-ui/body))
+
+(use-package helpful
+  :config
+  (setq counsel-describe-function-function #'helpful-callable)
+  (setq counsel-describe-variable-function #'helpful-variable)
+  :bind
+  ("C-h f" . helpful-callable)
+  ("C-h v" . helpful-variable)
+  ("C-h k" . helpful-key)
+  ("C-h d" . helpful-at-point)
+  ("C-h C" . helpful-command)
+  ("C-h F" . helpful-function))
 
 ;; find and replace
 (global-set-key (kbd "C-c h") 'query-replace)
@@ -760,8 +893,8 @@
 ;; Matching parenthesis
 ;;--------------------------------------------------
 
-;;Showing matching parentheses (built-in)
-;;  (show-paren-mode t)
+;; Showing matching parentheses (built-in)
+;; (show-paren-mode t)
 ;; (setq show-paren-delay 0)
 ;; (setq show-paren-style 'parenthesis) ;;Options: parenthesis/expression/mixed
 
@@ -875,13 +1008,13 @@
   :hook
   (doom-modeline-mode . nyan-mode))
 
-
+;; defer if it's slow
 (use-package dashboard
   :if (and (< (length command-line-args) 2)
 	   (native-comp-available-p))
   :config
+  (setq dashboard-set-init-info nil)
   (dashboard-setup-startup-hook)
-  (setq dashboard-set-init-info t)
   (setq dashboard-banner-logo-title "Happiness is everything - Rui")
   ;;    (setq dashboard-startup-banner 3)
   (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/world.png")
@@ -915,6 +1048,8 @@
   (minimap-minimum-width 15)
   :bind
   ("<f6>" . minimap-mode))
+
+(use-package all-the-icons)
 
 ;;(use-package neotree
 ;;  :config
@@ -962,7 +1097,9 @@
 (use-package all-the-icons-ibuffer
   :if window-system
   :config
-  (setq inhibit-compacting-font-caches t))
+  (setq inhibit-compacting-font-caches t)
+  :hook
+  (ibuffer-mode . all-the-icons-ibuffer-mode))
 
 ;; (use-package ivy-posframe ;;center your selection candidate box
 ;;   :config

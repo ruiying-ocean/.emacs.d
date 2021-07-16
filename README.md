@@ -1,11 +1,11 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # About
- This is my Emacs init file(s) to implement a *self-use* cross-platform editor/IDE. It has been tested for Emacs 27.2 on MacOS (Big Sur), Linux (Ubuntu 20). Windows may not be well supported because of possible limitations from cygwin/MSYS2. WSL2 is recommended instead.
+ This is my Emacs configuration file(s) to implement a *self-use* cross-platform editor/IDE. It has been tested for Emacs 27.2/28.0.05 (with native-compilation feature) on MacOS (Big Sur), Linux (Ubuntu 20). Windows may not be well supported because of possible limitations from cygwin/MSYS2. WSL2 is recommended instead.
 
 # Screenshot
-![](screenshot.png)
-
+![](screenshot-light.png)
+![](screenshot-dark.png)
 The splash is downloaded from [the free png image website](https://www.freepngimg.com)
 
 # Quick-start
