@@ -1015,10 +1015,12 @@
   :hook
   (doom-modeline-mode . nyan-mode))
 
+
+
 ;; defer if it's slow
 (use-package dashboard
   :if (and (< (length command-line-args) 2)
-	   (native-comp-available-p))
+	   (fboundp 'native-comp-available-p))
   :config
   (setq dashboard-set-init-info nil)
   (dashboard-setup-startup-hook)

@@ -23,16 +23,19 @@ Then have some beverage and wait for downloading :smile:
 
 - Fast start-up (load more than 100 packages in <1s)
 - Modern UI (directory explorer, theme, color-scheme, minimap, file icons, etc)
-- Multiple programming languages support and syntax highlighting (R, Python, TeX, Fortran, etc)
+- Multiple languages support and syntax highlighting (R, Python, TeX, Fortran, etc)
 - IntelliSense
 - Go-to definition
+- Shell/terminal
 - Snippets
 - Quick documentation
 - Spell and lint checker
+- Efficient editor
 - Project management
-- Git integration as version control
-- Easy remote file operation as local
-- Perfect org-mode as lightweight markup language and todo manager
+- Fuzzy finding and ripgrep intergration
+- Git integration
+- Easy remote file operation
+- Org-mode as lightweight markup language and todo manager
 - PDF support
 - Email client
 
