@@ -262,6 +262,19 @@
   :bind
   ("C-j" . smart-newline))
 
+;; smartly select region, press until it selects what you want
+(use-package expand-region
+  :bind
+  ("C-=" . er/expand-region))
+
+;; assign every marked line a cursor
+(use-package multiple-cursors
+  :bind
+  ("C-S-c C-S-c" . mc/edit-lines)
+  ("C-c >" . mc/mark-next-like-this)
+  ("C-c <" . mc/mark-previous-like-this)
+  ("C-c C-<" . mc/mark-all-like-this))
+
 
 ;;; TERMINAL, COMPLETION, LINT, SNIPPET
 
@@ -301,6 +314,12 @@
 ;; (use-package eterm-256color
 ;;   :hook
 ;;   (term-mode . eterm-256color-mode))
+
+;; a comint extension, e.g., :view *.jpg to view a plot in shell
+;; other useful cmd: :e (edit), :ssh,
+(use-package shx
+  :hook
+  (after-init . shx-global-mode))
 
 ;;auto-completion system
 (use-package company
@@ -621,8 +640,8 @@
 (global-set-key (kbd "<f5>") 'hs-toggle-hiding)
 
 ;; adjust font size
-(global-set-key (kbd "C-=") 'text-scale-increase)
-(global-set-key (kbd "C--") 'text-scale-decrease)
+(global-set-key (kbd "C-c =") 'text-scale-increase)
+(global-set-key (kbd "C-c -") 'text-scale-decrease)
 (setq-default text-scale-mode-step 1.1)
 
 ;; find and replace
@@ -856,22 +875,24 @@
   :hook
   (doom-modeline-mode . nyan-mode))
 
-;; (use-package dashboard
-;;   :if (< (length command-line-args) 2)
-;;   :config
-;;   (dashboard-setup-startup-hook)
-;;   (setq dashboard-set-init-info t)
-;;   (setq dashboard-banner-logo-title "Happiness is everything - Rui")
-;;   ;;    (setq dashboard-startup-banner 3)
-;;   (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/world.png")
-;;   (setq dashboard-center-content t)
-;;   (setq dashboard-items '((recents  . 3))) ;;add org-agenda could slow start-up speed
-;;   (setq dashboard-set-heading-icons t)
-;;   (setq dashboard-set-file-icons t)
-;;   (setq dashboard-set-navigator t)
-;;   (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))) ;; show Dashboard in frames created with emacsclient -c
-;;   (setq dashboard-projects-switch-function 'counsel-projectile-switch-project-by-name)
-;;   )
+
+(use-package dashboard
+  :if (and (< (length command-line-args) 2)
+	   (native-comp-available-p))
+  :config
+  (dashboard-setup-startup-hook)
+  (setq dashboard-set-init-info t)
+  (setq dashboard-banner-logo-title "Happiness is everything - Rui")
+  ;;    (setq dashboard-startup-banner 3)
+  (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/world.png")
+  (setq dashboard-center-content t)
+  (setq dashboard-items '((recents  . 3))) ;;add org-agenda could slow start-up speed
+  (setq dashboard-set-heading-icons t)
+  (setq dashboard-set-file-icons t)
+  (setq dashboard-set-navigator t)
+  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))) ;; show Dashboard in frames created with emacsclient -c
+  (setq dashboard-projects-switch-function 'counsel-projectile-switch-project-by-name)
+  )
 
 (use-package highlight-indent-guides
   :hook
@@ -979,7 +1000,8 @@
   (visual-line-mode . visual-fill-column-mode)
   :custom
   (visual-fill-column-center-text t)
-  (visual-fill-column-width 100))
+  ;; wrap long line
+  (visual-fill-column-width 140))
 
 ;;press your keyboard fast and hard !!!
 (use-package power-mode
