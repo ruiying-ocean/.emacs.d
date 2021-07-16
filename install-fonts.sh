@@ -54,6 +54,7 @@ cd $font_dir
 #New York
 #Cormorant Garamond
 #ET Book
+#Noto Serif
 #---End----
 
 dejavu_url="https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_2_37/dejavu-fonts-ttf-2.37.zip"
@@ -73,12 +74,13 @@ notosans_url="https://github.com/googlefonts/noto-cjk/raw/main/Sans/Mono/NotoSan
 monaco_url="https://github.com/todylu/monaco.ttf/raw/master/monaco.ttf"
 etbook_url="https://github.com/edwardtufte/et-book/raw/gh-pages/et-book/et-book-roman-old-style-figures/et-book-roman-old-style-figures.ttf"
 ubuntumono_url="https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/UbuntuMono/Regular/complete/Ubuntu%20Mono%20Nerd%20Font%20Complete.ttf"
+noto_serif_url="https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSerif/NotoSerif-Regular.ttf"
 
 font_list=($iosevka_url $inconsolata_url $jetbrainmono_url
 	   $firacode_url $robotomono_url $symbola_url $juliamono_url
 	   $newyork_rul $sarasa_url $wqy_url $cormorant_url
 	   $notosans_url $monaco_url $etbook_url $dejavu_url
-	   $ubuntumono_url)
+	   $ubuntumono_url $noto_serif_url)
 
 echo ">>>> Downloading"
 for i in ${font_list[@]}; do

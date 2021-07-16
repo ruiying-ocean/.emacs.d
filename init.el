@@ -1266,8 +1266,8 @@
 ;;Varialble/fixed pictch font setting, essential for org-mode
 (custom-theme-set-faces
  'user
- '(variable-pitch ((t (:family "Cormorant Garamond" :height 230))))
- '(fixed-pitch ((t ( :family "Monaco" :height 160)))))
+ '(variable-pitch ((t (:family "Noto Serif" :height 200))))
+ '(fixed-pitch ((t ( :family "Roboto Mono" :height 160)))))
 
 (custom-theme-set-faces
  'user
