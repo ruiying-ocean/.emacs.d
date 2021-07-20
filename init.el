@@ -1,13 +1,21 @@
 ;;; init.el --- Load the full configuration -*- lexical-binding: t -*-
-;;; Commentary:
 
-;; This file contains customized configuration codes, which
-;; have been divided into multiple sections by ^L character.
+;;; Commentary:
 
 ;;; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;; Always remember that it is WHAT YOU ARE EDITING, rather
 ;; than the editor, that is the key.
 ;;; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+;; This file contains customized configuration codes, which
+;; have been divided into multiple sections by ^L character.
+
+;;; EXTERNAL DEPENDENCIES:
+;; LSP servers: pylsp, clangd, fortls, texlab/digestif
+;; Spell checker: languagetool, aspell/huspell
+;; Lint checker: python-flakes, shell checker
+;; Fonts: all-the-icons, Roboto Mono, Iosevka
+;; Others: riggrep, fzf, libvterm, PDF tools, multidown, github-token for grip-mode
 
 ;;; Code:
 
@@ -1345,7 +1353,6 @@
  '(org-level-3 ((t (:inherit outline-3 :height 1.1))))
  '(org-level-4 ((t (:inherit outline-4 :height 1.0))))
  '(org-level-5 ((t (:inherit outline-5 :height 1.0)))))
-
 
 ;;Unicode font setting
 (when (member "Symbola" (font-family-list))
