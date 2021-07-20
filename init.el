@@ -130,11 +130,50 @@
 ;;No more strange ring bell
 (setq ring-bell-function 'ignore)
 
+;; Delete selection
+(delete-selection-mode t)
+
+;; repeat command
+(global-set-key (kbd "<f4>") #'repeat)
+
+;; wrap up line (use visual-line-mode and visual-fill-column-mode instead)
+;; (setq truncate-lines nil)
+;; (setq-default word-wrap nil)
+(use-package visual-fill-column
+  :hook
+  (visual-line-mode . visual-fill-column-mode)
+  :custom
+  (visual-fill-column-center-text t)
+  ;; wrap long line
+  (visual-fill-column-width 140))
+
+(use-package so-long
+  :straight (:type built-in)
+  :hook
+  (after-init . global-so-long-mode))
+
+;; auto revert buffer
+(use-package autorevert
+  :straight (:type built-in)
+  :hook
+  (after-init . global-auto-revert-mode))
+
+;; Display next page at the other window
+;; (setq follow-mode t)
+
 ;;;; Enable mouse operation in terminal emacs
 (unless (display-graphic-p)
   (xterm-mouse-mode 1)
   (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
   (global-set-key (kbd "<mouse-5>") 'scroll-up-line))
+
+;; Hack clipboard for macOS in TUI mode
+(defun my/kill-ring-save (orig-fun beg end &optional region)
+  (unless (display-graphic-p)
+    (let ((inhibit-message t))
+      (shell-command-on-region beg end "pbcopy")))
+  (funcall orig-fun beg end region))
+(advice-add 'kill-ring-save :around #'my/kill-ring-save)
 
 (use-package languagetool
   :config
@@ -151,8 +190,7 @@
   ("C-c C-; d" . languagetool-clear-buffer)
   ("C-c C-; i" . languagetool-correct-at-point)
   ("C-c C-; b" . languagetool-buffer)
-  ("C-c C-; l" . languagetool-set-language)
-  )
+  ("C-c C-; l" . languagetool-set-language))
 
 ;; A dictionary inside Emacs, by abo-abo!
 (use-package define-word
@@ -553,15 +591,15 @@
   ("C-c j" . counsel-git-grep)
   ("C-c g" . counsel-git) ;;find file in current git directory
   ("C-c l" . counsel-git-log)
-  ("C-c r" . counsel-rg)  ;;rg find tex
+  ("C-c r" . counsel-rg) ;;rg find tex
   ("C-c f" . counsel-fzf) ;;fzf find file
   ("C-c e" . counsel-flycheck)
-  ("C-c C-r" . counsel-recentf)
-  )
+  ("C-c C-r" . counsel-recentf))
 
 ;;sorting and filtering framework for ivy
 (use-package ivy-prescient
-  :hook (ivy-mode . ivy-prescient-mode)
+  :hook
+  (ivy-mode . ivy-prescient-mode)
   :config
   (setq ivy-prescient-sort-commands t
 	ivy-prescient-enable-sorting nil
@@ -678,17 +716,17 @@
   ("S-SPC" . major-mode-hydra)
   :config
   (defvar hydra-r-title (s-concat
-			 (s-repeat 20 " ")
+			 (s-repeat 28 " ")
 			 (all-the-icons-icon-for-file "f.R")
 			 " "
 			 "ESS R commands"))
   (defvar hydra-py-title (s-concat
-			  (s-repeat 20 " ")
+			  (s-repeat 23 " ")
 			  (all-the-icons-icon-for-file "f.py")
 			  " "
 			  "Python mode commands"))
   (defvar hydra-el-title (s-concat
-			  (s-repeat 8 " ")
+			  (s-repeat 18 " ")
 			  (all-the-icons-icon-for-file "f.el")
 			  " "
 			  "Emacs-lisp commands"))
@@ -705,17 +743,23 @@
      (("d" describe-foo-at-point "thing-at-pt")
       ("f" counsel-describe-function "function")
       ("v" counsel-describe-variable "variable")
-      ("i" info-lookup-symbol "info lookup"))))
+      ("i" info-lookup-symbol "info lookup"))
+     "Project"
+     (("p D" projectile-dired "dired")
+      ("p f" projectile-find-file "find")
+      ("p d" projectile-find-directory "directory")
+      ("p s" projectile-ripgrep "search")
+      ("p p" projectile-switch-project "switch")
+      ("p r" projectile-replace "replace"))))
   (major-mode-hydra-define python-mode
     (:foreign-keys warn :quit-key "q"
 		   :title hydra-py-title :separator "-")
     ("Execute"
      (("b" python-shell-send-buffer "buffer")
       ("r" python-shell-send-region "region")
-      ("f" python-shell-send-file "file"))
-     "Jupyter"
-     (("j" ein:run "Start"))
-     "Power"
+      ("f" python-shell-send-file "file")
+      ("j" ein:run "jupyter"))
+     "REPL"
      (("c" run-python "console")
       ("s" shell "shell")
       ("u" undo-tree-mode "undo-tree")
@@ -728,7 +772,14 @@
      "Check"
      (("l" flycheck-list-errors "all")
       ("c" flycheck-clear "clear")
-      ("v" flycheck-verify-setup "setup"))))
+      ("v" flycheck-verify-setup "setup"))
+     "Project"
+     (("p D" projectile-dired "dired")
+      ("p f" projectile-find-file "find")
+      ("p d" projectile-find-directory "directory")
+      ("p s" projectile-ripgrep "search")
+      ("p p" projectile-switch-project "switch")
+      ("p r" projectile-replace "replace"))))
   (major-mode-hydra-define ess-r-mode
     (:foreign-keys warn :quit-key "q"
 		   :separator "-"
@@ -750,13 +801,20 @@
      "Check"
      (("l" flycheck-list-errors "all")
       ("c" flycheck-clear "clear")
-      ("v" flycheck-verify-setup "setup")))))
+      ("v" flycheck-verify-setup "setup"))
+     "Project"
+     (("p D" projectile-dired "dired")
+      ("p f" projectile-find-file "find")
+      ("p d" projectile-find-directory "directory")
+      ("p s" projectile-ripgrep "search")
+      ("p p" projectile-switch-project "switch")
+      ("p r" projectile-replace "replace")))))
 
 ;; beautify hydra
 (use-package pretty-hydra
   :after all-the-icons
   :config
-  (defvar hydra-ui-title (s-concat (s-repeat 10 " ")
+  (defvar hydra-ui-title (s-concat (s-repeat 20 " ")
 				   (all-the-icons-faicon "windows")
 				   " Apperance"))
   (pretty-hydra-define hydra-ui
@@ -768,8 +826,12 @@
      "Window"
      (("b" split-window-right "split horizontally")
       ("v" split-window-below "split vertically")
-      ("f" toggle-frame-fullscreen "toggle fullscreen")
-      ("m" ace-delete-other-windows "maximize"))))
+      ("f" toggle-frame-fullscreen "fullscreen")
+      ("m" ace-delete-other-windows "maximize")
+      ("o" ace-window "others"))
+     "Page"
+     (("n" forward-page "next")
+      ("p" backward-page "previous"))))
   (global-set-key (kbd "C-c w") 'hydra-ui/body))
 
 (use-package helpful
@@ -847,7 +909,8 @@
 ;;Disable line number for certain modes
 (dolist (mode '(org-mode-hook
 		term-mode-hook
-		eshell-mode-hook))
+		eshell-mode-hook
+		LaTeX-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 ;;turn off electric-indent-mode but use aggressive-indent-mode
@@ -1015,8 +1078,6 @@
   :hook
   (doom-modeline-mode . nyan-mode))
 
-
-
 ;; defer if it's slow
 (use-package dashboard
   :if (and (< (length command-line-args) 2)
@@ -1028,13 +1089,14 @@
   ;;    (setq dashboard-startup-banner 3)
   (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/world.png")
   (setq dashboard-center-content t)
-  (setq dashboard-items '((recents  . 3))) ;;add org-agenda could slow start-up speed
+  (setq dashboard-items '((recents . 3))) ;;add org-agenda could slow start-up speed
   (setq dashboard-set-heading-icons t)
   (setq dashboard-set-file-icons t)
   (setq dashboard-set-navigator t)
   (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))) ;; show Dashboard in frames created with emacsclient -c
   (setq dashboard-projects-switch-function 'counsel-projectile-switch-project-by-name)
-  )
+  (define-key dashboard-mode-map (kbd "n") 'next-line)
+  (define-key dashboard-mode-map (kbd "p") 'previous-line))
 
 (use-package highlight-indent-guides
   :hook
@@ -1134,20 +1196,13 @@
   (setq centaur-tabs-height 20)
   ;;(setq centaur-tabs-label-fixed-length 10) ;;fixed length
   (centaur-tabs-change-fonts "Roboto Mono" 130)
+  (setq centaur-tabs-show-navigation-buttons t)
   :bind
   ("M-<left>" . centaur-tabs-backward)
   ("M-<right>" . centaur-tabs-forward)
   :hook
   (dired-mode . centaur-tabs-local-mode)
   (after-init . centaur-tabs-mode))
-
-(use-package visual-fill-column
-  :hook
-  (visual-line-mode . visual-fill-column-mode)
-  :custom
-  (visual-fill-column-center-text t)
-  ;; wrap long line
-  (visual-fill-column-width 140))
 
 ;;press your keyboard fast and hard !!!
 (use-package power-mode
@@ -1218,7 +1273,7 @@
 (use-package tao-theme :defer t )
 (use-package humanoid-themes :defer t )
 (use-package twilight-bright-theme :defer t )
-(use-package ample-theme :defer t ) ;;ample flat is a good option for dark theme
+(use-package ample-theme :defer t )
 (use-package eziam-theme :defer t ) ;;almost perfect light theme
 (use-package spacemacs-common :defer t :straight spacemacs-theme)
 (use-package doom-themes
@@ -1234,7 +1289,8 @@
 
 ;; loading theme
 (setq custom-safe-themes t)
-(setq-default custom-enabled-themes '(doom-one))
+(setq-default custom-enabled-themes '(sanityinc-tomorrow-night))
+
 ;; Ensure that themes will be applied even if they have not been customized
 (defun reapply-themes ()
   "Forcibly load the themes listed in `custom-enabled-themes'."
@@ -1249,13 +1305,13 @@
 (defun day-theme ()
   "Activate a light color theme.  Recommendation: leuven, spacemacs-light, eziam, twilight-bright."
   (interactive)
-  (setq custom-enabled-themes '(twilight-bright))
+  (setq custom-enabled-themes '(modus-vivendi))
   (reapply-themes))
 
 (defun night-theme ()
   "Activate a dark color theme.  Recommendation: humanoid-dark, doom-one, doom-dark+, ample-flat."
   (interactive)
-  (setq custom-enabled-themes '(doom-dark+))
+  (setq custom-enabled-themes '(doom-one))
   (reapply-themes))
 
 ;;Transprancy setting
@@ -1268,8 +1324,8 @@
 ;;Varialble/fixed pictch font setting, essential for org-mode
 (custom-theme-set-faces
  'user
- '(variable-pitch ((t (:family "Noto Serif" :height 200))))
- '(fixed-pitch ((t ( :family "Roboto Mono" :height 160)))))
+ '(variable-pitch ((t (:family "Noto Serif" :height 180))))
+ '(fixed-pitch ((t ( :family "Roboto Mono" :height 180)))))
 
 (custom-theme-set-faces
  'user
@@ -1277,14 +1333,19 @@
  '(org-code ((t (:inherit (shadow fixed-pitch)))))
  '(org-document-info ((t (:foreground "dark orange"))))
  '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
- '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
- '(org-link ((t (:foreground "royal blue" :underline t))))
- '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+ '(org-link ((t (:foreground "light blue" :underline t))))
  '(org-property-value ((t (:inherit fixed-pitch))) t)
  '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
- '(org-table ((t (:inherit fixed-pitch :foreground "#83a598"))))
- '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
- '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
+ '(org-table ((t (:inherit fixed-pitch))))
+ '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8)))))
+
+(custom-set-faces
+ '(org-level-1 ((t (:inherit fixed-pitch :height 1.2))))
+ '(org-level-2 ((t (:inherit outline-2 :height 1.1))))
+ '(org-level-3 ((t (:inherit outline-3 :height 1.1))))
+ '(org-level-4 ((t (:inherit outline-4 :height 1.0))))
+ '(org-level-5 ((t (:inherit outline-5 :height 1.0)))))
+
 
 ;;Unicode font setting
 (when (member "Symbola" (font-family-list))
@@ -1392,7 +1453,7 @@
 
 ;;python-mode local keybinding
 (with-eval-after-load 'python
-  (defun python-run-current-line()
+  (defun python-run-current-line ()
     "a wrapper of python-shell-send-statement"
     (interactive)
     (python-shell-send-statement)
@@ -1402,8 +1463,7 @@
   (define-key inferior-python-mode-map (kbd "<up>") 'comint-previous-input)
   (define-key inferior-python-mode-map (kbd "C-p") 'comint-previous-input)
   (define-key inferior-python-mode-map (kbd "<down>") 'comint-next-input)
-  (define-key inferior-python-mode-map (kbd "C-n") 'comint-next-input)
-  )
+  (define-key inferior-python-mode-map (kbd "C-n") 'comint-next-input))
 
 (use-package conda
   :config
@@ -1521,6 +1581,9 @@
   :defer t
   :mode "\\.[mM]\\'")
 
+
+;;; Text-mode: Markdown/org-mode/TeX
+
 ;; ==============================
 ;;            Markdown         ;;
 ;; ==============================
@@ -1587,13 +1650,11 @@
 ;; ==============================
 (use-package org
   :straight (:type built-in)
-  :defer t
   :after counsel
   :config
   (setq org-startup-indented t)
   (setq org-todo-keywords
 	'((sequence "TODO" "DOING" "|" "DONE" "CANCELED")))
-  (add-hook 'org-mode-hook 'org-toggle-pretty-entities)
   (setq org-capture-templates
 	'(("t" "Todo" entry (file+headline "~/.emacs.d/org/inbox.org" "Tasks")
 	   "* TODO %?\n  %i\n  %a")
@@ -1631,7 +1692,15 @@
 		(visual-line-mode 1)
 		(display-line-numbers-mode -1)
 		;;(org-num-mode 1)
-		)))
+		))
+  (org-mode . org-toggle-pretty-entities))
+
+(use-package org-link-beautify
+  :hook
+  (org-mode . org-link-beautify-mode)
+  :config
+  (setq org-element-use-cache t)
+  (define-key org-link-beautify-keymap (kbd "RET") 'org-open-at-point))
 
 ;;use org-superstar-mode to replace org-bullets
 (use-package org-superstar
@@ -1728,12 +1797,10 @@
   (add-hook 'LaTeX-mode-hook
 	    (lambda ()
 	      (rainbow-delimiters-mode 1)
-	      (visual-line-mode -1)
-	      (visual-fill-column-mode -1)
+	      (visual-line-mode 1)
 	      (LaTeX-math-mode 1)
-	      (display-line-numbers-mode 1)
 	      (flycheck-mode -1)
-	      ;;(variable-pitch-mode 1)
+	      (variable-pitch-mode 1)
 	      (TeX-source-correlate-mode 1) ;;Needed to sync TeX and PDF
 	      )))
 
