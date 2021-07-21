@@ -658,6 +658,8 @@
 
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
 
+(global-set-key (kbd "C-M-;") 'comment-box)
+
 (defun select-current-line ()
   "Select the current line."
   (interactive)
@@ -907,6 +909,22 @@
 
 ;;Highlight current line
 (add-hook 'after-init-hook 'global-hl-line-mode)
+
+;; highlight cursor when scroll window
+(use-package beacon
+  :straight (:type git :host github
+		   :repo "Malabarba/beacon")
+  :hook
+  (after-init . beacon-mode))
+
+;; type-writer sound effect
+(use-package selectric-mode
+  :hook
+  (after-init . selectric-mode))
+
+(use-package smart-cursor-color
+  :hook
+  (after-init . smart-cursor-color-mode))
 
 (setq x-underline-at-descent-line t)
 
