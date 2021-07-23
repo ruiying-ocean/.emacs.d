@@ -8,3 +8,6 @@ projectile-bookmarks.eld
 elpa/
 eln-cache/
 auto-save-list/
+pyim/
+viper
+flycheck_init.el

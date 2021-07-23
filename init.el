@@ -15,7 +15,8 @@
 ;; Spell checker: languagetool, aspell/huspell
 ;; Lint checker: python-flakes, shell checker
 ;; Fonts: all-the-icons, Roboto Mono, Iosevka
-;; Others: riggrep, fzf, libvterm, PDF tools, multidown, github-token for grip-mode
+;; Others: riggrep, fzf, libvterm, PDF tools, multidown,
+;; github-token for grip-mode, Math preview for LaTeX inline preview
 
 ;;; Code:
 
@@ -617,6 +618,44 @@
   ("C-c e" . counsel-flycheck)
   ("C-c C-r" . counsel-recentf))
 
+;;sorting and filtering framework for ivy
+(use-package ivy-prescient
+  :hook
+  (ivy-mode . ivy-prescient-mode)
+  :config
+  (setq ivy-prescient-sort-commands t
+	ivy-prescient-enable-sorting nil
+	ivy-prescient-retain-classic-highlighting t))
+
+;; Project management tool
+(use-package projectile
+  :after ivy
+  :config
+  (setq projectile-completion-system 'ivy)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+
+(use-package counsel-projectile
+  :hook
+  (after-init . counsel-projectile-mode))
+
+;; yet another robust find file in project
+;; but don't rely on fzf
+(use-package find-file-in-project
+  :bind
+  ("C-x f" . find-file-in-project-at-point))
+
+;;Faster cursor movement - go to anywhere
+(use-package avy
+  :bind
+  ("C-\"" . avy-goto-char)		;input: one character
+  ("C-'" . avy-goto-char-2)		;input: two characters
+  ("M-g w" . avy-goto-word-1)
+  ("M-g l" . avy-goto-line))
+
+(use-package ace-window
+  :bind
+  ("M-o" . ace-window))
+
 
 ;; yet another search system
 ;; (use-package consult
@@ -727,55 +766,11 @@
 ;;   ;; (setq consult-project-root-function (lambda () (locate-dominating-file "." ".git")))
 ;; )
 
-;;sorting and filtering framework for ivy
-(use-package ivy-prescient
-  :hook
-  (ivy-mode . ivy-prescient-mode)
-  :config
-  (setq ivy-prescient-sort-commands t
-	ivy-prescient-enable-sorting nil
-	ivy-prescient-retain-classic-highlighting t))
-
-;; Project management tool
-(use-package projectile
-  :after ivy
-  :config
-  (setq projectile-completion-system 'ivy)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
-
-(use-package counsel-projectile
-  :hook
-  (after-init . counsel-projectile-mode))
-
-;; yet another robust find file in project
-;; but don't rely on fzf
-(use-package find-file-in-project
-  :bind
-  ("C-x f" . find-file-in-project-at-point))
-
-;;Faster cursor movement - go to anywhere
-(use-package avy
-  :bind
-  ("C-\"" . avy-goto-char)		;input: one character
-  ("C-'" . avy-goto-char-2)		;input: two characters
-  ("M-g w" . avy-goto-word-1)
-  ("M-g l" . avy-goto-line))
-
-(use-package ace-window
-  :bind
-  ("M-o" . ace-window))
-
-;;Another interesting package for fuzzy finding
+;; Another interesting package for fuzzy finding
 ;; (use-package affe
-;;   :after orderless
 ;;   :config
-;;   ;; Configure Orderless
-;;   (setq affe-regexp-function #'orderless-pattern-compiler
-;;         affe-highlight-function #'orderless-highlight-matches)
-
 ;;   ;; Manual preview key for `affe-grep'
-;;  (consult-customize affe-grep :preview-key (kbd "M-.")))
-
+;;   (consult-customize affe-grep :preview-key (kbd "M-.")))
 
 ;;; KEYBINDING
 
@@ -995,7 +990,7 @@
   ("M-i" . iedit-mode))
 
 
-;;; UI & APPEARANCE
+;;; WINDOW, UI & APPEARANCE
 
 ;;If you are running Emacs in MacOS, then I recommend you using
 ;;Emacs-mac <--with-no-title-bars> which improves GUI performance a lot
@@ -1039,6 +1034,10 @@
 ;;Highlight current line
 (add-hook 'after-init-hook 'global-hl-line-mode)
 
+;; (use-package yascroll
+;;   :hook
+;;   (after-init . global-yascroll-bar-mode))
+
 ;; (use-package mini-frame
 ;;   :hook
 ;;   (after-init . mini-frame-mode)
@@ -1062,6 +1061,15 @@
 ;; (use-package selectric-mode
 ;;   :hook
 ;;   (after-init . selectric-mode))
+
+;; highlight a little bit "important" buffers
+;; depends on what theme you're using
+(use-package solaire-mode
+  :hook
+  (after-init . solaire-global-mode))
+
+;; minimal columns for Emacs to split window horizontally
+(setq split-width-threshold 130)
 
 (use-package smart-cursor-color
   :hook
@@ -1088,21 +1096,6 @@
 ;;   (prog-mode . aggressive-indent-mode))
 
 (setq frame-inhibit-implied-resize nil)
-
-;; (use-package mini-frame
-;;   :config
-;;   (setq mini-frame-show-parameters
-;;         `((left . 0.5)
-;;           (top . 1.0) (width . 1.0)
-;;           (height . 8)
-;;           (left-fringe . 12)
-;;           (right-fringe .12)
-;;           (child-frame-border-width . 0)
-;;           (internal-border-width . 0)
-;; 	  ))
-;;   (setq resize-mini-frames t)
-;;   (mini-frame-mode t)
-;;   )
 
 ;;-----------Dired enhancement-------------
 ;; (use-package dired-hacks-utils
@@ -1455,7 +1448,7 @@
 
 ;; loading theme
 (setq custom-safe-themes t)
-(setq-default custom-enabled-themes '(sanityinc-tomorrow-night))
+(setq-default custom-enabled-themes '(doom-vibrant)) ;;sanityinc-tomorrow-night
 
 ;; Ensure that themes will be applied even if they have not been customized
 (defun reapply-themes ()
@@ -1943,7 +1936,7 @@
   (setq-default TeX-PDF-mode t)	   ;;PDF output
   (setq-default TeX-master nil)
 
-  ;;Preview latex C-c C-p C-p
+  ;;auctex preview C-c C-p C-p (recommend use math-preview instead)
   (setq preview-pdf-color-adjust-method t)
   (set-default 'preview-scale-function 1.0) ;;preview scale
   ;;  (setq org-format-latex-options (plist-put org-format-latex-options :scale 3.0)) ;;preview in org-mode
@@ -1968,6 +1961,25 @@
 	      (variable-pitch-mode 1)
 	      (TeX-source-correlate-mode 1) ;;Needed to sync TeX and PDF
 	      )))
+
+;; Third-party preview for LaTeX
+;; npm install -g git+https://gitlab.com/matsievskiysv/math-preview
+(use-package math-preview
+  :custom
+  (math-preview-command "/usr/local/bin/math-preview")
+  (math-preview-scale 1.0)
+  (math-preview-marks
+   '(("\\begin{equation}" . "\\end{equation}")
+     ("\\begin{equation*}" . "\\end{equation*}")
+     ("\\[" . "\\]")
+     ("\\(" . "\\)")
+     ("$$" . "$$")
+     ("$" . "$")
+     ("\\begin{align}" . "\\end{align}")))
+   :bind
+   ("C-c C-p p" . math-preview-at-point)
+   ("C-c C-p a" . math-preview-all)
+   ("C-c C-p c" . math-preview-clear-all))
 
 (use-package magic-latex-buffer
   :defer t
