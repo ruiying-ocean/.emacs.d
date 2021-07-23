@@ -141,6 +141,19 @@
 ;; Delete selection
 (delete-selection-mode t)
 
+;; Chinese input method, would be great for inconvenient environment
+(use-package pyim
+  :unless window-system
+  :config
+  (pyim-default-scheme 'microsoft-shuangpin)
+  ;; (setq default-input-method "pyim")
+  (if (posframe-workable-p)
+      (setq pyim-page-tooltip 'posframe)
+    (setq pyim-page-tooltip 'popup))
+  (setq pyim-page-length 7)		; list of candidate
+  (setq ivy-re-builders-alist
+	'((t . pyim-cregexp-ivy))))
+
 ;; repeat command
 (global-set-key (kbd "<f4>") #'repeat)
 
@@ -733,6 +746,12 @@
 (use-package counsel-projectile
   :hook
   (after-init . counsel-projectile-mode))
+
+;; yet another robust find file in project
+;; but don't rely on fzf
+(use-package find-file-in-project
+  :bind
+  ("C-x f" . find-file-in-project-at-point))
 
 ;;Faster cursor movement - go to anywhere
 (use-package avy
@@ -1344,7 +1363,7 @@
   (setq centaur-tabs-height 20)
   ;;(setq centaur-tabs-label-fixed-length 10) ;;fixed length
   (centaur-tabs-change-fonts "Roboto Mono" 130)
-  (setq centaur-tabs-show-navigation-buttons t)
+  (setq centaur-tabs-show-navigation-buttons nil)
   :bind
   ("M-<left>" . centaur-tabs-backward)
   ("M-<right>" . centaur-tabs-forward)
