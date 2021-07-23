@@ -441,23 +441,24 @@
   (setq prescient-filter-method '(literal regexp initialism)))
 
 ;; (use-package company-quickhelp
+;;   :hook
+;;   (company-mode . company-quickhelp-mode)
 ;;   :config
-;;   (add-hook 'company-quickhelp-mode-hook 'python-mode)
-;;   ;(company-quickhelp-mode 1) ;;globally true
-;;   (eval-after-load 'company
-;;     '(define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin)))
+;;   (setq x-gtk-use-system-tooltips nil))
 
 ;;Alternative to company-quickhelp
-;; (use-package company-posframe
-;;   :config
-;;   (company-posframe-mode 1)
-;;   )
-
-(use-package company-box
+(use-package company-posframe
   :hook
-  (company-mode . company-box-mode)
-  :config
-  (setq company-box-icons-alist 'company-box-icons-images))
+  (company-mode . company-posframe-mode)
+  :custom
+  (company-posframe-quickhelp-delay 0.3))
+
+;; (use-package company-box
+;;   :hook
+;;   (company-mode . company-box-mode)
+;;   :custom
+;;   (company-box-enable-icon t)
+;;   (company-box-icons-alist 'company-box-icons-all-the-icons))
 
 ;;To specify new version of git on remote machine so I can run magit locally
 ;;add ~/.ssh/config and ~/.ssh/known_hosts first
@@ -1038,6 +1039,31 @@
 ;;   :hook
 ;;   (after-init . global-yascroll-bar-mode))
 
+(use-package ivy-posframe
+  :config
+  (setq ivy-posframe-display-functions-alist
+	'((complete-symbol . ivy-posframe-display-at-point)
+	  (swiper . ivy-posframe-display-at-window-center)
+	  (counsel-M-x . ivy-posframe-display-at-window-center)
+	  (t . ivy-posframe-display)))
+  (setq ivy-posframe-parameters
+	'((left-fringe . 8)
+	  (right-fringe . 8)))
+  (setq ivy-posframe-width 200
+	ivy-posframe-border-width 0)
+  (setq ivy-posframe-height-alist '((swiper . 10)
+				    (t . 10)))
+  ;; fix the width
+  (defun ivy-posframe-get-size ()
+    "Set the ivy-posframe size according to the current frame."
+    (let ((height (or ivy-posframe-height (or ivy-height 10)))
+	  (width (min (or ivy-posframe-width 200) (round (* 0.75 (frame-width))))))
+      (list :height height :width width :min-height height :min-width width)))
+  (setq ivy-posframe-size-function 'ivy-posframe-get-size)
+  :hook
+  (ivy-mode . ivy-posframe-mode))
+
+;; similar to ivy-frame
 ;; (use-package mini-frame
 ;;   :hook
 ;;   (after-init . mini-frame-mode)
@@ -1045,10 +1071,15 @@
 ;;   (setq resize-mini-frames t)
 ;;   ;; for gnome shell
 ;;   ;; (setq x-gtk-resize-child-frames 'resize-mode)
-;;   (custom-set-variables
-;;    '(mini-frame-show-parameters
-;;      '((top . 0.8)
-;;        (width . 1.0)))))
+;;   :custom
+;;   (mini-frame-show-parameters
+;;    '((top . 0.25)
+;;      (width . 0.7)
+;;      (left . 0.5)))
+;;   (mini-frame-ignore-commands
+;;    '(eval-expression "edebug-eval-expression"
+;; 		     debugger-eval-expression swiper))
+;;   (mini-frame-create-lazy nil))
 
 ;; highlight cursor when scroll window
 (use-package beacon
@@ -1314,7 +1345,10 @@
   :custom
   (ivy-rich-modify-columns
    'ivy-switch-buffer
-   '((ivy-rich-switch-buffer-size (:align right)))))
+   '((ivy-rich-switch-buffer-size (:align right)))
+   'counsel-M-x
+   '((counsel-M-x-transformer (:width 40)))
+   ))
 
 (use-package all-the-icons-ivy-rich
   :if window-system
@@ -1332,17 +1366,6 @@
   :hook
   (ibuffer-mode . all-the-icons-ibuffer-mode))
 
-;; (use-package ivy-posframe ;;center your selection candidate box
-;;   :config
-;;   (setq ivy-posframe-display-functions-alist
-;; 	'((complete-symbol . ivy-posframe-display-at-point)
-;; 	  (swiper . ivy-posframe-display-at-window-center)
-;;           (counsel-M-x     . ivy-posframe-display-at-window-center)
-;;           (t               . ivy-posframe-display)))
-;;   (setq ivy-posframe-height-alist '((swiper . 15)
-;;                                     (t      . 10)))
-;;   (ivy-posframe-mode 1))
-
 (use-package centaur-tabs
   :config
   ;;  (centaur-tabs-mode t)
@@ -1355,7 +1378,7 @@
   (setq centaur-tabs-modified-marker "*")
   (setq centaur-tabs-height 20)
   ;;(setq centaur-tabs-label-fixed-length 10) ;;fixed length
-  (centaur-tabs-change-fonts "Roboto Mono" 130)
+  ;; (centaur-tabs-change-fonts "Roboto Mono" 130)
   (setq centaur-tabs-show-navigation-buttons nil)
   :bind
   ("M-<left>" . centaur-tabs-backward)
@@ -1405,7 +1428,7 @@
   (if (display-graphic-p)
       (progn
 	;; English font
-	(set-face-attribute 'default nil :font (format "%s:pixelsize=%d" "Iosevka" 16))
+	(set-face-attribute 'default nil :font (format "%s:pixelsize=%d" "SF Mono" 16))
 	;; CJK font
 	(dolist (charset '(kana han symbol cjk-misc bopomofo))
 	  (set-fontset-font (frame-parameter nil 'font)
