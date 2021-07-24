@@ -9,5 +9,6 @@ elpa/
 eln-cache/
 auto-save-list/
 pyim/
+emojis/
 viper
 flycheck_init.el

@@ -653,8 +653,8 @@
 
 (use-package ace-window
   :bind
-  ("M-o" . ace-window))
-
+  ("M-o" . ace-window)
+  ("C-x o" . ace-swap-window))
 
 ;; yet another search system
 ;; (use-package consult
@@ -1305,7 +1305,11 @@
 ;; show emoji
 (use-package emojify
   :hook
-  (after-init . global-emojify-mode))
+  (after-init . global-emojify-mode)
+  :custom
+  (emojify-display-style 'unicode)
+  (emojify-download-emojis-p t)
+  (emojify-emoji-styles '(ascii github unicode)))
 
 (use-package nyan-mode
   :hook
@@ -1685,9 +1689,9 @@
     (forward-line))
   (define-key python-mode-map (kbd "C-<return>") 'python-run-current-line)
   (define-key inferior-python-mode-map (kbd "C-l") 'comint-clear-buffer)
-  (define-key inferior-python-mode-map (kbd "<up>") 'comint-previous-input)
+  ;; (define-key inferior-python-mode-map (kbd "<up>") 'comint-previous-input)
   (define-key inferior-python-mode-map (kbd "C-p") 'comint-previous-input)
-  (define-key inferior-python-mode-map (kbd "<down>") 'comint-next-input)
+  ;; (define-key inferior-python-mode-map (kbd "<down>") 'comint-next-input)
   (define-key inferior-python-mode-map (kbd "C-n") 'comint-next-input))
 
 (use-package conda
@@ -1776,9 +1780,10 @@
   (define-key ess-r-mode-map (kbd "M-p") 'ess-insert-pipe)
   (define-key inferior-ess-r-mode-map (kbd "M-p") 'ess-insert-pipe)
   (define-key inferior-ess-r-mode-map (kbd "C-p") 'comint-previous-input)
-  (define-key inferior-ess-r-mode-map (kbd "<up>") 'comint-previous-input)
+  ;; (define-key inferior-ess-r-mode-map (kbd "<up>") 'comint-previous-input)
   (define-key inferior-ess-r-mode-map (kbd "C-n") 'comint-next-input)
-  (define-key inferior-ess-r-mode-map (kbd "<down>") 'comint-next-input))
+  ;; (define-key inferior-ess-r-mode-map (kbd "<down>") 'comint-next-input)
+  )
 
 ;; view R data frame
 ;; https://github.com/ShuguangSun/ess-view-data
