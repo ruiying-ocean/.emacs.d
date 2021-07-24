@@ -375,10 +375,10 @@
   :bind
   ("C-x t" . vterm))
 
-;; get better rendering experience for terminal
-;; (use-package eterm-256color
-;;   :hook
-;;   (term-mode . eterm-256color-mode))
+;; get better rendering experience for term/ansi-term
+(use-package eterm-256color
+  :hook
+  (term-mode . eterm-256color-mode))
 
 ;; a comint extension, e.g., :view *.jpg to view a plot in shell
 ;; other useful cmd: :e (edit), :ssh,
@@ -1280,6 +1280,14 @@
   :hook
   (after-init . mood-line-mode))
 
+;; yet another simple and clean mode line
+;; (use-package awesome-tray
+;;   :straight (:type git :host github
+;; 		   :repo "manateelazycat/awesome-tray")
+;;   :hook
+;;   (after-init . awesome-tray-mode))
+
+;; a feature-rich modeline
 ;; (use-package doom-modeline
 ;;   ;;right fringe cut-off issue should relate to font size
 ;;   ;;Use cnfont-decrease-size or see more methods in
@@ -1293,6 +1301,11 @@
 ;;   (setq doom-modeline-enable-word-count nil)
 ;;   (setq all-the-icons-scale-factor 1.0)
 ;;   )
+
+;; show emoji
+(use-package emojify
+  :hook
+  (after-init . global-emojify-mode))
 
 (use-package nyan-mode
   :hook
@@ -2115,7 +2128,6 @@
 
 ;;read the documentation to find how to compile and pdf-tools first
 (use-package pdf-tools
-  :defer t
   :commands (pdf-view-mode pdf-loader-install)
   :mode ("\\.[pP][dD][fF]\\'" . pdf-view-mode)
   :magic ("%PDF" . pdf-view-mode)
@@ -2126,8 +2138,10 @@
   (setq pdf-view-use-scaling t
 	pdf-view-use-imagemagick nil)
   :hook
-  (pdf-view-mode-hook . (lambda () (display-line-numbers-mode -1)))
-  (pdf-view-mode-hook . pdf-tools-enable-minor-modes)
+  (pdf-view-mode . (lambda ()
+			  (display-line-numbers-mode -1)))
+  (pdf-view-mode . pdf-tools-enable-minor-modes)
+  (pdf-view-mode . pdf-view-themed-minor-mode)
   :bind
   (:map pdf-view-mode-map
 	("C-s" . isearch-forward-regexp)
