@@ -14,7 +14,7 @@
 ;; LSP servers: pylsp, clangd, fortls, texlab/digestif
 ;; Spell checker: languagetool, aspell/huspell
 ;; Lint checker: python-flakes, shell checker
-;; Fonts: all-the-icons, Roboto Mono, Iosevka
+;; Fonts: all-the-icons, Roboto Mono, Iosevka, SF Mono
 ;; Others: riggrep, fzf, libvterm, PDF tools, multidown,
 ;; github-token for grip-mode, Math preview for LaTeX inline preview
 
@@ -84,8 +84,6 @@
 ;;   (gcmh-mode +1)
 ;;   (setq gcmh-verbose t))
 
-(require 'bind-key)
-
 ;; Recompile outdated .elc file
 ;; (use-package auto-compile
 ;;   :init
@@ -144,11 +142,11 @@
 
 ;; Chinese input method, would be great for inconvenient environment
 (use-package pyim
-  :unless window-system
+  :unless (window-system)
   :config
   (pyim-default-scheme 'microsoft-shuangpin)
   ;; (setq default-input-method "pyim")
-  (if (posframe-workable-p)
+  (if (window-system)
       (setq pyim-page-tooltip 'posframe)
     (setq pyim-page-tooltip 'popup))
   (setq pyim-page-length 7)		; list of candidate
@@ -865,6 +863,11 @@
 			  (all-the-icons-icon-for-file "f.el")
 			  " "
 			  "Emacs-lisp commands"))
+  (defvar hydra-tex-title (s-concat
+			   (s-repeat 23 " ")
+			   (all-the-icons-icon-for-file "f.tex")
+			   " "
+			   "LaTeX commands"))
   (major-mode-hydra-define emacs-lisp-mode
     (:foreign-keys warn :quit-key "q"
 		   :title hydra-el-title :separator "-")
@@ -943,7 +946,33 @@
       ("p d" projectile-find-directory "directory")
       ("p s" projectile-ripgrep "search")
       ("p p" projectile-switch-project "switch")
-      ("p r" projectile-replace "replace")))))
+      ("p r" projectile-replace "replace"))))
+  (major-mode-hydra-define latex-mode
+    (:foreign-keys warn :quit-key "q"
+		   :separator "-"
+		   :title hydra-tex-title)
+    ("Compile"
+     (("m" TeX-command-master "master-cmd")
+      ("v" TeX-view "view"))
+     "Preview"
+     (("p p" math-preview-at-point "preview-at-pt")
+      ("p a" math-preview-all "preview-all")
+      ("p a" math-preview-region "preview-region")
+      ("c p" math-preview-clear-at-point "clear-at-pt")
+      ("c a" math-preview-clear-all "clear-all")
+      ("c r" math-preview-clear-region "clear-region"))
+     "Insert"
+     (("e" LaTeX-environment "env")
+      ("]" LaTeX-close-environment "close env")
+      ("f" TeX-font "font")
+      ("s" LaTeX-section "section")
+      ("i" LaTeX-insert-item "item"))
+     "Languagetool"
+     (("c" languagetool-check "check")
+      ("d" languagetool-clear-buffer "clear")
+      ("i" languagetool-correct-at-point "at-pt")
+      ("b" languagetool-buffer "buffer")
+      ("S" languagetool-set-language "setting")))))
 
 ;; beautify hydra
 (use-package pretty-hydra
@@ -1459,19 +1488,19 @@
 (use-package ample-theme :defer t )
 (use-package eziam-theme :defer t ) ;;almost perfect light theme
 (use-package spacemacs-common :defer t :straight spacemacs-theme)
-(use-package doom-themes :defer t
-  ;; :config
-  ;; ;;treemacs setting
-  ;; (setq doom-themes-treemacs-enable-variable-pitch nil)
-  ;; (setq doom-themes-treemacs-theme "doom-color")
-  ;; (doom-themes-treemacs-config)
-  ;; ;; Corrects (and improves) org-mode's native fontification.
-  ;; (doom-themes-org-config)
-  )
+(use-package doom-themes
+  :defer t
+  :config
+  ;;treemacs setting
+  (setq doom-themes-treemacs-enable-variable-pitch nil)
+  (setq doom-themes-treemacs-theme "doom-color")
+  (doom-themes-treemacs-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
 
 ;; loading theme
 (setq custom-safe-themes t)
-(setq-default custom-enabled-themes '(doom-vibrant)) ;;sanityinc-tomorrow-night
+(setq-default custom-enabled-themes '(doom-city-lights))
 
 ;; Ensure that themes will be applied even if they have not been customized
 (defun reapply-themes ()
@@ -1485,15 +1514,17 @@
 
 ;; Toggle between light and dark
 (defun day-theme ()
-  "Activate a light color theme.  Recommendation: leuven, spacemacs-light, eziam, twilight-bright."
+  "Activate a light color theme.  Recommendation: leuven, spacemacs-light,
+   eziam, twilight-bright, modus-operandi."
   (interactive)
-  (setq custom-enabled-themes '(modus-operandi))
+  (setq custom-enabled-themes '(doom-nord-light))
   (reapply-themes))
 
 (defun night-theme ()
-  "Activate a dark color theme.  Recommendation: humanoid-dark, doom-one/vibrant, doom-dark+, ample-flat."
+  "Activate a dark color theme.  Recommendation: humanoid-dark, doom-city-light,
+  doom-one/vibrant, doom-dark+, sanityinc-tomorrow-night, doom-wilmersdorf"
   (interactive)
-  (setq custom-enabled-themes '(doom-one))
+  (setq custom-enabled-themes '(doom-vibrant))
   (reapply-themes))
 
 ;;Transprancy setting
@@ -1845,13 +1876,11 @@
   (setq org-archive-location "~/.emacs.d/org/archives.org::* From %s")
   (setq org-agenda-files (list "~/.emacs.d/org/agenda.org"))
 
+  ;; not display _ and ^ as sub/superscript
+  (setq org-use-sub-superscripts nil)
+
   ;;src setting
   (setq org-src-fontify-natively t)
-
-  ;; (with-eval-after-load 'ein
-  ;;   (org-babel-do-load-languages 'org-babel-load-languages
-  ;; 				 (append org-babel-load-languages
-  ;; 					 '((ein . t)))))
 
   :custom
   (org-support-shift-select 'alway)
@@ -1867,14 +1896,15 @@
 	("C-c C-r" . org-archive-subtree)
 	("C-c t" . counsel-org-tag)
 	("C-c l" . counsel-org-link))
+
   :hook
   (org-mode . (lambda ()
 		(variable-pitch-mode 1)
 		(visual-line-mode 1)
 		(display-line-numbers-mode -1)
+		(org-toggle-pretty-entities)
 		;;(org-num-mode 1)
-		))
-  (org-mode . org-toggle-pretty-entities))
+		)))
 
 (use-package org-link-beautify
   :hook
@@ -1977,6 +2007,7 @@
 
   (add-hook 'LaTeX-mode-hook
 	    (lambda ()
+	      (projectile-mode -1)
 	      (rainbow-delimiters-mode 1)
 	      (visual-line-mode 1)
 	      (LaTeX-math-mode 1)
@@ -1987,6 +2018,7 @@
 
 ;; Third-party preview for LaTeX
 ;; npm install -g git+https://gitlab.com/matsievskiysv/math-preview
+;; There's also org-latex-impatient for org-mode
 (use-package math-preview
   :custom
   (math-preview-command "/usr/local/bin/math-preview")
@@ -1998,11 +2030,14 @@
      ("\\(" . "\\)")
      ("$$" . "$$")
      ("$" . "$")
-     ("\\begin{align}" . "\\end{align}")))
-   :bind
-   ("C-c C-p p" . math-preview-at-point)
-   ("C-c C-p a" . math-preview-all)
-   ("C-c C-p c" . math-preview-clear-all))
+     ("\\begin{align}" . "\\end{align}")
+     ("\\begin{align*}" . "\\end{align*}")))
+  :bind
+  (:map TeX-mode-map
+	("C-c p p" . math-preview-at-point)
+	("C-c p a" . math-preview-all)
+	("C-c c p" . math-preview-clear-at-point)
+	("C-c c a" . math-preview-clear-all)))
 
 (use-package magic-latex-buffer
   :defer t
