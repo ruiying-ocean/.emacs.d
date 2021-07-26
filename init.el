@@ -15,7 +15,7 @@
 ;; Spell checker: languagetool, aspell/huspell
 ;; Lint checker: python-flakes, shell checker
 ;; Fonts: all-the-icons, Roboto Mono, Iosevka, SF Mono
-;; Others: riggrep, fzf, libvterm, PDF tools, multidown,
+;; Others: ripgrep, fzf, libvterm, PDF tools, multidown,
 ;; github-token for grip-mode, Math preview for LaTeX inline preview
 
 ;;; Code:
