@@ -442,7 +442,8 @@
 ;;   :hook
 ;;   (company-mode . company-quickhelp-mode)
 ;;   :config
-;;   (setq x-gtk-use-system-tooltips nil))
+;;   (setq x-gtk-use-system-tooltips nil)
+;;   (setq company-quickhelp-tooltip 'posframe))
 
 ;;Alternative to company-quickhelp
 (use-package company-posframe
@@ -476,7 +477,8 @@
 (use-package counsel-tramp
   :after (counsel tramp)
   :config
-  (setq counsel-tramp-custom-connections '(/ssh:mogu@almond.ggy.bris.ac.uk:/home/mogu/cgenie.muffin/))
+  (setq counsel-tramp-custom-connections '("/ssh:mogu@almond.ggy.bris.ac.uk:/home/mogu/cgenie.muffin/"
+					   "/ssh:mogu@sprout.ggy.bris.ac.uk:/home/mogu/cgenie.muffin/"))
   (setq tramp-default-method "ssh")
   (setq make-backup-files nil)
   (setq create-lockfiles nil)
@@ -588,34 +590,40 @@
   :config
   (setq ivy-use-virtual-buffers t)
   (setq enable-recursive-minibuffers t)
-  (global-set-key "\C-s" 'swiper)
-  (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
-  (global-set-key (kbd "C-c v") 'ivy-push-view)
-  (global-set-key (kbd "C-c V") 'ivy-pop-view)
   (setq ivy-wrap t)
   (setq ivy-height 9)
   ;;  (setq ivy-format-function 'ivy-format-function-line)
-  )
+  :bind
+  (("\C-s" . swiper)
+   ("C-c v" . ivy-push-view)
+   ("C-c V" . ivy-pop-view)
+   :map ivy-minibuffer-map
+   ("TAB" . ivy-alt-done)
+   :map ivy-switch-buffer-map
+   ("C-d" . ivy-switch-buffer-kill)))
 
 (use-package counsel
   :after ivy
-  :config
-  (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
   :bind
-  ("C-c b" . counsel-imenu) ;; imenus provides a list of definition
-  ("C-x C-f" . counsel-find-file)
-  ("M-x" . counsel-M-x)
-  ("M-y" . counsel-yank-pop) ;;something like a clipboard
-  ("C-h f" . counsel-describe-function)
-  ("C-h v" . counsel-describe-variable)
-  ("C-c t" . counsel-load-theme)
-  ("C-c j" . counsel-git-grep)
-  ("C-c g" . counsel-git) ;;find file in current git directory
-  ("C-c l" . counsel-git-log)
-  ("C-c r" . counsel-rg)  ;;rg find tex
-  ("C-c f" . counsel-fzf) ;;fzf find file
-  ("C-c e" . counsel-flycheck)
-  ("C-c C-r" . counsel-recentf))
+  (;; ("C-x C-b" . counsel-ibuffer)
+   ("C-x b" . counsel-switch-buffer)
+   ("C-c b" . counsel-imenu) ;; imenus provides a list of definition
+   ("C-x C-f" . counsel-find-file)
+   ("M-x" . counsel-M-x)
+   ("M-y" . counsel-yank-pop) ;;something like a clipboard
+   ("C-h f" . counsel-describe-function)
+   ("C-h v" . counsel-describe-variable)
+   ("C-c t" . counsel-load-theme)
+   ("C-c j" . counsel-git-grep)
+   ("C-c g" . counsel-git) ;;find file in current git directory
+   ("C-c l" . counsel-git-log)
+   ("C-c r" . counsel-rg)  ;;rg find tex
+   ("C-c f" . counsel-fzf) ;;fzf find file
+   ("C-c e" . counsel-flycheck)
+   ("C-c C-r" . counsel-recentf)
+   :map minibuffer-local-map
+   ("C-r" . counsel-minibuffer-history)
+   ))
 
 ;;sorting and filtering framework for ivy
 (use-package ivy-prescient
@@ -780,8 +788,12 @@
     (setq mac-command-modifier 'meta))
 
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
-
 (global-set-key (kbd "C-M-;") 'comment-box)
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+(global-set-key (kbd "C-x ,") 'beginning-of-buffer)
+(global-set-key (kbd "C-x .") 'end-of-buffer)
+;; globally go to previous position; "C-u C-SPC" to do same locally
+(global-set-key (kbd "C-c C-SPC") 'pop-global-mark)
 
 (defun select-current-line ()
   "Select the current line."
@@ -800,10 +812,10 @@
 
 ;; ibuffer
 (global-set-key (kbd "C-x C-b") 'ibuffer)
-;; Martset
-;; In case you can't use C-SPEC to do markset, change it to C-j
+
+;; Mark set
 ;; (global-set-key (kbd "C-j") 'set-mark-command)
-;; C-x C-x -> set mark and go back
+;; C-x C-x -> set mark and move back to previous position
 ;; C-x h to select all
 
 ;; a human-friendly keymap of built-in code-folding package
@@ -934,7 +946,7 @@
       ("g" magit-status "git"))
      "Find"
      (("i" counsel-imenu "function")
-      ("r" counsel-rg "ripgrep")
+      ("R" counsel-rg "ripgrep")
       ("F" counsel-fzf "find"))
      "Check"
      (("l" flycheck-list-errors "all")
@@ -1011,7 +1023,8 @@
   ("C-h F" . helpful-function))
 
 ;; find and replace
-(global-set-key (kbd "C-c h") 'query-replace)
+(global-set-key (kbd "C-c %") 'query-replace)
+(global-set-key (kbd "C-c R") 'query-replace-regexp)
 
 ;; select one and edit all (https://github.com/victorhge/iedit)
 ;; iedit is also dependency of lispy, use M-i to toggle
@@ -1463,7 +1476,7 @@
 ;;; FONT, THEME & COLOR SCHEME
 
 ;;English font: Iosevka/Inconsolata/Juliamono/Jetbrains Mono/Roboto Mono/Monaco/Fira Code/SF Mono/Operator Mono
-;;Chinese font: Wenquanyi Micro Hei Mono/Sarasa UI SC Mono/Noto Sans CJK SC Mono (work perfectly with Iosevka/Inconsolata)
+;;Chinese font: Wenquanyi Micro Hei Mono/Sarasa UI SC Mono/Sarasa Mono SC Nerd/Noto Sans CJK SC Mono (work perfectly with Iosevka/Inconsolata)
 ;;Variable-pitch font, ETBembo/New York
 ;;Unicode: Symbola
 
@@ -1479,7 +1492,7 @@
 	(dolist (charset '(kana han symbol cjk-misc bopomofo))
 	  (set-fontset-font (frame-parameter nil 'font)
 			    charset
-			    (font-spec :family "Noto Sans Mono CJK SC"))))))
+			    (font-spec :family "Sarasa Mono SC Nerd"))))))
 
 ;; Use emacs daemon, put following lines to shell config file
 ;; alias ed="emacs --daemon"
