@@ -247,9 +247,14 @@
 ;;   :hook
 ;;   (after-init . evil-mode)
 ;;   :config
-;;   (setq evil-disable-insert-state-bindings t)
-;;   )
+;;   (setq evil-disable-insert-state-bindings t))
 
+;; (use-package evil-collection
+;;   :custom
+;;   (evil-collection-setup-minibuffer t)
+;;   (evil-want-keybinding nil)
+;;   :init
+;;   (evil-collection-init))
 ;; >>> OPTION2: viper-mode (built-in vim-like)
 ;; (use-package viper
 ;;   :straight (:type built-in)
@@ -336,9 +341,9 @@
 (use-package multiple-cursors
   :bind
   ("C-S-c C-S-c" . mc/edit-lines)
-  ("C-c >" . mc/mark-next-like-this)
-  ("C-c <" . mc/mark-previous-like-this)
-  ("C-c C-<" . mc/mark-all-like-this))
+  ("C-x >" . mc/mark-next-like-this)
+  ("C-x <" . mc/mark-previous-like-this)
+  ("C-x C-<" . mc/mark-all-like-this))
 
 
 ;;; TERMINAL, COMPLETION, LINT, SNIPPET
@@ -1710,8 +1715,11 @@
 (use-package conda
   :config
   (conda-env-initialize-interactive-shells)
-  (setq conda-anaconda-home (expand-file-name "~/miniconda3"))
-  (setq conda-env-home-directory (expand-file-name "~/miniconda3"))
+  (if (file-directory-p "~/miniconda3")
+      (setq conda-anaconda-home (expand-file-name "~/miniconda3")
+	    conda-env-home-directory (expand-file-name "~/miniconda3"))
+    (setq conda-anaconda-home (expand-file-name "~/anaconda")
+	  conda-env-home-directory (expand-file-name "~/anaconda")))
   ;; when in conda-project-env-name or has environmental.yml auto activate
   (conda-env-autoactivate-mode t)
   :bind
