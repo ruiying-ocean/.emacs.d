@@ -141,6 +141,7 @@
 (delete-selection-mode t)
 
 ;; Chinese input method, would be great for inconvenient environment
+;; It's better to use external input method unless necessary
 ;; (use-package pyim
 ;;   :unless (window-system)
 ;;   :config
