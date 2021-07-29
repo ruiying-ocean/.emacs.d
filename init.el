@@ -308,7 +308,9 @@
 ;;   :hook
 ;;   (prog-mode . whitespace-mode))
 
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+;; locally remove trailing whitespace for programming mode
+(add-hook 'prog-mode-hook
+          (lambda () (add-hook 'before-save-hook 'delete-trailing-whitespace nil 'local)))
 
 ;; An alternative way to cleanup whitespace
 (use-package ws-butler
