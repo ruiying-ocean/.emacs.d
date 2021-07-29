@@ -141,17 +141,25 @@
 (delete-selection-mode t)
 
 ;; Chinese input method, would be great for inconvenient environment
-(use-package pyim
-  :unless (window-system)
-  :config
-  (pyim-default-scheme 'microsoft-shuangpin)
-  ;; (setq default-input-method "pyim")
-  (if (window-system)
-      (setq pyim-page-tooltip 'posframe)
-    (setq pyim-page-tooltip 'popup))
-  (setq pyim-page-length 7)		; list of candidate
-  (setq ivy-re-builders-alist
-	'((t . pyim-cregexp-ivy))))
+;; (use-package pyim
+;;   :unless (window-system)
+;;   :config
+;;   (require 'liberime nil t)
+;;   (pyim-default-scheme 'rime-quanpin)
+;;   ;; (setq default-input-method "pyim")
+;;   (if (window-system)
+;;       (setq pyim-page-tooltip 'posframe)
+;;     (setq pyim-page-tooltip 'popup))
+;;   (setq pyim-page-length 7)		; list of candidate
+;;   (setq ivy-re-builders-alist
+;; 	'((t . pyim-cregexp-ivy))))
+
+;; (use-package pyim-greatdict
+;;   :straight (:type git :host github
+;; 		   :repo "tumashu/pyim-greatdict")
+;;   :after pyim
+;;   :config
+;;   (pyim-greatdict-enable))
 
 ;; repeat command
 (global-set-key (kbd "<f4>") #'repeat)
@@ -1574,8 +1582,8 @@
 ;;Varialble/fixed pictch font setting, essential for org-mode
 (custom-theme-set-faces
  'user
- '(variable-pitch ((t (:family "Noto Serif" :height 180))))
- '(fixed-pitch ((t ( :family "Roboto Mono" :height 180)))))
+ '(variable-pitch ((t (:family "Noto Serif" :height 160))))
+ '(fixed-pitch ((t ( :family "Roboto Mono" :height 160)))))
 
 (custom-theme-set-faces
  'user
