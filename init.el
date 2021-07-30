@@ -18,6 +18,7 @@
 ;; Fonts: all-the-icons, Roboto Mono, Iosevka, SF Mono
 ;; Others: ripgrep, fzf, libvterm, PDF tools, multidown,
 ;; github-token for grip-mode, Math preview for LaTeX inline preview
+;; Input method (optional): Rime
 
 ;;; Code:
 
@@ -143,8 +144,14 @@
 
 ;; Chinese input method within Emacs, rely on dynamic modules/gcc/make and librime (by the rime team)
 ;; Doc: https://github.com/DogLooksGood/emacs-rime/blob/master/INSTALLATION.org
+;; ------------------------------------------------------------
 ;; Alternative: pyim (which can be used as rime frontend too. Requrie another package liberime
 ;; which also uses librime. No need external dependencies if uses default shuangpin)
+;; To switch traditional/simplified Chinese, put your default.custom.yaml file to
+;; "~/.emacs.d/rime/", and M-x rime-deploy (yes it's independent from external rime)
+;; ------------------------------------------------------------
+;; A convinient out-of-box config: https://github.com/maomiui/rime.git
+;; ------------------------------------------------------------
 (use-package rime
   :straight (rime :type git
 		  :host github
@@ -458,26 +465,22 @@
   :config
   (setq prescient-filter-method '(literal regexp initialism)))
 
-;; (use-package company-quickhelp
-;;   :hook
-;;   (company-mode . company-quickhelp-mode)
-;;   :config
-;;   (setq x-gtk-use-system-tooltips nil)
-;;   (setq company-quickhelp-tooltip 'posframe))
-
-;;Alternative to company-quickhelp
 (use-package company-posframe
   :hook
   (company-mode . company-posframe-mode)
   :custom
-  (company-posframe-quickhelp-delay 0.3))
+  (company-posframe-quickhelp-delay 0.3)
+  (company-posframe-quickhelp-show-header nil)
+  :config
+  (setq posframe-arghandler #'my-posframe-arghandler)
+  (defun my-posframe-arghandler (buffer-or-name arg-name value)
+    (let ((info '(:internal-border-width 0)))
+      (or (plist-get info arg-name) value))))
 
+;; Alternative to company-posframe, there's also company-quickhelp
 ;; (use-package company-box
 ;;   :hook
-;;   (company-mode . company-box-mode)
-;;   :custom
-;;   (company-box-enable-icon t)
-;;   (company-box-icons-alist 'company-box-icons-all-the-icons))
+;;   (company-mode . company-box-mode))
 
 ;;To specify new version of git on remote machine so I can run magit locally
 ;;add ~/.ssh/config and ~/.ssh/known_hosts first
@@ -1850,6 +1853,16 @@
 (use-package matlab-mode
   :defer t
   :mode "\\.[mM]\\'")
+
+;;;;;;;;;;
+;; Yaml ;;
+;;;;;;;;;;
+
+(use-package yaml-mode
+  :mode "\\.yml\\'"
+  :bind
+  (:map yaml-mode-map
+	("\C-m" . newline-and-indent)))
 
 
 ;;; Text-mode: Markdown/org-mode/TeX
