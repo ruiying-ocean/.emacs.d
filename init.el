@@ -9,6 +9,7 @@
 
 ;; This file contains customized configuration codes, which
 ;; have been divided into multiple sections by ^L character.
+;; One can use Ctrl-TAB to have a look of outline
 
 ;;; EXTERNAL DEPENDENCIES:
 ;; LSP servers: pylsp, clangd, fortls, texlab/digestif
@@ -140,27 +141,29 @@
 ;; Delete selection
 (delete-selection-mode t)
 
-;; Chinese input method, would be great for inconvenient environment
-;; It's better to use external input method unless necessary
-;; (use-package pyim
-;;   :unless (window-system)
-;;   :config
-;;   (require 'liberime nil t)
-;;   (pyim-default-scheme 'rime-quanpin)
-;;   ;; (setq default-input-method "pyim")
-;;   (if (window-system)
-;;       (setq pyim-page-tooltip 'posframe)
-;;     (setq pyim-page-tooltip 'popup))
-;;   (setq pyim-page-length 7)		; list of candidate
-;;   (setq ivy-re-builders-alist
-;; 	'((t . pyim-cregexp-ivy))))
-
-;; (use-package pyim-greatdict
-;;   :straight (:type git :host github
-;; 		   :repo "tumashu/pyim-greatdict")
-;;   :after pyim
-;;   :config
-;;   (pyim-greatdict-enable))
+;; Chinese input method within Emacs, rely on dynamic modules/gcc/make and librime (by the rime team)
+;; Doc: https://github.com/DogLooksGood/emacs-rime/blob/master/INSTALLATION.org
+;; Alternative: pyim (which can be used as rime frontend too. Requrie another package liberime
+;; which also uses librime. No need external dependencies if uses default shuangpin)
+(use-package rime
+  :straight (rime :type git
+		  :host github
+		  :repo "DogLooksGood/emacs-rime"
+		  :files ("*.el" "Makefile" "lib.c"))
+  :custom
+  (default-input-method "rime")
+  (rime-librime-root "~/.emacs.d/librime/dist")
+  :config
+  (setq rime-show-candidate 'posframe)
+  (setq rime-posframe-properties
+	(list :font "Sarasa Mono SC Nerd"
+	      :internal-border-width 10))
+  (setq rime-translate-keybindings
+	'("C-f" "C-b" "C-n" "C-p" "C-g" "<left>" "<right>"
+	  "<up>" "<down>" "<prior>" "<next>" "<delete>"))
+  (setq rime-posframe-style 'horizontal)
+  :bind
+  ("C-\\" . toggle-input-method))
 
 ;; repeat command
 (global-set-key (kbd "<f4>") #'repeat)
@@ -344,6 +347,7 @@
   ("C-j" . smart-newline))
 
 ;; smartly select region, press until it selects what you want
+;; C-M-SPC also does same on Mac
 (use-package expand-region
   :bind
   ("C-=" . er/expand-region))
@@ -1456,8 +1460,8 @@
   ;; (centaur-tabs-change-fonts "Roboto Mono" 130)
   (setq centaur-tabs-show-navigation-buttons nil)
   :bind
-  ("M-<left>" . centaur-tabs-backward)
-  ("M-<right>" . centaur-tabs-forward)
+  ("C-x <left>" . centaur-tabs-backward)
+  ("C-x <right>" . centaur-tabs-forward)
   :hook
   (dired-mode . centaur-tabs-local-mode)
   (after-init . centaur-tabs-mode))
@@ -1514,6 +1518,10 @@
 ;; alias ed="emacs --daemon"
 ;; alias ec="emacsclient -c"
 ;; alias eq="emacsclient -e '(save-buffers-kill-emacs)'"
+;; If you want more fuzzy cmd:
+;; alias emcas=emacs
+;; alias emasc=emacs
+;; alias enacs=emacs
 
 ;; Set font and auto-fullscreen in daemon-mode, put after init-ui.el
 (if (daemonp)
@@ -1546,7 +1554,7 @@
 
 ;; loading theme
 (setq custom-safe-themes t)
-(setq-default custom-enabled-themes '(doom-city-lights))
+(setq-default custom-enabled-themes '(doom-vibrant))
 
 ;; Ensure that themes will be applied even if they have not been customized
 (defun reapply-themes ()
@@ -1570,7 +1578,7 @@
   "Activate a dark color theme.  Recommendation: humanoid-dark, doom-city-light,
   doom-one/vibrant, doom-dark+, sanityinc-tomorrow-night, doom-wilmersdorf"
   (interactive)
-  (setq custom-enabled-themes '(doom-vibrant))
+  (setq custom-enabled-themes '(sanityinc-tomorrow-night))
   (reapply-themes))
 
 ;;Transprancy setting
