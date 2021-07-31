@@ -13,7 +13,7 @@ The splash is downloaded from [the free png image website](https://www.freepngim
 Install Emacs and download the init files in your `$HOME` directory:
 ```bash
 cd ~
-git clone https://github.com/Leslieying/.emacs.d.git
+git clone https://github.com/ruiying-emacs/.ocean.d.git
 ```
 Then have some beverage and wait for downloading :smile:
 
@@ -21,9 +21,9 @@ Then have some beverage and wait for downloading :smile:
 
 > *All features come from community's efforts*, not mine.
 
-- Fast start-up (load more than 100 packages in <1s)
-- Modern UI (directory explorer, theme, color-scheme, minimap, file icons, etc)
-- Multiple languages support and syntax highlighting (R, Python, TeX, Fortran, etc)
+- Fast start-up
+- Modern UI
+- Multiple languages support
 - IntelliSense
 - Go-to definition
 - Shell/terminal
