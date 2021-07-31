@@ -13,7 +13,7 @@ The splash is downloaded from [the free png image website](https://www.freepngim
 Install Emacs and download the init files in your `$HOME` directory:
 ```bash
 cd ~
-git clone https://github.com/ruiying-emacs/.ocean.d.git
+git clone https://github.com/ruiying-ocean/.emacs.d.git
 ```
 Then have some beverage and wait for downloading :smile:
 
