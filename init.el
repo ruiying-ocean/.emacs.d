@@ -13,15 +13,15 @@
 
 ;;; EXTERNAL DEPENDENCIES:
 ;; LSP servers: pylsp, clangd, fortls, texlab/digestif
-;; Spell checker: languagetool, aspell/huspell
+;; Spell checker: languagetool, grammarly, aspell/huspell
 ;; Lint checker: python-flakes, shell checker
 ;; Fonts: all-the-icons, Roboto Mono, Iosevka, SF Mono
 ;; Others: ripgrep, fzf, libvterm, PDF tools, multidown,
 ;; github-token for grip-mode, Math preview for LaTeX inline preview
 ;; Input method (optional): Rime
+;; Literature management (optinal): zotext addon in Zotero
 
 ;;; Code:
-
 
 ;;; FUNDEMENTAL
 
@@ -172,9 +172,6 @@
   :bind
   ("C-\\" . toggle-input-method))
 
-;; repeat command
-(global-set-key (kbd "<f4>") #'repeat)
-
 ;; wrap up line (use visual-line-mode and visual-fill-column-mode instead)
 ;; (setq truncate-lines nil)
 ;; (setq-default word-wrap nil)
@@ -214,52 +211,6 @@
   (funcall orig-fun beg end region))
 (advice-add 'kill-ring-save :around #'my/kill-ring-save)
 
-(use-package languagetool
-  :config
-  (setq languagetool-language-tool-jar
-	(concat (getenv "HOME") "/LanguageTool-5.4/languagetool-commandline.jar"))
-  (setq languagetool-language-tool-server-jar
-	(concat (getenv "HOME") "/LanguageTool-5.4/languagetool-server.jar"))
-  (setq languagetool-server-user-arguments '("-p" "8082"))
-  (setq languagetool-default-language "en-GB")
-  (setq languagetool-java-bin "/usr/bin/java")
-  (setq languagetool-java-arguments '("-Dfile.encoding=UTF-8"))
-  :bind
-  ("C-c C-; c" . languagetool-check)
-  ("C-c C-; d" . languagetool-clear-buffer)
-  ("C-c C-; i" . languagetool-correct-at-point)
-  ("C-c C-; b" . languagetool-buffer)
-  ("C-c C-; l" . languagetool-set-language))
-
-;; A dictionary inside Emacs, by abo-abo!
-(use-package define-word
-  :bind
-  ("C-c d" . define-word-at-point)
-  :config
-  (setq define-word-default-service 'webster))
-
-;;flyspell setting
-(use-package flyspell
-  :straight (:type built-in)
-  :hook
-  (text-mode . flyspell-mode)
-  (org-mode . flyspell-mode)
-  (LaTeX-mode . flyspell-mode)
-  :config
-  (setq-default ispell-program-name "aspell") ;;depends on aspell in the path
-  (setq ispell-local-dictionary "en_GB")
-  (setq ispell-extra-args '("--sug-mode=fast" "--lang=en_GB"
-			    "--camel-case" "--run-together")))
-
-(use-package flyspell-correct
-  :after flyspell
-  :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper)))
-
-;; Flyspell interface
-;; Use M-o to do words action (e.g., save)
-(use-package flyspell-correct-ivy
-  :after flyspell-correct)
-
 ;; ---Edit keybinding style---
 ;; >>> OPTION1: evil (vim-like)
 ;; (use-package evil
@@ -274,6 +225,7 @@
 ;;   (evil-want-keybinding nil)
 ;;   :init
 ;;   (evil-collection-init))
+
 ;; >>> OPTION2: viper-mode (built-in vim-like)
 ;; (use-package viper
 ;;   :straight (:type built-in)
@@ -283,8 +235,8 @@
 ;; >>> OPTION3: god-mode (remove prefix key)
 ;; (use-package god-mode
 ;;   :init
-;;   (god-mode)
-;;   )
+;;   (god-mode t))
+;; -----------------------------
 
 (use-package recentf
   :straight (:type built-in)
@@ -368,7 +320,7 @@
   ("C-x C-<" . mc/mark-all-like-this))
 
 
-;;; TERMINAL, COMPLETION, LINT, SNIPPET
+;;; TERMINAL, COMPLETION, LINT/SPELL CHECKER, SNIPPET
 
 ;; Shells in Emacs (more of an interface)
 ;; Tips: you can use M-r to search in shell history
@@ -560,9 +512,62 @@
 					     python-pycompile
 					     emacs-lisp-checkdoc)))
 
+;; (use-package flycheck-grammarly
+;;   :config
+;;   (setq flycheck-grammarly-check-time 0.8))
+
 (use-package flycheck-inline
   :hook
   (flycheck-mode . flycheck-inline-mode))
+
+(use-package languagetool
+  :config
+  (setq languagetool-language-tool-jar
+	(concat (getenv "HOME") "/LanguageTool-5.4/languagetool-commandline.jar"))
+  (setq languagetool-language-tool-server-jar
+	(concat (getenv "HOME") "/LanguageTool-5.4/languagetool-server.jar"))
+  (setq languagetool-server-user-arguments '("-p" "8082"))
+  (setq languagetool-default-language "en-GB")
+  (setq languagetool-java-bin "/usr/bin/java")
+  (setq languagetool-java-arguments '("-Dfile.encoding=UTF-8"))
+  :bind
+  ("C-c C-; c" . languagetool-check)
+  ("C-c C-; d" . languagetool-clear-buffer)
+  ("C-c C-; i" . languagetool-correct-at-point)
+  ("C-c C-; b" . languagetool-buffer)
+  ("C-c C-; l" . languagetool-set-language))
+
+;; Doc: https://github.com/egh/zotxt-emacs
+;; (use-package zotxt-emacs)
+
+;; A dictionary inside Emacs, by abo-abo!
+(use-package define-word
+  :bind
+  ("C-c d" . define-word-at-point)
+  :config
+  (setq define-word-default-service 'webster))
+
+;;flyspell setting
+(use-package flyspell
+  :straight (:type built-in)
+  :hook
+  (text-mode . flyspell-mode)
+  (org-mode . flyspell-mode)
+  (LaTeX-mode . flyspell-mode)
+  :config
+  (setq-default ispell-program-name "aspell") ;;depends on aspell in the path
+  (setq ispell-local-dictionary "en_GB")
+  (setq ispell-extra-args '("--sug-mode=fast" "--lang=en_GB"
+			    "--camel-case" "--run-together")))
+
+(use-package flyspell-correct
+  :after flyspell
+  :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper)))
+
+;; Flyspell interface
+;; Use M-o to do words action (e.g., save)
+(use-package flyspell-correct-ivy
+  :after flyspell-correct)
 
 (use-package yasnippet
   :straight yasnippet-snippets ;; Collection of snippets
@@ -817,6 +822,9 @@
 (global-set-key (kbd "C-x .") 'end-of-buffer)
 ;; globally go to previous position; "C-u C-SPC" to do same locally
 (global-set-key (kbd "C-c C-SPC") 'pop-global-mark)
+
+;; repeat command
+(global-set-key (kbd "<f4>") #'repeat)
 
 (defun select-current-line ()
   "Select the current line."
@@ -1352,24 +1360,24 @@
   (doom-modeline-mode . nyan-mode))
 
 ;; defer if it's slow
-(use-package dashboard
-  :if (and (< (length command-line-args) 2)
-	   (fboundp 'native-comp-available-p))
-  :config
-  (setq dashboard-set-init-info nil)
-  (dashboard-setup-startup-hook)
-  (setq dashboard-banner-logo-title "Happiness is everything - Rui")
-  ;;    (setq dashboard-startup-banner 3)
-  (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/world.png")
-  (setq dashboard-center-content t)
-  (setq dashboard-items '((recents . 3))) ;;add org-agenda could slow start-up speed
-  (setq dashboard-set-heading-icons t)
-  (setq dashboard-set-file-icons t)
-  (setq dashboard-set-navigator t)
-  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))) ;; show Dashboard in frames created with emacsclient -c
-  (setq dashboard-projects-switch-function 'counsel-projectile-switch-project-by-name)
-  (define-key dashboard-mode-map (kbd "n") 'next-line)
-  (define-key dashboard-mode-map (kbd "p") 'previous-line))
+;; (use-package dashboard
+;;   :if (and (< (length command-line-args) 2)
+;; 	   (fboundp 'native-comp-available-p))
+;;   :config
+;;   (setq dashboard-set-init-info nil)
+;;   (dashboard-setup-startup-hook)
+;;   (setq dashboard-banner-logo-title "Happiness is everything - Rui")
+;;   ;;    (setq dashboard-startup-banner 3)
+;;   (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/world.png")
+;;   (setq dashboard-center-content t)
+;;   (setq dashboard-items '((recents . 3))) ;;add org-agenda could slow start-up speed
+;;   (setq dashboard-set-heading-icons t)
+;;   (setq dashboard-set-file-icons t)
+;;   (setq dashboard-set-navigator t)
+;;   (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))) ;; show Dashboard in frames created with emacsclient -c
+;;   (setq dashboard-projects-switch-function 'counsel-projectile-switch-project-by-name)
+;;   (define-key dashboard-mode-map (kbd "n") 'next-line)
+;;   (define-key dashboard-mode-map (kbd "p") 'previous-line))
 
 (use-package highlight-indent-guides
   :hook
@@ -1669,6 +1677,14 @@
   ;;(define-key eglot-mode-map (kbd "C-c h") 'eldoc)
   )
 
+;; A lsp for grammarly, still in early development
+;; (use-package eglot-grammarly
+;;   :straight (:type git :host github
+;; 		   :repo "emacs-grammarly/eglot-grammarly")
+;;   :hook (text-mode . (lambda ()
+;;                        (require 'eglot-grammarly)
+;;                        (call-interactively #'eglot))))
+
 ;;==============================
 ;;           Python           ;;
 ;;==============================
@@ -1740,8 +1756,8 @@
   (if (file-directory-p "~/miniconda3")
       (setq conda-anaconda-home (expand-file-name "~/miniconda3")
 	    conda-env-home-directory (expand-file-name "~/miniconda3"))
-    (setq conda-anaconda-home (expand-file-name "~/anaconda")
-	  conda-env-home-directory (expand-file-name "~/anaconda")))
+    (setq conda-anaconda-home (expand-file-name "~/anaconda3")
+	  conda-env-home-directory (expand-file-name "~/anaconda3")))
   ;; when in conda-project-env-name or has environmental.yml auto activate
   (conda-env-autoactivate-mode t)
   :bind
@@ -1974,6 +1990,7 @@
 		(visual-line-mode 1)
 		(display-line-numbers-mode -1)
 		(org-toggle-pretty-entities)
+		(flycheck-mode 1)
 		;;(org-num-mode 1)
 		)))
 
@@ -2016,9 +2033,8 @@
 
 ;;Image drag-and-drop for org-mode
 (use-package org-download
-  :defer t
-  :config
-  (add-hook 'dired-mode-hook 'org-download-enable))
+  :hook
+  (dired-mode . org-download-enable))
 
 ;;(use-package org-super-agenda)
 (use-package org-graph-view
@@ -2082,7 +2098,7 @@
 	      (rainbow-delimiters-mode 1)
 	      (visual-line-mode 1)
 	      (LaTeX-math-mode 1)
-	      (flycheck-mode -1)
+	      (flycheck-mode 1) 	;enable grammarly
 	      (variable-pitch-mode 1)
 	      (TeX-source-correlate-mode 1) ;;Needed to sync TeX and PDF
 	      )))
