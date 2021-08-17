@@ -145,12 +145,15 @@
 ;; Chinese input method within Emacs, rely on dynamic modules/gcc/make and librime (by the rime team)
 ;; Doc: https://github.com/DogLooksGood/emacs-rime/blob/master/INSTALLATION.org
 ;; ------------------------------------------------------------
-;; Alternative: pyim (which can be used as rime frontend too. Requrie another package liberime
-;; which also uses librime. No need external dependencies if uses default shuangpin)
-;; To switch traditional/simplified Chinese, put your default.custom.yaml file to
-;; "~/.emacs.d/rime/", and M-x rime-deploy (yes it's independent from external rime)
+;; Alternative: pyim (which can be used as rime frontend too.
+;; Requrie another el package liberime which also uses librime.
+;; However no need external dependencies if uses default shuangpin)
 ;; ------------------------------------------------------------
-;; A convinient out-of-box config: https://github.com/maomiui/rime.git
+;; Customisation:
+;; * Emacs-rime has seperate config from the system rime's *
+;; To customise any configuration, e.g., switch traditional/simplified Chinese,
+;; place your default.custom.yaml file to "~/.emacs.d/rime/", and M-x rime-deploy
+;; There's also a convinient out-of-box config on github: https://github.com/maomiui/rime.git
 ;; ------------------------------------------------------------
 (use-package rime
   :straight (rime :type git
@@ -1209,7 +1212,8 @@
 
 (setq dired-listing-switches "-alFh")
 (with-eval-after-load 'dired
-  (define-key dired-mode-map [mouse-2] 'dired-mouse-find-file))
+  (define-key dired-mode-map [mouse-2] 'dired-mouse-find-file)
+  (setq dired-dwim-target t))
 
 ;; W -> X to move, W -> Y to copy
 (use-package dired-ranger
