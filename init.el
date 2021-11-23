@@ -3,8 +3,7 @@
 ;;; Commentary:
 
 ;;; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-;; Always remember that it is WHAT YOU ARE EDITING, rather
-;; than the editor, that is the key.
+;;               Editor is just a tool.
 ;;; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 ;; This file contains customized configuration codes, which
@@ -12,17 +11,20 @@
 ;; One can use Ctrl-TAB to have a look of outline
 
 ;;; EXTERNAL DEPENDENCIES:
-;; LSP servers: pylsp, clangd, fortls, texlab/digestif
-;; Spell checker: languagetool, grammarly, aspell/huspell
-;; Lint checker: python-flakes, shell checker
-;; Fonts: all-the-icons, Roboto Mono, Iosevka, SF Mono
-;; Others: ripgrep, fzf, libvterm, PDF tools, multidown,
-;; github-token for grip-mode, Math preview for LaTeX inline preview
-;; Input method (optional): Rime
-;; Literature management (optinal): zotext addon in Zotero
+;; LSP servers:
+;;       pylsp, clangd, fortls, texlab/digestif
+;; Spell checker:
+;;       languagetool, grammarly, aspell/huspell
+;; Lint checker:
+;;       pyflakes, shell checker (brew)
+;; Fonts:
+;;       all-the-icons, Roboto Mono, Iosevka, SF Mono
+;; Others:
+;;       ripgrep, fzf, libvterm, PDF tools, multimarkdown (brew),
+;;       npm package `livedown` and `math-preview`
+
 
 ;;; Code:
-
 ;;; FUNDEMENTAL
 
 ;; Package Manager: straight.el
@@ -131,7 +133,9 @@
 (set-keyboard-coding-system 'utf-8)
 
 ;;We are lazy human :)
-(fset 'yes-or-no-p 'y-or-n-p)
+(if (> emacs-major-version 28)
+    (setq use-short-answers t)
+  (fset 'yes-or-no-p 'y-or-n-p))
 
 ;;No more backup files~
 (setq-default make-backup-files nil)
@@ -164,6 +168,7 @@
   (default-input-method "rime")
   (rime-librime-root "~/.emacs.d/librime/dist")
   :config
+  (setq rime-emacs-module-header-root "/opt/homebrew/Cellar/emacs-head@29/29.0.50_1/include/")
   (setq rime-show-candidate 'posframe)
   (setq rime-posframe-properties
 	(list :font "Sarasa Mono SC Nerd"
@@ -353,6 +358,7 @@
 
 ;; Enable this to get a superior terminal emulator (a true application like iTerm)
 ;; read more on https://github.com/akermu/emacs-libvterm to see the external dependencies
+;; remember to check the exec-path as well
 (use-package vterm
   :bind
   ("C-x t" . vterm))
@@ -523,12 +529,14 @@
   :hook
   (flycheck-mode . flycheck-inline-mode))
 
+;; https://github.com/languagetool-org/languagetool
+;; alternative: https://github.com/emacs-languagetool/flycheck-languagetool
 (use-package languagetool
   :config
   (setq languagetool-language-tool-jar
-	(concat (getenv "HOME") "/LanguageTool-5.4/languagetool-commandline.jar"))
+	(concat (getenv "HOME") "/LanguageTool-5.5-stable/languagetool-commandline.jar"))
   (setq languagetool-language-tool-server-jar
-	(concat (getenv "HOME") "/LanguageTool-5.4/languagetool-server.jar"))
+	(concat (getenv "HOME") "/LanguageTool-5.5-stable/languagetool-server.jar"))
   (setq languagetool-server-user-arguments '("-p" "8082"))
   (setq languagetool-default-language "en-GB")
   (setq languagetool-java-bin "/usr/bin/java")
@@ -601,7 +609,7 @@
 ;;put your PATH variable like /usr/local/bin/python3.9 in this file)
 ;;Find out more in https://github.com/purcell/exec-path-from-shell
 (use-package exec-path-from-shell
-  :if (memq window-system '(mac ns))
+  :if (memq window-system '(mac ns x))
   :config
   (setq exec-path-from-shell-arguments nil) ;;read non-interactive shell config
   (exec-path-from-shell-initialize)
@@ -1566,10 +1574,12 @@
   (doom-themes-treemacs-config)
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
+(use-package apropospriate-theme
+  :defer t)
 
 ;; loading theme
 (setq custom-safe-themes t)
-(setq-default custom-enabled-themes '(doom-vibrant))
+(setq-default custom-enabled-themes '(apropospriate-dark))
 
 ;; Ensure that themes will be applied even if they have not been customized
 (defun reapply-themes ()
@@ -1895,7 +1905,7 @@
 ;; preview included but reply on multimarkdown
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
-  :mode (("README\\.md\\'" . gfm-mode)
+  :mode (;; ("README\\.md\\'" . gfm-mode)
 	 ("\\.md\\'" . markdown-mode)
 	 ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown")
@@ -1906,36 +1916,21 @@
 
 ;; Advanced preview
 
-;; >>> Option 1
-;; depend on grip (pip install grip) and manual changing of github api limit
-;; Not work for SSH git repository
 
-;; (use-package grip-mode
-;;
-;;   :bind (:map markdown-mode-command-map
-;;               ("g" . grip-mode))
-;;   :hook (markdown-mode . grip-mode)
-;;   :config
-;;   ;;create your personal access token, then config
-;;   ;;your github username and token in "~/.authinfo.gpg"
-;;   ;;DO NOT input your password here!
-;;   (require 'auth-source)
-;;   (let ((credential (auth-source-user-and-password "api.github.com")))
-;;     (setq grip-github-user (car credential)
-;;           grip-github-password (cadr credential)))
-;;   )
-
-;; >>> Option 2
-(use-package markdown-preview-mode
-  :hook (markdown-mode . markdown-preview-mode)
+;; Dependency: npm/node, livedown npm package
+(use-package livedown
+  :ensure nil
+  :load-path "~/.emacs.d/emacs-livedown"
   :bind
   (:map markdown-mode-map
-	("C-c C-c p" . markdown-preview-open-browser))
-  :config
-  ;; extra css element
-  (add-to-list 'markdown-preview-stylesheets "https://raw.githubusercontent.com/richleland/pygments-css/master/emacs.css")
-  ;; enable mathjax
-  (add-to-list 'markdown-preview-javascript "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"))
+	("C-c C-c p" . livedown-preview)
+	("C-c C-c k" . livedown-kill))
+  :custom
+  (livedown-autostart t) ; automatically open preview when opening markdown files
+  (livedown-open t)	 ; automatically open the browser window
+  (livedown-port 1337)	 ; port for livedown server
+  (livedown-browser nil) ; browser to use
+  )
 
 ;;add table of content for md/org
 ;;Add :TOC: tag for org (C-c C-c) and <-- :TOC: --> for md
