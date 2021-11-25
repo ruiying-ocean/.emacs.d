@@ -1,7 +1,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # About
- This is my Emacs configuration file(s) to implement a *self-use* cross-platform editor/IDE. It has been tested for Emacs 27.2/28.0.05 (with native-compilation feature) on MacOS (Big Sur), Linux (Ubuntu 20). Windows may not be well supported because of possible limitations from cygwin/MSYS2. WSL2 is recommended instead.
+ This is my Emacs configuration file(s) to implement a *self-use* cross-platform editor/IDE. It has been tested for Emacs 27.2/28.0.05/29.0.05 (with native-compilation feature) on MacOS (Monterey), Linux (Ubuntu 20). Windows may not be well supported because of possible limitations from cygwin/MSYS2. WSL2 is recommended instead.
 
 # Screenshot
 ![](screenshot-light.png)
@@ -19,7 +19,7 @@ Then have some beverage and wait for downloading :smile:
 
 # Features
 
-> *All features come from community's efforts*, not mine.
+> *All features collected from the community*
 
 - Fast start-up
 - Modern UI

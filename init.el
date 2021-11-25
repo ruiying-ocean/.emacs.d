@@ -81,43 +81,12 @@
 ;; Avoid matching file name with regrex list during startup
 (let ((file-name-handler-alist nil)) "~/.emacs.d/init.el")
 
-;; Another package to automatically optimise garbage collector
-;; (use-package gcmh
-;;   :straight (gcmh :type git :host gitlab :repo "koral/gcmh")
-;;   :config
-;;   (gcmh-mode +1)
-;;   (setq gcmh-verbose t))
-
-;; Recompile outdated .elc file
-;; (use-package auto-compile
-;;   :init
-;;   (auto-compile-on-load-mode)
-;;   (auto-compile-on-save-mode))
-
 ;; Benchmark init time
-;; Option 1
-;; `time emacs -e kill-emacs`
-
-;; Option 2
-;; (setq use-package-verbose t)
-;; (use-package-statistic-mode)
-
-;; Option 3
-;; (use-package benchmark-init
-;;   :config
-;;   ;; To disable collection of benchmark data after init is done.
-;;   (add-hook 'after-init-hook 'benchmark-init/deactivate))
-
-;; Option 4
 (use-package esup
   :config
   (setq esup-depth 0))
-
-;; Option 5 (Run time not start up)
-;; profile-start -> profile-stop -> profile-report
-
 
-;;; EDITOR SECTION
+;;; EDITOR
 
 ;;Coding system
 ;; In some old machines, you might need specify these in .bashrc
@@ -146,12 +115,8 @@
 ;; Delete selection
 (delete-selection-mode t)
 
-;; Chinese input method within Emacs, rely on dynamic modules/gcc/make and librime (by the rime team)
+;; Chinese input method within Emacs, rely on dynamic modules, gcc, make, and librime (powered by the RIME team)
 ;; Doc: https://github.com/DogLooksGood/emacs-rime/blob/master/INSTALLATION.org
-;; ------------------------------------------------------------
-;; Alternative: pyim (which can be used as rime frontend too.
-;; Requrie another el package liberime which also uses librime.
-;; However no need external dependencies if uses default shuangpin)
 ;; ------------------------------------------------------------
 ;; Customisation:
 ;; * Emacs-rime has seperate config from the system rime's *
@@ -191,19 +156,20 @@
   ;; wrap long line
   (visual-fill-column-width 140))
 
+;; overrides certain minor modes and variables to
+;; improve the perforamce when open files with long lines
 (use-package so-long
   :straight (:type built-in)
   :hook
-  (after-init . global-so-long-mode))
+  (after-init . global-so-long-mode)
+  :custom
+  (so-long-action 'so-long-minor-mode))
 
 ;; auto revert buffer
 (use-package autorevert
   :straight (:type built-in)
   :hook
   (after-init . global-auto-revert-mode))
-
-;; Display next page at the other window
-;; (setq follow-mode t)
 
 ;;;; Enable mouse operation in terminal emacs
 (unless (display-graphic-p)
@@ -220,32 +186,6 @@
 (advice-add 'kill-ring-save :around #'my/kill-ring-save)
 
 ;; ---Edit keybinding style---
-;; >>> OPTION1: evil (vim-like)
-;; (use-package evil
-;;   :hook
-;;   (after-init . evil-mode)
-;;   :config
-;;   (setq evil-disable-insert-state-bindings t))
-
-;; (use-package evil-collection
-;;   :custom
-;;   (evil-collection-setup-minibuffer t)
-;;   (evil-want-keybinding nil)
-;;   :init
-;;   (evil-collection-init))
-
-;; >>> OPTION2: viper-mode (built-in vim-like)
-;; (use-package viper
-;;   :straight (:type built-in)
-;;   :init (setq viper-mode t)
-;;   )
-
-;; >>> OPTION3: god-mode (remove prefix key)
-;; (use-package god-mode
-;;   :init
-;;   (god-mode t))
-;; -----------------------------
-
 (use-package recentf
   :straight (:type built-in)
   :config
@@ -703,121 +643,6 @@
   ("M-o" . ace-window)
   ("C-x o" . ace-swap-window))
 
-;; yet another search system
-;; (use-package consult
-;;   ;; Replace bindings. Lazily loaded due by `use-package'.
-;;   :bind (;; C-c bindings (mode-specific-map)
-;;          ("C-c h" . consult-history)
-;;          ("C-c m" . consult-mode-command)
-;;          ("C-c b" . consult-bookmark)
-;;          ("C-c k" . consult-kmacro)
-;;          ;; C-x bindings (ctl-x-map)
-;;          ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
-;;          ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
-;;          ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
-;;          ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
-;;          ;; Custom M-# bindings for fast register access
-;;          ("M-#" . consult-register-load)
-;;          ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
-;;          ("C-M-#" . consult-register)
-;;          ;; Other custom bindings
-;;          ("M-y" . consult-yank-pop)                ;; orig. yank-pop
-;;          ("<help> a" . consult-apropos)            ;; orig. apropos-command
-;;          ;; M-g bindings (goto-map)
-;;          ("M-g e" . consult-compile-error)
-;;          ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
-;;          ("M-g g" . consult-goto-line)             ;; orig. goto-line
-;;          ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
-;;          ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
-;;          ("M-g m" . consult-mark)
-;;          ("M-g k" . consult-global-mark)
-;;          ("M-g i" . consult-imenu)
-;;          ("M-g I" . consult-project-imenu)
-;;          ;; M-s bindings (search-map)
-;;          ("M-s f" . consult-find)
-;;          ("M-s L" . consult-locate)
-;;          ("M-s g" . consult-grep)
-;;          ("M-s G" . consult-git-grep)
-;;          ("M-s r" . consult-ripgrep)
-;;          ("M-s l" . consult-line)
-;;          ("M-s m" . consult-multi-occur)
-;;          ("M-s k" . consult-keep-lines)
-;;          ("M-s u" . consult-focus-lines)
-;;          ;; Isearch integration
-;;          ("M-s e" . consult-isearch)
-;;          :map isearch-mode-map
-;;          ("M-e" . consult-isearch)                 ;; orig. isearch-edit-string
-;;          ("M-s e" . consult-isearch)               ;; orig. isearch-edit-string
-;;          ("M-s l" . consult-line))                 ;; needed by consult-line to detect isearch
-
-;;   ;; Enable automatic preview at point in the *Completions* buffer.
-;;   ;; This is relevant when you use the default completion UI,
-;;   ;; and not necessary for Vertico, Selectrum, etc.
-;;   :hook (completion-list-mode . consult-preview-at-point-mode)
-
-;;   ;; The :init configuration is always executed (Not lazy)
-;;   :init
-
-;;   ;; Optionally configure the register formatting. This improves the register
-;;   ;; preview for `consult-register', `consult-register-load',
-;;   ;; `consult-register-store' and the Emacs built-ins.
-;;   (setq register-preview-delay 0
-;;         register-preview-function #'consult-register-format)
-
-;;   ;; Optionally tweak the register preview window.
-;;   ;; This adds thin lines, sorting and hides the mode line of the window.
-;;   (advice-add #'register-preview :override #'consult-register-window)
-
-;;   ;; Optionally replace `completing-read-multiple' with an enhanced version.
-;;   (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
-
-;;   ;; Use Consult to select xref locations with preview
-;;   (setq xref-show-xrefs-function #'consult-xref
-;;         xref-show-definitions-function #'consult-xref)
-
-;;   ;; Configure other variables and modes in the :config section,
-;;   ;; after lazily loading the package.
-;;   :config
-
-;;   ;; Optionally configure preview. The default value
-;;   ;; is 'any, such that any key triggers the preview.
-;;   ;; (setq consult-preview-key 'any)
-;;   ;; (setq consult-preview-key (kbd "M-."))
-;;   ;; (setq consult-preview-key (list (kbd "<S-down>") (kbd "<S-up>")))
-;;   ;; For some commands and buffer sources it is useful to configure the
-;;   ;; :preview-key on a per-command basis using the `consult-customize' macro.
-;;   (consult-customize
-;;    consult-theme
-;;    :preview-key '(:debounce 0.2 any)
-;;    consult-ripgrep consult-git-grep consult-grep
-;;    consult-bookmark consult-recent-file consult-xref
-;;    consult--source-file consult--source-project-file consult--source-bookmark
-;;    :preview-key (kbd "M-."))
-
-;;   ;; Optionally configure the narrowing key.
-;;   ;; Both < and C-+ work reasonably well.
-;;   (setq consult-narrow-key "<") ;; (kbd "C-+")
-
-;;   ;; Optionally make narrowing help available in the minibuffer.
-;;   ;; You may want to use `embark-prefix-help-command' or which-key instead.
-;;   ;; (define-key consult-narrow-map (vconcat consult-narrow-key "?") #'consult-narrow-help)
-
-
-;;   ;;;; 2. projectile.el (projectile-project-root)
-;;   (autoload 'projectile-project-root "projectile")
-;;   (setq consult-project-root-function #'projectile-project-root)
-;;   ;;;; 3. vc.el (vc-root-dir)
-;;   ;; (setq consult-project-root-function #'vc-root-dir)
-;;   ;;;; 4. locate-dominating-file
-;;   ;; (setq consult-project-root-function (lambda () (locate-dominating-file "." ".git")))
-;; )
-
-;; Another interesting package for fuzzy finding
-;; (use-package affe
-;;   :config
-;;   ;; Manual preview key for `affe-grep'
-;;   (consult-customize affe-grep :preview-key (kbd "M-.")))
-
 ;;; KEYBINDING
 
 ;; Set meta command for Mac OS
@@ -1284,38 +1109,6 @@
   ;; allow delete single parenthesis
   (define-key lispy-mode-map-lispy (kbd "C-d") nil))
 
-;; --> Option 2 (Advanced but has learning curve)
-;; (use-package paredit
-;;   :config
-;;   (paredit-mode t)
-;;   )
-
-;; (use-package paredit-everywhere
-;;   :config
-;;   (add-hook 'prog-mode-hook 'paredit-everywhere-mode)
-;;   )
-
-;; --> Option 3 (ISSUE: can't close several brackets by one pressing)
-;; more see the doc https://github.com/Fuco1/smartparens/wiki/Working-with-expressions
-;; https://github.com/lujun9972/emacs-document/blob/master/emacs-common/Smartparens用法详解.org
-;; (use-package smartparens
-;; :hook
-;;  (after-init . smartparens-global-mode)
-;; :bind
-;; (:map smartparens-mode-map
-;; 	("C-M-f" . sp-forward-sexp)
-;; 	("C-M-b" . sp-backward-sexp)
-;; 	("C-M-h" . sp-down-sexp) ;;down one level
-;; 	("C-M-l" . sp-up-sexp) ;;up one level
-;; 	("M-[" . sp-backward-unwrap-sexp)
-;; 	("C-M-k" . sp-kill-sexp))
-;; :config
-;; (sp-pair "\{" "\}") ;; latex literal brackets (included by default)
-;; (sp-pair "<#" "#>")
-;; (sp-pair "$" "$")   ;; latex inline math mode. Pairs can have same opening and closing string)
-;; (sp-local-pair 'LaTeX-mode "\\left(" "\\right)" :insert "C-b l" :trigger "\\l(")
-;; (sp-pair "'" nil :actions :rem))
-
 (use-package rainbow-delimiters
   :hook
   (prog-mode . rainbow-delimiters-mode))
@@ -1326,37 +1119,9 @@
   :bind
   ([S-down-mouse-3] . minions-minor-modes-menu))
 
-;; (use-package spaceline
-;;  :config
-;;  (require 'spaceline-config)
-;;  :config
-;;  (spaceline-emacs-theme))
-
 (use-package mood-line
   :hook
   (after-init . mood-line-mode))
-
-;; yet another simple and clean mode line
-;; (use-package awesome-tray
-;;   :straight (:type git :host github
-;; 		   :repo "manateelazycat/awesome-tray")
-;;   :hook
-;;   (after-init . awesome-tray-mode))
-
-;; a feature-rich modeline
-;; (use-package doom-modeline
-;;   ;;right fringe cut-off issue should relate to font size
-;;   ;;Use cnfont-decrease-size or see more methods in
-;;   ;;https://github.com/hlissner/doom-emacs/blob/develop/modules/ui/modeline/README.org#the-right-side-of-the-modeline-is-cut-off
-;;   :after all-the-icons
-;;   :hook (after-init . doom-modeline-mode)
-;;   :config
-;;   (setq doom-modeline-window-width-limit fill-column)
-;;   (setq doom-modeline-icon (display-graphic-p))
-;;   (setq doom-modeline-major-mode-icon t)
-;;   (setq doom-modeline-enable-word-count nil)
-;;   (setq all-the-icons-scale-factor 1.0)
-;;   )
 
 ;; show emoji
 (use-package emojify
@@ -1414,12 +1179,6 @@
   ("<f6>" . minimap-mode))
 
 (use-package all-the-icons)
-
-;;(use-package neotree
-;;  :config
-;;  (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
-;;  (global-set-key [f8] 'neotree-toggle)
-;;  )
 
 (use-package treemacs
   :bind
@@ -1575,7 +1334,9 @@
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 (use-package apropospriate-theme
-  :defer t)
+  :defer t
+  :custom
+  (apropospriate-mode-line-height 1.0))
 
 ;; loading theme
 (setq custom-safe-themes t)
@@ -1770,13 +1531,13 @@
   (if (file-directory-p "~/miniconda3")
       (setq conda-anaconda-home (expand-file-name "~/miniconda3")
 	    conda-env-home-directory (expand-file-name "~/miniconda3"))
-    (setq conda-anaconda-home (expand-file-name "~/anaconda3")
-	  conda-env-home-directory (expand-file-name "~/anaconda3")))
-  ;; when in conda-project-env-name or has environmental.yml auto activate
-  (conda-env-autoactivate-mode t)
-  :bind
-  ("C-c c a" . conda-env-activate)
-  ("C-c c d" . conda-env-deactivate))
+    (setq conda-anaconda-home "/opt/homebrew/Caskroom/miniforge"
+	  conda-env-home-directory "/opt/homebrew/Caskroom/miniforge"))
+    ;; when in conda-project-env-name or has environmental.yml auto activate
+    (conda-env-autoactivate-mode t)
+    :bind
+    ("C-c c a" . conda-env-activate)
+    ("C-c c d" . conda-env-deactivate))
 
 ;;jupyter notebook integration
 
@@ -1875,9 +1636,11 @@
   :hook
   (ess-r-mode . rainbow-mode))
 
-;;==============================
-;;           Matlab           ;;
-;;==============================
+
+;;;;;;;;;;;;
+;; Matlab ;;
+;;;;;;;;;;;;
+
 ;; cd /path/to/matlab-emacs -> make
 ;; Homepage: https://sourceforge.net/p/matlab-emacs/src/ci/documentation/tree/
 (use-package matlab-mode
@@ -1905,7 +1668,7 @@
 ;; preview included but reply on multimarkdown
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
-  :mode (;; ("README\\.md\\'" . gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
 	 ("\\.md\\'" . markdown-mode)
 	 ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown")
@@ -1915,16 +1678,14 @@
 		     (visual-line-mode 1))))
 
 ;; Advanced preview
-
-
 ;; Dependency: npm/node, livedown npm package
 (use-package livedown
   :ensure nil
   :load-path "~/.emacs.d/emacs-livedown"
   :bind
   (:map markdown-mode-map
-	("C-c C-c p" . livedown-preview)
-	("C-c C-c k" . livedown-kill))
+	("C-c c p" . livedown-preview)
+	("C-c c k" . livedown-kill))
   :custom
   (livedown-autostart t) ; automatically open preview when opening markdown files
   (livedown-open t)	 ; automatically open the browser window
@@ -2136,59 +1897,6 @@
 	magic-latex-enable-block-align nil
 	magic-latex-enable-inline-image nil
 	magic-latex-enable-minibuffer-echo nil))
-
-;; Retrieve BibTeX entries
-;; Call 'gscholar-bibtex' to retrieve BibTeX entries from Google
-;; Scholar, ACM Digital Library, IEEE Xplore and DBLP.
-;; (use-package gscholar-bibtex
-;;   :defer t)
-
-;; Reformat BibTeX using bibclean
-;; (use-package bibclean-format
-;;   :defer t
-;;   :bind (:map bibtex-mode-map
-;;               ("C-c f" . bibclean-format)))
-
-
-;;; EMAIL CLIENT
-
-;;read my blog to find how to install prerequisites
-;; (use-package mu4e
-;;   :defer t ;;will trigger org-mode
-;;   :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e"
-;;   :config
-;;   ;;Emacs Mail setting
-;;   (setq user-mail-address "ying.rui@outlook.com")
-;;   (setq user-full-name "Rui Ying/应锐")
-
-;;   ;; SMTP settings:
-;;   (setq send-mail-function 'smtpmail-send-it) ; should not be modified
-;;   (setq smtpmail-smtp-user "ying.rui@outlook.com")
-;;   (setq smtpmail-smtp-server "smtp.office365.com") ; host running SMTP server
-;;   (setq smtpmail-smtp-service 587)	; SMTP service port number
-;;   (setq smtpmail-stream-type 'starttls)	; type of SMTP connections to use
-;;   (setq smtpmail-use-gnutls t)
-;;   (setq mu4e-get-mail-command "mbsync -a")
-
-;;   ;; Mail folders:
-;;   (setq mu4e-maildir "~/Maildir")
-;;   (setq mu4e-drafts-folder "/Drafts")
-;;   (setq mu4e-sent-folder   "/Sent")
-;;   (setq mu4e-trash-folder  "/Deleted Items")
-;;   (setq mu4e-attachments-dir "~/Downloads")
-
-;;   ;; Further customization:
-;;   (setq m4e-html2text-command "w3m -T text/html" ; how to hanfle html-formatted emails
-;; 	mu4e-update-interval 300 ; seconds between each mail retrieval
-;; 	mu4e-headers-auto-update t    ; avoid to type `g' to update
-;; 	mu4e-view-show-images t	      ; show images in the view buffer
-;; 	mu4e-compose-signature-auto-include nil	; I don't want a message signature
-;; 	mu4e-use-fancy-chars t)	  ; allow fancy icons for mail threads
-
-;;   ;;Others
-;;   (setq mu4e-main-buffer-hide-personal-addresses t)
-;;   )
-
 
 ;;; PDF READER
 
@@ -2199,7 +1907,10 @@
   :hook
   (pdf-view-mode-hook . pdf-continuous-scroll-mode))
 
-;;read the documentation to find how to compile and pdf-tools first
+;; Compile and install: https://github.com/politza/pdf-tools
+;; Install dependencies: cask, poppler, automake and setenv
+;; Download source code and compile
+;; (pdf-tools-install)
 (use-package pdf-tools
   :commands (pdf-view-mode pdf-loader-install)
   :mode ("\\.[pP][dD][fF]\\'" . pdf-view-mode)
@@ -2212,7 +1923,7 @@
 	pdf-view-use-imagemagick nil)
   :hook
   (pdf-view-mode . (lambda ()
-			  (display-line-numbers-mode -1)))
+		     (display-line-numbers-mode -1)))
   (pdf-view-mode . pdf-tools-enable-minor-modes)
   (pdf-view-mode . pdf-view-themed-minor-mode)
   :bind
@@ -2236,7 +1947,7 @@
 (setq max-specpdl-size 32000
       max-lisp-eval-depth 16000)
 
-(defun display-init-info ()
+(defun print-init-info ()
   "Print init time of Emacs, a wrapper of 'emacs-init-time."
   (interactive)
   (message
@@ -2244,7 +1955,7 @@
 	   (float-time (time-subtract after-init-time before-init-time))
 	   (length features)
 	   gcs-done)))
-(add-hook 'after-init-hook #'display-init-info)
+(add-hook 'after-init-hook #'print-init-info)
 
 (provide 'init)
 ;;; Init.el ends here
