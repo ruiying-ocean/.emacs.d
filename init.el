@@ -27,7 +27,14 @@
 ;;; Code:
 ;;; FUNDEMENTAL
 
-;; Package Manager: straight.el
+;; Customize when to check package modification (much much faster)
+(setq straight-check-for-modifications '(check-on-save find-when-checking))
+
+;; Cause straight.el to cache the autoloads of all used packages in a single
+;; file on disk thus reduce IO operations
+(setq straight-cache-autoloads t)
+
+;; Initialise PACKAGE MANAGER: straight.el
 ;; if the boostrap doesn't work, manually run
 ;; git clone https://github.com/raxod502/straight.el.git ~/.emacs.d/straight/repos/straight.el
 (defvar bootstrap-version)
@@ -42,12 +49,6 @@
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
-
-;; Customize when to check package modification
-(setq straight-check-for-modifications '(check-on-save))
-;; Cause straight.el to cache the autoloads of all used packages in a single
-;; file on disk thus reduce IO operations
-(setq straight-cache-autoloads t)
 
 ;; Intergration with use-package
 (straight-use-package 'use-package)
@@ -585,7 +586,7 @@
   :after ivy
   :bind
   (;; ("C-x C-b" . counsel-ibuffer)
-   ("C-x b" . counsel-switch-buffer)
+   ;; ("C-x b" . counsel-switch-buffer)
    ("C-c b" . counsel-imenu) ;; imenus provides a list of definition
    ("C-x C-f" . counsel-find-file)
    ("M-x" . counsel-M-x)
@@ -624,6 +625,24 @@
   :hook
   (after-init . counsel-projectile-mode))
 
+;; Built-in project manager, support git repos only
+;; (use-package project
+;;   :straight (:type built-in)
+;;   :config
+;;   (defun my/project-files-in-directory (dir)
+;;     "Use `fd' to list files in DIR."
+;;     (let* ((default-directory dir)
+;; 	   (localdir (file-local-name (expand-file-name dir)))
+;; 	   (command (format "fd -H -t f -0 . %s" localdir)))
+;;       (project--remote-file-names
+;;        (sort (split-string (shell-command-to-string command) "\0" t)
+;; 	     #'string<))))
+
+;;   (cl-defmethod project-files ((project (head local)) &optional dirs)
+;;     "Override `project-files' to use `fd' in local projects."
+;;     (mapcan #'my/project-files-in-directory
+;; 	    (or dirs (list (project-root project))))))
+
 ;; yet another robust find file in project
 ;; but don't rely on fzf
 (use-package find-file-in-project
@@ -642,6 +661,19 @@
   :bind
   ("M-o" . ace-window)
   ("C-x o" . ace-swap-window))
+
+;; workspace manager and just show buffers in this space
+;; C-x x s to switch/create a new perspective
+(use-package perspective
+  :bind
+  ("C-x C-b" . persp-ibuffer)
+  ("C-x b" . persp-counsel-switch-buffer)
+  :config
+  (persp-mode)
+  :custom
+  (persp-sort 'access)
+  (persp-mode-prefix-key (kbd "C-x x")))
+
 
 ;;; KEYBINDING
 
@@ -677,13 +709,14 @@
   (find-file "~/.emacs.d/init.el"))
 (global-set-key (kbd "<f2>") 'open-init-file)
 
-;; ibuffer
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-
 ;; Mark set
 ;; (global-set-key (kbd "C-j") 'set-mark-command)
 ;; C-x C-x -> set mark and move back to previous position
 ;; C-x h to select all
+
+(use-package general
+  :config
+  (defconst my-leader "C-c"))
 
 ;; a human-friendly keymap of built-in code-folding package
 ;; alternatives: vimish-fold, Origami
@@ -762,12 +795,12 @@
       ("v" counsel-describe-variable "variable")
       ("i" info-lookup-symbol "info lookup"))
      "Project"
-     (("p D" projectile-dired "dired")
-      ("p f" projectile-find-file "find")
-      ("p d" projectile-find-directory "directory")
-      ("p s" projectile-ripgrep "search")
-      ("p p" projectile-switch-project "switch")
-      ("p r" projectile-replace "replace"))))
+     (("p D" project-dired "dired")
+      ("p f" project-find-file "find")
+      ("p d" project-find-dir "directory")
+      ("p s" project-find-regexp "search")
+      ("p p" project-switch-project "switch")
+      ("p r" project-query-replace-regexp "replace"))))
   (major-mode-hydra-define python-mode
     (:foreign-keys warn :quit-key "q"
 		   :title hydra-py-title :separator "-")
@@ -775,6 +808,7 @@
      (("b" python-shell-send-buffer "buffer")
       ("r" python-shell-send-region "region")
       ("f" python-shell-send-file "file")
+      ("l" python-shell-send-statement "line")
       ("j" ein:run "jupyter"))
      "REPL"
      (("c" run-python "console")
@@ -784,19 +818,19 @@
       ("g" magit-status "git"))
      "Find"
      (("i" counsel-imenu "function")
-      ("r" counsel-rg "ripgrep")
+      ("R" counsel-rg "ripgrep")
       ("F" counsel-fzf "find"))
      "Check"
-     (("l" flycheck-list-errors "all")
+     (("e" flycheck-list-errors "errors")
       ("c" flycheck-clear "clear")
       ("v" flycheck-verify-setup "setup"))
      "Project"
-     (("p D" projectile-dired "dired")
-      ("p f" projectile-find-file "find")
-      ("p d" projectile-find-directory "directory")
-      ("p s" projectile-ripgrep "search")
-      ("p p" projectile-switch-project "switch")
-      ("p r" projectile-replace "replace"))))
+     (("p D" project-dired "dired")
+      ("p f" project-find-file "find")
+      ("p d" project-find-dir "directory")
+      ("p s" project-find-regexp "search")
+      ("p p" project-switch-project "switch")
+      ("p r" project-query-replace-regexp "replace"))))
   (major-mode-hydra-define ess-r-mode
     (:foreign-keys warn :quit-key "q"
 		   :separator "-"
@@ -820,12 +854,12 @@
       ("c" flycheck-clear "clear")
       ("v" flycheck-verify-setup "setup"))
      "Project"
-     (("p D" projectile-dired "dired")
-      ("p f" projectile-find-file "find")
-      ("p d" projectile-find-directory "directory")
-      ("p s" projectile-ripgrep "search")
-      ("p p" projectile-switch-project "switch")
-      ("p r" projectile-replace "replace"))))
+     (("p D" project-dired "dired")
+      ("p f" project-find-file "find")
+      ("p d" project-find-dir "directory")
+      ("p s" project-find-regexp "search")
+      ("p p" project-switch-project "switch")
+      ("p r" project-query-replace-regexp "replace"))))
   (major-mode-hydra-define latex-mode
     (:foreign-keys warn :quit-key "q"
 		   :separator "-"
@@ -836,7 +870,7 @@
      "Preview"
      (("p p" math-preview-at-point "preview-at-pt")
       ("p a" math-preview-all "preview-all")
-      ("p a" math-preview-region "preview-region")
+      ("p r" math-preview-region "preview-region")
       ("c p" math-preview-clear-at-point "clear-at-pt")
       ("c a" math-preview-clear-all "clear-all")
       ("c r" math-preview-clear-region "clear-region"))
@@ -1463,20 +1497,22 @@
 ;;==============================
 ;;           Python           ;;
 ;;==============================
-;;(setq python-shell-interpreter "python3.9")
-;; or ipython
+
+;; Interpreter choice
 (setq python-shell-interpreter "ipython"
       python-shell-interpreter-args "-i --simple-prompt --InteractiveShell.display_page=True")
+;;(setq python-shell-interpreter "python3.9")
 
 ;;python-style indent
 (setq python-indent-offset 4)
 (setq python-indent-guess-indent-offset-verbose nil) ;;don't complain about the indent anymore
+(setq python-indent-guess-indent nil)
+(setq indent-tabs-mode t) ;; whether tabs are used for indentation
 
 ;;debug setting
 (setq python-shell-completion-native-enable nil) ;;or pip3 install pyreadline to avoid warning
 (setq python-shell-prompt-detect-failure-warning nil)
 (setq python-shell-enable-font-lock nil) ;;make printing fast
-(setq python-shell-completion-native-enable nil) ;;don't use ipython completion, cause bug
 
 ;;A dirty solution of showing inferior-python input codes
 ;;from https://github.com/jorgenschaefer/elpy/issues/924
@@ -1679,9 +1715,10 @@
 
 ;; Advanced preview
 ;; Dependency: npm/node, livedown npm package
-(use-package livedown
-  :ensure nil
-  :load-path "~/.emacs.d/emacs-livedown"
+(use-package emacs-livedown
+  :straight (:type git
+		   :host github
+		   :repo "shime/emacs-livedown")
   :bind
   (:map markdown-mode-map
 	("C-c c p" . livedown-preview)
@@ -1868,7 +1905,7 @@
 ;; There's also org-latex-impatient for org-mode
 (use-package math-preview
   :custom
-  (math-preview-command "/usr/local/bin/math-preview")
+  (math-preview-command "/opt/homebrew/bin/math-preview")
   (math-preview-scale 1.0)
   (math-preview-marks
    '(("\\begin{equation}" . "\\end{equation}")
@@ -1897,6 +1934,16 @@
 	magic-latex-enable-block-align nil
 	magic-latex-enable-inline-image nil
 	magic-latex-enable-minibuffer-echo nil))
+
+;; LaTeX instant preview functionality based on pyQt5
+;; need symbolic link python file from straight/repo to straight/build
+;; `ln -s ~/.emacs.d/straight/build/popweb/popweb.py ./popweb.py`
+;; (use-package popweb
+;;   :straight (popweb :type git
+;; 		    :host github
+;; 		    :repo "manateelazycat/popweb")
+;;   :config
+;;   (add-hook 'latex-mode-hook #'popweb-latex-mode))
 
 ;;; PDF READER
 
