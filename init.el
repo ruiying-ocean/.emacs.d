@@ -1716,19 +1716,19 @@
 ;; Advanced preview
 ;; Dependency: npm/node, livedown npm package
 (use-package emacs-livedown
+  :after markdown-mode
   :straight (:type git
 		   :host github
 		   :repo "shime/emacs-livedown")
-  :bind
-  (:map markdown-mode-map
-	("C-c c p" . livedown-preview)
-	("C-c c k" . livedown-kill))
   :custom
   (livedown-autostart t) ; automatically open preview when opening markdown files
   (livedown-open t)	 ; automatically open the browser window
   (livedown-port 1337)	 ; port for livedown server
   (livedown-browser nil) ; browser to use
-  )
+  :bind
+  (:map markdown-mode-map
+	("C-c c p" . livedown-preview)
+	("C-c c k" . livedown-kill)))
 
 ;;add table of content for md/org
 ;;Add :TOC: tag for org (C-c C-c) and <-- :TOC: --> for md
@@ -1935,7 +1935,7 @@
 	magic-latex-enable-inline-image nil
 	magic-latex-enable-minibuffer-echo nil))
 
-;; LaTeX instant preview functionality based on pyQt5
+;; LaTeX instant preview functionality based on pyQt5 (bug existed in arm64 Mac)
 ;; need symbolic link python file from straight/repo to straight/build
 ;; `ln -s ~/.emacs.d/straight/build/popweb/popweb.py ./popweb.py`
 ;; (use-package popweb
