@@ -694,6 +694,11 @@
 ;; repeat command
 (global-set-key (kbd "<f4>") #'repeat)
 
+;; M-up/down to move text
+(use-package move-text
+  :config
+  (move-text-default-bindings))
+
 (defun select-current-line ()
   "Select the current line."
   (interactive)
@@ -710,13 +715,63 @@
 (global-set-key (kbd "<f2>") 'open-init-file)
 
 ;; Mark set
-;; (global-set-key (kbd "C-j") 'set-mark-command)
 ;; C-x C-x -> set mark and move back to previous position
 ;; C-x h to select all
 
 (use-package general
   :config
-  (defconst my-leader "C-c"))
+  (defconst leader "\\")
+  (general-create-definer my/leader-def
+    :prefix leader)
+
+  (general-auto-unbind-keys)
+
+  ;; ** Global Keybindings
+  (my/leader-def
+    "g l" '(avy-goto-line :which-key "goto-line")
+    "g g" '(goto-line :which-key "goto-line-number")
+    "g b" '(exchange-point-and-mark :which-key "go-back-and-mark")
+    "g f" '(counsel-file-jump :which-key "goto-file")
+
+    "h a" '(mark-whole-buffer :which-key "select-all")
+
+    "." 'mc/mark-next-like-this
+    "," 'mc/mark-previous-like-this
+
+    "<left>" '(centaur-tabs-backward :which-key "last-tab")
+    "<right>" '(centaur-tabs-forward :which-key "next-tab"))
+
+  ;; ** Mode Keybindings
+  (my/leader-def prog-mode-map
+    "b" 'counsel-imenu
+    "s" 'shell
+    "t" 'vterm
+    "c" 'counsel-flycheck)
+
+  (my/leader-def text-mode-map
+    "d" 'define-word-at-point
+    "c" 'languagetool-check
+    "i" 'languagetool-correct-at-point
+    )
+
+  (my/leader-def projectile-mode-map
+    "p f" 'projectile-find-file
+    "p s" 'projectile-ripgrep
+    "p p" 'projectile-switch-project)
+
+  (my/leader-def markdown-mode-map
+    "l" 'livedown-preview
+    "k" 'livedown-kill)
+
+  (my/leader-def python-mode-map
+    "r" 'python-shell-send-buffer
+    "h" 'eldoc)
+
+  (my/leader-def ess-r-mode-map
+    "r" 'ess-eval-buffer-and-go
+    "h" 'eldoc)
+
+  (general-auto-unbind-keys t))
 
 ;; a human-friendly keymap of built-in code-folding package
 ;; alternatives: vimish-fold, Origami
@@ -1131,6 +1186,7 @@
 ;; w/s to move marked regions up/down
 ;; M-j to split, + to join
 ;; To insert a single parenthsis, use a C-q prefix
+;; M-x check-parens to check unbalanced parens
 
 (use-package lispy
   :hook
@@ -1672,7 +1728,6 @@
   :hook
   (ess-r-mode . rainbow-mode))
 
-
 ;;;;;;;;;;;;
 ;; Matlab ;;
 ;;;;;;;;;;;;
@@ -1696,9 +1751,9 @@
 
 ;;; Text-mode: Markdown/org-mode/TeX
 
-;; ==============================
-;;            Markdown         ;;
-;; ==============================
+;;;;;;;;;;;;;;
+;; Markdown ;;
+;;;;;;;;;;;;;;
 
 ;; Major mode for markdown
 ;; preview included but reply on multimarkdown
@@ -1741,9 +1796,10 @@
   (global-set-key (kbd "\C-c\C-o") 'toc-org-markdown-follow-thing-at-point)
   (add-to-list 'org-tag-alist '("TOC" . ?T)))
 
-;; ==============================
-;;           Org-mode          ;;
-;; ==============================
+;;;;;;;;;;;;;;
+;; Org-mode ;;
+;;;;;;;;;;;;;;
+
 (use-package org
   :straight (:type built-in)
   :after counsel
