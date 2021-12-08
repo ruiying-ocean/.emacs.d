@@ -113,6 +113,8 @@
 ;;No more strange ring bell
 (setq ring-bell-function 'ignore)
 
+(setq confirm-kill-processes t)
+
 ;; Delete selection
 (delete-selection-mode t)
 
@@ -267,7 +269,6 @@
   ("C-x >" . mc/mark-next-like-this)
   ("C-x <" . mc/mark-previous-like-this)
   ("C-x C-<" . mc/mark-all-like-this))
-
 
 ;;; TERMINAL, COMPLETION, LINT/SPELL CHECKER, SNIPPET
 
@@ -387,8 +388,9 @@
 ;;To specify new version of git on remote machine so I can run magit locally
 ;;add ~/.ssh/config and ~/.ssh/known_hosts first
 ;;then ssh-keygen -t rsa => ssh-copy-id name@host_name
+;; .inputrc file may trigger bug of "timeout reached"
 (use-package tramp
-  :defer t
+  :defer 1
   :straight (:type built-in)
   :if (memq system-type '(gnu/linux darwin))
   :config
@@ -408,7 +410,8 @@
   (setq make-backup-files nil)
   (setq create-lockfiles nil)
   :bind
-  ("C-c s" . counsel-tramp))
+  ("C-c s" . counsel-tramp)
+  )
 
 ;; visit https://github.com/jacktasia/dumb-jump to see more alternative ways
 ;; like TAGS system
@@ -435,7 +438,9 @@
 
 ;; python flycheck depdencies
 ;; pip install pyflakes -> fast and don't check code style
-(use-package flycheck-pyflakes)
+
+(use-package flycheck-pyflakes
+  :after python)
 
 ;; Alternative
 ;; pip install prospector -> don't check code style but relatively slower
@@ -553,8 +558,7 @@
   :if (memq window-system '(mac ns x))
   :config
   (setq exec-path-from-shell-arguments nil) ;;read non-interactive shell config
-  (exec-path-from-shell-initialize)
-  )
+  (exec-path-from-shell-initialize))
 
 (use-package use-package-ensure-system-package
   :defer t
@@ -733,10 +737,15 @@
     "g b" '(exchange-point-and-mark :which-key "go-back-and-mark")
     "g f" '(counsel-file-jump :which-key "goto-file")
 
+    "x s" 'persp-switch
+
     "h a" '(mark-whole-buffer :which-key "select-all")
 
     "." 'mc/mark-next-like-this
     "," 'mc/mark-previous-like-this
+
+    "f" 'counsel-find-file
+    "q" 'save-buffers-kill-terminal
 
     "<left>" '(centaur-tabs-backward :which-key "last-tab")
     "<right>" '(centaur-tabs-forward :which-key "next-tab"))
@@ -746,13 +755,13 @@
     "b" 'counsel-imenu
     "s" 'shell
     "t" 'vterm
-    "c" 'counsel-flycheck)
+    "c" 'counsel-flycheck
+    "%" 'query-replace)
 
   (my/leader-def text-mode-map
     "d" 'define-word-at-point
     "c" 'languagetool-check
-    "i" 'languagetool-correct-at-point
-    )
+    "i" 'languagetool-correct-at-point)
 
   (my/leader-def projectile-mode-map
     "p f" 'projectile-find-file
@@ -1168,8 +1177,7 @@
 
 ;;--> Option 1 (built-in)
 (electric-pair-mode t)
-(setq electric-pair-pairs '(
-			    (?\" . ?\")
+(setq electric-pair-pairs '((?\" . ?\")
 			    (?\` . ?\`)
 			    (?\( . ?\))
 			    (?\{ . ?\})))
@@ -1233,7 +1241,7 @@
 ;;   :config
 ;;   (setq dashboard-set-init-info nil)
 ;;   (dashboard-setup-startup-hook)
-;;   (setq dashboard-banner-logo-title "Happiness is everything - Rui")
+;;   (setq dashboard-banner-logo-title "Rui, happiness is more than everything")
 ;;   ;;    (setq dashboard-startup-banner 3)
 ;;   (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/world.png")
 ;;   (setq dashboard-center-content t)
@@ -1387,6 +1395,8 @@
 			    (font-spec :family "Sarasa Mono SC Nerd"))))))
 
 ;; Use emacs daemon, put following lines to shell config file
+;; alias emacs=/path_2_miniconda3/bin/emacs
+;; alias emacsclient=/path_2_miniconda/bin/emacsclient
 ;; alias ed="emacs --daemon"
 ;; alias ec="emacsclient -c"
 ;; alias eq="emacsclient -e '(save-buffers-kill-emacs)'"
