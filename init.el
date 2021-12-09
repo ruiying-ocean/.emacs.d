@@ -737,7 +737,12 @@
     "g b" '(exchange-point-and-mark :which-key "go-back-and-mark")
     "g f" '(counsel-file-jump :which-key "goto-file")
 
-    "x s" 'persp-switch
+    "n f" 'org-roam-node-find
+    "n i" 'org-roam-node-insert
+    "n t" 'org-roam-buffer-toggle
+    "n v" 'org-roam-ui-mode
+
+    "b s" 'persp-switch
 
     "h a" '(mark-whole-buffer :which-key "select-all")
 
@@ -779,6 +784,9 @@
   (my/leader-def ess-r-mode-map
     "r" 'ess-eval-buffer-and-go
     "h" 'eldoc)
+
+  (my/leader-def dired-mode-map
+    "e" 'dired-toggle-read-only)
 
   (general-auto-unbind-keys t))
 
@@ -1918,6 +1926,41 @@
   ;; (setq org-mind-map-engine "fdp")    ; Undirected Spring Force-Directed
   ;; (setq org-mind-map-engine "sfdp")   ; Multiscale version of fdp for the layout of large graphs
   )
+
+;; A personal knowlege database tool, lateral linking
+;; require sqlite, check org-oram--sqlite-available-p
+(use-package org-roam
+  :custom
+  (org-roam-directory "~/Documents/RoamNotes")
+  :init
+  (setq org-roam-v2-ack t)
+  :bind
+  (("C-c n l" . org-roam-buffer-toggle) ;;Backlink
+   ("C-c n f" . org-roam-node-find)
+   ("C-c n i" . org-roam-node-insert)
+   :map org-mode-map
+   ("C-M-i" . completion-at-point)
+   ;;create an ID for heading
+   ("C-c n c" . org-id-get-create))
+  :config
+  (org-roam-setup)
+  (setq org-roam-complete-everywhere t))
+
+
+(straight-use-package '(simple-httpd :type git :host github :repo "ruiying-ocean/simple-httpd" :local-repo "simple-httpd"))
+;; a mindmap-like visualiser for org-roam
+(use-package org-roam-ui
+  :requires (simple-httpd)
+  :straight
+  (:host github :repo "org-roam/org-roam-ui"
+	 :branch "main" :files ("*.el" "out"))
+  :after org-roam
+  ;;  :hook (after-init . org-roam-ui-mode)
+  :config
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start t))
 
 ;; perfectly alian English/CJK fonts in the same table
 (use-package valign
