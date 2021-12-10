@@ -739,8 +739,9 @@
 
     "n f" 'org-roam-node-find
     "n i" 'org-roam-node-insert
-    "n t" 'org-roam-buffer-toggle
+    "n b" 'org-roam-buffer-toggle
     "n v" 'org-roam-ui-mode
+    "n c" 'org-id-get-create
 
     "b s" 'persp-switch
 
@@ -798,7 +799,7 @@
 ;; adjust font size
 (setq-default text-scale-mode-step 1.1)
 
-;; one "BODY", many "HEADs", try "C-c 5 =" to know the magic
+;; one "BODY", multiple "HEADs", try "C-c 5 =" to know the magic
 (use-package hydra
   :config
   (defhydra hydra-zoom (global-map "C-c")
@@ -943,9 +944,9 @@
      (("p p" math-preview-at-point "preview-at-pt")
       ("p a" math-preview-all "preview-all")
       ("p r" math-preview-region "preview-region")
-      ("c p" math-preview-clear-at-point "clear-at-pt")
-      ("c a" math-preview-clear-all "clear-all")
-      ("c r" math-preview-clear-region "clear-region"))
+      ("p c p" math-preview-clear-at-point "clear-at-pt")
+      ("p c a" math-preview-clear-all "clear-all")
+      ("p c r" math-preview-clear-region "clear-region"))
      "Insert"
      (("e" LaTeX-environment "env")
       ("]" LaTeX-close-environment "close env")
@@ -1004,7 +1005,6 @@
 (use-package iedit
   :bind
   ("M-i" . iedit-mode))
-
 
 ;;; WINDOW, UI & APPEARANCE
 
@@ -1154,7 +1154,7 @@
   (define-key dired-mode-map [mouse-2] 'dired-mouse-find-file)
   (setq dired-dwim-target t))
 
-;; W -> X to move, W -> Y to copy
+;; W -> X to move, W -> Y to copy from one buffer to the other
 (use-package dired-ranger
   :bind
   (:map dired-mode-map
@@ -1422,7 +1422,7 @@
 		  (auto-max-frame))))
   (add-hook 'after-init-hook 'init-font))
 
-;;Install themes
+;;A bunch of themes
 (use-package base16-theme :defer t )
 (use-package color-theme-sanityinc-tomorrow :defer t )
 (use-package gruvbox-theme :defer t )
@@ -1441,6 +1441,7 @@
   (doom-themes-treemacs-config)
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
+
 (use-package apropospriate-theme
   :defer t
   :custom
@@ -1448,7 +1449,7 @@
 
 ;; loading theme
 (setq custom-safe-themes t)
-(setq-default custom-enabled-themes '(apropospriate-dark))
+(setq-default custom-enabled-themes '(doom-laserwave)) ;doom-badger
 
 ;; Ensure that themes will be applied even if they have not been customized
 (defun reapply-themes ()
@@ -1818,6 +1819,7 @@
 ;; Org-mode ;;
 ;;;;;;;;;;;;;;
 
+;; special arrow \to
 (use-package org
   :straight (:type built-in)
   :after counsel
@@ -1948,6 +1950,7 @@
 
 
 (straight-use-package '(simple-httpd :type git :host github :repo "ruiying-ocean/simple-httpd" :local-repo "simple-httpd"))
+
 ;; a mindmap-like visualiser for org-roam
 (use-package org-roam-ui
   :requires (simple-httpd)
@@ -2033,7 +2036,6 @@
 	("C-c c a" . math-preview-clear-all)))
 
 (use-package magic-latex-buffer
-  :defer t
   :hook
   (LaTeX-mode . magic-latex-buffer)
   :config
