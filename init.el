@@ -207,6 +207,16 @@
   :bind
   ("C-c u" . undo-tree-visualize))
 
+;; undo and redo changes in the *window configuration*
+(use-package winner
+  :straight (:type built-in)
+  :hook
+  (after-init . winner-mode)
+  :bind
+  (:map winner-mode-map
+	("M-<left>" . winner-undo)
+	("M-<right>" . winner-redo)))
+
 ;;; Auto-save
 (use-package super-save
   :config
@@ -743,6 +753,7 @@
     "n v" 'org-roam-ui-mode
     "n k" 'org-id-get-create
     "n c" 'org-roam-capture
+    "n s" 'org-roam-db-autosync-mode
 
     "b s" 'persp-switch
 
@@ -1955,6 +1966,7 @@
    ("C-c n f" . org-roam-node-find)
    ("C-c n i" . org-roam-node-insert)
    ("C-c n c" . org-roam-capture)
+   ("C-c n s" . org-roam-db-autosync-mode)
    :map org-mode-map
    ("C-M-i" . completion-at-point)
    ;;create an ID for heading
