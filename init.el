@@ -741,7 +741,8 @@
     "n i" 'org-roam-node-insert
     "n b" 'org-roam-buffer-toggle
     "n v" 'org-roam-ui-mode
-    "n c" 'org-id-get-create
+    "n k" 'org-id-get-create
+    "n c" 'org-roam-capture
 
     "b s" 'persp-switch
 
@@ -1882,7 +1883,7 @@
   :hook
   (org-mode . org-superstar-mode)
   :custom
-  (org-ellipsis "⤵"))
+  (org-ellipsis "▾"))
 
 ;;prettify-symbols-mode setting
 (add-hook 'org-mode-hook 'prettify-symbols-mode)
@@ -1934,16 +1935,30 @@
 (use-package org-roam
   :custom
   (org-roam-directory "~/Documents/RoamNotes")
+  (org-roam-capture-templates
+   '(("d" "default" plain "%?"
+      ;; file+head is the pattern for file name
+      ;; %? -> cursor position
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+			 "#+title: ${title}\n")
+      :unnarrowed t)
+     ;; ${Title} -> same as the file title
+     ("l" "literature" plain
+      "\n* Source\nTitle: ${Title}\nAuthor: %^{Author}\nYear: %^{Year}\nDOI: %^{DOI}\n* Summary\n** Backgrounds\n** Highlight\n** Question\n** How to solve it\n** Results & Conclusions"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+			 "#+title: ${title}\n#+filetags: Literature")
+      :unnarrowed t)))
   :init
   (setq org-roam-v2-ack t)
   :bind
   (("C-c n l" . org-roam-buffer-toggle) ;;Backlink
    ("C-c n f" . org-roam-node-find)
    ("C-c n i" . org-roam-node-insert)
+   ("C-c n c" . org-roam-capture)
    :map org-mode-map
    ("C-M-i" . completion-at-point)
    ;;create an ID for heading
-   ("C-c n c" . org-id-get-create))
+   ("C-c n k" . org-id-get-create))
   :config
   (org-roam-setup)
   (setq org-roam-complete-everywhere t))
