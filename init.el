@@ -983,7 +983,7 @@
     (:foreign-keys warn :title hydra-ui-title :quit-key "q")
     ("Theme"
      (("d" night-theme "dark-theme")
-      ("l" day-theme "light-theme")
+      ("l" light-theme "light-theme")
       ("t" counsel-load-theme "choose"))
      "Window"
      (("b" split-window-right "split horizontally")
@@ -1412,7 +1412,7 @@
 	(dolist (charset '(kana han symbol cjk-misc bopomofo))
 	  (set-fontset-font (frame-parameter nil 'font)
 			    charset
-			    (font-spec :family "Sarasa Mono SC Nerd"))))))
+			    (font-spec :family "Noto Serif SC"))))))
 
 ;; Use emacs daemon, put following lines to shell config file
 ;; alias emacs=/path_2_miniconda3/bin/emacs
@@ -1435,6 +1435,7 @@
   (add-hook 'after-init-hook 'init-font))
 
 ;;A bunch of themes
+(use-package solarized-theme)
 (use-package base16-theme :defer t )
 (use-package color-theme-sanityinc-tomorrow :defer t )
 (use-package gruvbox-theme :defer t )
@@ -1459,9 +1460,9 @@
   :custom
   (apropospriate-mode-line-height 1.0))
 
-;; loading theme
+;; loading default theme
 (setq custom-safe-themes t)
-(setq-default custom-enabled-themes '(doom-laserwave)) ;doom-badger
+(setq-default custom-enabled-themes '(doom-solarized-light))
 
 ;; Ensure that themes will be applied even if they have not been customized
 (defun reapply-themes ()
@@ -1474,16 +1475,19 @@
 (add-hook 'after-init-hook 'reapply-themes)
 
 ;; Toggle between light and dark
-(defun day-theme ()
-  "Activate a light color theme.  Recommendation: leuven, spacemacs-light,
-   eziam, twilight-bright, modus-operandi."
+(defun light-theme ()
+  "Activate a light color theme.
+  Recommendation:
+     solarized-light, leuven, spacemacs-light, eziam, twilight-bright, modus-operandi."
   (interactive)
-  (setq custom-enabled-themes '(doom-nord-light))
+  (setq custom-enabled-themes '(twilight-bright))
   (reapply-themes))
 
 (defun night-theme ()
-  "Activate a dark color theme.  Recommendation: humanoid-dark, doom-city-light,
-  doom-one/vibrant, doom-dark+, sanityinc-tomorrow-night, doom-wilmersdorf"
+  "Activate a dark color theme.
+  Recommendation: humanoid-dark, doom-city-light,
+  doom-one/vibrant, doom-dark+, sanityinc-tomorrow-night, doom-wilmersdorf,
+  doom-badge, doom-laserwave"
   (interactive)
   (setq custom-enabled-themes '(sanityinc-tomorrow-night))
   (reapply-themes))
@@ -1498,7 +1502,7 @@
 ;;Varialble/fixed pictch font setting, essential for org-mode
 (custom-theme-set-faces
  'user
- '(variable-pitch ((t (:family "Noto Serif" :height 160))))
+ '(variable-pitch ((t (:family "Noto Serif SC" :height 160))))
  '(fixed-pitch ((t ( :family "Roboto Mono" :height 160)))))
 
 (custom-theme-set-faces
@@ -1514,7 +1518,7 @@
  '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8)))))
 
 (custom-set-faces
- '(org-level-1 ((t (:inherit fixed-pitch :height 1.2))))
+ '(org-level-1 ((t (:inherit outline-1 :height 1.2))))
  '(org-level-2 ((t (:inherit outline-2 :height 1.1))))
  '(org-level-3 ((t (:inherit outline-3 :height 1.1))))
  '(org-level-4 ((t (:inherit outline-4 :height 1.0))))
