@@ -215,8 +215,8 @@
   (after-init . winner-mode)
   :bind
   (:map winner-mode-map
-	("M-<left>" . winner-undo)
-	("M-<right>" . winner-redo)))
+	("C-M-<left>" . winner-undo)
+	("C-M-<right>" . winner-redo)))
 
 ;;; Auto-save
 (use-package super-save
@@ -1841,7 +1841,9 @@
   :straight (:type built-in)
   :after counsel
   :config
-  (setq org-startup-indented t)
+  (setq org-startup-indented t
+	org-startup-with-inline-images t
+	org-image-actual-width nil)
   (setq org-todo-keywords
 	'((sequence "TODO" "DOING" "|" "DONE" "CANCELED")))
   (setq org-capture-templates
@@ -1903,10 +1905,10 @@
 
 ;;prettify-symbols-mode setting
 (add-hook 'org-mode-hook 'prettify-symbols-mode)
-(setq-default prettify-symbols-alist '(("#+BEGIN_SRC" . "λ")
-				       ("#+END_SRC" . "λ")
-				       ("#+begin_src" . "λ")
-				       ("#+end_src" . "λ")
+(setq-default prettify-symbols-alist '(("#+BEGIN_SRC" . "➤")
+				       ("#+END_SRC" . "⏹")
+				       ("#+begin_src" . "➤")
+				       ("#+end_src" . "⏹")
 				       (">=" . "≥")
 				       ("=>" . "⇨")
 				       ("[-]" . "❍" )
