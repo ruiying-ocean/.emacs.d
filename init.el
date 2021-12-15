@@ -215,8 +215,8 @@
   (after-init . winner-mode)
   :bind
   (:map winner-mode-map
-	("C-M-<left>" . winner-undo)
-	("C-M-<right>" . winner-redo)))
+	("C-M-b" . winner-undo)
+	("C-M-f" . winner-redo)))
 
 ;;; Auto-save
 (use-package super-save
@@ -765,6 +765,7 @@
 
     "f" 'counsel-find-file
     "q" 'save-buffers-kill-terminal
+    "r" 'counsel-recentf
 
     "<left>" '(centaur-tabs-backward :which-key "last-tab")
     "<right>" '(centaur-tabs-forward :which-key "next-tab"))
@@ -1656,16 +1657,21 @@
 (use-package conda
   :config
   (conda-env-initialize-interactive-shells)
-  (if (file-directory-p "~/miniconda3")
-      (setq conda-anaconda-home (expand-file-name "~/miniconda3")
-	    conda-env-home-directory (expand-file-name "~/miniconda3"))
-    (setq conda-anaconda-home "/opt/homebrew/Caskroom/miniforge"
-	  conda-env-home-directory "/opt/homebrew/Caskroom/miniforge"))
-    ;; when in conda-project-env-name or has environmental.yml auto activate
-    (conda-env-autoactivate-mode t)
-    :bind
-    ("C-c c a" . conda-env-activate)
-    ("C-c c d" . conda-env-deactivate))
+  (cond ((file-directory-p "~/miniconda3")
+	 (setq conda-anaconda-home (expand-file-name "~/miniconda3")
+	       conda-env-home-directory (expand-file-name "~/miniconda3")))
+	((file-directory-p "~/miniforge3")
+	 (setq conda-anaconda-home (expand-file-name "~/miniforge3")
+	       conda-env-home-directory (expand-file-name "~/miniforge3")))
+	(((eq system-type 'darwin))
+	 (setq conda-anaconda-home "/opt/homebrew/Caskroom/miniforge"
+	       conda-env-home-directory "/opt/homebrew/Caskroom/miniforge")))
+
+  ;; when in conda-project-env-name or has environmental.yml auto activate
+  (conda-env-autoactivate-mode t)
+  :bind
+  ("C-c c a" . conda-env-activate)
+  ("C-c c d" . conda-env-deactivate))
 
 ;;jupyter notebook integration
 
