@@ -176,7 +176,8 @@
 
 ;;;; Enable mouse operation in terminal emacs
 (unless (display-graphic-p)
-  (setq normal-erase-is-backspace t) 	;; specifies the mode where <BS> or <BACKSPACE> is <DEL>
+  ;; specifies the mode where <BS> or <BACKSPACE> is <DEL>
+  (normal-erase-is-backspace-mode 0)
   (xterm-mouse-mode 1)
   (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
   (global-set-key (kbd "<mouse-5>") 'scroll-up-line))
