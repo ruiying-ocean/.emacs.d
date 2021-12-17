@@ -492,9 +492,9 @@
 (use-package languagetool
   :config
   (setq languagetool-language-tool-jar
-	(concat (getenv "HOME") "/LanguageTool-5.5-stable/languagetool-commandline.jar"))
+	(concat (getenv "HOME") "/Library" "/LanguageTool-5.5-stable/languagetool-commandline.jar"))
   (setq languagetool-language-tool-server-jar
-	(concat (getenv "HOME") "/LanguageTool-5.5-stable/languagetool-server.jar"))
+	(concat (getenv "HOME") "/Library" "/LanguageTool-5.5-stable/languagetool-server.jar"))
   (setq languagetool-server-user-arguments '("-p" "8082"))
   (setq languagetool-default-language "en-GB")
   (setq languagetool-java-bin "/usr/bin/java")
