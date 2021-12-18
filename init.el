@@ -757,6 +757,9 @@
     "n c" 'org-roam-capture
     "n s" 'org-roam-db-autosync-mode
 
+    "j o" 'ein:run
+    "j s" 'ein:stop
+
     "b s" 'persp-switch
 
     "h a" '(mark-whole-buffer :which-key "select-all")
@@ -1767,9 +1770,9 @@
 
 ;;display color of RGB code
 (use-package rainbow-mode
-  :after ess
   :hook
-  (ess-r-mode . rainbow-mode))
+  (ess-r-mode . rainbow-mode)
+  (js-mode . rainbow-mode))
 
 ;;;;;;;;;;;;
 ;; Matlab ;;
