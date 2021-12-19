@@ -277,10 +277,8 @@
 ;; assign every marked line a cursor
 (use-package multiple-cursors
   :bind
-  ("C-S-c C-S-c" . mc/edit-lines)
-  ("C-x >" . mc/mark-next-like-this)
-  ("C-x <" . mc/mark-previous-like-this)
-  ("C-x C-<" . mc/mark-all-like-this))
+  ("C-M-<down>" . mc/mark-next-like-this)
+  ("C-M-<up>" . mc/mark-previous-like-this))
 
 ;;; TERMINAL, COMPLETION, LINT/SPELL CHECKER, SNIPPET
 
@@ -790,7 +788,8 @@
   (my/leader-def projectile-mode-map
     "p f" 'projectile-find-file
     "p s" 'projectile-ripgrep
-    "p p" 'projectile-switch-project)
+    "p p" 'projectile-switch-project
+    "p r" 'projectile-replace)
 
   (my/leader-def markdown-mode-map
     "l" 'livedown-preview
