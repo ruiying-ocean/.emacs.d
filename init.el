@@ -56,13 +56,12 @@
 
 ;; Emacs Native Compilation Feature support
 (when (and (fboundp 'native-comp-available-p)
-           (native-comp-available-p))
+	   (native-comp-available-p))
   (progn
     (setq native-comp-async-report-warnings-errors nil)
     (setq comp-deferred-compilation t)
     (add-to-list 'native-comp-eln-load-path (expand-file-name "eln-cache/" user-emacs-directory))
-    (setq package-native-compile t)
-    ))
+    (setq package-native-compile t)))
 
 ;; Update user load path
 ;; Optimize: Force "lisp" at the head to reduce the startup time.
@@ -77,7 +76,10 @@
 (setq custom-file (concat user-emacs-directory "/extra-lisp/custom.el"))
 (load custom-file :noerror)
 
-;;; Speed up launching Emacs
+(when (eq system-type 'darwin)
+  (defvar brew-parent-dir "/opt/homebrew/")
+  (defvar brew-bin-dir (expand-file-name "bin/" brew-parent-dir))
+  (defvar emacs-path "/opt/homebrew/Cellar/emacs-plus@28/28.0.50"))
 
 ;; Avoid matching file name with regrex list during startup
 (let ((file-name-handler-alist nil)) "~/.emacs.d/init.el")
@@ -102,8 +104,12 @@
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 
-;;We are lazy human :)
+;; Improved global minor mode for scrolling in Emacs 29
 (if (> emacs-major-version 28)
+    (pixel-scroll-precision-mode))
+
+;;We are lazy human :)
+(if (> emacs-major-version 27)
     (setq use-short-answers t)
   (fset 'yes-or-no-p 'y-or-n-p))
 
@@ -136,7 +142,7 @@
   (default-input-method "rime")
   (rime-librime-root "~/.emacs.d/librime/dist")
   :config
-  (setq rime-emacs-module-header-root "/opt/homebrew/Cellar/emacs-head@29/29.0.50_1/include/")
+  (setq rime-emacs-module-header-root (expand-file-name "include/" emacs-path))
   (setq rime-show-candidate 'posframe)
   (setq rime-posframe-properties
 	(list :font "Sarasa Mono SC Nerd"
@@ -382,7 +388,7 @@
   :hook
   (company-mode . company-posframe-mode)
   :custom
-  (company-posframe-quickhelp-delay 0.3)
+  (company-posframe-quickhelp-delay 0.15)
   (company-posframe-quickhelp-show-header nil)
   :config
   (setq posframe-arghandler #'my-posframe-arghandler)
@@ -734,17 +740,17 @@
 
 (use-package general
   :config
+  (general-auto-unbind-keys)
   (defconst leader "\\")
   (general-create-definer my/leader-def
     :prefix leader)
-
-  (general-auto-unbind-keys)
 
   ;; ** Global Keybindings
   (my/leader-def
     "g l" '(avy-goto-line :which-key "goto-line")
     "g g" '(goto-line :which-key "goto-line-number")
-    "g b" '(exchange-point-and-mark :which-key "go-back-and-mark")
+    "g m" '(exchange-point-and-mark :which-key "go-back-and-mark")
+    "g b" '(pop-global-mark :which-key "go-back")
     "g f" '(counsel-file-jump :which-key "goto-file")
 
     "n f" 'org-roam-node-find
@@ -754,6 +760,8 @@
     "n k" 'org-id-get-create
     "n c" 'org-roam-capture
     "n s" 'org-roam-db-autosync-mode
+
+    "d b" 'dired-ranger-bookmark-visit
 
     "j o" 'ein:run
     "j s" 'ein:stop
@@ -806,7 +814,7 @@
   (my/leader-def dired-mode-map
     "e" 'dired-toggle-read-only)
 
-  (general-auto-unbind-keys t))
+  (general-auto-unbind-keys :off))
 
 ;; a human-friendly keymap of built-in code-folding package
 ;; alternatives: vimish-fold, Origami
@@ -1161,11 +1169,6 @@
 (setq frame-inhibit-implied-resize nil)
 
 ;;-----------Dired enhancement-------------
-;; (use-package dired-hacks-utils
-;;   :hook
-;;   (dired-mode . dired-utils-format-information-line-mode)
-;;   )
-
 (setq dired-listing-switches "-alFh")
 (with-eval-after-load 'dired
   (define-key dired-mode-map [mouse-2] 'dired-mouse-find-file)
@@ -1177,12 +1180,21 @@
   (:map dired-mode-map
 	("W" . dired-ranger-copy)
 	("X" . dired-ranger-move)
-	("Y" . dired-ranger-paste)))
+	("Y" . dired-ranger-paste)
+	("j" . dired-hacks-next-file)
+	("k" . dired-hacks-previous-file)
+	("b" . dired-ranger-bookmark)
+	("b" . dired-ranger-bookmark-LRU))
+  :hook
+  (dired-mode . dired-utils-format-information-line-mode))
 
-;; (use-package dired-collapse
-;;   :hook
-;;   (dired-mode . dired-collapse-mode))
-
+(use-package dired-filter
+  :bind
+  (:map dired-mode-map
+	("/ n" . dired-filter-by-name)
+	("/ r" . dired-filter-by-regexp)
+	("/ e" . dired-filter-by-extension)
+	("/ f" . dired-filter-by-file)))
 ;;--------------------------------------------------
 ;; Matching parenthesis
 ;;--------------------------------------------------
@@ -1260,24 +1272,24 @@
   (doom-modeline-mode . nyan-mode))
 
 ;; defer if it's slow
-;; (use-package dashboard
-;;   :if (and (< (length command-line-args) 2)
-;; 	   (fboundp 'native-comp-available-p))
-;;   :config
-;;   (setq dashboard-set-init-info nil)
-;;   (dashboard-setup-startup-hook)
-;;   (setq dashboard-banner-logo-title "Rui, happiness is more than everything")
-;;   ;;    (setq dashboard-startup-banner 3)
-;;   (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/world.png")
-;;   (setq dashboard-center-content t)
-;;   (setq dashboard-items '((recents . 3))) ;;add org-agenda could slow start-up speed
-;;   (setq dashboard-set-heading-icons t)
-;;   (setq dashboard-set-file-icons t)
-;;   (setq dashboard-set-navigator t)
-;;   (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))) ;; show Dashboard in frames created with emacsclient -c
-;;   (setq dashboard-projects-switch-function 'counsel-projectile-switch-project-by-name)
-;;   (define-key dashboard-mode-map (kbd "n") 'next-line)
-;;   (define-key dashboard-mode-map (kbd "p") 'previous-line))
+(use-package dashboard
+  :if (and (< (length command-line-args) 2)
+	   (fboundp 'native-comp-available-p))
+  :config
+  (setq dashboard-set-init-info nil)
+  (dashboard-setup-startup-hook)
+  (setq dashboard-banner-logo-title "Rui, happiness is more than everything")
+  ;;    (setq dashboard-startup-banner 3)
+  (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/world.png")
+  (setq dashboard-center-content t)
+  (setq dashboard-items '((recents . 3))) ;;add org-agenda could slow start-up speed
+  (setq dashboard-set-heading-icons t)
+  (setq dashboard-set-file-icons t)
+  (setq dashboard-set-navigator t)
+  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))) ;; show Dashboard in frames created with emacsclient -c
+  (setq dashboard-projects-switch-function 'counsel-projectile-switch-project-by-name)
+  (define-key dashboard-mode-map (kbd "n") 'next-line)
+  (define-key dashboard-mode-map (kbd "p") 'previous-line))
 
 (use-package highlight-indent-guides
   :hook
@@ -1717,7 +1729,11 @@
 ;;==============================
 ;; require ESS installed
 ;;Lazy load ess-r-mode (ESS doesn't like use-package pretty much)
-(use-package ess :defer t)
+(use-package ess
+  :defer t
+  ;; :custom
+  ;; (inferior-ess-r-program "radian")
+  )
 
 (add-to-list 'auto-mode-alist '("\\.R\\'" . ess-r-mode))
 (with-eval-after-load 'ess-r-mode
@@ -1872,10 +1888,10 @@
 
   :custom
   (org-support-shift-select 'alway)
-  (org-babel-load-languages '((emacs-lisp . t)
-			      (python . t)
-			      (R . t)
-			      (ein . t)))
+  ;; (org-babel-load-languages '((emacs-lisp . t)
+  ;; 			      (python . t)
+  ;; 			      (R . t)
+  ;; 			      (ein . t)))
   ;;local keybinding
   :bind
   (:map org-mode-map
