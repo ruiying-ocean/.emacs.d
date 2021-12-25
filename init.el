@@ -761,8 +761,6 @@
     "n c" 'org-roam-capture
     "n s" 'org-roam-db-autosync-mode
 
-    "d b" 'dired-ranger-bookmark-visit
-
     "j o" 'ein:run
     "j s" 'ein:stop
 
@@ -1168,33 +1166,11 @@
 
 (setq frame-inhibit-implied-resize nil)
 
-;;-----------Dired enhancement-------------
-(setq dired-listing-switches "-alFh")
-(with-eval-after-load 'dired
-  (define-key dired-mode-map [mouse-2] 'dired-mouse-find-file)
-  (setq dired-dwim-target t))
+;;-----------Dired replacement-------------
+(use-package ranger
+  :config
+  (ranger-override-dired-mode t))
 
-;; W -> X to move, W -> Y to copy from one buffer to the other
-(use-package dired-ranger
-  :bind
-  (:map dired-mode-map
-	("W" . dired-ranger-copy)
-	("X" . dired-ranger-move)
-	("Y" . dired-ranger-paste)
-	("j" . dired-hacks-next-file)
-	("k" . dired-hacks-previous-file)
-	("b" . dired-ranger-bookmark)
-	("b" . dired-ranger-bookmark-LRU))
-  :hook
-  (dired-mode . dired-utils-format-information-line-mode))
-
-(use-package dired-filter
-  :bind
-  (:map dired-mode-map
-	("/ n" . dired-filter-by-name)
-	("/ r" . dired-filter-by-regexp)
-	("/ e" . dired-filter-by-extension)
-	("/ f" . dired-filter-by-file)))
 ;;--------------------------------------------------
 ;; Matching parenthesis
 ;;--------------------------------------------------
