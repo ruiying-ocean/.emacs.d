@@ -283,8 +283,8 @@
 ;; assign every marked line a cursor
 (use-package multiple-cursors
   :bind
-  ("C-M-<down>" . mc/mark-next-like-this)
-  ("C-M-<up>" . mc/mark-previous-like-this))
+  ("C-S-<down>" . mc/mark-next-like-this)
+  ("C-S-<up>" . mc/mark-previous-like-this))
 
 ;;; TERMINAL, COMPLETION, LINT/SPELL CHECKER, SNIPPET
 
@@ -1167,7 +1167,12 @@
 (setq frame-inhibit-implied-resize nil)
 
 ;;-----------Dired replacement-------------
+
+(setq dired-listing-switches "-alFhv")
+(setq counsel-dired-listing-switches "-alFhv")
+
 (use-package ranger
+  :defer 0.5
   :config
   (ranger-override-dired-mode t))
 
@@ -1340,7 +1345,7 @@
 
 (use-package centaur-tabs
   :config
-  ;;  (centaur-tabs-mode t)
+  (centaur-tabs-headline-match)
   (setq centaur-tabs-set-bar 'over)
   (setq centaur-tabs-gray-out-icons 'buffer)
   ;;(setq centaur-tabs-set-icons t)
@@ -1455,7 +1460,7 @@
 
 ;; loading default theme
 (setq custom-safe-themes t)
-(setq-default custom-enabled-themes '(doom-solarized-light))
+(setq-default custom-enabled-themes '(doom-nord-light))
 
 ;; Ensure that themes will be applied even if they have not been customized
 (defun reapply-themes ()
@@ -1471,16 +1476,16 @@
 (defun light-theme ()
   "Activate a light color theme.
   Recommendation:
-     solarized-light, leuven, spacemacs-light, eziam, twilight-bright, modus-operandi."
+     solarized-light, leuven, spacemacs-light, eziam, twilight-bright, modus-operandi, doom-homage-white, doom-tomorrow-day."
   (interactive)
   (setq custom-enabled-themes '(twilight-bright))
   (reapply-themes))
 
 (defun night-theme ()
   "Activate a dark color theme.
-  Recommendation: humanoid-dark, doom-city-light,
+  Recommendation: humanoid-dark, doom-city-light, doom-xcode
   doom-one/vibrant, doom-dark+, sanityinc-tomorrow-night, doom-wilmersdorf,
-  doom-badge, doom-laserwave"
+  doom-badge, doom-laserwave, doom-shades-of-purple"
   (interactive)
   (setq custom-enabled-themes '(sanityinc-tomorrow-night))
   (reapply-themes))
@@ -1496,7 +1501,7 @@
 (custom-theme-set-faces
  'user
  '(variable-pitch ((t (:family "Noto Serif SC" :height 160))))
- '(fixed-pitch ((t ( :family "Roboto Mono" :height 160)))))
+ '(fixed-pitch ((t ( :family "Roboto Mono" :height 150)))))
 
 (custom-theme-set-faces
  'user
@@ -1864,10 +1869,9 @@
 
   :custom
   (org-support-shift-select 'alway)
-  ;; (org-babel-load-languages '((emacs-lisp . t)
-  ;; 			      (python . t)
-  ;; 			      (R . t)
-  ;; 			      (ein . t)))
+  (org-babel-load-languages '((emacs-lisp . t)
+			      (python . t)
+			      (R . t)))
   ;;local keybinding
   :bind
   (:map org-mode-map
@@ -1907,9 +1911,9 @@
 ;;prettify-symbols-mode setting
 (add-hook 'org-mode-hook 'prettify-symbols-mode)
 (setq-default prettify-symbols-alist '(("#+BEGIN_SRC" . "➤")
-				       ("#+END_SRC" . "⏹")
+				       ("#+END_SRC" . "➤")
 				       ("#+begin_src" . "➤")
-				       ("#+end_src" . "⏹")
+				       ("#+end_src" . "➤")
 				       (">=" . "≥")
 				       ("=>" . "⇨")
 				       ("[-]" . "❍" )
