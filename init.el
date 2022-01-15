@@ -282,9 +282,13 @@
 
 ;; assign every marked line a cursor
 (use-package multiple-cursors
+  :init
+  (global-unset-key (kbd "M-<down-mouse-1>"))
   :bind
-  ("C-S-<down>" . mc/mark-next-like-this)
-  ("C-S-<up>" . mc/mark-previous-like-this))
+  ("C-M-<down>" . mc/mark-next-like-this)
+  ("C-S-<up>" . mc/mark-previous-like-this)
+  ("M-<mouse-1>" . mc/add-cursor-on-click))
+
 
 ;;; TERMINAL, COMPLETION, LINT/SPELL CHECKER, SNIPPET
 
@@ -738,6 +742,8 @@
 ;; C-x C-x -> set mark and move back to previous position
 ;; C-x h to select all
 
+
+
 (use-package general
   :config
   (general-auto-unbind-keys)
@@ -745,8 +751,13 @@
   (general-create-definer my/leader-def
     :prefix leader)
 
+  (defun quote-backslash()
+    (interactive)
+    (insert "\\"))
+
   ;; ** Global Keybindings
   (my/leader-def
+    "\\" 'quote-backslash
     "g l" '(avy-goto-line :which-key "goto-line")
     "g g" '(goto-line :which-key "goto-line-number")
     "g m" '(exchange-point-and-mark :which-key "go-back-and-mark")
@@ -1460,7 +1471,7 @@
 
 ;; loading default theme
 (setq custom-safe-themes t)
-(setq-default custom-enabled-themes '(doom-nord-light))
+(setq-default custom-enabled-themes '(doom-flatwhite))
 
 ;; Ensure that themes will be applied even if they have not been customized
 (defun reapply-themes ()
