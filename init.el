@@ -1354,26 +1354,27 @@
   :hook
   (ibuffer-mode . all-the-icons-ibuffer-mode))
 
-(use-package centaur-tabs
-  :config
-  (centaur-tabs-headline-match)
-  (setq centaur-tabs-set-bar 'over)
-  (setq centaur-tabs-gray-out-icons 'buffer)
-  ;;(setq centaur-tabs-set-icons t)
-  (setq centaur-tabs-plain-icons t)
-  (setq centaur-tabs-close-button "x")
-  (setq centaur-tabs-set-modified-marker t)
-  (setq centaur-tabs-modified-marker "*")
-  (setq centaur-tabs-height 20)
-  ;;(setq centaur-tabs-label-fixed-length 10) ;;fixed length
-  ;; (centaur-tabs-change-fonts "Roboto Mono" 130)
-  (setq centaur-tabs-show-navigation-buttons nil)
-  :bind
-  ("C-x <left>" . centaur-tabs-backward)
-  ("C-x <right>" . centaur-tabs-forward)
-  :hook
-  (dired-mode . centaur-tabs-local-mode)
-  (after-init . centaur-tabs-mode))
+(global-tab-line-mode t)
+;; (use-package centaur-tabs
+;;   :config
+;;   (centaur-tabs-headline-match)
+;;   (setq centaur-tabs-set-bar 'over)
+;;   (setq centaur-tabs-gray-out-icons 'buffer)
+;;   ;;(setq centaur-tabs-set-icons t)
+;;   (setq centaur-tabs-plain-icons t)
+;;   (setq centaur-tabs-close-button "x")
+;;   (setq centaur-tabs-set-modified-marker t)
+;;   (setq centaur-tabs-modified-marker "*")
+;;   (setq centaur-tabs-height 20)
+;;   ;;(setq centaur-tabs-label-fixed-length 10) ;;fixed length
+;;   ;; (centaur-tabs-change-fonts "Roboto Mono" 130)
+;;   (setq centaur-tabs-show-navigation-buttons nil)
+;;   :bind
+;;   ("C-x <left>" . centaur-tabs-backward)
+;;   ("C-x <right>" . centaur-tabs-forward)
+;;   :hook
+;;   (dired-mode . centaur-tabs-local-mode)
+;;   (after-init . centaur-tabs-mode))
 
 ;;press your keyboard fast and hard !!!
 (use-package power-mode
@@ -1445,7 +1446,7 @@
 
 ;;A bunch of themes
 (use-package solarized-theme)
-(use-package base16-theme :defer t )
+(use-package base16-theme :defer t)
 (use-package color-theme-sanityinc-tomorrow :defer t )
 (use-package gruvbox-theme :defer t )
 (use-package tao-theme :defer t )
@@ -1471,7 +1472,7 @@
 
 ;; loading default theme
 (setq custom-safe-themes t)
-(setq-default custom-enabled-themes '(doom-flatwhite))
+(setq-default custom-enabled-themes '(sanityinc-tomorrow-day))
 
 ;; Ensure that themes will be applied even if they have not been customized
 (defun reapply-themes ()
