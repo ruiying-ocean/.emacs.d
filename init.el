@@ -1183,10 +1183,18 @@
 (setq counsel-dired-listing-switches "-alFhv")
 
 (use-package ranger
-  :defer 0.5
+  ;; use `zP` to switch deer mode and ranger
   :config
-  (ranger-override-dired-mode t))
-
+  (ranger-override-dired-mode t)
+  :custom
+  (ranger-preview-file t)
+  (ranger-width-preview 0.5)
+  (ranger-max-preview-size 10)
+  (ranger-dont-show-binary t)
+  :bind
+  (:map ranger-mode-map
+	("g" . ranger-refresh))
+  )
 ;;--------------------------------------------------
 ;; Matching parenthesis
 ;;--------------------------------------------------
