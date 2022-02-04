@@ -121,6 +121,10 @@
 
 (setq confirm-kill-processes t)
 
+;; smooth mouse wheel
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil)))
+(setq mouse-wheel-progressive-speed nil)
+
 ;; Delete selection
 (delete-selection-mode t)
 
@@ -349,7 +353,11 @@
   (setq company-idle-delay 0.8)
   (setq company-show-numbers t)
   :hook
-  (after-init . global-company-mode))
+  (after-init . global-company-mode)
+  :bind
+  (:map company-active-map
+	("C-n" . company-select-next)
+	("C-p" . company-select-previous)))
 
 ;; company for shell script
 (use-package company-shell
@@ -690,13 +698,19 @@
 ;; C-x x s to switch/create a new perspective
 (use-package perspective
   :bind
-  ("C-x C-b" . persp-ibuffer)
-  ("C-x b" . persp-counsel-switch-buffer)
+  (("C-x k" . persp-kill-buffer*)
+   ("C-x C-b" . persp-ibuffer)
+   ("C-x b" . persp-counsel-switch-buffer))
   :config
+  (add-hook 'ibuffer-hook
+	    (lambda ()
+	      (persp-ibuffer-set-filter-groups)
+	      (unless (eq ibuffer-sorting-mode 'alphabetic)
+		(ibuffer-do-sort-by-alphabetic))))
   (persp-mode)
   :custom
   (persp-sort 'access)
-  (persp-mode-prefix-key (kbd "C-x x")))
+  (persp-mode-prefix-key (kbd "C-x w")))
 
 
 ;;; KEYBINDING
@@ -758,6 +772,7 @@
   ;; ** Global Keybindings
   (my/leader-def
     "\\" 'quote-backslash
+
     "g l" '(avy-goto-line :which-key "goto-line")
     "g g" '(goto-line :which-key "goto-line-number")
     "g m" '(exchange-point-and-mark :which-key "go-back-and-mark")
@@ -775,7 +790,7 @@
     "j o" 'ein:run
     "j s" 'ein:stop
 
-    "b s" 'persp-switch
+    "x s" 'persp-switch
 
     "h a" '(mark-whole-buffer :which-key "select-all")
 
@@ -785,6 +800,8 @@
     "f" 'counsel-find-file
     "q" 'save-buffers-kill-terminal
     "r" 'counsel-recentf
+
+    "1" 'ranger
 
     "<left>" '(centaur-tabs-backward :which-key "last-tab")
     "<right>" '(centaur-tabs-forward :which-key "next-tab"))
@@ -840,6 +857,7 @@
     "zoom in/out windows, or increase/decrease text"
     ("=" text-scale-increase "in")
     ("-" text-scale-decrease "out"))
+
   (defhydra hydra-vi (:pre (set-cursor-color "#40e0d0")
 			   :post (progn
 				   (set-cursor-color "#ffffff")
@@ -851,7 +869,8 @@
     ("j" next-line)
     ("k" previous-line)
     ("q" nil "quit"))
-  (global-set-key (kbd "C-c v") 'hydra-vi/body))
+  :bind
+  ("C-c v" . hydra-vi/body))
 
 ;; a center-floating posframe for hydra
 (use-package hydra-posframe
@@ -1184,8 +1203,6 @@
 
 (use-package ranger
   ;; use `zP` to switch deer mode and ranger
-  :config
-  (ranger-override-dired-mode t)
   :custom
   (ranger-preview-file t)
   (ranger-width-preview 0.5)
@@ -1193,8 +1210,8 @@
   (ranger-dont-show-binary t)
   :bind
   (:map ranger-mode-map
-	("g" . ranger-refresh))
-  )
+	("g" . ranger-refresh)))
+
 ;;--------------------------------------------------
 ;; Matching parenthesis
 ;;--------------------------------------------------
@@ -1278,7 +1295,7 @@
   :config
   (setq dashboard-set-init-info nil)
   (dashboard-setup-startup-hook)
-  (setq dashboard-banner-logo-title "Rui, happiness is more than everything")
+  (setq dashboard-banner-logo-title "Focus, Patient and Kind. 过好每一天")
   ;;    (setq dashboard-startup-banner 3)
   (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/world.png")
   (setq dashboard-center-content t)
@@ -1313,7 +1330,10 @@
   :bind
   ("<f6>" . minimap-mode))
 
-(use-package all-the-icons)
+(use-package all-the-icons
+  :if (display-graphic-p)
+  :config
+  (setq inhibit-compacting-font-caches t))
 
 (use-package treemacs
   :bind
@@ -1425,7 +1445,7 @@
   (if (display-graphic-p)
       (progn
 	;; English font
-	(set-face-attribute 'default nil :font (format "%s:pixelsize=%d" "SF Mono" 16))
+	(set-face-attribute 'default nil :font (format "%s:pixelsize=%d" "SF Mono" 15))
 	;; CJK font
 	(dolist (charset '(kana han symbol cjk-misc bopomofo))
 	  (set-fontset-font (frame-parameter nil 'font)
@@ -1453,7 +1473,7 @@
   (add-hook 'after-init-hook 'init-font))
 
 ;;A bunch of themes
-(use-package solarized-theme)
+(use-package solarized-theme :defer t)
 (use-package base16-theme :defer t)
 (use-package color-theme-sanityinc-tomorrow :defer t )
 (use-package gruvbox-theme :defer t )
@@ -1480,7 +1500,7 @@
 
 ;; loading default theme
 (setq custom-safe-themes t)
-(setq-default custom-enabled-themes '(sanityinc-tomorrow-day))
+(setq-default custom-enabled-themes '(apropospriate-light))
 
 ;; Ensure that themes will be applied even if they have not been customized
 (defun reapply-themes ()
