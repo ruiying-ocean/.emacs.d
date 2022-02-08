@@ -1295,11 +1295,12 @@
   :config
   (setq dashboard-set-init-info nil)
   (dashboard-setup-startup-hook)
-  (setq dashboard-banner-logo-title "Focus, Patient and Kind. 过好每一天")
+  (setq dashboard-banner-logo-title "过好每一天")
   ;;    (setq dashboard-startup-banner 3)
   (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/world.png")
   (setq dashboard-center-content t)
-  (setq dashboard-items '((recents . 3))) ;;add org-agenda could slow start-up speed
+  (setq dashboard-items '((recents . 3)
+			  (projects . 3))) ;;add org-agenda could slow start-up speed
   (setq dashboard-set-heading-icons t)
   (setq dashboard-set-file-icons t)
   (setq dashboard-set-navigator t)
