@@ -1196,10 +1196,10 @@
 
 (setq frame-inhibit-implied-resize nil)
 
-;;-----------Dired replacement-------------
-
+;;-----------Dired setting/replacement-------------
 (setq dired-listing-switches "-alFhv")
 (setq counsel-dired-listing-switches "-alFhv")
+(setq dired-dwim-target t)
 
 (use-package ranger
   ;; use `zP` to switch deer mode and ranger
@@ -1210,7 +1210,36 @@
   (ranger-dont-show-binary t)
   :bind
   (:map ranger-mode-map
-	("g" . ranger-refresh)))
+	("g" . ranger-refresh)
+	("m" . ranger-mark)))
+(setq dired-listing-switches "-alFh")
+
+(with-eval-after-load 'dired
+  (define-key dired-mode-map [mouse-2] 'dired-mouse-find-file)
+  (setq dired-dwim-target t))
+
+;; W -> X to move, W -> Y to copy from one buffer to the other
+(use-package dired-ranger
+  :bind
+  (:map dired-mode-map
+	("W" . dired-ranger-copy)
+	("X" . dired-ranger-move)
+	("Y" . dired-ranger-paste)
+	("j" . dired-hacks-next-file)
+	("k" . dired-hacks-previous-file)
+	("b" . dired-ranger-bookmark)
+	("b" . dired-ranger-bookmark-LRU))
+  :hook
+  (dired-mode . dired-utils-format-information-line-mode))
+
+
+(use-package dired-filter
+  :bind
+  (:map dired-mode-map
+	("/ n" . dired-filter-by-name)
+	("/ r" . dired-filter-by-regexp)
+	("/ e" . dired-filter-by-extension)
+	("/ f" . dired-filter-by-file)))
 
 ;;--------------------------------------------------
 ;; Matching parenthesis
