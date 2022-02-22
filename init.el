@@ -1216,6 +1216,7 @@
 
 (with-eval-after-load 'dired
   (define-key dired-mode-map [mouse-2] 'dired-mouse-find-file)
+  (define-key dired-mode-map (kbd "o") 'dired-display-file)
   (setq dired-dwim-target t))
 
 ;; W -> X to move, W -> Y to copy from one buffer to the other
