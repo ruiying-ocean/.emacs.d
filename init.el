@@ -756,8 +756,6 @@
 ;; C-x C-x -> set mark and move back to previous position
 ;; C-x h to select all
 
-
-
 (use-package general
   :config
   (general-auto-unbind-keys)
@@ -1131,24 +1129,6 @@
   :hook
   (ivy-mode . ivy-posframe-mode))
 
-;; similar to ivy-frame
-;; (use-package mini-frame
-;;   :hook
-;;   (after-init . mini-frame-mode)
-;;   :config
-;;   (setq resize-mini-frames t)
-;;   ;; for gnome shell
-;;   ;; (setq x-gtk-resize-child-frames 'resize-mode)
-;;   :custom
-;;   (mini-frame-show-parameters
-;;    '((top . 0.25)
-;;      (width . 0.7)
-;;      (left . 0.5)))
-;;   (mini-frame-ignore-commands
-;;    '(eval-expression "edebug-eval-expression"
-;; 		     debugger-eval-expression swiper))
-;;   (mini-frame-create-lazy nil))
-
 ;; highlight cursor when scroll window
 (use-package beacon
   :straight (:type git :host github
@@ -1232,7 +1212,6 @@
 	("b" . dired-ranger-bookmark-LRU))
   :hook
   (dired-mode . dired-utils-format-information-line-mode))
-
 
 (use-package dired-filter
   :bind
@@ -1414,52 +1393,11 @@
   (ibuffer-mode . all-the-icons-ibuffer-mode))
 
 (global-tab-line-mode t)
-;; (use-package centaur-tabs
-;;   :config
-;;   (centaur-tabs-headline-match)
-;;   (setq centaur-tabs-set-bar 'over)
-;;   (setq centaur-tabs-gray-out-icons 'buffer)
-;;   ;;(setq centaur-tabs-set-icons t)
-;;   (setq centaur-tabs-plain-icons t)
-;;   (setq centaur-tabs-close-button "x")
-;;   (setq centaur-tabs-set-modified-marker t)
-;;   (setq centaur-tabs-modified-marker "*")
-;;   (setq centaur-tabs-height 20)
-;;   ;;(setq centaur-tabs-label-fixed-length 10) ;;fixed length
-;;   ;; (centaur-tabs-change-fonts "Roboto Mono" 130)
-;;   (setq centaur-tabs-show-navigation-buttons nil)
-;;   :bind
-;;   ("C-x <left>" . centaur-tabs-backward)
-;;   ("C-x <right>" . centaur-tabs-forward)
-;;   :hook
-;;   (dired-mode . centaur-tabs-local-mode)
-;;   (after-init . centaur-tabs-mode))
-
-;;press your keyboard fast and hard !!!
-(use-package power-mode
-  :defer t
-  :straight (power-mode :type git :host github
-			:repo "elizagamedev/power-mode.el"))
 
 ;; to display ^L page break
 (use-package form-feed
   :hook
   (emacs-lisp-mode . form-feed-mode))
-
-;; (use-package focus
-;;   :defer t
-;;   :hook
-;;   (text-mode . focus-mode)
-;;   :config
-;;   (add-to-list 'focus-mode-to-thing '((text-mode . sentence)
-;; 				      (prog-mode . defun)
-;; 				      (latex-mode . paragraph))))
-
-;; (use-package smooth-scroll
-;;   :load-path "extra-lisp/"
-;;   :hook
-;;   (after-init . smooth-scroll-mode)
-;;   )
 
 
 ;;; FONT, THEME & COLOR SCHEME
