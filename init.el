@@ -1188,6 +1188,8 @@
   (ranger-width-preview 0.5)
   (ranger-max-preview-size 10)
   (ranger-dont-show-binary t)
+  :config
+  (ranger-override-dired-mode t)
   :bind
   (:map ranger-mode-map
 	("g" . ranger-refresh)
