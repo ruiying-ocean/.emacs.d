@@ -293,6 +293,12 @@
   ("C-S-<up>" . mc/mark-previous-like-this)
   ("M-<mouse-1>" . mc/add-cursor-on-click))
 
+(use-package ediff
+  :custom
+  (ediff-forward-word-function 'forward-char) ;; from https://emacs.stackexchange.com/a/9411/17066
+  (ediff-highlight-all-diffs t)
+  (ediff-keep-variants nil)
+  (ediff-window-setup-function 'ediff-setup-windows-plain))
 
 ;;; TERMINAL, COMPLETION, LINT/SPELL CHECKER, SNIPPET
 
@@ -758,17 +764,18 @@
 
 (use-package general
   :config
-  (general-auto-unbind-keys)
   (defconst leader "\\")
+
   (general-create-definer my/leader-def
     :prefix leader)
 
-  (defun quote-backslash()
+  (defun quote-backslash ()
     (interactive)
     (insert "\\"))
 
   ;; ** Global Keybindings
   (my/leader-def
+    "" nil
     "\\" 'quote-backslash
 
     "g l" '(avy-goto-line :which-key "goto-line")
@@ -776,6 +783,8 @@
     "g m" '(exchange-point-and-mark :which-key "go-back-and-mark")
     "g b" '(pop-global-mark :which-key "go-back")
     "g f" '(counsel-file-jump :which-key "goto-file")
+
+    "m" '(indent-rigidly :which-key "move code")
 
     "n f" 'org-roam-node-find
     "n i" 'org-roam-node-insert
@@ -790,7 +799,7 @@
 
     "x s" 'persp-switch
 
-    "h a" '(mark-whole-buffer :which-key "select-all")
+    "h a" '(mark-whole-buffer :which-key "highlight all")
 
     "." 'mc/mark-next-like-this
     "," 'mc/mark-previous-like-this
@@ -836,9 +845,7 @@
     "h" 'eldoc)
 
   (my/leader-def dired-mode-map
-    "e" 'dired-toggle-read-only)
-
-  (general-auto-unbind-keys :off))
+    "e" 'dired-toggle-read-only))
 
 ;; a human-friendly keymap of built-in code-folding package
 ;; alternatives: vimish-fold, Origami
@@ -1306,7 +1313,7 @@
   :config
   (setq dashboard-set-init-info nil)
   (dashboard-setup-startup-hook)
-  (setq dashboard-banner-logo-title "过好每一天")
+  (setq dashboard-banner-logo-title "为自己而活")
   ;;    (setq dashboard-startup-banner 3)
   (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/world.png")
   (setq dashboard-center-content t)
