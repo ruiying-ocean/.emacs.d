@@ -1324,7 +1324,7 @@
   :config
   (setq dashboard-set-init-info nil)
   (dashboard-setup-startup-hook)
-  (setq dashboard-banner-logo-title "自其不变者而观之，则物与我皆无尽也")
+  (setq dashboard-banner-logo-title "惟江上之清风，与山间之明月。耳得之而为声，目遇之而成色。")
   ;;    (setq dashboard-startup-banner 3)
   (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/world.png")
   (setq dashboard-center-content t)
@@ -1489,7 +1489,7 @@
 
 ;; loading default theme
 (setq custom-safe-themes t)
-(setq-default custom-enabled-themes '(apropospriate-light))
+(setq-default custom-enabled-themes '(modus-operandi))
 
 ;; Ensure that themes will be applied even if they have not been customized
 (defun reapply-themes ()
