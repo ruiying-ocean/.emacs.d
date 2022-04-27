@@ -294,9 +294,13 @@
   ("M-<mouse-1>" . mc/add-cursor-on-click))
 
 (use-package ediff
+  :config
+  (setq ediff-split-window-function 'split-window-horizontally)
+  (setq ediff-highlight-all-diffs t)
   :custom
   (ediff-forward-word-function 'forward-char) ;; from https://emacs.stackexchange.com/a/9411/17066
   (ediff-highlight-all-diffs t)
+  (ediff-diff-options "-w")
   (ediff-keep-variants nil)
   (ediff-window-setup-function 'ediff-setup-windows-plain))
 
@@ -1230,6 +1234,13 @@
 	("/ e" . dired-filter-by-extension)
 	("/ f" . dired-filter-by-file)))
 
+
+(use-package pulsing-cursor
+  :straight (:type git :host github
+		   :repo "jasonjckn/pulsing-cursor")
+  :hook
+  (after-init . pulsing-cursor-mode))
+
 ;;--------------------------------------------------
 ;; Matching parenthesis
 ;;--------------------------------------------------
@@ -1313,7 +1324,7 @@
   :config
   (setq dashboard-set-init-info nil)
   (dashboard-setup-startup-hook)
-  (setq dashboard-banner-logo-title "为自己而活")
+  (setq dashboard-banner-logo-title "自其不变者而观之，则物与我皆无尽也")
   ;;    (setq dashboard-startup-banner 3)
   (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/world.png")
   (setq dashboard-center-content t)
@@ -1496,7 +1507,7 @@
   Recommendation:
      solarized-light, leuven, spacemacs-light, eziam, twilight-bright, modus-operandi, doom-homage-white, doom-tomorrow-day."
   (interactive)
-  (setq custom-enabled-themes '(twilight-bright))
+  (setq custom-enabled-themes '(modus-operandi))
   (reapply-themes))
 
 (defun night-theme ()
