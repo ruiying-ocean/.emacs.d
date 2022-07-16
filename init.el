@@ -1,11 +1,4 @@
 ;;; init.el --- Load the full configuration -*- lexical-binding: t -*-
-
-;;; Commentary:
-
-;;; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-;;               Editor is just a tool.
-;;; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
 ;; This file contains customized configuration codes, which
 ;; have been divided into multiple sections by ^L character.
 ;; One can use Ctrl-TAB to have a look of outline
@@ -88,6 +81,7 @@
 (use-package esup
   :config
   (setq esup-depth 0))
+
 
 ;;; EDITOR
 
@@ -137,27 +131,6 @@
 ;; place your default.custom.yaml file to "~/.emacs.d/rime/", and M-x rime-deploy
 ;; There's also a convinient out-of-box config on github: https://github.com/maomiui/rime.git
 ;; ------------------------------------------------------------
-(use-package rime
-  :straight (rime :type git
-		  :host github
-		  :repo "DogLooksGood/emacs-rime"
-		  :files ("*.el" "Makefile" "lib.c"))
-  :custom
-  (default-input-method "rime")
-  (rime-librime-root "~/.emacs.d/librime/dist")
-  :config
-  (setq rime-emacs-module-header-root (expand-file-name "include/" emacs-path))
-  (setq rime-show-candidate 'posframe)
-  (setq rime-posframe-properties
-	(list :font "Sarasa Mono SC Nerd"
-	      :internal-border-width 10))
-  (setq rime-translate-keybindings
-	'("C-f" "C-b" "C-n" "C-p" "C-g" "<left>" "<right>"
-	  "<up>" "<down>" "<prior>" "<next>" "<delete>"))
-  (setq rime-posframe-style 'horizontal)
-  :bind
-  ("C-\\" . toggle-input-method))
-
 ;; wrap up line (use visual-line-mode and visual-fill-column-mode instead)
 ;; (setq truncate-lines nil)
 ;; (setq-default word-wrap nil)
@@ -231,8 +204,9 @@
 
 ;;; Auto-save
 (use-package super-save
+  :hook
+  (after-init-mode . super-save-mode)
   :config
-  (super-save-mode 1)
   ;; turn off the buil-in auto-save
   (setq auto-save-default nil)
   (add-to-list 'super-save-triggers 'ace-window)
@@ -294,6 +268,7 @@
   ("M-<mouse-1>" . mc/add-cursor-on-click))
 
 (use-package ediff
+  :defer 1
   :config
   (setq ediff-split-window-function 'split-window-horizontally)
   (setq ediff-highlight-all-diffs t)
@@ -350,79 +325,6 @@
   :hook
   (after-init . shx-global-mode))
 
-;;auto-completion system
-(use-package company
-  :config
-  (setq company-tooltip-limit 10)
-  (setq company-minimum-prefix-length 2)
-  (setq company-tooltip-align-annotations t)
-  ;; invert the navigation direction if the the completion popup-isearch-match
-  ;; is displayed on top (happens near the bottom of windows)
-  (setq company-tooltip-flip-when-above t)
-  (setq company-global-modes '(not inferior-python-mode))
-  (setq company-idle-delay 0.8)
-  (setq company-show-numbers t)
-  :hook
-  (after-init . global-company-mode)
-  :bind
-  (:map company-active-map
-	("C-n" . company-select-next)
-	("C-p" . company-select-previous)))
-
-;; company for shell script
-(use-package company-shell
-  :config
-  (add-to-list 'company-backends 'company-shell-env))
-
-;;A machine-learning based backend for company
-;;May conflict with company-flx-mode/ESS mode
-;; (use-package company-tabnine
-;;   :defer 1
-;;   :after company
-;;   :config
-;;   (eval-after-load 'company-tabnine
-;;     (if (not (file-directory-p "~/.TabNine/"))
-;; 	(company-tabnine-install-binary)))
-;;   (add-to-list 'company-backends #'company-tabnine)
-;;   )
-
-(use-package company-org-block
-  :defer t
-  :custom
-  (company-org-block-edit-style 'auto) ;; 'auto, 'prompt, or 'inline
-  :hook ((org-mode . (lambda ()
-		       (setq-local company-backends '(company-org-block))
-		       (company-mode 1)))))
-
-;;A fuzzy matching of company
-(use-package company-flx
-  :hook
-  (company-mode . company-flx-mode))
-
-;;simple and fast sorting and filtering framework for comppany
-(use-package company-prescient
-  :hook
-  (company-mode . company-prescient-mode)
-  :config
-  (setq prescient-filter-method '(literal regexp initialism)))
-
-(use-package company-posframe
-  :hook
-  (company-mode . company-posframe-mode)
-  :custom
-  (company-posframe-quickhelp-delay 0.15)
-  (company-posframe-quickhelp-show-header nil)
-  :config
-  (setq posframe-arghandler #'my-posframe-arghandler)
-  (defun my-posframe-arghandler (buffer-or-name arg-name value)
-    (let ((info '(:internal-border-width 0)))
-      (or (plist-get info arg-name) value))))
-
-;; Alternative to company-posframe, there's also company-quickhelp
-;; (use-package company-box
-;;   :hook
-;;   (company-mode . company-box-mode))
-
 ;;To specify new version of git on remote machine so I can run magit locally
 ;;add ~/.ssh/config and ~/.ssh/known_hosts first
 ;;then ssh-keygen -t rsa => ssh-copy-id name@host_name
@@ -438,18 +340,6 @@
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
   ;;tramp mode to cache password
   (setq password-cache-expiry nil))
-
-(use-package counsel-tramp
-  :after (counsel tramp)
-  :config
-  (setq counsel-tramp-custom-connections '("/ssh:mogu@almond.ggy.bris.ac.uk:/home/mogu/cgenie.muffin/"
-					   "/ssh:mogu@sprout.ggy.bris.ac.uk:/home/mogu/cgenie.muffin/"))
-  (setq tramp-default-method "ssh")
-  (setq make-backup-files nil)
-  (setq create-lockfiles nil)
-  :bind
-  ("C-c s" . counsel-tramp)
-  )
 
 ;; visit https://github.com/jacktasia/dumb-jump to see more alternative ways
 ;; like TAGS system
@@ -513,28 +403,6 @@
   :hook
   (flycheck-mode . flycheck-inline-mode))
 
-;; https://github.com/languagetool-org/languagetool
-;; alternative: https://github.com/emacs-languagetool/flycheck-languagetool
-(use-package languagetool
-  :config
-  (setq languagetool-language-tool-jar
-	(concat (getenv "HOME") "/Library" "/LanguageTool-5.5-stable/languagetool-commandline.jar"))
-  (setq languagetool-language-tool-server-jar
-	(concat (getenv "HOME") "/Library" "/LanguageTool-5.5-stable/languagetool-server.jar"))
-  (setq languagetool-server-user-arguments '("-p" "8082"))
-  (setq languagetool-default-language "en-GB")
-  (setq languagetool-java-bin "/usr/bin/java")
-  (setq languagetool-java-arguments '("-Dfile.encoding=UTF-8"))
-  :bind
-  ("C-c C-; c" . languagetool-check)
-  ("C-c C-; d" . languagetool-clear-buffer)
-  ("C-c C-; i" . languagetool-correct-at-point)
-  ("C-c C-; b" . languagetool-buffer)
-  ("C-c C-; l" . languagetool-set-language))
-
-;; Doc: https://github.com/egh/zotxt-emacs
-;; (use-package zotxt-emacs)
-
 ;; A dictionary inside Emacs, by abo-abo!
 (use-package define-word
   :bind
@@ -559,22 +427,9 @@
   :after flyspell
   :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper)))
 
-;; Flyspell interface
-;; Use M-o to do words action (e.g., save)
-(use-package flyspell-correct-ivy
-  :after flyspell-correct)
-
 (use-package yasnippet
   :straight yasnippet-snippets ;; Collection of snippets
   :hook (after-init . yas-global-mode))
-
-;;manually choose a snippet
-(use-package ivy-yasnippet
-  :after (ivy yasnippet)
-  :bind
-  (("C-c i" . ivy-yasnippet))
-  :config
-  (setq ivy-yasnippet-expand-keys 'smart))
 
 ;;Git + Emacs = boom!
 (use-package magit
@@ -606,84 +461,162 @@
   :hook
   (after-init . popwin-mode))
 
-(use-package ivy
-  :hook
-  (after-init . ivy-mode)
-  :config
-  (setq ivy-use-virtual-buffers t)
-  (setq enable-recursive-minibuffers t)
-  (setq ivy-wrap t)
-  (setq ivy-height 9)
-  ;;  (setq ivy-format-function 'ivy-format-function-line)
+;; dwim: do what I mean
+;; contextual action using embark
+(use-package embark
   :bind
-  (("\C-s" . swiper)
-   ("C-c v" . ivy-push-view)
-   ("C-c V" . ivy-pop-view)
-   :map ivy-minibuffer-map
-   ("TAB" . ivy-alt-done)
-   :map ivy-switch-buffer-map
-   ("C-d" . ivy-switch-buffer-kill)))
-
-(use-package counsel
-  :after ivy
-  :bind
-  (;; ("C-x C-b" . counsel-ibuffer)
-   ;; ("C-x b" . counsel-switch-buffer)
-   ("C-c b" . counsel-imenu) ;; imenus provides a list of definition
-   ("C-x C-f" . counsel-find-file)
-   ("M-x" . counsel-M-x)
-   ("M-y" . counsel-yank-pop) ;;something like a clipboard
-   ("C-h f" . counsel-describe-function)
-   ("C-h v" . counsel-describe-variable)
-   ("C-c t" . counsel-load-theme)
-   ("C-c j" . counsel-git-grep)
-   ("C-c g" . counsel-git) ;;find file in current git directory
-   ("C-c l" . counsel-git-log)
-   ("C-c r" . counsel-rg)  ;;rg find tex
-   ("C-c f" . counsel-fzf) ;;fzf find file
-   ("C-c e" . counsel-flycheck)
-   ("C-c C-r" . counsel-recentf)
-   :map minibuffer-local-map
-   ("C-r" . counsel-minibuffer-history)
-   ))
-
-;;sorting and filtering framework for ivy
-(use-package ivy-prescient
-  :hook
-  (ivy-mode . ivy-prescient-mode)
+  (("C-;" . embark-act)         ;; give a menu
+   ("M-." . embark-dwim)	;; do the default action
+   ("C-h b" . embark-bindings)) ;; alternative for `describe-bindings'
   :config
-  (setq ivy-prescient-sort-commands t
-	ivy-prescient-enable-sorting nil
-	ivy-prescient-retain-classic-highlighting t))
+  (setq prefix-help-command #'embark-prefix-help-command)
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none)))))
 
-;; Project management tool
-(use-package projectile
-  :after ivy
-  :config
-  (setq projectile-completion-system 'ivy)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
-
-(use-package counsel-projectile
+;; completion UI
+(use-package vertico
   :hook
-  (after-init . counsel-projectile-mode))
+  (after-init . vertico-mode))
+
+(use-package vertico-posframe
+  :hook
+  (vertico-mode . vertico-posframe-mode))
+
+;; Emacs 28: Hide commands in M-x which do not work in the current mode.
+;; Vertico commands are hidden in normal buffers.
+(setq read-extended-command-predicate
+      #'command-completion-default-include-p)
+
+;; Enable recursive minibuffers
+(setq enable-recursive-minibuffers t)
+
+(use-package savehist
+  :config
+  (savehist-mode))
+
+;; completion strategy
+(use-package orderless
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles basic partial-completion)))))
+
+;; rich annotations of minibuffer
+(use-package marginalia
+  ;; change more or less info
+  :bind (:map minibuffer-local-map
+	      ("M-A" . marginalia-cycle))
+  :hook
+  (after-init . marginalia-mode))
+
+;; auto completion
+(use-package corfu
+  :hook
+  (after-init . global-corfu-mode)
+  :custom
+  (corfu-auto t)
+  (corfu-preview-current t))
+
+;; (use-package corf-terminal
+;;   :straight (:type git :repo "https://codeberg.org/akib/emacs-corfu-terminal")
+;;   :config
+;;   (unless (display-graphic-p)
+;;     (corfu-terminal-mode 1)))
+
+;; documentation
+(use-package corfu-doc
+  :straight (:type git :host github
+		   :repo "galeo/corfu-doc")
+  :hook
+  (corfu-mode . corfu-doc-mode))
+
+;; icon like all-the-icons
+(use-package kind-icon
+  :straight (:type git :host github
+		   :repo "jdtsmith/kind-icon")
+  :after corfu
+  :custom
+  (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
+  :config
+  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+
+;; a bunch of advanced commands: buffer switching, imenu, search commands etc.
+(use-package consult
+  ;; Replace bindings. Lazily loaded due by `use-package'.
+  :bind (;; C-c bindings (mode-specific-map)
+	 ("C-c h" . consult-history)
+	 ("C-c m" . consult-mode-command)
+
+	 ;; C-x bindings (ctl-x-map)
+	 ("C-x b" . consult-buffer)	;; orig. switch-to-buffer
+	 ("C-x r b" . consult-bookmark) ;; orig. bookmark-jump
+	 ("C-x p b" . consult-project-buffer) ;; orig. project-switch-to-buffer
+
+	 ;; Other custom bindings
+	 ("M-y" . consult-yank-pop)	;; orig. yank-pop
+	 ("<help> a" . consult-apropos) ;; orig. apropos-command
+
+	 ;; M-g bindings (goto-map)
+	 ("M-g e" . consult-compile-error)
+	 ("M-g f" . consult-flycheck) ;; Alternative: consult-flycheck
+	 ("M-g g" . consult-goto-line)	 ;; orig. goto-line
+	 ("M-g M-g" . consult-goto-line) ;; orig. goto-line
+	 ("M-g o" . consult-outline) ;; Alternative: consult-org-heading
+	 ("M-g m" . consult-mark)
+	 ("M-g k" . consult-global-mark)
+	 ("M-g i" . consult-imenu)
+	 ("M-g I" . consult-imenu-multi)
+
+	 ;; M-s bindings (search-map)
+	 ("C-s" . consult-line)
+	 ("M-s f" . consult-find)
+	 ("M-s g" . consult-grep)
+	 ("M-s G" . consult-git-grep)
+	 ("M-s r" . consult-ripgrep)
+	 ("M-s L" . consult-line-multi)
+	 ("M-s m" . consult-multi-occur)
+	 ("M-s k" . consult-keep-lines)
+	 ("M-s u" . consult-focus-lines)
+	 ("M-s e" . consult-isearch-history)
+	 :map isearch-mode-map
+	 ("M-e" . consult-isearch-history) ;; orig. isearch-edit-string
+	 ("M-s e" . consult-isearch-history) ;; orig. isearch-edit-string
+	 ("M-s l" . consult-line) ;; needed by consult-line to detect isearch
+	 ("M-s L" . consult-line-multi) ;; needed by consult-line to detect isearch
+	 ;; Minibuffer history
+	 :map minibuffer-local-map
+	 ("M-s" . consult-history) ;; orig. next-matching-history-element
+	 ("M-r" . consult-history)) ;; orig. previous-matching-history-element
+
+  :hook
+  ;; Enable automatic preview at point in the *Completions* buffer. This is
+  ;; relevant when you use the default completion UI.
+  (completion-list-mode . consult-preview-at-point-mode)
+
+  :config
+  ;; Use Consult to select xref locations with preview
+  (setq xref-show-xrefs-function #'consult-xref
+	xref-show-definitions-function #'consult-xref))
 
 ;; Built-in project manager, support git repos only
-;; (use-package project
-;;   :straight (:type built-in)
-;;   :config
-;;   (defun my/project-files-in-directory (dir)
-;;     "Use `fd' to list files in DIR."
-;;     (let* ((default-directory dir)
-;; 	   (localdir (file-local-name (expand-file-name dir)))
-;; 	   (command (format "fd -H -t f -0 . %s" localdir)))
-;;       (project--remote-file-names
-;;        (sort (split-string (shell-command-to-string command) "\0" t)
-;; 	     #'string<))))
+(use-package project
+  :straight (:type built-in)
+  :config
+  (defun my/project-files-in-directory (dir)
+    "Use `fd' to list files in DIR."
+    (let* ((default-directory dir)
+	   (localdir (file-local-name (expand-file-name dir)))
+	   (command (format "fd -H -t f -0 . %s" localdir)))
+      (project--remote-file-names
+       (sort (split-string (shell-command-to-string command) "\0" t)
+	     #'string<))))
 
-;;   (cl-defmethod project-files ((project (head local)) &optional dirs)
-;;     "Override `project-files' to use `fd' in local projects."
-;;     (mapcan #'my/project-files-in-directory
-;; 	    (or dirs (list (project-root project))))))
+  (cl-defmethod project-files ((project (head local)) &optional dirs)
+    "Override `project-files' to use `fd' in local projects."
+    (mapcan #'my/project-files-in-directory
+	    (or dirs (list (project-root project))))))
 
 ;; yet another robust find file in project
 ;; but don't rely on fzf
@@ -703,25 +636,6 @@
   :bind
   ("M-o" . ace-window)
   ("C-x o" . ace-swap-window))
-
-;; workspace manager and just show buffers in this space
-;; C-x x s to switch/create a new perspective
-(use-package perspective
-  :bind
-  (("C-x k" . persp-kill-buffer*)
-   ("C-x C-b" . persp-ibuffer)
-   ("C-x b" . persp-counsel-switch-buffer))
-  :config
-  (add-hook 'ibuffer-hook
-	    (lambda ()
-	      (persp-ibuffer-set-filter-groups)
-	      (unless (eq ibuffer-sorting-mode 'alphabetic)
-		(ibuffer-do-sort-by-alphabetic))))
-  (persp-mode)
-  :custom
-  (persp-sort 'access)
-  (persp-mode-prefix-key (kbd "C-x w")))
-
 
 ;;; KEYBINDING
 
@@ -798,10 +712,15 @@
     "n c" 'org-roam-capture
     "n s" 'org-roam-db-autosync-mode
 
+    "p f" 'project-find-file
+    "p s" 'project-find-regexp
+    "p b" 'project-find-buffer
+
     "j o" 'ein:run
     "j s" 'ein:stop
 
-    "x s" 'persp-switch
+    "e b" 'ediff-buffers
+    "e f" 'ediff-files
 
     "h a" '(mark-whole-buffer :which-key "highlight all")
 
@@ -812,8 +731,6 @@
     "q" 'save-buffers-kill-terminal
     "r" 'counsel-recentf
 
-    "1" 'ranger
-
     "<left>" '(centaur-tabs-backward :which-key "last-tab")
     "<right>" '(centaur-tabs-forward :which-key "next-tab"))
 
@@ -821,6 +738,7 @@
   (my/leader-def prog-mode-map
     "b" 'counsel-imenu
     "s" 'shell
+    "d" 'ediff-buffers
     "t" 'vterm
     "c" 'counsel-flycheck
     "%" 'query-replace)
@@ -830,11 +748,14 @@
     "c" 'languagetool-check
     "i" 'languagetool-correct-at-point)
 
-  (my/leader-def projectile-mode-map
-    "p f" 'projectile-find-file
-    "p s" 'projectile-ripgrep
-    "p p" 'projectile-switch-project
-    "p r" 'projectile-replace)
+  (my/leader-def org-mode-map
+    "t" 'org-insert-structure-template)
+
+  ;; (my/leader-def projectile-mode-map
+  ;;   "p f" 'projectile-find-file
+  ;;   "p s" 'projectile-ripgrep
+  ;;   "p p" 'projectile-switch-project
+  ;;   "p r" 'projectile-replace)
 
   (my/leader-def markdown-mode-map
     "l" 'livedown-preview
@@ -1022,29 +943,6 @@
       ("b" languagetool-buffer "buffer")
       ("S" languagetool-set-language "setting")))))
 
-;; beautify hydra
-(use-package pretty-hydra
-  :after all-the-icons
-  :config
-  (defvar hydra-ui-title (s-concat (s-repeat 20 " ")
-				   (all-the-icons-faicon "windows")
-				   " Apperance"))
-  (pretty-hydra-define hydra-ui
-    (:foreign-keys warn :title hydra-ui-title :quit-key "q")
-    ("Theme"
-     (("d" night-theme "dark-theme")
-      ("l" light-theme "light-theme")
-      ("t" counsel-load-theme "choose"))
-     "Window"
-     (("b" split-window-right "split horizontally")
-      ("v" split-window-below "split vertically")
-      ("f" toggle-frame-fullscreen "fullscreen")
-      ("m" ace-delete-other-windows "maximize")
-      ("o" ace-window "others"))
-     "Page"
-     (("n" forward-page "next")
-      ("p" backward-page "previous"))))
-  (global-set-key (kbd "C-c w") 'hydra-ui/body))
 
 (use-package helpful
   :config
@@ -1147,10 +1045,6 @@
   :hook
   (after-init . beacon-mode))
 
-;; type-writer sound effect
-;; (use-package selectric-mode
-;;   :hook
-;;   (after-init . selectric-mode))
 
 ;; highlight a little bit "important" buffers
 ;; depends on what theme you're using
@@ -1188,29 +1082,17 @@
 (setq frame-inhibit-implied-resize nil)
 
 ;;-----------Dired setting/replacement-------------
-(setq dired-listing-switches "-alFhv")
-(setq counsel-dired-listing-switches "-alFhv")
-(setq dired-dwim-target t)
-
-(use-package ranger
-  ;; use `zP` to switch deer mode and ranger
-  :custom
-  (ranger-preview-file t)
-  (ranger-width-preview 0.5)
-  (ranger-max-preview-size 10)
-  (ranger-dont-show-binary t)
+(use-package dired
+  :straight (:type built-in)
   :config
-  (ranger-override-dired-mode t)
+  (setq dired-listing-switches "-alFhv")
+  (setq counsel-dired-listing-switches "-alFhv")
+  (setq dired-dwim-target t)
+  (setq dired-dwim-target t)
   :bind
-  (:map ranger-mode-map
-	("g" . ranger-refresh)
-	("m" . ranger-mark)))
-(setq dired-listing-switches "-alFh")
-
-(with-eval-after-load 'dired
-  (define-key dired-mode-map [mouse-2] 'dired-mouse-find-file)
-  (define-key dired-mode-map (kbd "o") 'dired-display-file)
-  (setq dired-dwim-target t))
+  (:map dired-mode-map
+	("o" . dired-display-file)
+	("<mouse-2>" . dired-mouse-find-file)))
 
 ;; W -> X to move, W -> Y to copy from one buffer to the other
 (use-package dired-ranger
@@ -1233,7 +1115,6 @@
 	("/ r" . dired-filter-by-regexp)
 	("/ e" . dired-filter-by-extension)
 	("/ f" . dired-filter-by-file)))
-
 
 (use-package pulsing-cursor
   :straight (:type git :host github
@@ -1300,43 +1181,28 @@
   :bind
   ([S-down-mouse-3] . minions-minor-modes-menu))
 
-(use-package mood-line
-  :hook
-  (after-init . mood-line-mode))
+;; (use-package mood-line
+;;   :hook
+;;   (after-init . mood-line-mode))
 
-;; show emoji
-(use-package emojify
-  :hook
-  (after-init . global-emojify-mode)
-  :custom
-  (emojify-display-style 'unicode)
-  (emojify-download-emojis-p t)
-  (emojify-emoji-styles '(ascii github unicode)))
-
-(use-package nyan-mode
-  :hook
-  (doom-modeline-mode . nyan-mode))
-
-;; defer if it's slow
-(use-package dashboard
-  :if (and (< (length command-line-args) 2)
-	   (fboundp 'native-comp-available-p))
+(use-package bespoke-modeline
+  :straight (:type git :host github :repo "mclear-tools/bespoke-modeline")
   :config
-  (setq dashboard-set-init-info nil)
-  (dashboard-setup-startup-hook)
-  (setq dashboard-banner-logo-title "惟江上之清风，与山间之明月。耳得之而为声，目遇之而成色。")
-  ;;    (setq dashboard-startup-banner 3)
-  (setq dashboard-startup-banner "~/.emacs.d/fancy-splash/world.png")
-  (setq dashboard-center-content t)
-  (setq dashboard-items '((recents . 3)
-			  (projects . 3))) ;;add org-agenda could slow start-up speed
-  (setq dashboard-set-heading-icons t)
-  (setq dashboard-set-file-icons t)
-  (setq dashboard-set-navigator t)
-  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))) ;; show Dashboard in frames created with emacsclient -c
-  (setq dashboard-projects-switch-function 'counsel-projectile-switch-project-by-name)
-  (define-key dashboard-mode-map (kbd "n") 'next-line)
-  (define-key dashboard-mode-map (kbd "p") 'previous-line))
+  ;; Set header line
+  (setq bespoke-modeline-position 'top)
+  ;; Set mode-line height
+  (setq bespoke-modeline-size 3)
+  ;; Show diff lines in mode-line
+  (setq bespoke-modeline-git-diff-mode-line t)
+  ;; Set mode-line cleaner
+  (setq bespoke-modeline-cleaner t)
+  ;; Use mode-line visual bell
+  (setq bespoke-modeline-visual-bell t)
+  ;; Set vc symbol
+  (setq bespoke-modeline-vc-symbol "G:")
+  (bespoke-modeline-mode)
+  :custom
+  (bespoke-background "white"))
 
 (use-package highlight-indent-guides
   :hook
@@ -1365,54 +1231,13 @@
   :config
   (setq inhibit-compacting-font-caches t))
 
-(use-package treemacs
-  :bind
-  ("<f8>" . treemacs))
-
-(use-package treemacs-all-the-icons
-  :defer t
-  :requires
-  (treemacs all-the-icons)
-  :config
-  (treemacs-load-theme "all-the-icons"))
-
 (use-package all-the-icons-dired
   :if window-system
   ;;need to run all-the-icons-install-fonts first to avoid grabled icon
   :hook
   (dired-mode . all-the-icons-dired-mode))
 
-(use-package ivy-rich
-  :hook
-  (ivy-mode . ivy-rich-mode)
-  :config
-  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
-  (setq ivy-rich-path-style 'absolute)
-  :custom
-  (ivy-rich-modify-columns
-   'ivy-switch-buffer
-   '((ivy-rich-switch-buffer-size (:align right)))
-   'counsel-M-x
-   '((counsel-M-x-transformer (:width 40)))
-   ))
-
-(use-package all-the-icons-ivy-rich
-  :if window-system
-  :after ivy-rich
-  :config
-  (setq all-the-icons-ivy-rich-icon-size 1.0)
-  (setq inhibit-compacting-font-caches t)
-  (all-the-icons-ivy-rich-mode t))
-
-;; Enable icons in the ibuffer
-(use-package all-the-icons-ibuffer
-  :if window-system
-  :config
-  (setq inhibit-compacting-font-caches t)
-  :hook
-  (ibuffer-mode . all-the-icons-ibuffer-mode))
-
-(global-tab-line-mode t)
+;; (global-tab-line-mode t)
 
 ;; to display ^L page break
 (use-package form-feed
@@ -1461,63 +1286,37 @@
 		  (auto-max-frame))))
   (add-hook 'after-init-hook 'init-font))
 
-;;A bunch of themes
-(use-package solarized-theme :defer t)
-(use-package base16-theme :defer t)
-(use-package color-theme-sanityinc-tomorrow :defer t )
-(use-package gruvbox-theme :defer t )
-(use-package tao-theme :defer t )
-(use-package humanoid-themes :defer t )
-(use-package twilight-bright-theme :defer t )
-(use-package ample-theme :defer t )
-(use-package eziam-theme :defer t ) ;;almost perfect light theme
-(use-package spacemacs-common :defer t :straight spacemacs-theme)
-(use-package doom-themes
-  :defer t
-  :config
-  ;;treemacs setting
-  (setq doom-themes-treemacs-enable-variable-pitch nil)
-  (setq doom-themes-treemacs-theme "doom-color")
-  (doom-themes-treemacs-config)
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
-
-(use-package apropospriate-theme
-  :defer t
-  :custom
-  (apropospriate-mode-line-height 1.0))
-
 ;; loading default theme
 (setq custom-safe-themes t)
-(setq-default custom-enabled-themes '(modus-operandi))
+(use-package bespoke-themes
+  :straight (:host github :repo "mclear-tools/bespoke-themes" :branch "main")
+  :custom
+  (bespoke-background "white smoke")
+  :config
+  ;; Set evil cursor colors
+  (setq bespoke-set-evil-cursors t)
+  ;; Set use of italics
+  (setq bespoke-set-italic-comments t
+	bespoke-set-italic-keywords t)
+  ;; Set variable pitch
+  (setq bespoke-set-variable-pitch t)
+  ;; Set initial theme variant
+  (setq bespoke-set-theme 'light)
+  ;; Load theme
+  (load-theme 'bespoke t))
 
-;; Ensure that themes will be applied even if they have not been customized
-(defun reapply-themes ()
-  "Forcibly load the themes listed in `custom-enabled-themes'."
-  (dolist (theme custom-enabled-themes)
-    (unless (custom-theme-p theme)
-      (load-theme theme)))
-  (custom-set-variables `(custom-enabled-themes ',custom-enabled-themes)))
-
-(add-hook 'after-init-hook 'reapply-themes)
-
-;; Toggle between light and dark
-(defun light-theme ()
-  "Activate a light color theme.
-  Recommendation:
-     solarized-light, leuven, spacemacs-light, eziam, twilight-bright, modus-operandi, doom-homage-white, doom-tomorrow-day."
-  (interactive)
-  (setq custom-enabled-themes '(modus-operandi))
-  (reapply-themes))
-
-(defun night-theme ()
-  "Activate a dark color theme.
-  Recommendation: humanoid-dark, doom-city-light, doom-xcode
-  doom-one/vibrant, doom-dark+, sanityinc-tomorrow-night, doom-wilmersdorf,
-  doom-badge, doom-laserwave, doom-shades-of-purple"
-  (interactive)
-  (setq custom-enabled-themes '(sanityinc-tomorrow-night))
-  (reapply-themes))
+;; Dim inactive windows
+(use-package dimmer
+  :straight (:host github :repo "gonewest818/dimmer.el")
+  :hook (after-init . dimmer-mode)
+  :config
+  (setq dimmer-fraction 0.5)
+  (setq dimmer-adjustment-mode :foreground)
+  (setq dimmer-use-colorspace :rgb)
+  (setq dimmer-watch-frame-focus-events nil)
+  (dimmer-configure-which-key)
+  (dimmer-configure-magit)
+  (dimmer-configure-posframe))
 
 ;;Transprancy setting
 (set-frame-parameter (selected-frame) 'alpha '(97 100))
@@ -1532,32 +1331,14 @@
  '(variable-pitch ((t (:family "Noto Serif SC" :height 160))))
  '(fixed-pitch ((t ( :family "Roboto Mono" :height 150)))))
 
-(custom-theme-set-faces
- 'user
- '(org-block ((t (:inherit fixed-pitch))))
- '(org-code ((t (:inherit (shadow fixed-pitch)))))
- '(org-document-info ((t (:foreground "dark orange"))))
- '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
- '(org-link ((t (:foreground "light blue" :underline t))))
- '(org-property-value ((t (:inherit fixed-pitch))) t)
- '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
- '(org-table ((t (:inherit fixed-pitch))))
- '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8)))))
-
-(custom-set-faces
- '(org-level-1 ((t (:inherit outline-1 :height 1.2))))
- '(org-level-2 ((t (:inherit outline-2 :height 1.1))))
- '(org-level-3 ((t (:inherit outline-3 :height 1.1))))
- '(org-level-4 ((t (:inherit outline-4 :height 1.0))))
- '(org-level-5 ((t (:inherit outline-5 :height 1.0)))))
-
 ;;Unicode font setting
-(when (member "Symbola" (font-family-list))
-  (set-fontset-font "fontset-default" nil
-		    (font-spec :size 16 :name "Symbola")))
-
-(when (member "Symbola" (font-family-list))
-  (set-fontset-font t 'unicode "Symbola" nil 'prepend))
+(use-package fontset
+  :straight (:type built-in) ;; only include this if you use straight
+  :config
+  ;; Use symbola for proper unicode
+  (when (member "Symbola" (font-family-list))
+    (set-fontset-font
+     t 'symbol "Symbola" nil)))
 
 
 ;;; PROGRAMMING LANGUAGES & LSP
@@ -1604,13 +1385,10 @@
   ;;(define-key eglot-mode-map (kbd "C-c h") 'eldoc)
   )
 
-;; A lsp for grammarly, still in early development
-;; (use-package eglot-grammarly
-;;   :straight (:type git :host github
-;; 		   :repo "emacs-grammarly/eglot-grammarly")
-;;   :hook (text-mode . (lambda ()
-;;                        (require 'eglot-grammarly)
-;;                        (call-interactively #'eglot))))
+;; requires install `sbcl`
+;; (use-package slime
+;;   :config
+;;   (setq inferior-lisp-program "sbcl"))
 
 ;;==============================
 ;;           Python           ;;
@@ -1870,168 +1648,45 @@
 ;;;;;;;;;;;;;;
 ;; Org-mode ;;
 ;;;;;;;;;;;;;;
+(use-package org-modern
+  :straight (:type git :host github
+		   :repo "minad/org-modern")
+  :hook
+  (org-modern-mode . org-mode))
+
+(use-package svg-tag-mode
+  :hook
+  (svg-tag-mode . org-mode)
+  :config
+  (setq svg-tag-tags
+	'((":TODO:" . ((lambda (tag) (svg-tag-make "TODO")))))))
 
 ;; special arrow \to
 (use-package org
   :straight (:type built-in)
-  :after counsel
   :config
-  (setq org-startup-indented t
-	org-startup-with-inline-images t
-	org-image-actual-width nil)
-  (setq org-todo-keywords
-	'((sequence "TODO" "DOING" "|" "DONE" "CANCELED")))
-  (setq org-capture-templates
-	'(("t" "Todo" entry (file+headline "~/.emacs.d/org/inbox.org" "Tasks")
-	   "* TODO %?\n  %i\n  %a")
-	  ("j" "Journal" entry (file+datetree "~/.emacs.d/org/journal.org")
-	   "* %?\nEntered on %U\n  %i\n  %a")))
-  (setq org-default-notes-file "~/.emacs.d/org/inbox.org")
-  (setq org-archive-location "~/.emacs.d/org/archives.org::* From %s")
-  (setq org-agenda-files (list "~/.emacs.d/org/agenda.org"))
+  (setq
+   ;; Edit settings
+   org-auto-align-tags nil
+   org-tags-column 0
+   org-catch-invisible-edits 'show-and-error
+   org-special-ctrl-a/e t
+   org-insert-heading-respect-content t
 
-  ;; not display _ and ^ as sub/superscript
-  (setq org-use-sub-superscripts nil)
+   ;; Org styling, hide markup etc.
+   org-hide-emphasis-markers t
+   org-pretty-entities t
+   org-ellipsis "…"
 
-  ;;src setting
-  (setq org-src-fontify-natively t)
-
-  :custom
-  (org-support-shift-select 'alway)
-  (org-babel-load-languages '((emacs-lisp . t)
-			      (python . t)
-			      (R . t)))
-  ;;local keybinding
-  :bind
-  (:map org-mode-map
-	("C-c a" . org-agenda)
-	("C-c c" . org-capture)
-	("C-c C-r" . org-archive-subtree)
-	("C-c t" . counsel-org-tag)
-	("C-c l" . counsel-org-link))
-
-  :hook
-  (org-mode . (lambda ()
-		(variable-pitch-mode 1)
-		(visual-line-mode 1)
-		(display-line-numbers-mode -1)
-		(org-toggle-pretty-entities)
-		(flycheck-mode 1)
-		;;(org-num-mode 1)
-		)))
-
-(use-package org-link-beautify
-  :hook
-  (org-mode . org-link-beautify-mode)
-  :config
-  (setq org-element-use-cache t)
-  (define-key org-link-beautify-keymap (kbd "RET") 'org-open-at-point))
-
-;;use org-superstar-mode to replace org-bullets
-(use-package org-superstar
-  :defer t
-  :config
-  (setq org-superstar-special-todo-items t)
-  :hook
-  (org-mode . org-superstar-mode)
-  :custom
-  (org-ellipsis "▾"))
-
-;;prettify-symbols-mode setting
-(add-hook 'org-mode-hook 'prettify-symbols-mode)
-(setq-default prettify-symbols-alist '(("#+BEGIN_SRC" . "➤")
-				       ("#+END_SRC" . "➤")
-				       ("#+begin_src" . "➤")
-				       ("#+end_src" . "➤")
-				       (">=" . "≥")
-				       ("=>" . "⇨")
-				       ("[-]" . "❍" )
-				       ("[ ]" .  "☐")
-				       ("[X]" . "☑" )))
-(setq prettify-symbols-unprettify-at-point 'right-edge)
-
-(use-package org-fancy-priorities
-  :defer t
-  :hook
-  (org-mode . org-fancy-priorities-mode)
-  :config
-  (setq org-fancy-priorities-list '("❗❗❗" "❗❗" "❗")))
-
-;;Image drag-and-drop for org-mode
-(use-package org-download
-  :hook
-  (dired-mode . org-download-enable))
-
-;;(use-package org-super-agenda)
-(use-package org-graph-view
-  :defer t
-  :straight (org-graph-view :type git :host github
-			    :repo "alphapapa/org-graph-view"))
-
-;; This is an Emacs package that creates graphviz directed graphs from
-;; the headings of an org file
-(use-package org-mind-map
-  :defer t
-  :straight (org-mind-map :type git :host github
-			    :repo "the-ted/org-mind-map")
-  :config
-  (setq org-mind-map-engine "dot")	; Default. Directed Graph
-  ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
-  ;; (setq org-mind-map-engine "twopi")  ; Radial Layout
-  ;; (setq org-mind-map-engine "fdp")    ; Undirected Spring Force-Directed
-  ;; (setq org-mind-map-engine "sfdp")   ; Multiscale version of fdp for the layout of large graphs
-  )
-
-;; A personal knowlege database tool, lateral linking
-;; require sqlite, check org-oram--sqlite-available-p
-(use-package org-roam
-  :custom
-  (org-roam-directory "~/Documents/RoamNotes")
-  (org-roam-capture-templates
-   '(("d" "default" plain "%?"
-      ;; file+head is the pattern for file name
-      ;; %? -> cursor position
-      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-			 "#+title: ${title}\n")
-      :unnarrowed t)
-     ;; ${Title} -> same as the file title
-     ("l" "literature" plain
-      "\n* Source\nTitle: ${Title}\nAuthor: %^{Author}\nYear: %^{Year}\nDOI: %^{DOI}\n* Summary\n** Backgrounds\n** Highlight\n** Question\n** How to solve it\n** Results & Conclusions"
-      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-			 "#+title: ${title}\n#+filetags: Literature")
-      :unnarrowed t)))
-  :init
-  (setq org-roam-v2-ack t)
-  :bind
-  (("C-c n l" . org-roam-buffer-toggle) ;;Backlink
-   ("C-c n f" . org-roam-node-find)
-   ("C-c n i" . org-roam-node-insert)
-   ("C-c n c" . org-roam-capture)
-   ("C-c n s" . org-roam-db-autosync-mode)
-   :map org-mode-map
-   ("C-M-i" . completion-at-point)
-   ;;create an ID for heading
-   ("C-c n k" . org-id-get-create))
-  :config
-  (org-roam-setup)
-  (setq org-roam-complete-everywhere t))
-
-
-(straight-use-package '(simple-httpd :type git :host github :repo "ruiying-ocean/simple-httpd" :local-repo "simple-httpd"))
-
-;; a mindmap-like visualiser for org-roam
-(use-package org-roam-ui
-  :requires (simple-httpd)
-  :straight
-  (:host github :repo "org-roam/org-roam-ui"
-	 :branch "main" :files ("*.el" "out"))
-  :after org-roam
-  ;;  :hook (after-init . org-roam-ui-mode)
-  :config
-  (setq org-roam-ui-sync-theme t
-        org-roam-ui-follow t
-        org-roam-ui-update-on-save t
-        org-roam-ui-open-on-start t))
+   ;; Agenda styling
+   org-agenda-tags-column 0
+   org-agenda-block-separator ?─
+   org-agenda-time-grid
+   '((daily today require-timed)
+     (800 1000 1200 1400 1600 1800 2000)
+     " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+   org-agenda-current-time-string
+   "⭠ now ─────────────────────────────────────────────────"))
 
 ;; perfectly alian English/CJK fonts in the same table
 (use-package valign
@@ -2071,7 +1726,6 @@
 
   (add-hook 'LaTeX-mode-hook
 	    (lambda ()
-	      (projectile-mode -1)
 	      (rainbow-delimiters-mode 1)
 	      (visual-line-mode 1)
 	      (LaTeX-math-mode 1)
