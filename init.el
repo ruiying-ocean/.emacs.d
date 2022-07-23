@@ -7,7 +7,7 @@
 ;; LSP servers:
 ;;       pylsp, clangd, fortls, texlab/digestif
 ;; Spell checker:
-;;       languagetool, grammarly, aspell/huspell
+;;       aspell/huspell
 ;; Lint checker:
 ;;       pyflakes, shell checker (brew)
 ;; Fonts:
@@ -81,7 +81,6 @@
 (use-package esup
   :config
   (setq esup-depth 0))
-
 
 ;;; EDITOR
 
@@ -102,7 +101,7 @@
 (if (> emacs-major-version 28)
     (pixel-scroll-precision-mode))
 
-;;We are lazy human :)
+;; abbreviaiont of yes/no
 (if (> emacs-major-version 27)
     (setq use-short-answers t)
   (fset 'yes-or-no-p 'y-or-n-p))
@@ -122,14 +121,6 @@
 ;; Delete selection
 (delete-selection-mode t)
 
-;; Chinese input method within Emacs, rely on dynamic modules, gcc, make, and librime (powered by the RIME team)
-;; Doc: https://github.com/DogLooksGood/emacs-rime/blob/master/INSTALLATION.org
-;; ------------------------------------------------------------
-;; Customisation:
-;; * Emacs-rime has seperate config from the system rime's *
-;; To customise any configuration, e.g., switch traditional/simplified Chinese,
-;; place your default.custom.yaml file to "~/.emacs.d/rime/", and M-x rime-deploy
-;; There's also a convinient out-of-box config on github: https://github.com/maomiui/rime.git
 ;; ------------------------------------------------------------
 ;; wrap up line (use visual-line-mode and visual-fill-column-mode instead)
 ;; (setq truncate-lines nil)
@@ -174,17 +165,6 @@
 (advice-add 'kill-ring-save :around #'my/kill-ring-save)
 
 ;; ---Edit keybinding style---
-(use-package recentf
-  :straight (:type built-in)
-  :config
-  (setq-default
-   recentf-max-saved-items 30
-   recentf-exclude `("/tmp/",
-		     (concat "~/.emacs.d/straight/build" "/.*-autoloads\\.el\\'")))
-  (global-set-key (kbd "<f3>") #'recentf-open-files)
-  :hook
-  (after-init . recentf-mode))
-
 ;;use undo-tree-visualize to show history
 (use-package undo-tree
   :hook
@@ -232,8 +212,7 @@
 
 ;; An alternative way to cleanup whitespace
 (use-package ws-butler
-  :straight (:type git :host github
-		   :repo "lewang/ws-butler")
+  :straight (:host github :repo "lewang/ws-butler")
   :hook
   (prog-mode . ws-butler-mode))
 
@@ -245,8 +224,7 @@
   (ess-r-mode . electric-operator-mode))
 
 (use-package smart-newline
-  :straight (:type git :host github
-		   :repo "ainame/smart-newline.el")
+  :straight (:host github :repo "ainame/smart-newline.el")
   :config
   (smart-newline-mode 1)
   :bind
@@ -279,7 +257,7 @@
   (ediff-keep-variants nil)
   (ediff-window-setup-function 'ediff-setup-windows-plain))
 
-;;; TERMINAL, COMPLETION, LINT/SPELL CHECKER, SNIPPET
+;;; CORE: TERMINAL, COMPLETION, LINT/SPELL CHECKER, SNIPPET, PROJECT
 
 ;; Shells in Emacs (more of an interface)
 ;; Tips: you can use M-r to search in shell history
@@ -314,16 +292,11 @@
   :bind
   ("C-x t" . vterm))
 
-;; get better rendering experience for term/ansi-term
-(use-package eterm-256color
-  :hook
-  (term-mode . eterm-256color-mode))
-
 ;; a comint extension, e.g., :view *.jpg to view a plot in shell
 ;; other useful cmd: :e (edit), :ssh,
 (use-package shx
   :hook
-  (after-init . shx-global-mode))
+  (shell-mode . shx-global-mode))
 
 ;;To specify new version of git on remote machine so I can run magit locally
 ;;add ~/.ssh/config and ~/.ssh/known_hosts first
@@ -341,22 +314,6 @@
   ;;tramp mode to cache password
   (setq password-cache-expiry nil))
 
-;; visit https://github.com/jacktasia/dumb-jump to see more alternative ways
-;; like TAGS system
-;;======================================================================
-;;depends on external programs: The-Silver-Searcher/ripgrep and emacs package ag/rg
-;;======================================================================
-(use-package dumb-jump
-  :defer 4
-  :config
-  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
-  (setq dumb-jump-default-project "~/cgenie.muffin")
-  (add-to-list 'auto-mode-alist '("\\.config\\'" . shell-script-mode)))
-
-(use-package ag :defer t)
-(use-package rg :defer t)
-(use-package ripgrep :defer t)
-
 (use-package which-key
   :hook
   (after-init . which-key-mode))
@@ -369,13 +326,6 @@
 
 (use-package flycheck-pyflakes
   :after python)
-
-;; Alternative
-;; pip install prospector -> don't check code style but relatively slower
-;; (use-package flycheck-prospector
-;;   :config
-;;   (flycheck-prospector-setup)
-;;   )
 
 ;; shell -> shell-checker
 ;; python -> pyflakes
@@ -394,10 +344,6 @@
 					     python-pyright
 					     python-pycompile
 					     emacs-lisp-checkdoc)))
-
-;; (use-package flycheck-grammarly
-;;   :config
-;;   (setq flycheck-grammarly-check-time 0.8))
 
 (use-package flycheck-inline
   :hook
@@ -461,20 +407,14 @@
   :hook
   (after-init . popwin-mode))
 
-;; dwim: do what I mean
-;; contextual action using embark
-(use-package embark
-  :bind
-  (("C-;" . embark-act)         ;; give a menu
-   ("M-." . embark-dwim)	;; do the default action
-   ("C-h b" . embark-bindings)) ;; alternative for `describe-bindings'
+;; jump to definition
+(use-package dumb-jump
   :config
-  (setq prefix-help-command #'embark-prefix-help-command)
-  ;; Hide the mode line of the Embark live/completions buffers
-  (add-to-list 'display-buffer-alist
-               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                 nil
-                 (window-parameters (mode-line-format . none)))))
+  (setq dumb-jump-prefer-searcher 'rg)
+  ;; xref as backend
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
+  ;; customized xref to use `completing-read' to select a target
+  (setq xref-show-definitions-function #'xref-show-definitions-completing-read))
 
 ;; completion UI
 (use-package vertico
@@ -493,6 +433,7 @@
 ;; Enable recursive minibuffers
 (setq enable-recursive-minibuffers t)
 
+;; save minibuffer history
 (use-package savehist
   :config
   (savehist-mode))
@@ -519,12 +460,6 @@
   (corfu-auto t)
   (corfu-preview-current t))
 
-;; (use-package corf-terminal
-;;   :straight (:type git :repo "https://codeberg.org/akib/emacs-corfu-terminal")
-;;   :config
-;;   (unless (display-graphic-p)
-;;     (corfu-terminal-mode 1)))
-
 ;; documentation
 (use-package corfu-doc
   :straight (:type git :host github
@@ -550,18 +485,18 @@
 	 ("C-c m" . consult-mode-command)
 
 	 ;; C-x bindings (ctl-x-map)
-	 ("C-x b" . consult-buffer)	;; orig. switch-to-buffer
+	 ("C-x b" . consult-buffer)   ;; orig. switch-to-buffer
 	 ("C-x r b" . consult-bookmark) ;; orig. bookmark-jump
 	 ("C-x p b" . consult-project-buffer) ;; orig. project-switch-to-buffer
 
 	 ;; Other custom bindings
-	 ("M-y" . consult-yank-pop)	;; orig. yank-pop
+	 ("M-y" . consult-yank-pop) ;; orig. yank-pop
 	 ("<help> a" . consult-apropos) ;; orig. apropos-command
 
 	 ;; M-g bindings (goto-map)
 	 ("M-g e" . consult-compile-error)
 	 ("M-g f" . consult-flycheck) ;; Alternative: consult-flycheck
-	 ("M-g g" . consult-goto-line)	 ;; orig. goto-line
+	 ("M-g g" . consult-goto-line) ;; orig. goto-line
 	 ("M-g M-g" . consult-goto-line) ;; orig. goto-line
 	 ("M-g o" . consult-outline) ;; Alternative: consult-org-heading
 	 ("M-g m" . consult-mark)
@@ -579,6 +514,7 @@
 	 ("M-s m" . consult-multi-occur)
 	 ("M-s k" . consult-keep-lines)
 	 ("M-s u" . consult-focus-lines)
+	 ("<f3>" . consult-recent-file)
 	 ("M-s e" . consult-isearch-history)
 	 :map isearch-mode-map
 	 ("M-e" . consult-isearch-history) ;; orig. isearch-edit-string
@@ -599,6 +535,13 @@
   ;; Use Consult to select xref locations with preview
   (setq xref-show-xrefs-function #'consult-xref
 	xref-show-definitions-function #'consult-xref))
+
+;; consult extension
+(use-package consult-flycheck
+  :after (consult flycheck))
+
+(use-package consult-yasnippet
+  :after (consult yasnippet))
 
 ;; Built-in project manager, support git repos only
 (use-package project
@@ -624,6 +567,10 @@
   :bind
   ("C-x f" . find-file-in-project-at-point))
 
+(use-package recentf
+  :hook
+  (after-init . recentf-mode))
+
 ;;Faster cursor movement - go to anywhere
 (use-package avy
   :bind
@@ -637,6 +584,7 @@
   ("M-o" . ace-window)
   ("C-x o" . ace-swap-window))
 
+
 ;;; KEYBINDING
 
 ;; Set meta command for Mac OS
@@ -652,7 +600,6 @@
 (global-set-key (kbd "C-x .") 'end-of-buffer)
 ;; globally go to previous position; "C-u C-SPC" to do same locally
 (global-set-key (kbd "C-c C-SPC") 'pop-global-mark)
-
 ;; repeat command
 (global-set-key (kbd "<f4>") #'repeat)
 
@@ -727,9 +674,8 @@
     "." 'mc/mark-next-like-this
     "," 'mc/mark-previous-like-this
 
-    "f" 'counsel-find-file
+    "f" 'consult-find-file
     "q" 'save-buffers-kill-terminal
-    "r" 'counsel-recentf
 
     "<left>" '(centaur-tabs-backward :which-key "last-tab")
     "<right>" '(centaur-tabs-forward :which-key "next-tab"))
@@ -750,12 +696,6 @@
 
   (my/leader-def org-mode-map
     "t" 'org-insert-structure-template)
-
-  ;; (my/leader-def projectile-mode-map
-  ;;   "p f" 'projectile-find-file
-  ;;   "p s" 'projectile-ripgrep
-  ;;   "p p" 'projectile-switch-project
-  ;;   "p r" 'projectile-replace)
 
   (my/leader-def markdown-mode-map
     "l" 'livedown-preview
@@ -997,9 +937,6 @@
 (setq display-time-format "%B %d %H:%M %p")
 (setq system-time-locale nil)
 
-;;If use doom-mode-line, then display battery
-(add-hook 'doom-modeline-mode-hook 'display-battery-mode)
-
 ;;Don't display load average percentage
 (setq display-time-default-load-average nil)
 
@@ -1010,41 +947,12 @@
 ;;Highlight current line
 (add-hook 'after-init-hook 'global-hl-line-mode)
 
-;; (use-package yascroll
-;;   :hook
-;;   (after-init . global-yascroll-bar-mode))
-
-(use-package ivy-posframe
-  :config
-  (setq ivy-posframe-display-functions-alist
-	'((complete-symbol . ivy-posframe-display-at-point)
-	  (swiper . ivy-posframe-display-at-window-center)
-	  (counsel-M-x . ivy-posframe-display-at-window-center)
-	  (t . ivy-posframe-display)))
-  (setq ivy-posframe-parameters
-	'((left-fringe . 8)
-	  (right-fringe . 8)))
-  (setq ivy-posframe-width 200
-	ivy-posframe-border-width 0)
-  (setq ivy-posframe-height-alist '((swiper . 10)
-				    (t . 10)))
-  ;; fix the width
-  (defun ivy-posframe-get-size ()
-    "Set the ivy-posframe size according to the current frame."
-    (let ((height (or ivy-posframe-height (or ivy-height 10)))
-	  (width (min (or ivy-posframe-width 200) (round (* 0.75 (frame-width))))))
-      (list :height height :width width :min-height height :min-width width)))
-  (setq ivy-posframe-size-function 'ivy-posframe-get-size)
-  :hook
-  (ivy-mode . ivy-posframe-mode))
-
 ;; highlight cursor when scroll window
 (use-package beacon
   :straight (:type git :host github
 		   :repo "Malabarba/beacon")
   :hook
   (after-init . beacon-mode))
-
 
 ;; highlight a little bit "important" buffers
 ;; depends on what theme you're using
@@ -1086,10 +994,10 @@
   :straight (:type built-in)
   :config
   (setq dired-listing-switches "-alFhv")
-  (setq counsel-dired-listing-switches "-alFhv")
   (setq dired-dwim-target t)
   (setq dired-dwim-target t)
   :bind
+  ;; % - m to mark regex
   (:map dired-mode-map
 	("o" . dired-display-file)
 	("<mouse-2>" . dired-mouse-find-file)))
@@ -1114,7 +1022,9 @@
 	("/ n" . dired-filter-by-name)
 	("/ r" . dired-filter-by-regexp)
 	("/ e" . dired-filter-by-extension)
-	("/ f" . dired-filter-by-file)))
+	("/ f" . dired-filter-by-file))
+  :hook
+  (dired-filter-mode . dired-mode))
 
 (use-package pulsing-cursor
   :straight (:type git :host github
@@ -1181,29 +1091,6 @@
   :bind
   ([S-down-mouse-3] . minions-minor-modes-menu))
 
-;; (use-package mood-line
-;;   :hook
-;;   (after-init . mood-line-mode))
-
-(use-package bespoke-modeline
-  :straight (:type git :host github :repo "mclear-tools/bespoke-modeline")
-  :config
-  ;; Set header line
-  (setq bespoke-modeline-position 'top)
-  ;; Set mode-line height
-  (setq bespoke-modeline-size 3)
-  ;; Show diff lines in mode-line
-  (setq bespoke-modeline-git-diff-mode-line t)
-  ;; Set mode-line cleaner
-  (setq bespoke-modeline-cleaner t)
-  ;; Use mode-line visual bell
-  (setq bespoke-modeline-visual-bell t)
-  ;; Set vc symbol
-  (setq bespoke-modeline-vc-symbol "G:")
-  (bespoke-modeline-mode)
-  :custom
-  (bespoke-background "white"))
-
 (use-package highlight-indent-guides
   :hook
   (prog-mode . highlight-indent-guides-mode)
@@ -1248,7 +1135,7 @@
 ;;; FONT, THEME & COLOR SCHEME
 
 ;;English font: Iosevka/Inconsolata/Juliamono/Jetbrains Mono/Roboto Mono/Monaco/Fira Code/SF Mono/Operator Mono
-;;Chinese font: Wenquanyi Micro Hei Mono/Sarasa UI SC Mono/Sarasa Mono SC Nerd/Noto Sans CJK SC Mono (work perfectly with Iosevka/Inconsolata)
+;;Chinese font: Wenquanyi Micro Hei Mono/Sarasa UI SC Mono/Sarasa Mono SC Nerd/Noto Sans CJK SC Mono/LXGW WenKai (work perfectly with Iosevka/Inconsolata)
 ;;Variable-pitch font, ETBembo/New York
 ;;Unicode: Symbola
 
@@ -1264,7 +1151,7 @@
 	(dolist (charset '(kana han symbol cjk-misc bopomofo))
 	  (set-fontset-font (frame-parameter nil 'font)
 			    charset
-			    (font-spec :family "Noto Serif SC"))))))
+			    (font-spec :family "LXWG WenKai"))))))
 
 ;; Use emacs daemon, put following lines to shell config file
 ;; alias emacs=/path_2_miniconda3/bin/emacs
@@ -1288,35 +1175,38 @@
 
 ;; loading default theme
 (setq custom-safe-themes t)
-(use-package bespoke-themes
-  :straight (:host github :repo "mclear-tools/bespoke-themes" :branch "main")
-  :custom
-  (bespoke-background "white smoke")
-  :config
-  ;; Set evil cursor colors
-  (setq bespoke-set-evil-cursors t)
-  ;; Set use of italics
-  (setq bespoke-set-italic-comments t
-	bespoke-set-italic-keywords t)
-  ;; Set variable pitch
-  (setq bespoke-set-variable-pitch t)
-  ;; Set initial theme variant
-  (setq bespoke-set-theme 'light)
-  ;; Load theme
-  (load-theme 'bespoke t))
+(load-theme 'dichromacy)
 
-;; Dim inactive windows
-(use-package dimmer
-  :straight (:host github :repo "gonewest818/dimmer.el")
-  :hook (after-init . dimmer-mode)
+;;; mode line
+(use-package telephone-line
   :config
-  (setq dimmer-fraction 0.5)
-  (setq dimmer-adjustment-mode :foreground)
-  (setq dimmer-use-colorspace :rgb)
-  (setq dimmer-watch-frame-focus-events nil)
-  (dimmer-configure-which-key)
-  (dimmer-configure-magit)
-  (dimmer-configure-posframe))
+  ;; gradient
+  (setq telephone-line-primary-left-separator 'telephone-line-gradient
+	telephone-line-secondary-left-separator 'telephone-line-nil
+	telephone-line-primary-right-separator 'telephone-line-cubed-right
+	telephone-line-secondary-right-separator 'telephone-line-nil)
+
+  ;; height
+  (setq telephone-line-height 22)
+
+  ;; left/right to show
+  (setq telephone-line-lhs
+	'((accent . (telephone-line-vc-segment
+		     telephone-line-erc-modified-channels-segment
+		     telephone-line-process-segment))
+	  (nil . (telephone-line-buffer-segment))))
+  (setq telephone-line-rhs
+	'((nil . (telephone-line-misc-info-segment))
+	  (accent . (telephone-line-major-mode-segment))))
+  :hook
+  (after-init . telephone-line-mode))
+
+
+;; compilation color
+(use-package fancy-compilation
+  :commands (fancy-compilation-mode)
+  :hook
+  (fancy-compilation-mode . compilation-mode))
 
 ;;Transprancy setting
 (set-frame-parameter (selected-frame) 'alpha '(97 100))
@@ -1328,17 +1218,8 @@
 ;;Varialble/fixed pictch font setting, essential for org-mode
 (custom-theme-set-faces
  'user
- '(variable-pitch ((t (:family "Noto Serif SC" :height 160))))
+ '(variable-pitch ((t (:family "LXWG WenKai " :height 160))))
  '(fixed-pitch ((t ( :family "Roboto Mono" :height 150)))))
-
-;;Unicode font setting
-(use-package fontset
-  :straight (:type built-in) ;; only include this if you use straight
-  :config
-  ;; Use symbola for proper unicode
-  (when (member "Symbola" (font-family-list))
-    (set-fontset-font
-     t 'symbol "Symbola" nil)))
 
 
 ;;; PROGRAMMING LANGUAGES & LSP
@@ -1355,12 +1236,12 @@
   ;; make sure every command works separately in shell environment
   (set 'ad-redefinition-action 'accept)
   ;; install clangd first
-  (add-to-list 'eglot-server-programs '((c++-mode c-mode) ("clangd")))
+  (add-to-list 'eglot-server-programs '((c++-mode c-mode) ("ccls")))
   ;; pip3 install fortran-language-server
   (add-to-list 'eglot-server-programs '(f90-mode . ("fortls")))
   ;; use tex-lab or digestif as TeX server
   (add-to-list 'eglot-server-programs '((LaTeX-mode tex-mode context-mode texinfo-mode bibtex-mode)
-					. ("texlab")))
+					"texlab"))
   ;; pip3 install python-lsp-server
   ;; jupterlab has some experimental lsp server, install and change it above: pip3 install git+https://github.com/krassowski/python-language-server.git@main
   (add-to-list 'eglot-server-programs '(python-mode . ("pylsp")))
@@ -1371,6 +1252,8 @@
   ;;============================================
   :hook
   (python-mode . eglot-ensure)
+  (c-mode . eglot-ensure)
+  (c++-mode . eglot-ensure)
   (f90-mode . eglot-ensure)
   (ess-r-mode . eglot-ensure)
   (LaTeX-mode . eglot-ensure)
@@ -1379,16 +1262,13 @@
   :bind
   (:map eglot-mode-map
 	("C-c r" . eglot-rename)
-	("C-c h" . eldoc))
-  ;;or add follwing lines to :config section
-  ;;(define-key eglot-mode-map (kbd "C-c r") 'eglot-rename)
-  ;;(define-key eglot-mode-map (kbd "C-c h") 'eldoc)
-  )
+	("C-c h" . eldoc)))
 
 ;; requires install `sbcl`
 ;; (use-package slime
 ;;   :config
 ;;   (setq inferior-lisp-program "sbcl"))
+
 
 ;;==============================
 ;;           Python           ;;
@@ -1476,52 +1356,13 @@
   ("C-c c a" . conda-env-activate)
   ("C-c c d" . conda-env-deactivate))
 
-;;jupyter notebook integration
-
-;;>>> option 1
-;; (use-package jupyter
-;;  :defer t)
-;;1. Require Emacs with module-support
-;;2. run `pip install ipykernel` `python -m ipykernel install --user`
-;;3. This package use zmq which makes Emacs very slow
-
-;;>>> option 2
-;; specify jupyter kernel in kernel.json file
-;; if you don't know its path, run !jupyter kernelspec list in ipython
-;; Other checking commands:
-;; import sys; print(sys.executable); print(sys.path)
-;; I also recommend to use mamba to manage packages
-;; ---org-babel snippet---
-;;#+BEGIN_SRC ein-python :session localhost:8889
-;;#+END_SRC
-;; Change cell type by C-c C-t
-
-(use-package ein
-  :defer 1
-  :config
-  ;;ein-babel config see the org-mode block
-  (setq ein:use-company-backend t)
-  (setq ein:worksheet-enable-undo t)
-  (setq ein:output-area-inlined-images t)
-  (add-hook 'poly-ein-mode-hook 'elpy-enable)
-  (add-hook 'poly-ein-mode-hook (lambda ()
-				  (display-line-numbers-mode nil))) ;;avoid grabled line-number
-  (with-eval-after-load 'ein-notebook
-    (define-key ein:notebook-mode-map "\C-c\C-d" 'ein:worksheet-delete-cell))
-  (setq ein:worksheet-enable-undo t))
-
-(use-package elpy :defer t) 		;;a completion system for ein
-
 ;;==============================
 ;;           Rlang            ;;
 ;;==============================
 ;; require ESS installed
 ;;Lazy load ess-r-mode (ESS doesn't like use-package pretty much)
 (use-package ess
-  :defer t
-  ;; :custom
-  ;; (inferior-ess-r-program "radian")
-  )
+  :defer t)
 
 (add-to-list 'auto-mode-alist '("\\.R\\'" . ess-r-mode))
 (with-eval-after-load 'ess-r-mode
@@ -1654,40 +1495,6 @@
   :hook
   (org-modern-mode . org-mode))
 
-(use-package svg-tag-mode
-  :hook
-  (svg-tag-mode . org-mode)
-  :config
-  (setq svg-tag-tags
-	'((":TODO:" . ((lambda (tag) (svg-tag-make "TODO")))))))
-
-;; special arrow \to
-(use-package org
-  :straight (:type built-in)
-  :config
-  (setq
-   ;; Edit settings
-   org-auto-align-tags nil
-   org-tags-column 0
-   org-catch-invisible-edits 'show-and-error
-   org-special-ctrl-a/e t
-   org-insert-heading-respect-content t
-
-   ;; Org styling, hide markup etc.
-   org-hide-emphasis-markers t
-   org-pretty-entities t
-   org-ellipsis "…"
-
-   ;; Agenda styling
-   org-agenda-tags-column 0
-   org-agenda-block-separator ?─
-   org-agenda-time-grid
-   '((daily today require-timed)
-     (800 1000 1200 1400 1600 1800 2000)
-     " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
-   org-agenda-current-time-string
-   "⭠ now ─────────────────────────────────────────────────"))
-
 ;; perfectly alian English/CJK fonts in the same table
 (use-package valign
   :hook (org-mode . valign-mode)
@@ -1699,21 +1506,17 @@
 ;; ==============================
 (use-package tex ;;not auctex instead!
   :straight auctex
-  :defer t
   :mode ("\\.tex\\'" . latex-mode)
+
   :config
+  ;; enable document parsing
   (setq TeX-auto-save t
 	TeX-parse-self t)
+  ;; tex directory structure
+  (setq-default TeX-master nil)
   (setq-default TeX-engine 'xetex) ;;default engine
   (setq-default TeX-PDF-mode t)	   ;;PDF output
   (setq-default TeX-master nil)
-
-  ;;auctex preview C-c C-p C-p (recommend use math-preview instead)
-  (setq preview-pdf-color-adjust-method t)
-  (set-default 'preview-scale-function 1.0) ;;preview scale
-  ;;  (setq org-format-latex-options (plist-put org-format-latex-options :scale 3.0)) ;;preview in org-mode
-  ;; (custom-set-faces
-  ;;  '(preview-reference-face ((t (:background "gray" :foreground "black")))))
 
   ;;sync latex <-> pdf
   (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer) ;;auto revert PDF buffer
@@ -1727,35 +1530,11 @@
   (add-hook 'LaTeX-mode-hook
 	    (lambda ()
 	      (rainbow-delimiters-mode 1)
-	      (visual-line-mode 1)
 	      (LaTeX-math-mode 1)
-	      (flycheck-mode 1) 	;enable grammarly
-	      (variable-pitch-mode 1)
+	      (visual-line-mode 1)
+	      (flycheck-mode 1)		    ;enable grammarly
 	      (TeX-source-correlate-mode 1) ;;Needed to sync TeX and PDF
 	      )))
-
-;; Third-party preview for LaTeX
-;; npm install -g git+https://gitlab.com/matsievskiysv/math-preview
-;; There's also org-latex-impatient for org-mode
-(use-package math-preview
-  :custom
-  (math-preview-command "/opt/homebrew/bin/math-preview")
-  (math-preview-scale 1.0)
-  (math-preview-marks
-   '(("\\begin{equation}" . "\\end{equation}")
-     ("\\begin{equation*}" . "\\end{equation*}")
-     ("\\[" . "\\]")
-     ("\\(" . "\\)")
-     ("$$" . "$$")
-     ("$" . "$")
-     ("\\begin{align}" . "\\end{align}")
-     ("\\begin{align*}" . "\\end{align*}")))
-  :bind
-  (:map TeX-mode-map
-	("C-c p p" . math-preview-at-point)
-	("C-c p a" . math-preview-all)
-	("C-c c p" . math-preview-clear-at-point)
-	("C-c c a" . math-preview-clear-all)))
 
 (use-package magic-latex-buffer
   :hook
@@ -1767,23 +1546,12 @@
 	magic-latex-enable-block-align nil
 	magic-latex-enable-inline-image nil
 	magic-latex-enable-minibuffer-echo nil))
-
-;; LaTeX instant preview functionality based on pyQt5 (bug existed in arm64 Mac)
-;; need symbolic link python file from straight/repo to straight/build
-;; `ln -s ~/.emacs.d/straight/build/popweb/popweb.py ./popweb.py`
-;; (use-package popweb
-;;   :straight (popweb :type git
-;; 		    :host github
-;; 		    :repo "manateelazycat/popweb")
-;;   :config
-;;   (add-hook 'latex-mode-hook #'popweb-latex-mode))
 
 ;;; PDF READER
 
 ;;allow you to view pdf continuously
 (use-package pdf-continuous-scroll-mode
-  :straight (pdf-continuous-scroll-mode :type git :host github
-					:repo "dalanicolai/pdf-continuous-scroll-mode.el")
+  :straight (:host github :repo "dalanicolai/pdf-continuous-scroll-mode.el")
   :hook
   (pdf-view-mode-hook . pdf-continuous-scroll-mode))
 
@@ -1838,4 +1606,4 @@
 (add-hook 'after-init-hook #'print-init-info)
 
 (provide 'init)
-;;; Init.el ends here
+;;; init.el ends here
