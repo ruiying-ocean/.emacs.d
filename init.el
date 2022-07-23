@@ -1208,6 +1208,11 @@
   :hook
   (fancy-compilation-mode . compilation-mode))
 
+;; set auto-dim-other-buffers-face in M-x customize face
+(use-package auto-dim-other-buffers
+  :hook
+  (after-init . auto-dim-other-buffers-mode))
+
 ;;Transprancy setting
 (set-frame-parameter (selected-frame) 'alpha '(97 100))
 (add-to-list 'default-frame-alist '(alpha 97 100))
@@ -1504,9 +1509,20 @@
 ;; ==============================
 ;;             LaTeX           ;;
 ;; ==============================
+;; First, add TeX distribution to path
 (use-package tex ;;not auctex instead!
   :straight auctex
   :mode ("\\.tex\\'" . latex-mode)
+  ;; one command to compile and view
+  :bind (:map latex-mode-map
+	      ("C-c C-a" . Tex-command-run-all))
+  :hook
+  (LaTeX-mode . rainbow-delimiters-mode)
+  (LaTeX-mode . LaTeX-math-mode)
+  (LaTeX-mode . visual-line-mode)
+  (LaTeX-mode . flycheck-mode)
+  ;; sync TeX and PDF
+  (LaTeX-mode . TeX-source-correlate-mode)
 
   :config
   ;; enable document parsing
@@ -1514,7 +1530,7 @@
 	TeX-parse-self t)
   ;; tex directory structure
   (setq-default TeX-master nil)
-  (setq-default TeX-engine 'xetex) ;;default engine
+  (setq-default TeX-engine 'latex) ;;default engine
   (setq-default TeX-PDF-mode t)	   ;;PDF output
   (setq-default TeX-master nil)
 
@@ -1526,15 +1542,7 @@
 				     (output-dvi "DVI Viewer"))
 	TeX-source-correlate-start-server t
 	TeX-source-correlate-method 'auto) ;;Method to use for enabling forward and inverse search
-
-  (add-hook 'LaTeX-mode-hook
-	    (lambda ()
-	      (rainbow-delimiters-mode 1)
-	      (LaTeX-math-mode 1)
-	      (visual-line-mode 1)
-	      (flycheck-mode 1)		    ;enable grammarly
-	      (TeX-source-correlate-mode 1) ;;Needed to sync TeX and PDF
-	      )))
+  )
 
 (use-package magic-latex-buffer
   :hook
