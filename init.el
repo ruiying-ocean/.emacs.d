@@ -1,9 +1,8 @@
 ;;; init.el --- Load the full configuration -*- lexical-binding: t -*-
 ;; This file contains customized configuration codes, which
-;; have been divided into multiple sections by ^L character.
-;; One can use Ctrl-TAB to have a look of outline
+;; are divided into multiple sections by ^L character.
 
-;;; EXTERNAL DEPENDENCIES:
+;;; DEPENDENCIES
 ;; LSP servers:
 ;;       pylsp, clangd, fortls, texlab/digestif
 ;; Spell checker:
@@ -14,7 +13,7 @@
 ;;       all-the-icons, Roboto Mono, Iosevka, SF Mono
 ;; Others:
 ;;       ripgrep, fzf, libvterm, PDF tools, multimarkdown (brew),
-;;       npm package `livedown` and `math-preview`
+;;       npm package `livedown`
 
 
 ;;; Code:
@@ -182,10 +181,10 @@
 	("C-M-b" . winner-undo)
 	("C-M-f" . winner-redo)))
 
-;;; Auto-save
+;;; Auto-save buffer
 (use-package super-save
   :hook
-  (after-init-mode . super-save-mode)
+  (after-init . super-save-mode)
   :config
   ;; turn off the buil-in auto-save
   (setq auto-save-default nil)
@@ -422,8 +421,8 @@
   (after-init . vertico-mode))
 
 (use-package vertico-posframe
-  :hook
-  (vertico-mode . vertico-posframe-mode))
+ :hook
+ (vertico-mode . vertico-posframe-mode))
 
 ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
 ;; Vertico commands are hidden in normal buffers.
@@ -458,6 +457,7 @@
   (after-init . global-corfu-mode)
   :custom
   (corfu-auto t)
+  (corfu-auto-delay 0.2)
   (corfu-preview-current t))
 
 ;; documentation
@@ -485,18 +485,18 @@
 	 ("C-c m" . consult-mode-command)
 
 	 ;; C-x bindings (ctl-x-map)
-	 ("C-x b" . consult-buffer)   ;; orig. switch-to-buffer
+	 ("C-x b" . consult-buffer)	;; orig. switch-to-buffer
 	 ("C-x r b" . consult-bookmark) ;; orig. bookmark-jump
 	 ("C-x p b" . consult-project-buffer) ;; orig. project-switch-to-buffer
 
 	 ;; Other custom bindings
-	 ("M-y" . consult-yank-pop) ;; orig. yank-pop
+	 ("M-y" . consult-yank-pop)	;; orig. yank-pop
 	 ("<help> a" . consult-apropos) ;; orig. apropos-command
 
 	 ;; M-g bindings (goto-map)
 	 ("M-g e" . consult-compile-error)
 	 ("M-g f" . consult-flycheck) ;; Alternative: consult-flycheck
-	 ("M-g g" . consult-goto-line) ;; orig. goto-line
+	 ("M-g g" . consult-goto-line)	 ;; orig. goto-line
 	 ("M-g M-g" . consult-goto-line) ;; orig. goto-line
 	 ("M-g o" . consult-outline) ;; Alternative: consult-org-heading
 	 ("M-g m" . consult-mark)
@@ -532,6 +532,7 @@
   (completion-list-mode . consult-preview-at-point-mode)
 
   :config
+  (advice-add #'project-find-regexp :override #'consult-ripgrep)
   ;; Use Consult to select xref locations with preview
   (setq xref-show-xrefs-function #'consult-xref
 	xref-show-definitions-function #'consult-xref))
@@ -603,6 +604,10 @@
 ;; repeat command
 (global-set-key (kbd "<f4>") #'repeat)
 
+(use-package goto-last-change
+  :bind
+  ("C-x C-x" . goto-last-change))
+
 ;; M-up/down to move text
 (use-package move-text
   :config
@@ -647,7 +652,6 @@
     "g g" '(goto-line :which-key "goto-line-number")
     "g m" '(exchange-point-and-mark :which-key "go-back-and-mark")
     "g b" '(pop-global-mark :which-key "go-back")
-    "g f" '(counsel-file-jump :which-key "goto-file")
 
     "m" '(indent-rigidly :which-key "move code")
 
@@ -662,9 +666,6 @@
     "p f" 'project-find-file
     "p s" 'project-find-regexp
     "p b" 'project-find-buffer
-
-    "j o" 'ein:run
-    "j s" 'ein:stop
 
     "e b" 'ediff-buffers
     "e f" 'ediff-files
@@ -720,170 +721,6 @@
 ;; adjust font size
 (setq-default text-scale-mode-step 1.1)
 
-;; one "BODY", multiple "HEADs", try "C-c 5 =" to know the magic
-(use-package hydra
-  :config
-  (defhydra hydra-zoom (global-map "C-c")
-    "zoom in/out windows, or increase/decrease text"
-    ("=" text-scale-increase "in")
-    ("-" text-scale-decrease "out"))
-
-  (defhydra hydra-vi (:pre (set-cursor-color "#40e0d0")
-			   :post (progn
-				   (set-cursor-color "#ffffff")
-				   (message
-				    "Thank you, come again.")))
-    "vi-style movement in Emacs"
-    ("l" forward-char)
-    ("h" backward-char)
-    ("j" next-line)
-    ("k" previous-line)
-    ("q" nil "quit"))
-  :bind
-  ("C-c v" . hydra-vi/body))
-
-;; a center-floating posframe for hydra
-(use-package hydra-posframe
-  :straight
-  (:type git :host github
-	 :repo "Ladicle/hydra-posframe")
-  :hook
-  (after-init . hydra-posframe-mode))
-
-;; define a hydra-leader-key for major mode, something like C-c
-(use-package major-mode-hydra
-  :after all-the-icons
-  :bind
-  ("S-SPC" . major-mode-hydra)
-  :config
-  (defvar hydra-r-title (s-concat
-			 (s-repeat 28 " ")
-			 (all-the-icons-icon-for-file "f.R")
-			 " "
-			 "ESS R commands"))
-  (defvar hydra-py-title (s-concat
-			  (s-repeat 23 " ")
-			  (all-the-icons-icon-for-file "f.py")
-			  " "
-			  "Python mode commands"))
-  (defvar hydra-el-title (s-concat
-			  (s-repeat 18 " ")
-			  (all-the-icons-icon-for-file "f.el")
-			  " "
-			  "Emacs-lisp commands"))
-  (defvar hydra-tex-title (s-concat
-			   (s-repeat 23 " ")
-			   (all-the-icons-icon-for-file "f.tex")
-			   " "
-			   "LaTeX commands"))
-  (major-mode-hydra-define emacs-lisp-mode
-    (:foreign-keys warn :quit-key "q"
-		   :title hydra-el-title :separator "-")
-    ("Eval"
-     (("b" eval-buffer "buffer")
-      ("e" eval-defun "defun")
-      ("r" eval-region "region"))
-     "REPL"
-     (("I" ielm "ielm"))
-     "Doc"
-     (("d" describe-foo-at-point "thing-at-pt")
-      ("f" counsel-describe-function "function")
-      ("v" counsel-describe-variable "variable")
-      ("i" info-lookup-symbol "info lookup"))
-     "Project"
-     (("p D" project-dired "dired")
-      ("p f" project-find-file "find")
-      ("p d" project-find-dir "directory")
-      ("p s" project-find-regexp "search")
-      ("p p" project-switch-project "switch")
-      ("p r" project-query-replace-regexp "replace"))))
-  (major-mode-hydra-define python-mode
-    (:foreign-keys warn :quit-key "q"
-		   :title hydra-py-title :separator "-")
-    ("Execute"
-     (("b" python-shell-send-buffer "buffer")
-      ("r" python-shell-send-region "region")
-      ("f" python-shell-send-file "file")
-      ("l" python-shell-send-statement "line")
-      ("j" ein:run "jupyter"))
-     "REPL"
-     (("c" run-python "console")
-      ("s" shell "shell")
-      ("u" undo-tree-mode "undo-tree")
-      ("y" ivy-yasnippet "yasnippet")
-      ("g" magit-status "git"))
-     "Find"
-     (("i" counsel-imenu "function")
-      ("R" counsel-rg "ripgrep")
-      ("F" counsel-fzf "find"))
-     "Check"
-     (("e" flycheck-list-errors "errors")
-      ("c" flycheck-clear "clear")
-      ("v" flycheck-verify-setup "setup"))
-     "Project"
-     (("p D" project-dired "dired")
-      ("p f" project-find-file "find")
-      ("p d" project-find-dir "directory")
-      ("p s" project-find-regexp "search")
-      ("p p" project-switch-project "switch")
-      ("p r" project-query-replace-regexp "replace"))))
-  (major-mode-hydra-define ess-r-mode
-    (:foreign-keys warn :quit-key "q"
-		   :separator "-"
-		   :title hydra-r-title)
-    ("Run"
-     (("b" ess-eval-buffer-and-go "buffer")
-      ("r" ess-eval-region-and-go "region")
-      ("f" ess-eval-function-and-go "function"))
-     "Power"
-     (("c" run-ess-r "console")
-      ("s" shell "terminal")
-      ("u" undo-tree-mode "undo-tree")
-      ("y" ivy-yasnippet "yasnippet")
-      ("g" magit-status "git"))
-     "Find"
-     (("i" counsel-imenu "function")
-      ("R" counsel-rg "ripgrep")
-      ("F" counsel-fzf "find"))
-     "Check"
-     (("l" flycheck-list-errors "all")
-      ("c" flycheck-clear "clear")
-      ("v" flycheck-verify-setup "setup"))
-     "Project"
-     (("p D" project-dired "dired")
-      ("p f" project-find-file "find")
-      ("p d" project-find-dir "directory")
-      ("p s" project-find-regexp "search")
-      ("p p" project-switch-project "switch")
-      ("p r" project-query-replace-regexp "replace"))))
-  (major-mode-hydra-define latex-mode
-    (:foreign-keys warn :quit-key "q"
-		   :separator "-"
-		   :title hydra-tex-title)
-    ("Compile"
-     (("m" TeX-command-master "master-cmd")
-      ("v" TeX-view "view"))
-     "Preview"
-     (("p p" math-preview-at-point "preview-at-pt")
-      ("p a" math-preview-all "preview-all")
-      ("p r" math-preview-region "preview-region")
-      ("p c p" math-preview-clear-at-point "clear-at-pt")
-      ("p c a" math-preview-clear-all "clear-all")
-      ("p c r" math-preview-clear-region "clear-region"))
-     "Insert"
-     (("e" LaTeX-environment "env")
-      ("]" LaTeX-close-environment "close env")
-      ("f" TeX-font "font")
-      ("s" LaTeX-section "section")
-      ("i" LaTeX-insert-item "item"))
-     "Languagetool"
-     (("c" languagetool-check "check")
-      ("d" languagetool-clear-buffer "clear")
-      ("i" languagetool-correct-at-point "at-pt")
-      ("b" languagetool-buffer "buffer")
-      ("S" languagetool-set-language "setting")))))
-
-
 (use-package helpful
   :config
   (setq counsel-describe-function-function #'helpful-callable)
@@ -914,31 +751,20 @@
 (when (eq system-type 'darwin)
   (progn
     (setq dired-use-ls-dired nil) ;;to avoid error "ls does not support --dired" in MacOS
-    (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t)) ;;same title bar color
+    (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
     (add-to-list 'default-frame-alist '(ns-appearance . light))))
 
-;;Auto-max the frame at startup
 (defun auto-max-frame ()
   "Maxize/full screen the frame according to the OS type."
   (interactive)
   (if (eq system-type 'darwin)
       (toggle-frame-maximized)
     (toggle-frame-fullscreen)))
-
-(if (display-graphic-p)
-    (add-hook 'after-init-hook #'auto-max-frame))
+(auto-max-frame)
 
 ;;no more startup message/screen
 (setq inhibit-startup-screen t)
 (setq inhibit-startup-message t)
-
-;;Display time in the mode line
-(add-hook 'after-init-hook 'display-time-mode)
-(setq display-time-format "%B %d %H:%M %p")
-(setq system-time-locale nil)
-
-;;Don't display load average percentage
-(setq display-time-default-load-average nil)
 
 ;;Cursor
 (setq-default cursor-type 'bar)
@@ -949,20 +775,15 @@
 
 ;; highlight cursor when scroll window
 (use-package beacon
-  :straight (:type git :host github
+  :straight (:host github
 		   :repo "Malabarba/beacon")
   :hook
   (after-init . beacon-mode))
 
-;; highlight a little bit "important" buffers
-;; depends on what theme you're using
-(use-package solaire-mode
-  :hook
-  (after-init . solaire-global-mode))
-
 ;; minimal columns for Emacs to split window horizontally
 (setq split-width-threshold 130)
 
+;; Change cursor color dynamically at cursor or pointer
 (use-package smart-cursor-color
   :hook
   (after-init . smart-cursor-color-mode))
@@ -1063,7 +884,7 @@
 
 ;; >>> Basic lispy usage:
 ;; jkhl to move, f/b to foward/backward level
-;; c to copy, m to mark, e to evaluate, d to swith parenthesis side (C-d to delete)
+;; c to copy, m to mark, e to evaluate, d to switch parenthesis side (C-d to delete)
 ;; >/< to slurp/barf: push out/pull in
 ;; w/s to move marked regions up/down
 ;; M-j to split, + to join
@@ -1104,14 +925,6 @@
   ("<f9>" . highlight-symbol-next)
   ("S-<f9>" . highlight-symbol-prev)
   ("M-<f9>" . highlight-symbol-query-replace))
-
-(use-package minimap
-  :custom
-  (minimap-window-location 'right)
-  (minimap-width-fraction 0.05)
-  (minimap-minimum-width 15)
-  :bind
-  ("<f6>" . minimap-mode))
 
 (use-package all-the-icons
   :if (display-graphic-p)
@@ -1175,32 +988,31 @@
 
 ;; loading default theme
 (setq custom-safe-themes t)
-(load-theme 'dichromacy)
 
-;;; mode line
-(use-package telephone-line
+;; nano theme
+(use-package nano-theme
   :config
-  ;; gradient
-  (setq telephone-line-primary-left-separator 'telephone-line-gradient
-	telephone-line-secondary-left-separator 'telephone-line-nil
-	telephone-line-primary-right-separator 'telephone-line-cubed-right
-	telephone-line-secondary-right-separator 'telephone-line-nil)
+  (load-theme 'nano-light t))
 
-  ;; height
-  (setq telephone-line-height 22)
-
-  ;; left/right to show
+;; mode line
+(use-package telephone-line
+  :hook
+  (after-init . telephone-line-mode)
+  :config
+  ;; content
   (setq telephone-line-lhs
-	'((accent . (telephone-line-vc-segment
-		     telephone-line-erc-modified-channels-segment
-		     telephone-line-process-segment))
+	'((accent . (telephone-line-vc-segment))
 	  (nil . (telephone-line-buffer-segment))))
   (setq telephone-line-rhs
 	'((nil . (telephone-line-misc-info-segment))
 	  (accent . (telephone-line-major-mode-segment))))
-  :hook
-  (after-init . telephone-line-mode))
+  ;; style
+  (setq telephone-line-primary-left-separator 'telephone-line-cubed-left
+	telephone-line-secondary-left-separator 'telephone-line-cubed-hollow-left
+	telephone-line-primary-right-separator 'telephone-line-cubed-right
+	telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
 
+  (setq telephone-line-height 18))
 
 ;; compilation color
 (use-package fancy-compilation
@@ -1208,10 +1020,10 @@
   :hook
   (fancy-compilation-mode . compilation-mode))
 
-;; set auto-dim-other-buffers-face in M-x customize face
-(use-package auto-dim-other-buffers
-  :hook
-  (after-init . auto-dim-other-buffers-mode))
+;; dim inactive buffer, works for limited theme
+(use-package solaire-mode
+  :config
+  (solaire-global-mode 1))
 
 ;;Transprancy setting
 (set-frame-parameter (selected-frame) 'alpha '(97 100))
