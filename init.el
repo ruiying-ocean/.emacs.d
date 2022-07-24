@@ -537,6 +537,11 @@
   (setq xref-show-xrefs-function #'consult-xref
 	xref-show-definitions-function #'consult-xref))
 
+(use-package consult-project-extra
+  :bind
+  (("C-x p f" . consult-project-extra-find)
+   ("C-x p o" . consult-project-extra-find-other-window)))
+
 ;; consult extension
 (use-package consult-flycheck
   :after (consult flycheck))
@@ -1001,8 +1006,7 @@
   :config
   ;; content
   (setq telephone-line-lhs
-	'((accent . (telephone-line-vc-segment))
-	  (nil . (telephone-line-buffer-segment))))
+	'((accent . (telephone-line-vc-segment))))
   (setq telephone-line-rhs
 	'((nil . (telephone-line-misc-info-segment))
 	  (accent . (telephone-line-major-mode-segment))))
@@ -1012,7 +1016,7 @@
 	telephone-line-primary-right-separator 'telephone-line-cubed-right
 	telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
 
-  (setq telephone-line-height 18))
+  (setq telephone-line-height 15))
 
 ;; compilation color
 (use-package fancy-compilation
