@@ -6,7 +6,7 @@
 ;; LSP servers:
 ;;       pylsp, clangd, fortls, texlab/digestif
 ;; Spell checker:
-;;       aspell/huspell
+;;       grammaly
 ;; Lint checker:
 ;;       pyflakes, shell checker (brew)
 ;; Fonts:
@@ -348,29 +348,20 @@
   :hook
   (flycheck-mode . flycheck-inline-mode))
 
+(use-package flycheck-grammarly
+  :config
+  ;; (with-eval-after-load 'flycheck
+  ;;   (flycheck-grammarly-setup))
+  (setq flycheck-grammarly-check-time 0.8)
+  :hook
+  (flycheck-mode . flycheck-grammarly-setup))
+
 ;; A dictionary inside Emacs, by abo-abo!
 (use-package define-word
   :bind
   ("C-c d" . define-word-at-point)
   :config
   (setq define-word-default-service 'webster))
-
-;;flyspell setting
-(use-package flyspell
-  :straight (:type built-in)
-  :hook
-  (text-mode . flyspell-mode)
-  (org-mode . flyspell-mode)
-  (LaTeX-mode . flyspell-mode)
-  :config
-  (setq-default ispell-program-name "aspell") ;;depends on aspell in the path
-  (setq ispell-local-dictionary "en_GB")
-  (setq ispell-extra-args '("--sug-mode=fast" "--lang=en_GB"
-			    "--camel-case" "--run-together")))
-
-(use-package flyspell-correct
-  :after flyspell
-  :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper)))
 
 (use-package yasnippet
   :straight yasnippet-snippets ;; Collection of snippets
@@ -1057,7 +1048,7 @@
   ;; make sure every command works separately in shell environment
   (set 'ad-redefinition-action 'accept)
   ;; install clangd first
-  (add-to-list 'eglot-server-programs '((c++-mode c-mode) ("ccls")))
+  (add-to-list 'eglot-server-programs '((c-mode c++-mode) ("clangd")))
   ;; pip3 install fortran-language-server
   (add-to-list 'eglot-server-programs '(f90-mode . ("fortls")))
   ;; use tex-lab or digestif as TeX server
@@ -1070,6 +1061,7 @@
   ;; Note R can be tricky in zsh due to the built-in command "r"
   ;; more R lsp server setting can be done in .Rprofile or .lintr file
   (add-to-list 'eglot-server-programs '(ess-r-mode . ("R" "--slave" "-e" "languageserver::run()")))
+  (setq debug-on-error t)
   ;;============================================
   :hook
   (python-mode . eglot-ensure)
@@ -1084,6 +1076,13 @@
   (:map eglot-mode-map
 	("C-c r" . eglot-rename)
 	("C-c h" . eldoc)))
+
+;; (use-package eglot-grammarly
+;;   :straight (:host github :repo "emacs-grammarly/eglot-grammarly")
+;;   :defer t  ; defer package loading
+;;   :hook ((text-mode markdown-mode). (lambda ()
+;;                                       (require 'eglot-grammarly)
+;;                                       (eglot-ensure))))
 
 ;; requires install `sbcl`
 ;; (use-package slime
