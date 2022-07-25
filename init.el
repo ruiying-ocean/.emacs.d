@@ -528,10 +528,11 @@
   (setq xref-show-xrefs-function #'consult-xref
 	xref-show-definitions-function #'consult-xref))
 
-(use-package consult-project-extra
-  :bind
-  (("C-x p f" . consult-project-extra-find)
-   ("C-x p o" . consult-project-extra-find-other-window)))
+;; asynchronous fuzzy finding,
+(use-package affe
+  :config
+  ;; Manual preview key for `affe-grep'
+  (consult-customize affe-grep :preview-key (kbd "M-.")))
 
 ;; consult extension
 (use-package consult-flycheck
@@ -557,6 +558,11 @@
     "Override `project-files' to use `fd' in local projects."
     (mapcan #'my/project-files-in-directory
 	    (or dirs (list (project-root project))))))
+
+(use-package consult-project-extra
+  :bind
+  (("C-x p f" . consult-project-extra-find)
+   ("C-x p o" . consult-project-extra-find-other-window)))
 
 ;; yet another robust find file in project
 ;; but don't rely on fzf
@@ -630,16 +636,17 @@
 
 (use-package general
   :config
+  ;; leader key
   (defconst leader "\\")
-
   (general-create-definer my/leader-def
     :prefix leader)
 
+  ;; double press to input `\`
   (defun quote-backslash ()
     (interactive)
     (insert "\\"))
 
-  ;; ** Global Keybindings
+  ;; ------ Global Keybindings ------
   (my/leader-def
     "" nil
     "\\" 'quote-backslash
@@ -651,9 +658,9 @@
 
     "m" '(indent-rigidly :which-key "move code")
 
-    "p f" '(consult-find :which-key "project find file")
-    "p s" '(consult-ripgrep :which-key "project search text")
-    "p b" '(consult-project-buffer :which-key "project buffer")
+    "p f" '(affe-find :which-key "project find file/buffer")
+    "p s" '(affe-grep :which-key "project search text")
+    "p c" '(project-switch-project :which-key "change project")
 
     "e b" '(ediff-buffers :which-key "compare buffers")
     "e f" '(ediff-files :which-key "compare files")
@@ -666,7 +673,7 @@
     "f" 'consult-file-externally
     "q" 'save-buffers-kill-terminal)
 
-  ;; ** Mode Keybindings
+  ;; ------ Mode-specific Keybindings ------
   (my/leader-def prog-mode-map
     "b" 'consult-imenu
     "s" 'shell
@@ -693,10 +700,13 @@
   (my/leader-def dired-mode-map
     "e" 'dired-toggle-read-only))
 
-;; a human-friendly keymap of built-in code-folding package
-;; alternatives: vimish-fold, Origami
-(add-hook 'prog-mode-hook #'hs-minor-mode)
-(global-set-key (kbd "<f5>") 'hs-toggle-hiding)
+;; folding your code
+(use-package hideshow
+  :straight (:type built-in)
+  :hook
+  (prog-mode . hs-minor-mode)
+  :bind
+  ("<f5>" . hs-toggle-hiding))
 
 ;; adjust font size
 (setq-default text-scale-mode-step 1.1)
@@ -750,8 +760,11 @@
 (setq-default cursor-type 'bar)
 (blink-cursor-mode 0)
 
-;;Highlight current line
-(add-hook 'after-init-hook 'global-hl-line-mode)
+;;Highlight current line, based on default hl-line-mode
+(use-package lin
+  :hook
+  (prog-mode . lin-mode)
+  (text-mode . lin-mode))
 
 ;; highlight cursor when scroll window
 (use-package beacon
@@ -1060,6 +1073,9 @@
   (:map eglot-mode-map
 	("C-c r" . eglot-rename)
 	("C-c h" . eldoc)))
+
+;; an intergration of eglot and consult
+(use-package consult-eglot)
 
 ;; (use-package eglot-grammarly
 ;;   :straight (:host github :repo "emacs-grammarly/eglot-grammarly")
