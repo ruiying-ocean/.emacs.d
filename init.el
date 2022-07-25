@@ -12,7 +12,7 @@
 ;; Fonts:
 ;;       all-the-icons, Roboto Mono, Iosevka, SF Mono
 ;; Others:
-;;       ripgrep, fzf, libvterm, PDF tools, multimarkdown (brew),
+;;       ripgrep, libvterm, PDF tools, multimarkdown (brew),
 ;;       npm package `livedown`
 
 
@@ -169,7 +169,9 @@
   :hook
   (after-init . global-undo-tree-mode)
   :bind
-  ("C-c u" . undo-tree-visualize))
+  ("C-c u" . undo-tree-visualize)
+  ("M-/" . undo-tree-redo)
+  ("C-/" . undo-tree-undo))
 
 ;; undo and redo changes in the *window configuration*
 (use-package winner
@@ -256,7 +258,7 @@
   (ediff-keep-variants nil)
   (ediff-window-setup-function 'ediff-setup-windows-plain))
 
-;;; CORE: TERMINAL, COMPLETION, LINT/SPELL CHECKER, SNIPPET, PROJECT
+;;; IDE FEATURES
 
 ;; Shells in Emacs (more of an interface)
 ;; Tips: you can use M-r to search in shell history
@@ -393,6 +395,7 @@
   :defer t
   :after exec-path-from-shell) ;;extend use-package, put after exec-path-from-shell
 
+;; pop up window management
 (use-package popwin
   :hook
   (after-init . popwin-mode))
@@ -411,9 +414,15 @@
   :hook
   (after-init . vertico-mode))
 
+;; displays current match and total matches in search
+(use-package anzu
+  :hook
+  (prog-mode . global-anzu-mode))
+
+;; use posframe (in the centre of buffer) for vertico
 (use-package vertico-posframe
- :hook
- (vertico-mode . vertico-posframe-mode))
+  :hook
+  (vertico-mode . vertico-posframe-mode))
 
 ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
 ;; Vertico commands are hidden in normal buffers.
@@ -448,7 +457,7 @@
   (after-init . global-corfu-mode)
   :custom
   (corfu-auto t)
-  (corfu-auto-delay 0.2)
+  (corfu-auto-delay 0.3)
   (corfu-preview-current t))
 
 ;; documentation
@@ -497,9 +506,8 @@
 
 	 ;; M-s bindings (search-map)
 	 ("C-s" . consult-line)
-	 ("M-s f" . consult-find)
-	 ("M-s g" . consult-grep)
-	 ("M-s G" . consult-git-grep)
+	 ("M-s f" . affe-find)
+	 ("M-s s" . affe-grep)
 	 ("M-s r" . consult-ripgrep)
 	 ("M-s L" . consult-line-multi)
 	 ("M-s m" . consult-multi-occur)
@@ -528,13 +536,11 @@
   (setq xref-show-xrefs-function #'consult-xref
 	xref-show-definitions-function #'consult-xref))
 
-;; asynchronous fuzzy finding,
+;; asynchronous fuzzy find/grep (with just 200+ lines)
 (use-package affe
-  :config
-  ;; Manual preview key for `affe-grep'
-  (consult-customize affe-grep :preview-key (kbd "M-.")))
+  :defer 0.5)
 
-;; consult extension
+;; consult extensions
 (use-package consult-flycheck
   :after (consult flycheck))
 
@@ -630,6 +636,14 @@
   (find-file "~/.emacs.d/init.el"))
 (global-set-key (kbd "<f2>") 'open-init-file)
 
+;; deleting a whitespace character will delete all whitespace
+(use-package hungry-delete
+  :hook
+  (after-init . global-hungry-delete-mode)
+  :config
+  ;; left one last whitespace
+  (setq hungry-delete-join-reluctantly t))
+
 ;; Mark set
 ;; C-x C-x -> set mark and move back to previous position
 ;; C-x h to select all
@@ -658,9 +672,10 @@
 
     "m" '(indent-rigidly :which-key "move code")
 
-    "p f" '(affe-find :which-key "project find file/buffer")
+    "p f" '(affe-find :which-key "project find file")
     "p s" '(affe-grep :which-key "project search text")
-    "p c" '(project-switch-project :which-key "change project")
+    "p c" '(project-switch-project :which-key "project switch")
+    "p b" '(consult-project-extra-find :which-key "project buffer/file")
 
     "e b" '(ediff-buffers :which-key "compare buffers")
     "e f" '(ediff-files :which-key "compare files")
@@ -670,7 +685,11 @@
     "." 'mc/mark-next-like-this
     "," 'mc/mark-previous-like-this
 
+    "1" 'beginning-of-buffer
+    "2" 'end-of-buffer
+
     "f" 'consult-file-externally
+    "k" 'kill-this-buffer
     "q" 'save-buffers-kill-terminal)
 
   ;; ------ Mode-specific Keybindings ------
@@ -1075,7 +1094,8 @@
 	("C-c h" . eldoc)))
 
 ;; an intergration of eglot and consult
-(use-package consult-eglot)
+(use-package consult-eglot
+  :after eglot)
 
 ;; (use-package eglot-grammarly
 ;;   :straight (:host github :repo "emacs-grammarly/eglot-grammarly")
