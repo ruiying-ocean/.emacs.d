@@ -647,52 +647,36 @@
     "g l" '(avy-goto-line :which-key "goto-line")
     "g g" '(goto-line :which-key "goto-line-number")
     "g m" '(exchange-point-and-mark :which-key "go-back-and-mark")
-    "g b" '(pop-global-mark :which-key "go-back")
+    "g b" '(goto-last-change :which-key "go-back")
 
     "m" '(indent-rigidly :which-key "move code")
 
-    "n f" 'org-roam-node-find
-    "n i" 'org-roam-node-insert
-    "n b" 'org-roam-buffer-toggle
-    "n v" 'org-roam-ui-mode
-    "n k" 'org-id-get-create
-    "n c" 'org-roam-capture
-    "n s" 'org-roam-db-autosync-mode
+    "p f" '(consult-find :which-key "project find file")
+    "p s" '(consult-ripgrep :which-key "project search text")
+    "p b" '(consult-project-buffer :which-key "project buffer")
 
-    "p f" 'project-find-file
-    "p s" 'project-find-regexp
-    "p b" 'project-find-buffer
+    "e b" '(ediff-buffers :which-key "compare buffers")
+    "e f" '(ediff-files :which-key "compare files")
 
-    "e b" 'ediff-buffers
-    "e f" 'ediff-files
-
-    "h a" '(mark-whole-buffer :which-key "highlight all")
+    "h a" '(mark-whole-buffer :which-key "select all")
 
     "." 'mc/mark-next-like-this
     "," 'mc/mark-previous-like-this
 
-    "f" 'consult-find-file
-    "q" 'save-buffers-kill-terminal
-
-    "<left>" '(centaur-tabs-backward :which-key "last-tab")
-    "<right>" '(centaur-tabs-forward :which-key "next-tab"))
+    "f" 'consult-file-externally
+    "q" 'save-buffers-kill-terminal)
 
   ;; ** Mode Keybindings
   (my/leader-def prog-mode-map
-    "b" 'counsel-imenu
+    "b" 'consult-imenu
     "s" 'shell
-    "d" 'ediff-buffers
     "t" 'vterm
-    "c" 'counsel-flycheck
+    "d" 'ediff-buffers
+    "c" 'consult-flycheck
     "%" 'query-replace)
 
   (my/leader-def text-mode-map
-    "d" 'define-word-at-point
-    "c" 'languagetool-check
-    "i" 'languagetool-correct-at-point)
-
-  (my/leader-def org-mode-map
-    "t" 'org-insert-structure-template)
+    "d" 'define-word-at-point)
 
   (my/leader-def markdown-mode-map
     "l" 'livedown-preview
