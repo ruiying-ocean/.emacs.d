@@ -342,7 +342,6 @@
 					     python-flake8
 					     python-pylint
 					     python-mypy
-					     python-pyright
 					     python-pycompile
 					     emacs-lisp-checkdoc)))
 
@@ -1051,7 +1050,6 @@
 
 
 ;;; PROGRAMMING LANGUAGES & LSP
-
 ;;==============================
 ;;            Eglot           ;;
 ;;==============================
@@ -1059,25 +1057,19 @@
 ;;your server-programs on remote, not local
 (use-package eglot
   :config
+  ;; debug when encounter error
+  (setq debug-on-error t)
+  (setq read-process-output-max (* 512 1024))
   (add-hook 'eglot-managed-mode-hook (lambda () (flymake-mode -1))) ;;Decouple flymake and eglot
   ;;============================================
   ;; make sure every command works separately in shell environment
   (set 'ad-redefinition-action 'accept)
-  ;; install clangd first
-  (add-to-list 'eglot-server-programs '((c-mode c++-mode) ("clangd")))
-  ;; pip3 install fortran-language-server
-  (add-to-list 'eglot-server-programs '(f90-mode . ("fortls")))
-  ;; use tex-lab or digestif as TeX server
+  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+  (add-to-list 'eglot-server-programs '(f90-mode . "fortls"))
   (add-to-list 'eglot-server-programs '((LaTeX-mode tex-mode context-mode texinfo-mode bibtex-mode)
 					"texlab"))
-  ;; pip3 install python-lsp-server
-  ;; jupterlab has some experimental lsp server, install and change it above: pip3 install git+https://github.com/krassowski/python-language-server.git@main
-  (add-to-list 'eglot-server-programs '(python-mode . ("pylsp")))
-  ;; install.packages("languageserver")
-  ;; Note R can be tricky in zsh due to the built-in command "r"
-  ;; more R lsp server setting can be done in .Rprofile or .lintr file
+  (add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))
   (add-to-list 'eglot-server-programs '(ess-r-mode . ("R" "--slave" "-e" "languageserver::run()")))
-  (setq debug-on-error t)
   ;;============================================
   :hook
   (python-mode . eglot-ensure)
@@ -1091,20 +1083,12 @@
   :bind
   (:map eglot-mode-map
 	("C-c r" . eglot-rename)
+	("C-c a" . eglot-code-action)
+	("C-c f" . eglot-format)
 	("C-c h" . eldoc)))
 
-;; an intergration of eglot and consult
-(use-package consult-eglot
-  :after eglot)
-
-;; (use-package eglot-grammarly
-;;   :straight (:host github :repo "emacs-grammarly/eglot-grammarly")
-;;   :defer t  ; defer package loading
-;;   :hook ((text-mode markdown-mode). (lambda ()
-;;                                       (require 'eglot-grammarly)
-;;                                       (eglot-ensure))))
-
 ;; requires install `sbcl`
+;; REPL for lisp
 ;; (use-package slime
 ;;   :config
 ;;   (setq inferior-lisp-program "sbcl"))
