@@ -494,6 +494,32 @@
   :config
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
+(use-package embark
+  :bind
+  (("<f6>" . embark-act)         ;; pick some comfortable binding
+   ("C-;" . embark-dwim)        ;; good alternative: M-.
+   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+
+  :init
+  ;; Optionally replace the key help with a completing-read interface
+  (setq prefix-help-command #'embark-prefix-help-command)
+
+  :config
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none)))))
+
+;; Consult users will also want the embark-consult package.
+(use-package embark-consult
+  :after (embark consult)
+  :demand t ; only necessary if you have the hook below
+  ;; if you want to have consult previews as you move around an
+  ;; auto-updating embark collect buffer
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
+
 ;; a bunch of advanced commands: buffer switching, imenu, search commands etc.
 (use-package consult
   ;; Replace bindings. Lazily loaded due by `use-package'.
@@ -725,7 +751,9 @@
     "h" 'eldoc)
 
   (my/leader-def dired-mode-map
-    "e" 'dired-toggle-read-only))
+    "e" 'dired-toggle-read-only
+    "r" 'dired-rsync
+    ))
 
 ;; folding your code
 (use-package hideshow
