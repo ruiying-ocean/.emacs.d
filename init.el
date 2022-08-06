@@ -64,10 +64,6 @@
 (advice-add #'package-initialize :after #'update-load-path)
 (update-load-path)
 
-;; Custom file
-(setq custom-file (concat user-emacs-directory "/extra-lisp/custom.el"))
-(load custom-file :noerror)
-
 (when (eq system-type 'darwin)
   (defvar brew-parent-dir "/opt/homebrew/")
   (defvar brew-bin-dir (expand-file-name "bin/" brew-parent-dir))
@@ -75,6 +71,10 @@
 
 ;; Avoid matching file name with regrex list during startup
 (let ((file-name-handler-alist nil)) "~/.emacs.d/init.el")
+
+;; Custom file
+(setq-default custom-file (concat user-emacs-directory "extra-lisp/custom.el"))
+(load custom-file :noerror)
 
 ;; Benchmark init time
 (use-package esup
@@ -1051,7 +1051,10 @@
 
 ;; dim inactive buffer
 (use-package auto-dim-other-buffers
-  :config (auto-dim-other-buffers-mode 1))
+  :hook
+  (after-init . auto-dim-other-buffers-mode)
+  :custom
+  (auto-dim-other-buffers-face "white smoke"))
 
 ;;Transprancy setting
 (set-frame-parameter (selected-frame) 'alpha '(97 100))
