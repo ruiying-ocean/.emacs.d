@@ -286,6 +286,11 @@
 	("C-l" . comint-clear-buffer)
 	("SPC" . comint-magic-space)))     ;magically expand history reference
 
+(use-package eshell-syntax-highlighting
+  :hook
+  ;; Enable in all Eshell buffers.
+  (eshell-mode . eshell-syntax-highlighting-mode))
+
 ;; Enable this to get a superior terminal emulator (a true application like iTerm)
 ;; read more on https://github.com/akermu/emacs-libvterm to see the external dependencies
 ;; remember to check the exec-path as well
@@ -342,6 +347,7 @@
 					     python-flake8
 					     python-pylint
 					     python-mypy
+					     python-pyright
 					     python-pycompile
 					     emacs-lisp-checkdoc)))
 
@@ -376,7 +382,11 @@
 
 ;;a magit prefix help page
 (use-package transient
-  :defer t)
+  :after magit)
+
+;; git-forge support: fetches issues, pull-requests etc.
+(use-package forge
+  :after magit)
 
 ;;This package reads proper environment variable in MacOS GUI version
 ;;To speed up this package, (1) separate configuration into
@@ -457,7 +467,15 @@
   :custom
   (corfu-auto t)
   (corfu-auto-delay 0.3)
-  (corfu-preview-current t))
+  (corfu-preview-current t)
+  :bind
+  (:map corfu-map
+	("C-n" . corfu-next)
+	("C-p" . corfu-previous)
+	("C-m" . corfu-insert)
+	("<return>" . corfu-insert)
+	("RET" . corfu-insert)
+	("C-M-i" . corfu-complete)))
 
 ;; documentation
 (use-package corfu-doc
@@ -486,7 +504,6 @@
 	 ;; C-x bindings (ctl-x-map)
 	 ("C-x b" . consult-buffer)	;; orig. switch-to-buffer
 	 ("C-x r b" . consult-bookmark) ;; orig. bookmark-jump
-	 ("C-x p b" . consult-project-buffer) ;; orig. project-switch-to-buffer
 
 	 ;; Other custom bindings
 	 ("M-y" . consult-yank-pop)	;; orig. yank-pop
@@ -536,6 +553,7 @@
 	xref-show-definitions-function #'consult-xref))
 
 ;; asynchronous fuzzy find/grep (with just 200+ lines)
+;; used in project
 (use-package affe
   :defer 0.5)
 
@@ -546,31 +564,18 @@
 (use-package consult-yasnippet
   :after (consult yasnippet))
 
+;; project buffer/file
+(use-package consult-projectile
+  :after (consult projectile))
+
 ;; Built-in project manager, support git repos only
-(use-package project
-  :straight (:type built-in)
+(use-package projectile
+  :hook
+  (prog-mode . projectile-mode)
   :config
-  (defun my/project-files-in-directory (dir)
-    "Use `fd' to list files in DIR."
-    (let* ((default-directory dir)
-	   (localdir (file-local-name (expand-file-name dir)))
-	   (command (format "fd -H -t f -0 . %s" localdir)))
-      (project--remote-file-names
-       (sort (split-string (shell-command-to-string command) "\0" t)
-	     #'string<))))
+  (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map))
 
-  (cl-defmethod project-files ((project (head local)) &optional dirs)
-    "Override `project-files' to use `fd' in local projects."
-    (mapcan #'my/project-files-in-directory
-	    (or dirs (list (project-root project))))))
-
-(use-package consult-project-extra
-  :bind
-  (("C-x p f" . consult-project-extra-find)
-   ("C-x p o" . consult-project-extra-find-other-window)))
-
-;; yet another robust find file in project
-;; but don't rely on fzf
+;; robust find file (at point) in project
 (use-package find-file-in-project
   :bind
   ("C-x f" . find-file-in-project-at-point))
@@ -673,8 +678,12 @@
 
     "p f" '(affe-find :which-key "project find file")
     "p s" '(affe-grep :which-key "project search text")
-    "p c" '(project-switch-project :which-key "project switch")
-    "p b" '(consult-project-extra-find :which-key "project buffer/file")
+    "p b" '(consult-projectile :which-key "project buffer/file")
+    "p c" '(projectile-compile-project :which-key "project compile")
+    "p p" '(projectile-switch-project :which-key "project switch")
+    "p v" '(projectile-run-vterm :which-key "project vterm")
+    "p x" '(projectile-run-shell :which-key "project shell")
+    "p e" '(projectile-run-eshell :which-key "project eshell")
 
     "e b" '(ediff-buffers :which-key "compare buffers")
     "e f" '(ediff-files :which-key "compare files")
@@ -858,6 +867,13 @@
   :hook
   (dired-filter-mode . dired-mode))
 
+;; to replace slow tramp copy
+;; maybe need to reinstall rsync in MacOS
+(use-package dired-rsync
+  :bind
+  (:map dired-mode-map
+	("C-c C-r" . dired-rsync)))
+
 (use-package pulsing-cursor
   :straight (:type git :host github
 		   :repo "jasonjckn/pulsing-cursor")
@@ -999,30 +1015,12 @@
 
 ;; loading default theme
 (setq custom-safe-themes t)
-
-;; nano theme
-(use-package nano-theme
-  :config
-  (load-theme 'nano-light t))
+(load-theme 'tsdh-light)
 
 ;; mode line
-(use-package telephone-line
+(use-package mood-line
   :hook
-  (after-init . telephone-line-mode)
-  :config
-  ;; content
-  (setq telephone-line-lhs
-	'((accent . (telephone-line-vc-segment))))
-  (setq telephone-line-rhs
-	'((nil . (telephone-line-misc-info-segment))
-	  (accent . (telephone-line-major-mode-segment))))
-  ;; style
-  (setq telephone-line-primary-left-separator 'telephone-line-cubed-left
-	telephone-line-secondary-left-separator 'telephone-line-cubed-hollow-left
-	telephone-line-primary-right-separator 'telephone-line-cubed-right
-	telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
-
-  (setq telephone-line-height 15))
+  (after-init . mood-line-mode))
 
 ;; compilation color
 (use-package fancy-compilation
@@ -1066,7 +1064,11 @@
   (set 'ad-redefinition-action 'accept)
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
   (add-to-list 'eglot-server-programs '(f90-mode . "fortls"))
-  (add-to-list 'eglot-server-programs '((LaTeX-mode tex-mode context-mode texinfo-mode bibtex-mode)
+  (add-to-list 'eglot-server-programs '((LaTeX-mode
+					 tex-mode
+					 context-mode
+					 texinfo-mode
+					 bibtex-mode)
 					"texlab"))
   (add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))
   (add-to-list 'eglot-server-programs '(ess-r-mode . ("R" "--slave" "-e" "languageserver::run()")))
@@ -1092,7 +1094,6 @@
 ;; (use-package slime
 ;;   :config
 ;;   (setq inferior-lisp-program "sbcl"))
-
 
 ;;==============================
 ;;           Python           ;;
@@ -1261,6 +1262,9 @@
   :bind
   (:map yaml-mode-map
 	("\C-m" . newline-and-indent)))
+
+(use-package cmake-mode
+  :mode ("\\.cmake\\'" "CMakeLists\\.txt\\'"))
 
 
 ;;; Text-mode: Markdown/org-mode/TeX
