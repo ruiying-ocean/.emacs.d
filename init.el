@@ -218,6 +218,7 @@
   (prog-mode . ws-butler-mode))
 
 ;; Automatically add spacing around operators
+;; use C-v to next page
 (use-package electric-operator
   :hook
   ;; (python-mode . electric-operator-mode)
@@ -409,14 +410,12 @@
   :hook
   (after-init . popwin-mode))
 
-;; jump to definition
-(use-package dumb-jump
+;; to replace isearch and consult-line
+(use-package ctrlf
+  :hook
+  (after-init . ctrlf-mode)
   :config
-  (setq dumb-jump-prefer-searcher 'rg)
-  ;; xref as backend
-  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
-  ;; customized xref to use `completing-read' to select a target
-  (setq xref-show-definitions-function #'xref-show-definitions-completing-read))
+  (setq ctrlf-default-search-style 'fuzzy))
 
 ;; completion UI
 (use-package vertico
@@ -466,7 +465,7 @@
   (after-init . global-corfu-mode)
   :custom
   (corfu-auto t)
-  (corfu-auto-delay 0.3)
+  (corfu-auto-delay 0.5)
   (corfu-preview-current t)
   :bind
   (:map corfu-map
@@ -520,6 +519,16 @@
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
+
+;; jump to definition
+(use-package dumb-jump
+  :config
+  (setq dumb-jump-prefer-searcher 'rg)
+  ;; xref as backend
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
+  ;; customized xref to use `completing-read' to select a target
+  (setq xref-show-definitions-function #'xref-show-definitions-completing-read))
+
 ;; a bunch of advanced commands: buffer switching, imenu, search commands etc.
 (use-package consult
   ;; Replace bindings. Lazily loaded due by `use-package'.
@@ -547,7 +556,7 @@
 	 ("M-g I" . consult-imenu-multi)
 
 	 ;; M-s bindings (search-map)
-	 ("C-s" . consult-line)
+	 ("M-s l" . consult-line)
 	 ("M-s f" . affe-find)
 	 ("M-s s" . affe-grep)
 	 ("M-s r" . consult-ripgrep)
@@ -871,29 +880,13 @@
 	("o" . dired-display-file)
 	("<mouse-2>" . dired-mouse-find-file)))
 
-;; W -> X to move, W -> Y to copy from one buffer to the other
-(use-package dired-ranger
+(use-package dired-hacks-utils
+  :hook
+  (dired-mode . dired-utils-format-information-line-mode)
   :bind
   (:map dired-mode-map
-	("W" . dired-ranger-copy)
-	("X" . dired-ranger-move)
-	("Y" . dired-ranger-paste)
 	("j" . dired-hacks-next-file)
-	("k" . dired-hacks-previous-file)
-	("b" . dired-ranger-bookmark)
-	("b" . dired-ranger-bookmark-LRU))
-  :hook
-  (dired-mode . dired-utils-format-information-line-mode))
-
-(use-package dired-filter
-  :bind
-  (:map dired-mode-map
-	("/ n" . dired-filter-by-name)
-	("/ r" . dired-filter-by-regexp)
-	("/ e" . dired-filter-by-extension)
-	("/ f" . dired-filter-by-file))
-  :hook
-  (dired-filter-mode . dired-mode))
+	("k" . dired-hacks-previous-file)))
 
 ;; to replace slow tramp copy
 ;; maybe need to reinstall rsync in MacOS
@@ -1056,10 +1049,13 @@
   :hook
   (fancy-compilation-mode . compilation-mode))
 
-;; dim inactive buffer, works for limited theme
-(use-package solaire-mode
+;; dim inactive buffer
+(use-package dimmer
+  :hook
+  (after-init . dimmer-mode)
   :config
-  (solaire-global-mode 1))
+  (dimmer-configure-which-key)
+  (setq dimmer-fraction 0.35))
 
 ;;Transprancy setting
 (set-frame-parameter (selected-frame) 'alpha '(97 100))
