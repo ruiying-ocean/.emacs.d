@@ -1050,12 +1050,8 @@
   (fancy-compilation-mode . compilation-mode))
 
 ;; dim inactive buffer
-(use-package dimmer
-  :hook
-  (after-init . dimmer-mode)
-  :config
-  (dimmer-configure-which-key)
-  (setq dimmer-fraction 0.35))
+(use-package auto-dim-other-buffers
+  :config (auto-dim-other-buffers-mode 1))
 
 ;;Transprancy setting
 (set-frame-parameter (selected-frame) 'alpha '(97 100))
