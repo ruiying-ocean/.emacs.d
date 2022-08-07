@@ -184,19 +184,17 @@
 	("C-M-f" . winner-redo)))
 
 ;;; Auto-save buffer
-(use-package super-save
+(use-package real-auto-save
   :hook
-  (after-init . super-save-mode)
+  (prog-mode . real-auto-save-mode)
   :config
-  ;; turn off the buil-in auto-save
-  (setq auto-save-default nil)
-  (add-to-list 'super-save-triggers 'ace-window)
-  (add-to-list 'super-save-hook-triggers 'find-file-hook)
-  (setq super-save-remote-files nil)
-  (setq super-save-exclude '(".gpg")))
+  ;; in seconds
+  (setq real-auto-save-interval .5))
 
-;; A replacement to buil-tin M-w, now you can
-;; save word/sexp/list/defun/file by M-w w/s/l/d/f
+;; auto select and cut/copy
+;; manual control: press another `w` (word),
+;; `s` (expression), `l` (list), `f` (file)
+;; `d` (defun), '+', '-'
 (use-package easy-kill
   :config
   (global-set-key [remap kill-ring-save] 'easy-kill)
@@ -375,6 +373,39 @@
   :straight yasnippet-snippets ;; Collection of snippets
   :hook (after-init . yas-global-mode))
 
+;; Configure Tempel
+(use-package tempel
+  ;; Require trigger prefix before template name when completing.
+  ;; :custom
+  ;; (tempel-trigger-prefix "<")
+
+  :bind (("M-+" . tempel-complete) ;; Alternative tempel-expand
+         ("M-*" . tempel-insert))
+
+  :init
+
+  ;; Setup completion at point
+  (defun tempel-setup-capf ()
+    ;; Add the Tempel Capf to `completion-at-point-functions'.
+    ;; `tempel-expand' only triggers on exact matches. Alternatively use
+    ;; `tempel-complete' if you want to see all matches, but then you
+    ;; should also configure `tempel-trigger-prefix', such that Tempel
+    ;; does not trigger too often when you don't expect it. NOTE: We add
+    ;; `tempel-expand' *before* the main programming mode Capf, such
+    ;; that it will be tried first.
+    (setq-local completion-at-point-functions
+                (cons #'tempel-expand
+                      completion-at-point-functions)))
+
+  (add-hook 'prog-mode-hook 'tempel-setup-capf)
+  (add-hook 'text-mode-hook 'tempel-setup-capf)
+
+  ;; Optionally make the Tempel templates available to Abbrev,
+  ;; either locally or globally. `expand-abbrev' is bound to C-x '.
+  ;; (add-hook 'prog-mode-hook #'tempel-abbrev-mode)
+  ;; (global-tempel-abbrev-mode)
+  )
+
 ;;Git + Emacs = boom!
 (use-package magit
   :bind
@@ -493,10 +524,42 @@
   :config
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
+;; completion-at-point extensions for corfu
+(use-package cape
+  ;; Bind dedicated completion commands
+  ;; Alternative prefix keys: C-c p, M-p, M-+, ...
+  :bind (("C-c p p" . completion-at-point) ;; capf
+	 ("C-c p t" . complete-tag)	   ;; etags
+	 ("C-c p d" . cape-dabbrev)	   ;; or dabbrev-completion
+	 ("C-c p h" . cape-history)
+	 ("C-c p f" . cape-file)
+	 ("C-c p k" . cape-keyword)
+	 ("C-c p s" . cape-symbol)
+	 ("C-c p a" . cape-abbrev)
+	 ("C-c p l" . cape-line)
+	 ("C-c p \\" . cape-tex)
+	 ("C-c p _" . cape-tex)
+	 ("C-c p ^" . cape-tex)
+	 ("C-c p &" . cape-sgml)
+	 ("C-c p r" . cape-rfc1345))
+  :init
+  ;; Add `completion-at-point-functions', used by `completion-at-point'.
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  (add-to-list 'completion-at-point-functions #'cape-history)
+  (add-to-list 'completion-at-point-functions #'cape-keyword)
+  (add-to-list 'completion-at-point-functions #'cape-tex)
+  (add-to-list 'completion-at-point-functions #'cape-sgml)
+  (add-to-list 'completion-at-point-functions #'cape-rfc1345)
+  (add-to-list 'completion-at-point-functions #'cape-abbrev)
+
+  (add-to-list 'completion-at-point-functions #'cape-symbol)
+  (add-to-list 'completion-at-point-functions #'cape-line))
+
 (use-package embark
   :bind
-  (("<f6>" . embark-act)         ;; pick some comfortable binding
-   ("C-;" . embark-dwim)        ;; good alternative: M-.
+  (("<f6>" . embark-act)	;; pick some comfortable binding
+   ("C-;" . embark-dwim)	;; good alternative: M-.
    ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
 
   :init
@@ -506,7 +569,7 @@
   :config
   ;; Hide the mode line of the Embark live/completions buffers
   (add-to-list 'display-buffer-alist
-               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+	       '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
                  nil
                  (window-parameters (mode-line-format . none)))))
 
@@ -595,9 +658,6 @@
 ;; consult extensions
 (use-package consult-flycheck
   :after (consult flycheck))
-
-(use-package consult-yasnippet
-  :after (consult yasnippet))
 
 ;; project buffer/file
 (use-package consult-projectile
@@ -858,12 +918,13 @@
 		LaTeX-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
-;;turn off electric-indent-mode but use aggressive-indent-mode
-(electric-indent-mode 1)
+;; auto indent
+(use-package aggressive-indent
+  :hook
+  (prog-mode . aggressive-indent-mode))
 
-;; (use-package aggressive-indent
-;;   :hook
-;;   (prog-mode . aggressive-indent-mode))
+;; built-int choices:
+;; (electric-indent-mode 1)
 
 (setq frame-inhibit-implied-resize nil)
 
