@@ -187,6 +187,7 @@
 (use-package real-auto-save
   :hook
   (prog-mode . real-auto-save-mode)
+  (text-mode . real-auto-save-mode)
   :config
   ;; in seconds
   (setq real-auto-save-interval .5))
@@ -369,9 +370,13 @@
   :config
   (setq define-word-default-service 'webster))
 
+;; insert template
 (use-package yasnippet
   :straight yasnippet-snippets ;; Collection of snippets
-  :hook (after-init . yas-global-mode))
+  :hook
+  (after-init . yas-global-mode)
+  :bind
+  ("C-i" . yas-insert-snippet))
 
 ;;Git + Emacs = boom!
 (use-package magit
@@ -1062,9 +1067,9 @@
 		  (auto-max-frame))))
   (add-hook 'after-init-hook 'init-font))
 
-;; loading default theme
+;; lazy-load default theme
 (setq custom-safe-themes t)
-(load-theme 'tsdh-light)
+(add-hook 'after-init-hook (lambda () (load-theme 'tsdh-light)))
 
 ;; mode line
 (use-package mood-line
@@ -1114,7 +1119,8 @@
   ;; make sure every command works separately in shell environment
   (set 'ad-redefinition-action 'accept)
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
-  (add-to-list 'eglot-server-programs '(f90-mode . "fortls"))
+  (add-to-list 'eglot-server-programs '(markdown-mode "marksman"))
+  (add-to-list 'eglot-server-programs '(f90-mode "fortls"))
   (add-to-list 'eglot-server-programs '((LaTeX-mode
 					 tex-mode
 					 context-mode
@@ -1126,6 +1132,7 @@
   ;;============================================
   :hook
   (python-mode . eglot-ensure)
+  (markdown-mode . eglot-ensure)
   (c-mode . eglot-ensure)
   (c++-mode . eglot-ensure)
   (f90-mode . eglot-ensure)
