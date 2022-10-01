@@ -31,5 +31,5 @@
 
 (setq byte-compile-warnings '(cl-functions))
 
-;; straight.el doesn't need package.el setting
+;; disable package.el
 (setq package-enable-at-startup nil)

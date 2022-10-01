@@ -20,11 +20,11 @@
 ;;; FUNDEMENTAL
 
 ;; Customize when to check package modification (much much faster)
-(setq straight-check-for-modifications '(check-on-save find-when-checking))
+(setq-default straight-check-for-modifications '(check-on-save find-when-checking))
 
 ;; Cause straight.el to cache the autoloads of all used packages in a single
 ;; file on disk thus reduce IO operations
-(setq straight-cache-autoloads t)
+(setq-default straight-cache-autoloads t)
 
 ;; Initialise PACKAGE MANAGER: straight.el
 ;; if the boostrap doesn't work, manually run
@@ -44,14 +44,14 @@
 
 ;; Intergration with use-package
 (straight-use-package 'use-package)
-(setq straight-use-package-by-default t)
+(setq-default straight-use-package-by-default t)
 
 ;; Emacs Native Compilation Feature support
 (when (and (fboundp 'native-comp-available-p)
 	   (native-comp-available-p))
   (progn
-    (setq native-comp-async-report-warnings-errors nil)
-    (setq comp-deferred-compilation t)
+    (setq-default native-comp-async-report-warnings-errors nil)
+    (setq-default comp-deferred-compilation t)
     (add-to-list 'native-comp-eln-load-path (expand-file-name "eln-cache/" user-emacs-directory))
     (setq package-native-compile t)))
 
@@ -78,8 +78,8 @@
 
 ;; Benchmark init time
 (use-package esup
-  :config
-  (setq esup-depth 0))
+  :custom
+  (esup-depth 0))
 
 ;;; EDITOR
 
@@ -98,7 +98,19 @@
 
 ;; Improved global minor mode for scrolling in Emacs 29
 (if (> emacs-major-version 28)
-    (pixel-scroll-precision-mode))
+    (pixel-scroll-precision-mode)
+  ;; else use third-party package
+  (use-package good-scroll
+    :config
+    (good-scroll-mode 1)
+    (global-set-key [next] #'good-scroll-up-full-screen)
+    (global-set-key [prior] #'good-scroll-down-full-screen)))
+
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
+(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+(setq scroll-step 1) ;; keyboard scroll one line at a time
+
 
 ;; abbreviaiont of yes/no
 (if (> emacs-major-version 27)
@@ -112,10 +124,6 @@
 (setq ring-bell-function 'ignore)
 
 (setq confirm-kill-processes t)
-
-;; smooth mouse wheel
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil)))
-(setq mouse-wheel-progressive-speed nil)
 
 ;; Delete selection
 (delete-selection-mode t)
@@ -190,7 +198,7 @@
   (text-mode . real-auto-save-mode)
   :config
   ;; in seconds
-  (setq real-auto-save-interval .5))
+  (setq real-auto-save-interval 1))
 
 ;; auto select and cut/copy
 ;; manual control: press another `w` (word),
@@ -211,10 +219,10 @@
           (lambda () (add-hook 'before-save-hook 'delete-trailing-whitespace nil 'local)))
 
 ;; An alternative way to cleanup whitespace
-(use-package ws-butler
-  :straight (:host github :repo "lewang/ws-butler")
-  :hook
-  (prog-mode . ws-butler-mode))
+;; (use-package ws-butler
+;;   :straight (:host github :repo "lewang/ws-butler")
+;;   :hook
+;;   (prog-mode . ws-butler-mode))
 
 ;; Automatically add spacing around operators
 ;; use C-v to next page
@@ -279,6 +287,7 @@
   :bind
   ("C-x s" . shell)
   (:map shell-mode-map
+	("C-k" . comint-kill-whole-line)
 	("<up>" . comint-previous-input)
 	("C-p" . comint-previous-input)
 	("<down>" . comint-next-input)
@@ -296,7 +305,13 @@
 ;; remember to check the exec-path as well
 (use-package vterm
   :bind
-  ("C-x t" . vterm))
+  ("C-x t" . vterm)
+  ("C-x s" . vterm-shell)
+  (:map vterm-mode-map
+	("C-c C-t" . vterm-copy-mode))
+  :custom
+  (vterm-kill-buffer-on-exit t))
+
 
 ;; a comint extension, e.g., :view *.jpg to view a plot in shell
 ;; other useful cmd: :e (edit), :ssh,
@@ -376,7 +391,10 @@
   :hook
   (after-init . yas-global-mode)
   :bind
-  ("C-i" . yas-insert-snippet))
+  ("C-c i" . yas-insert-snippet))
+
+(use-package consult-yasnippet
+  :after (consult yasnippet))
 
 ;;Git + Emacs = boom!
 (use-package magit
@@ -467,8 +485,8 @@
   :hook
   (after-init . global-corfu-mode)
   :custom
-  (corfu-auto t)
-  (corfu-auto-delay 0.5)
+  ;; (corfu-auto t)
+  ;; (corfu-auto-delay 0.5)
   (corfu-preview-current t)
   :bind
   (:map corfu-map
@@ -495,6 +513,16 @@
   (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
   :config
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+
+(use-package emojify
+  :config
+  (when (member "Segoe UI Emoji" (font-family-list))
+    (set-fontset-font
+     t 'symbol (font-spec :family "Segoe UI Emoji") nil 'prepend))
+  (setq emojify-display-style 'unicode)
+  (setq emojify-emoji-styles '(unicode))
+  :bind
+  ("C-c ." . emojify-insert-emoji))
 
 ;; completion-at-point extensions for corfu
 (use-package cape
@@ -581,7 +609,7 @@
 
 	 ;; M-g bindings (goto-map)
 	 ("M-g e" . consult-compile-error)
-	 ("M-g f" . consult-flycheck) ;; Alternative: consult-flycheck
+	 ;; ("M-g f" . consult-flycheck) ;; Alternative: consult-flycheck
 	 ("M-g g" . consult-goto-line)	 ;; orig. goto-line
 	 ("M-g M-g" . consult-goto-line) ;; orig. goto-line
 	 ("M-g o" . consult-outline) ;; Alternative: consult-org-heading
@@ -699,6 +727,7 @@
   (push-mark nil nil t)
   ;;(forward-line 1)
   (end-of-line 1))
+
 (global-set-key (kbd "C-l") 'select-current-line)
 
 (defun open-init-file()
@@ -714,6 +743,16 @@
   :config
   ;; left one last whitespace
   (setq hungry-delete-join-reluctantly t))
+
+;; history across buffers
+(use-package dogears
+  :straight (:host github :repo "alphapapa/dogears.el")
+  ;; These bindings are optional, of course:
+  :bind (:map global-map
+	      ("M-g d" . dogears-go)
+	      ("M-g b" . dogears-back)
+	      ("M-g f" . dogears-forward)
+	      ("M-g D" . dogears-list)))
 
 ;; Mark set
 ;; C-x C-x -> set mark and move back to previous position
@@ -739,7 +778,8 @@
     "g l" '(avy-goto-line :which-key "goto-line")
     "g g" '(goto-line :which-key "goto-line-number")
     "g m" '(exchange-point-and-mark :which-key "go-back-and-mark")
-    "g b" '(goto-last-change :which-key "go-back")
+    ;; "g b" '(goto-last-change :which-key "go-back")
+    "g b" '(dogear-back :which-key "go-back")
 
     "m" '(indent-rigidly :which-key "move code")
 
@@ -762,6 +802,8 @@
 
     "1" 'beginning-of-buffer
     "2" 'end-of-buffer
+
+    "v" 'vterm
 
     "f" 'consult-file-externally
     "k" 'kill-this-buffer
@@ -1118,6 +1160,8 @@
   ;;============================================
   ;; make sure every command works separately in shell environment
   (set 'ad-redefinition-action 'accept)
+  (add-to-list 'eglot-server-programs '(ess-r-mode . ("R" "--slave" "-e" "languageserver::run()")))
+  (add-to-list 'eglot-server-programs `(python-mode . ("pyright-langserver" "--stdio")))
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
   (add-to-list 'eglot-server-programs '(markdown-mode "marksman"))
   (add-to-list 'eglot-server-programs '(f90-mode "fortls"))
@@ -1127,8 +1171,6 @@
 					 texinfo-mode
 					 bibtex-mode)
 					"texlab"))
-  (add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))
-  (add-to-list 'eglot-server-programs '(ess-r-mode . ("R" "--slave" "-e" "languageserver::run()")))
   ;;============================================
   :hook
   (python-mode . eglot-ensure)
@@ -1152,6 +1194,24 @@
 ;; (use-package slime
 ;;   :config
 ;;   (setq inferior-lisp-program "sbcl"))
+
+;; (add-to-list 'load-path "~/.emacs.d/lsp-bridge")
+;; (require 'lsp-bridge)
+;; (global-lsp-bridge-mode)
+
+;; tree sitter, a genral code parser
+;; (use-package tree-sitter-langs)
+;; (use-package tree-sitter
+;;   :hook
+;;   (after-init . global-tree-sitter-mode)
+;;   :config
+;;   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+
+;; sticky header of code block
+(use-package topsy
+  :straight (topsy :fetcher github :repo "alphapapa/topsy.el")
+  :hook (prog-mode . topsy-mode))
+
 
 ;;==============================
 ;;           Python           ;;
