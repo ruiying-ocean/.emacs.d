@@ -17,7 +17,9 @@
 
 
 ;;; Code:
-;;; FUNDEMENTAL
+
+
+;;; FUNDEMENTAL SETUP
 
 ;; Customize when to check package modification (much much faster)
 (setq-default straight-check-for-modifications '(check-on-save find-when-checking))
@@ -333,7 +335,10 @@
   (add-to-list 'tramp-remote-path "/usr/local/bin/git")
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
   ;;tramp mode to cache password
-  (setq password-cache-expiry nil))
+  (setq password-cache-expiry nil)
+  ;; version control backends
+  (setq vc-handled-backends '(Git))
+  )
 
 (use-package which-key
   :hook
@@ -400,7 +405,11 @@
 (use-package magit
   :bind
   ("C-x g" . magit-status)
-  ("C-x c" . magit-checkout))
+  ("C-x c" . magit-checkout)
+  :config
+  ;; for verbose
+  ;; (setq magit-refresh-verbose t)
+  )
 
 ;;a magit prefix help page
 (use-package transient
@@ -431,7 +440,7 @@
   :hook
   (after-init . popwin-mode))
 
-;; to replace isearch and consult-line
+;; better isearch, choose this or consult-line
 (use-package ctrlf
   :hook
   (after-init . ctrlf-mode)
@@ -485,8 +494,8 @@
   :hook
   (after-init . global-corfu-mode)
   :custom
-  ;; (corfu-auto t)
-  ;; (corfu-auto-delay 0.5)
+  (corfu-auto t)
+  (corfu-auto-delay 0.75)
   (corfu-preview-current t)
   :bind
   (:map corfu-map
@@ -496,6 +505,7 @@
 	("<return>" . corfu-insert)
 	("RET" . corfu-insert)
 	("C-M-i" . corfu-complete)))
+
 
 ;; documentation
 (use-package corfu-doc
@@ -619,7 +629,9 @@
 	 ("M-g I" . consult-imenu-multi)
 
 	 ;; M-s bindings (search-map)
-	 ("M-s l" . consult-line)
+	 ;; ("M-s l" . consult-line)
+	 ;; use consult-line to replac
+	 ("C-s" . consult-line)
 	 ("M-s f" . affe-find)
 	 ("M-s s" . affe-grep)
 	 ("M-s r" . consult-ripgrep)
@@ -1082,7 +1094,7 @@
   (if (display-graphic-p)
       (progn
 	;; English font
-	(set-face-attribute 'default nil :font (format "%s:pixelsize=%d" "SF Mono" 15))
+	(set-face-attribute 'default nil :font (format "%s:pixelsize=%d" "Iosevka" 15))
 	;; CJK font
 	(dolist (charset '(kana han symbol cjk-misc bopomofo))
 	  (set-fontset-font (frame-parameter nil 'font)
@@ -1111,7 +1123,18 @@
 
 ;; lazy-load default theme
 (setq custom-safe-themes t)
-(add-hook 'after-init-hook (lambda () (load-theme 'tsdh-light)))
+
+(use-package modus-themes
+  :config
+  ;; mode line, style, padding & height
+  (setq modus-themes-mode-line '(accented borderless))
+  ;; syntax style
+  (setq modus-themes-syntax '(alt-syntax green-strings yellow-comments))
+  (setq modus-themes-italic-constructs t
+	modus-themes-bold-constructs t
+	modus-themes-region '(accented bg-only no-extend))
+  ;; finally load the theme
+  (load-theme 'modus-operandi))
 
 ;; mode line
 (use-package mood-line
@@ -1142,7 +1165,7 @@
 (custom-theme-set-faces
  'user
  '(variable-pitch ((t (:family "LXWG WenKai " :height 160))))
- '(fixed-pitch ((t ( :family "Roboto Mono" :height 150)))))
+ '(fixed-pitch ((t ( :family " Iosevka" :height 160)))))
 
 
 ;;; PROGRAMMING LANGUAGES & LSP
@@ -1199,19 +1222,19 @@
 ;; (require 'lsp-bridge)
 ;; (global-lsp-bridge-mode)
 
-;; tree sitter, a genral code parser
-;; (use-package tree-sitter-langs)
-;; (use-package tree-sitter
-;;   :hook
-;;   (after-init . global-tree-sitter-mode)
-;;   :config
-;;   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+
+(use-package stan-mode
+  :mode ("\\.stan\\'" . stan-mode)
+  :hook (stan-mode . stan-mode-setup)
+  ;;
+  :config
+  ;; The officially recommended offset is 2.
+  (setq stan-indentation-offset 2))
 
 ;; sticky header of code block
 (use-package topsy
   :straight (topsy :fetcher github :repo "alphapapa/topsy.el")
   :hook (prog-mode . topsy-mode))
-
 
 ;;==============================
 ;;           Python           ;;
@@ -1432,23 +1455,113 @@
   (global-set-key (kbd "\C-c\C-o") 'toc-org-markdown-follow-thing-at-point)
   (add-to-list 'org-tag-alist '("TOC" . ?T)))
 
-;;;;;;;;;;;;;;
-;; Org-mode ;;
-;;;;;;;;;;;;;;
-(use-package org-modern
-  :straight (:type git :host github
-		   :repo "minad/org-modern")
-  :hook
-  (org-modern-mode . org-mode))
+;;===========
+;; Org-mode
+;;===========
 
-;; perfectly alian English/CJK fonts in the same table
+;; Beautify org-mode
+(use-package org-superstar
+  :hook
+  (org-mode . org-superstar-mode))
+
+(use-package svg-tag-mode
+  :init
+  (defconst date-re "[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}")
+  (defconst time-re "[0-9]\\{2\\}:[0-9]\\{2\\}")
+  (defconst day-re "[A-Za-z]\\{3\\}")
+  (defconst day-time-re (format "\\(%s\\)? ?\\(%s\\)?" day-re time-re))
+
+  (defun svg-progress-percent (value)
+    (svg-image (svg-lib-concat
+		(svg-lib-progress-bar (/ (string-to-number value) 100.0)
+				      nil :margin 0 :stroke 2 :radius 3 :padding 2 :width 11)
+		(svg-lib-tag (concat value "%")
+			     nil :stroke 0 :margin 0)) :ascent 'center))
+
+  (defun svg-progress-count (value)
+    (let* ((seq (mapcar #'string-to-number (split-string value "/")))
+	   (count (float (car seq)))
+	   (total (float (cadr seq))))
+      (svg-image (svg-lib-concat
+		  (svg-lib-progress-bar (/ count total) nil
+					:margin 0 :stroke 2 :radius 3 :padding 2 :width 11)
+		  (svg-lib-tag value nil
+			       :stroke 0 :margin 0)) :ascent 'center)))
+
+  (setq svg-tag-tags
+	`(
+	  ;; Org tags
+	  (":\\([A-Za-z0-9]+\\)" . ((lambda (tag) (svg-tag-make tag))))
+	  (":\\([A-Za-z0-9]+[ \-]\\)" . ((lambda (tag) tag)))
+
+	  ;; Task priority
+	  ("\\[#[A-Z]\\]" . ((lambda (tag)
+			       (svg-tag-make tag :face 'org-priority
+					     :beg 2 :end -1 :margin 0))))
+
+	  ;; Progress
+	  ("\\(\\[[0-9]\\{1,3\\}%\\]\\)" . ((lambda (tag)
+					      (svg-progress-percent (substring tag 1 -2)))))
+	  ("\\(\\[[0-9]+/[0-9]+\\]\\)" . ((lambda (tag)
+					    (svg-progress-count (substring tag 1 -1)))))
+
+	  ;; TODO / DONE
+	  ("TODO" . ((lambda (tag) (svg-tag-make "TODO" :face 'org-todo :inverse t :margin 0))))
+	  ("DONE" . ((lambda (tag) (svg-tag-make "DONE" :face 'org-done :margin 0))))
+
+
+	  ;; Citation of the form [cite:@Knuth:1984]
+	  ("\\(\\[cite:@[A-Za-z]+:\\)" . ((lambda (tag)
+					    (svg-tag-make tag
+							  :inverse t
+							  :beg 7 :end -1
+							  :crop-right t))))
+	  ("\\[cite:@[A-Za-z]+:\\([0-9]+\\]\\)" . ((lambda (tag)
+						     (svg-tag-make tag
+								   :end -1
+								   :crop-left t))))
+
+
+	  ;; Active date (with or without day name, with or without time)
+	  (,(format "\\(<%s>\\)" date-re) .
+	   ((lambda (tag)
+	      (svg-tag-make tag :beg 1 :end -1 :margin 0))))
+	  (,(format "\\(<%s \\)%s>" date-re day-time-re) .
+	   ((lambda (tag)
+	      (svg-tag-make tag :beg 1 :inverse nil :crop-right t :margin 0))))
+	  (,(format "<%s \\(%s>\\)" date-re day-time-re) .
+	   ((lambda (tag)
+	      (svg-tag-make tag :end -1 :inverse t :crop-left t :margin 0))))
+
+	  ;; Inactive date  (with or without day name, with or without time)
+	  (,(format "\\(\\[%s\\]\\)" date-re) .
+	   ((lambda (tag)
+	      (svg-tag-make tag :beg 1 :end -1 :margin 0 :face 'org-date))))
+	  (,(format "\\(\\[%s \\)%s\\]" date-re day-time-re) .
+	   ((lambda (tag)
+	      (svg-tag-make tag :beg 1 :inverse nil :crop-right t :margin 0 :face 'org-date))))
+	  (,(format "\\[%s \\(%s\\]\\)" date-re day-time-re) .
+	   ((lambda (tag)
+	      (svg-tag-make tag :end -1 :inverse t :crop-left t :margin 0 :face 'org-date))))))
+
+  :hook org-mode)
+
+;; pretty symbol for org-mode
+(add-hook 'org-mode-hook
+	  (lambda ()
+	    (push '("[ ]" . "🞎") prettify-symbols-alist)
+	    (push '("[X]" . "☑") prettify-symbols-alist)
+	    (push '("[-]" . "◫") prettify-symbols-alist)
+	    (prettify-symbols-mode)))
+
+;; Perfectly alian English/CJK fonts in the same table
 (use-package valign
   :hook (org-mode . valign-mode)
   :config
   (setq valign-fancy-bar t))
 
 ;; ==============================
-;;             LaTeX           ;;
+;;             LATEX           ;;
 ;; ==============================
 ;; First, add TeX distribution to path
 (use-package tex ;;not auctex instead!
