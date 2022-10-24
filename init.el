@@ -60,7 +60,7 @@
 ;; Update user load path
 ;; Optimize: Force "lisp" at the head to reduce the startup time.
 (defun update-load-path (&rest _)
-  "Update `load-path'."
+  "Update `load-path`"
   (dolist (dir '("extra-lisp"))
     (push (expand-file-name dir user-emacs-directory) load-path)))
 (advice-add #'package-initialize :after #'update-load-path)
@@ -1072,6 +1072,13 @@
   :hook
   (dired-mode . all-the-icons-dired-mode))
 
+;; all the icons for completion framework (e.g. vertico)
+(use-package all-the-icons-completion
+  :hook
+  (after-init . all-the-icons-completion-mode)
+  :config
+  (add-hook 'marginalia-mode-hook #'all-the-icons-completion-marginalia-setup))
+
 ;; (global-tab-line-mode t)
 
 ;; to display ^L page break
@@ -1124,6 +1131,7 @@
 ;; lazy-load default theme
 (setq custom-safe-themes t)
 
+;; use modus-operandi as default theme
 (use-package modus-themes
   :config
   ;; mode line, style, padding & height
@@ -1131,8 +1139,9 @@
   ;; syntax style
   (setq modus-themes-syntax '(alt-syntax green-strings yellow-comments))
   (setq modus-themes-italic-constructs t
-	modus-themes-bold-constructs t
+	modus-themes-bold-constructs nil
 	modus-themes-region '(accented bg-only no-extend))
+  (setq modus-themes-links '(neutral-underline background))
   ;; finally load the theme
   (load-theme 'modus-operandi))
 
@@ -1141,7 +1150,7 @@
   :hook
   (after-init . mood-line-mode))
 
-;; compilation color
+;; colorful compilation buffer
 (use-package fancy-compilation
   :commands (fancy-compilation-mode)
   :hook
@@ -1559,6 +1568,16 @@
   :hook (org-mode . valign-mode)
   :config
   (setq valign-fancy-bar t))
+
+;; org-capture template
+(setq org-capture-templates
+      '(("t" "Todo" entry (file+headline "~/gtd.org" "Workspace")
+	 "* TODO [#B] %?\n  %i\n %U"
+	 :empty-lines 1)))
+(global-set-key (kbd "C-c r") 'org-capture)
+
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "DOING(s)" "|" "DONE(d!/!)")))
 
 ;; ==============================
 ;;             LATEX           ;;
