@@ -69,7 +69,7 @@
 (when (eq system-type 'darwin)
   (defvar brew-parent-dir "/opt/homebrew/")
   (defvar brew-bin-dir (expand-file-name "bin/" brew-parent-dir))
-  (defvar emacs-path "/opt/homebrew/Cellar/emacs-plus@28/28.0.50"))
+  (defvar emacs-path "/opt/homebrew/bin/emacs"))
 
 ;; Avoid matching file name with regrex list during startup
 (let ((file-name-handler-alist nil)) "~/.emacs.d/init.el")
@@ -82,6 +82,9 @@
 (use-package esup
   :custom
   (esup-depth 0))
+
+;; restart emacs
+(use-package restart-emacs)
 
 ;;; EDITOR
 
@@ -166,15 +169,15 @@
   (global-set-key (kbd "<mouse-5>") 'scroll-up-line))
 
 ;; Hack clipboard for macOS in TUI mode
-(defun my/kill-ring-save (orig-fun beg end &optional region)
+(defun self/kill-ring-save (orig-fun beg end &optional region)
   (unless (display-graphic-p)
     (let ((inhibit-message t))
       (shell-command-on-region beg end "pbcopy")))
   (funcall orig-fun beg end region))
-(advice-add 'kill-ring-save :around #'my/kill-ring-save)
+(advice-add 'kill-ring-save :around #'self/kill-ring-save)
 
 ;; ---Edit keybinding style---
-;;use undo-tree-visualize to show history
+;; A better undo/redo mode
 (use-package undo-tree
   :hook
   (after-init . global-undo-tree-mode)
@@ -193,14 +196,20 @@
 	("C-M-b" . winner-undo)
 	("C-M-f" . winner-redo)))
 
+;; move within buffers
+(use-package mosey
+  :bind
+  ("C-a" . mosey-backward-bounce)
+  ("C-e" . mosey-forward-bounce))
+
 ;;; Auto-save buffer
 (use-package real-auto-save
   :hook
   (prog-mode . real-auto-save-mode)
   (text-mode . real-auto-save-mode)
-  :config
-  ;; in seconds
-  (setq real-auto-save-interval 1))
+  :custom
+  ;; configure time gap (in sec)
+  (real-auto-save-interval 1))
 
 ;; auto select and cut/copy
 ;; manual control: press another `w` (word),
@@ -490,21 +499,21 @@
   (after-init . marginalia-mode))
 
 ;; auto completion
-(use-package corfu
-  :hook
-  (after-init . global-corfu-mode)
-  :custom
-  (corfu-auto t)
-  (corfu-auto-delay 0.75)
-  (corfu-preview-current t)
-  :bind
-  (:map corfu-map
-	("C-n" . corfu-next)
-	("C-p" . corfu-previous)
-	("C-m" . corfu-insert)
-	("<return>" . corfu-insert)
-	("RET" . corfu-insert)
-	("C-M-i" . corfu-complete)))
+;; (use-package corfu
+;;   :hook
+;;   (after-init . global-corfu-mode)
+;;   :custom
+;;   (corfu-auto t)
+;;   (corfu-auto-delay 0.75)
+;;   (corfu-preview-current t)
+;;   :bind
+;;   (:map corfu-map
+;; 	("C-n" . corfu-next)
+;; 	("C-p" . corfu-previous)
+;; 	("C-m" . corfu-insert)
+;; 	("<return>" . corfu-insert)
+;; 	("RET" . corfu-insert)
+;; 	("C-M-i" . corfu-complete)))
 
 
 ;; documentation
@@ -902,10 +911,6 @@
     (toggle-frame-fullscreen)))
 (auto-max-frame)
 
-;;no more startup message/screen
-(setq inhibit-startup-screen t)
-(setq inhibit-startup-message t)
-
 ;;Cursor
 (setq-default cursor-type 'bar)
 (blink-cursor-mode 0)
@@ -948,6 +953,11 @@
 (use-package aggressive-indent
   :hook
   (prog-mode . aggressive-indent-mode))
+
+;; code formatting, require third-party formatter
+(use-package format-all
+  :hook
+  (prog-mode . format-all-mode))
 
 ;; built-int choices:
 ;; (electric-indent-mode 1)
@@ -1094,7 +1104,7 @@
 ;;Variable-pitch font, ETBembo/New York
 ;;Unicode: Symbola
 
-(defun init-font ()
+(defun self/setup-font ()
   "Set English and CJK font for Emacs."
   (interactive)
   ;; English font
@@ -1124,9 +1134,9 @@
     (add-hook 'after-make-frame-functions
 	      (lambda (frame)
 		(with-selected-frame frame
-		  (init-font)
+		  (self/setup-font)
 		  (auto-max-frame))))
-  (add-hook 'after-init-hook 'init-font))
+  (add-hook 'after-init-hook 'self/setup-font))
 
 ;; lazy-load default theme
 (setq custom-safe-themes t)
@@ -1179,58 +1189,19 @@
 
 ;;; PROGRAMMING LANGUAGES & LSP
 ;;==============================
-;;            Eglot           ;;
-;;==============================
-;;eglot can work with tramp-mode, but you should install
-;;your server-programs on remote, not local
-(use-package eglot
-  :config
-  ;; debug when encounter error
-  (setq debug-on-error t)
-  (setq read-process-output-max (* 512 1024))
-  (add-hook 'eglot-managed-mode-hook (lambda () (flymake-mode -1))) ;;Decouple flymake and eglot
-  ;;============================================
-  ;; make sure every command works separately in shell environment
-  (set 'ad-redefinition-action 'accept)
-  (add-to-list 'eglot-server-programs '(ess-r-mode . ("R" "--slave" "-e" "languageserver::run()")))
-  (add-to-list 'eglot-server-programs `(python-mode . ("pyright-langserver" "--stdio")))
-  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
-  (add-to-list 'eglot-server-programs '(markdown-mode "marksman"))
-  (add-to-list 'eglot-server-programs '(f90-mode "fortls"))
-  (add-to-list 'eglot-server-programs '((LaTeX-mode
-					 tex-mode
-					 context-mode
-					 texinfo-mode
-					 bibtex-mode)
-					"texlab"))
-  ;;============================================
-  :hook
-  (python-mode . eglot-ensure)
-  (markdown-mode . eglot-ensure)
-  (c-mode . eglot-ensure)
-  (c++-mode . eglot-ensure)
-  (f90-mode . eglot-ensure)
-  (ess-r-mode . eglot-ensure)
-  (LaTeX-mode . eglot-ensure)
-  ;;============================================
-  ;;local keybindings
-  :bind
-  (:map eglot-mode-map
-	("C-c r" . eglot-rename)
-	("C-c a" . eglot-code-action)
-	("C-c f" . eglot-format)
-	("C-c h" . eldoc)))
+
+;; LSP-bridge
+(add-to-list 'load-path "~/.emacs.d/lsp-bridge")
+(require 'lsp-bridge)
+(global-lsp-bridge-mode)
+(setq acm-enable-icon t)
+(setq lsp-bridge-complete-manually nil)
 
 ;; requires install `sbcl`
 ;; REPL for lisp
 ;; (use-package slime
 ;;   :config
 ;;   (setq inferior-lisp-program "sbcl"))
-
-;; (add-to-list 'load-path "~/.emacs.d/lsp-bridge")
-;; (require 'lsp-bridge)
-;; (global-lsp-bridge-mode)
-
 
 (use-package stan-mode
   :mode ("\\.stan\\'" . stan-mode)
@@ -1312,6 +1283,7 @@
   ;; (define-key inferior-python-mode-map (kbd "<down>") 'comint-next-input)
   (define-key inferior-python-mode-map (kbd "C-n") 'comint-next-input))
 
+;; use jupyter text to pair format
 (use-package conda
   :config
   (conda-env-initialize-interactive-shells)
