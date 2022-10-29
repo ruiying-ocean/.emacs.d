@@ -1,6 +1,9 @@
-;;; init.el --- Load the full configuration -*- lexical-binding: t -*-
-;; This file contains customized configuration codes, which
+;;; init.el --- Emacs configuration -*- lexical-binding: t -*-
+
+;; This file contains my customized configuration codes, which
 ;; are divided into multiple sections by ^L character.
+;; Author: Rui Ying
+;; Email: rui.ying@bristol.ac.uk
 
 ;;; DEPENDENCIES
 ;; LSP servers:
@@ -17,7 +20,6 @@
 
 
 ;;; Code:
-
 
 ;;; FUNDEMENTAL SETUP
 
@@ -200,7 +202,15 @@
 (use-package mosey
   :bind
   ("C-a" . mosey-backward-bounce)
-  ("C-e" . mosey-forward-bounce))
+  ("C-e" . mosey-forward-bounce)
+  :config
+  (defmosey '(beginning-of-line
+	      back-to-indentation
+	      sp-backward-sexp		; Moves across lines
+	      sp-forward-sexp		; Moves across lines
+	      mosey-goto-end-of-code
+	      mosey-goto-beginning-of-comment-text)
+    :prefix "lisp"))
 
 ;;; Auto-save buffer
 (use-package real-auto-save
@@ -1284,6 +1294,8 @@
   (define-key inferior-python-mode-map (kbd "C-n") 'comint-next-input))
 
 ;; use jupyter text to pair format
+;; jupytext --set-formats ipynb,py notebook.ipynb
+;; jupytext --sync notebook.ipynb
 (use-package conda
   :config
   (conda-env-initialize-interactive-shells)
@@ -1535,21 +1547,25 @@
 	    (push '("[-]" . "◫") prettify-symbols-alist)
 	    (prettify-symbols-mode)))
 
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "DOING(s)" "|" "DONE(d!/!)")))
+
 ;; Perfectly alian English/CJK fonts in the same table
 (use-package valign
   :hook (org-mode . valign-mode)
   :config
   (setq valign-fancy-bar t))
 
-;; org-capture template
+;; capture TODOs
+;; %U -> dat; %i -> current selection;
 (setq org-capture-templates
-      '(("t" "Todo" entry (file+headline "~/gtd.org" "Workspace")
-	 "* TODO [#B] %?\n  %i\n %U"
+      '(("t" "Todo" entry (file+headline "~/Documents/TODO.org" "Tasks")
+	 "* TODO [#A] %? %i %U"
 	 :empty-lines 1)))
-(global-set-key (kbd "C-c r") 'org-capture)
 
-(setq org-todo-keywords
-      '((sequence "TODO(t)" "DOING(s)" "|" "DONE(d!/!)")))
+(setq org-directory "~/Documents")
+(setq org-default-notes-file (concat org-directory "/TODO.org"))
+(global-set-key (kbd "C-c r") 'org-capture)
 
 ;; ==============================
 ;;             LATEX           ;;
@@ -1634,7 +1650,7 @@
 	("k" . pdf-view-previous-line-or-previous-page)))
 
 
-;;; End
+;;; Final cook up
 
 ;; Back to normal GC level
 (defun my-cleanup-gc ()
@@ -1648,7 +1664,7 @@
 (setq max-specpdl-size 32000
       max-lisp-eval-depth 16000)
 
-(defun print-init-info ()
+(defun self/print-init-info ()
   "Print init time of Emacs, a wrapper of 'emacs-init-time."
   (interactive)
   (message
@@ -1656,7 +1672,7 @@
 	   (float-time (time-subtract after-init-time before-init-time))
 	   (length features)
 	   gcs-done)))
-(add-hook 'after-init-hook #'print-init-info)
+(add-hook 'after-init-hook #'self/print-init-info)
 
 (provide 'init)
 ;;; init.el ends here
