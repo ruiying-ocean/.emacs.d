@@ -1199,13 +1199,13 @@
 
 ;;; PROGRAMMING LANGUAGES & LSP
 ;;==============================
-
 ;; LSP-bridge
 (add-to-list 'load-path "~/.emacs.d/lsp-bridge")
 (require 'lsp-bridge)
 (global-lsp-bridge-mode)
 (setq acm-enable-icon t)
 (setq lsp-bridge-complete-manually nil)
+(define-key lsp-bridge-mode-map (kbd "<return>") 'acm-complete)
 
 ;; requires install `sbcl`
 ;; REPL for lisp
