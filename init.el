@@ -49,6 +49,7 @@
 ;; Intergration with use-package
 (straight-use-package 'use-package)
 (setq-default straight-use-package-by-default t)
+(setq use-package-enable-imenu-support t)
 
 ;; Emacs Native Compilation Feature support
 (when (and (fboundp 'native-comp-available-p)
@@ -134,6 +135,11 @@
 
 ;; Delete selection
 (delete-selection-mode t)
+
+;; (global-set-key (kbd "M-w ") 'duplicate-dwim)
+
+;; right key
+(context-menu-mode 1)
 
 ;; ------------------------------------------------------------
 ;; wrap up line (use visual-line-mode and visual-fill-column-mode instead)
@@ -272,7 +278,7 @@
   (global-unset-key (kbd "M-<down-mouse-1>"))
   :bind
   ("C-M-<down>" . mc/mark-next-like-this)
-  ("C-S-<up>" . mc/mark-previous-like-this)
+  ("C-M-<up>" . mc/mark-previous-like-this)
   ("M-<mouse-1>" . mc/add-cursor-on-click))
 
 (use-package ediff
@@ -410,12 +416,13 @@
   (setq define-word-default-service 'webster))
 
 ;; insert template
-(use-package yasnippet
-  :straight yasnippet-snippets ;; Collection of snippets
-  :hook
-  (after-init . yas-global-mode)
-  :bind
-  ("C-c i" . yas-insert-snippet))
+;; change trigger key!
+;; (use-package yasnippet
+;;   :straight yasnippet-snippets ;; Collection of snippets
+;;   :hook
+;;   (after-init . yas-global-mode)
+;;   :bind
+;;   ("C-c i" . yas-insert-snippet))
 
 (use-package consult-yasnippet
   :after (consult yasnippet))
@@ -427,8 +434,7 @@
   ("C-x c" . magit-checkout)
   :config
   ;; for verbose
-  ;; (setq magit-refresh-verbose t)
-  )
+  (setq magit-refresh-verbose t))
 
 ;;a magit prefix help page
 (use-package transient
@@ -478,6 +484,7 @@
 
 ;; use posframe (in the centre of buffer) for vertico
 (use-package vertico-posframe
+  :requires posframe
   :hook
   (vertico-mode . vertico-posframe-mode))
 
@@ -509,21 +516,21 @@
   (after-init . marginalia-mode))
 
 ;; auto completion
-;; (use-package corfu
-;;   :hook
-;;   (after-init . global-corfu-mode)
-;;   :custom
-;;   (corfu-auto t)
-;;   (corfu-auto-delay 0.75)
-;;   (corfu-preview-current t)
-;;   :bind
-;;   (:map corfu-map
-;; 	("C-n" . corfu-next)
-;; 	("C-p" . corfu-previous)
-;; 	("C-m" . corfu-insert)
-;; 	("<return>" . corfu-insert)
-;; 	("RET" . corfu-insert)
-;; 	("C-M-i" . corfu-complete)))
+(use-package corfu
+  :hook
+  (after-init . global-corfu-mode)
+  :custom
+  (corfu-auto nil)
+  (corfu-auto-delay 0.75)
+  (corfu-preview-current t)
+  :bind
+  (:map corfu-map
+	("C-n" . corfu-next)
+	("C-p" . corfu-previous)
+	("C-m" . corfu-insert)
+	("<return>" . corfu-insert)
+	("RET" . corfu-insert)
+	("C-M-i" . corfu-complete)))
 
 
 ;; documentation
@@ -681,8 +688,9 @@
   (setq xref-show-xrefs-function #'consult-xref
 	xref-show-definitions-function #'consult-xref))
 
+
 ;; asynchronous fuzzy find/grep (with just 200+ lines)
-;; used in project
+;; used for project search
 (use-package affe
   :defer 0.5)
 
@@ -693,6 +701,7 @@
 ;; project buffer/file
 (use-package consult-projectile
   :after (consult projectile))
+
 
 ;; Built-in project manager, support git repos only
 (use-package projectile
@@ -775,6 +784,13 @@
   ;; left one last whitespace
   (setq hungry-delete-join-reluctantly t))
 
+
+;; dynamic module required
+(use-package rime
+  :custom
+  (default-input-method "rime")
+  (rime-librime-root "~/.emacs.d/librime/dist"))
+
 ;; history across buffers
 (use-package dogears
   :straight (:host github :repo "alphapapa/dogears.el")
@@ -835,8 +851,9 @@
     "2" 'end-of-buffer
 
     "v" 'vterm
+    "s" 'shell
 
-    "f" 'consult-file-externally
+    "f" 'find-file
     "k" 'kill-this-buffer
     "q" 'save-buffers-kill-terminal)
 
@@ -959,10 +976,6 @@
 		LaTeX-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
-;; auto indent
-(use-package aggressive-indent
-  :hook
-  (prog-mode . aggressive-indent-mode))
 
 ;; code formatting, require third-party formatter
 (use-package format-all
@@ -1206,6 +1219,11 @@
 (setq acm-enable-icon t)
 (setq lsp-bridge-complete-manually nil)
 (define-key lsp-bridge-mode-map (kbd "<return>") 'acm-complete)
+(setq lsp-bridge-enable-auto-format-code nil)
+(setq acm-enable-tabnine t)
+
+(add-to-list 'load-path "~/.emacs.d/color-rg")
+(require 'color-rg)
 
 ;; requires install `sbcl`
 ;; REPL for lisp
@@ -1225,6 +1243,15 @@
 (use-package topsy
   :straight (topsy :fetcher github :repo "alphapapa/topsy.el")
   :hook (prog-mode . topsy-mode))
+
+(use-package treesit
+  :if (treesit-available-p)
+  :config
+  ;; treesit language definition
+  (setq treesit-extra-load-path '("/usr/local/lib/tree-sitter-module/dist"))
+  ;; use  python-ts(i.e., treesit)-mode
+  (if (treesit-ready-p 'python)
+      (push '(python-mode . python-ts-mode) major-mode-remap-alist)))
 
 ;;==============================
 ;;           Python           ;;
@@ -1542,9 +1569,17 @@
 ;; pretty symbol for org-mode
 (add-hook 'org-mode-hook
 	  (lambda ()
+	    ;; tickboxes
 	    (push '("[ ]" . "🞎") prettify-symbols-alist)
 	    (push '("[X]" . "☑") prettify-symbols-alist)
 	    (push '("[-]" . "◫") prettify-symbols-alist)
+	    ;; arrows
+	    (push '("->" . "→") prettify-symbols-alist)
+	    (push '("<-" . "←") prettify-symbols-alist)
+	    (push '("=>" . "⇒") prettify-symbols-alist)
+	    (push '("<=" . "⇐") prettify-symbols-alist)
+	    (push '("\\->" . "↳") prettify-symbols-alist)
+	    (push '("<-/" . "↵") prettify-symbols-alist)
 	    (prettify-symbols-mode)))
 
 (setq org-todo-keywords
