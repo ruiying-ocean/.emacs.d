@@ -488,6 +488,7 @@
 
 ;; use posframe (in the centre of buffer) for vertico
 (use-package vertico-posframe
+  :if window-system
   :hook
   (vertico-mode . vertico-posframe-mode))
 
