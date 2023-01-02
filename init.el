@@ -189,6 +189,8 @@
 (use-package undo-tree
   :hook
   (after-init . global-undo-tree-mode)
+  :config
+  (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
   :bind
   ("C-c u" . undo-tree-visualize)
   ("M-/" . undo-tree-redo)
@@ -242,8 +244,8 @@
 ;;   (prog-mode . whitespace-mode))
 
 ;; locally remove trailing whitespace for programming mode
-(add-hook 'prog-mode-hook
-          (lambda () (add-hook 'before-save-hook 'delete-trailing-whitespace nil 'local)))
+;; (add-hook 'prog-mode-hook
+;;           (lambda () (add-hook 'before-save-hook 'delete-trailing-whitespace nil 'local)))
 
 ;; An alternative way to cleanup whitespace
 ;; (use-package ws-butler
@@ -335,10 +337,12 @@
   ("C-x t" . vterm)
   ("C-x s" . vterm-shell)
   (:map vterm-mode-map
-	("C-c C-t" . vterm-copy-mode))
+	("C-c C-t" . vterm-copy-mode)
+	("C-y" . vterm-yank))
   :custom
-  (vterm-kill-buffer-on-exit t))
-
+  (vterm-kill-buffer-on-exit t)
+  (vterm-always-compile-module t)
+  (vterm-max-scrollback 100000))
 
 ;; a comint extension, e.g., :view *.jpg to view a plot in shell
 ;; other useful cmd: :e (edit), :ssh,
@@ -484,7 +488,6 @@
 
 ;; use posframe (in the centre of buffer) for vertico
 (use-package vertico-posframe
-  :requires posframe
   :hook
   (vertico-mode . vertico-posframe-mode))
 
@@ -787,9 +790,16 @@
 
 ;; dynamic module required
 (use-package rime
+  :config
+  (setq rime-show-candidate 'posframe)
+  (setq rime-posframe-properties
+	(list :internal-border-width 1))
+  (setq rime-inline-ascii-trigger 'shift-l)
   :custom
   (default-input-method "rime")
-  (rime-librime-root "~/.emacs.d/librime/dist"))
+  (rime-emacs-module-header-root "/opt/homebrew/Cellar/emacs-plus@29/29.0.60/Emacs.app/Contents/Resources/include/")
+  (rime-librime-root "~/.emacs.d/librime/dist")
+  )
 
 ;; history across buffers
 (use-package dogears
@@ -826,7 +836,7 @@
     "g g" '(goto-line :which-key "goto-line-number")
     "g m" '(exchange-point-and-mark :which-key "go-back-and-mark")
     ;; "g b" '(goto-last-change :which-key "go-back")
-    "g b" '(dogear-back :which-key "go-back")
+    "g b" '(dogears-back :which-key "go-back")
 
     "m" '(indent-rigidly :which-key "move code")
 
@@ -887,12 +897,9 @@
     ))
 
 ;; folding your code
-(use-package hideshow
-  :straight (:type built-in)
-  :hook
-  (prog-mode . hs-minor-mode)
+(use-package origami
   :bind
-  ("<f5>" . hs-toggle-hiding))
+  ("<f5>" . origami-toggle-node))
 
 ;; adjust font size
 (setq-default text-scale-mode-step 1.1)
@@ -1244,6 +1251,8 @@
   :straight (topsy :fetcher github :repo "alphapapa/topsy.el")
   :hook (prog-mode . topsy-mode))
 
+;; (1) brew install treesit
+;; (2) build extra treesit language definition
 (use-package treesit
   :if (treesit-available-p)
   :config
