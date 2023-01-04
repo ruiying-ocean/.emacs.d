@@ -243,16 +243,6 @@
 ;;   :hook
 ;;   (prog-mode . whitespace-mode))
 
-;; locally remove trailing whitespace for programming mode
-;; (add-hook 'prog-mode-hook
-;;           (lambda () (add-hook 'before-save-hook 'delete-trailing-whitespace nil 'local)))
-
-;; An alternative way to cleanup whitespace
-;; (use-package ws-butler
-;;   :straight (:host github :repo "lewang/ws-butler")
-;;   :hook
-;;   (prog-mode . ws-butler-mode))
-
 ;; Automatically add spacing around operators
 ;; use C-v to next page
 (use-package electric-operator
@@ -359,15 +349,20 @@
   :straight (:type built-in)
   :if (memq system-type '(gnu/linux darwin))
   :config
-  ;; use for debug
-  ;; (setq tramp-verbose 6)
   (add-to-list 'tramp-remote-path "/usr/local/bin/git")
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
   ;;tramp mode to cache password
   (setq password-cache-expiry nil)
   ;; version control backends
   (setq vc-handled-backends '(Git))
-  )
+
+  (setq remote-file-name-inhibit-cache nil)
+  (setq vc-ignore-dir-regexp
+	(format "%s\\|%s"
+		vc-ignore-dir-regexp
+		tramp-file-name-regexp))
+  ;; turn off projectile-mode if experience slow
+  (setq tramp-verbose 1))
 
 (use-package which-key
   :hook
@@ -421,12 +416,12 @@
 
 ;; insert template
 ;; change trigger key!
-;; (use-package yasnippet
-;;   :straight yasnippet-snippets ;; Collection of snippets
-;;   :hook
-;;   (after-init . yas-global-mode)
-;;   :bind
-;;   ("C-c i" . yas-insert-snippet))
+(use-package yasnippet
+  :straight yasnippet-snippets ;; Collection of snippets
+  :hook
+  (after-init . yas-global-mode)
+  :bind
+  ("C-c i" . yas-insert-snippet))
 
 (use-package consult-yasnippet
   :after (consult yasnippet))
@@ -662,8 +657,6 @@
 	 ;; ("M-s l" . consult-line)
 	 ;; use consult-line to replac
 	 ("C-s" . consult-line)
-	 ("M-s f" . affe-find)
-	 ("M-s s" . affe-grep)
 	 ("M-s r" . consult-ripgrep)
 	 ("M-s L" . consult-line-multi)
 	 ("M-s m" . consult-multi-occur)
@@ -692,12 +685,6 @@
   (setq xref-show-xrefs-function #'consult-xref
 	xref-show-definitions-function #'consult-xref))
 
-
-;; asynchronous fuzzy find/grep (with just 200+ lines)
-;; used for project search
-(use-package affe
-  :defer 0.5)
-
 ;; consult extensions
 (use-package consult-flycheck
   :after (consult flycheck))
@@ -706,12 +693,14 @@
 (use-package consult-projectile
   :after (consult projectile))
 
-
 ;; Built-in project manager, support git repos only
 (use-package projectile
   :hook
   (prog-mode . projectile-mode)
   :config
+  ;; to avoid slowness over tramp 
+  (defadvice projectile-project-root (around ignore-remote first activate)
+    (unless (file-remote-p default-directory) ad-do-it))
   (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map))
 
 ;; robust find file (at point) in project
@@ -806,7 +795,9 @@
 (use-package dogears
   :straight (:host github :repo "alphapapa/dogears.el")
   ;; These bindings are optional, of course:
-  :bind (:map global-map
+  :hook
+  (after-init . dogears-mode)
+  :bind (:map dogears-mode
 	      ("M-g d" . dogears-go)
 	      ("M-g b" . dogears-back)
 	      ("M-g f" . dogears-forward)
@@ -840,10 +831,11 @@
     "g b" '(dogears-back :which-key "go-back")
 
     "m" '(indent-rigidly :which-key "move code")
-
-    "p f" '(affe-find :which-key "project find file")
-    "p s" '(affe-grep :which-key "project search text")
+    
+    "p s" '(consult-ripgrep :which-key "project search text")
     "p b" '(consult-projectile :which-key "project buffer/file")
+    "p i" '(consult-imenu :which-key "project imenu")
+    "p f" '(projectile-find-file :which-key "project find file")
     "p c" '(projectile-compile-project :which-key "project compile")
     "p p" '(projectile-switch-project :which-key "project switch")
     "p v" '(projectile-run-vterm :which-key "project vterm")
@@ -1034,17 +1026,11 @@
 ;;--------------------------------------------------
 
 ;; Showing matching parentheses (built-in)
-;; (show-paren-mode t)
-;; (setq show-paren-delay 0)
-;; (setq show-paren-style 'parenthesis) ;;Options: parenthesis/expression/mixed
-
 (use-package highlight-parentheses
   :hook
   (after-init . global-highlight-parentheses-mode)
   :config
-  (setq highlight-parentheses-highlight-adjacent t)
-  ;;  (setq highlight-parentheses-colors '("BlueViolet" "DarkOrchid" "orchid" "Plum"))
-  )
+  (setq highlight-parentheses-highlight-adjacent t))
 
 ;;--> Option 1 (built-in)
 (electric-pair-mode t)
@@ -1220,19 +1206,6 @@
 
 ;;; PROGRAMMING LANGUAGES & LSP
 ;;==============================
-;; LSP-bridge
-(add-to-list 'load-path "~/.emacs.d/lsp-bridge")
-(require 'lsp-bridge)
-(global-lsp-bridge-mode)
-(setq acm-enable-icon t)
-(setq lsp-bridge-complete-manually nil)
-(define-key lsp-bridge-mode-map (kbd "<return>") 'acm-complete)
-(setq lsp-bridge-enable-auto-format-code nil)
-(setq acm-enable-tabnine t)
-
-(add-to-list 'load-path "~/.emacs.d/color-rg")
-(require 'color-rg)
-
 ;; requires install `sbcl`
 ;; REPL for lisp
 ;; (use-package slime
@@ -1255,6 +1228,7 @@
 ;; (1) brew install treesit
 ;; (2) build extra treesit language definition
 (use-package treesit
+  :straight nil
   :if (treesit-available-p)
   :config
   ;; treesit language definition
