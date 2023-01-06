@@ -1242,7 +1242,7 @@
   ;; treesit language definition
   (setq treesit-extra-load-path '("/usr/local/lib/tree-sitter-module/dist"))
   :hook
-  (tree-sitter-hl-mode . python-mode))
+  (tree-sitter-hl-mode . tree-sitter-mode))
 
 ;; language-specific dynamic libraries
 (use-package tree-sitter-langs)
