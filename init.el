@@ -975,6 +975,13 @@
 (global-display-line-numbers-mode t) ;;the linum-mode has been obsolete
 (setq display-line-numbers-width 0)
 
+;; Line annotation for changed and saved lines.
+(use-package line-reminder
+  :hook
+  (after-init . global-line-reminder-mode)
+  :config
+  (setq line-reminder-show-option 'indicators))
+
 ;;Disable line number for certain modes
 (dolist (mode '(org-mode-hook
 		term-mode-hook
