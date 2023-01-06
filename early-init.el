@@ -20,7 +20,6 @@
                '(vertical-scroll-bars . nil) ;; remove the scroll bar	       
                '(tool-bar-lines . 0) ;;remove the tool bar
                '(menu-bar-lines . 0) ;;remove the menu bar
-	       '(undecorated . 1)    ;;keep the title bar
 	       )))
 
 (setq-default window-resize-pixelwise t)
