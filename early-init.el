@@ -80,5 +80,3 @@
   (add-hook 'emacs-startup-hook (lambda ()
                                   (when (display-graphic-p)
                                     (self/show-welcome-buffer)))))
-
-(message "test")

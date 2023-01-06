@@ -21,7 +21,8 @@
 
 ;;; Code:
 
-;;; FUNDEMENTAL SETUP
+;;; FUNDEMENTAL 
+
 
 ;; Customize when to check package modification (much much faster)
 (setq-default straight-check-for-modifications '(check-on-save find-when-checking))
@@ -68,6 +69,7 @@
     (push (expand-file-name dir user-emacs-directory) load-path)))
 (advice-add #'package-initialize :after #'update-load-path)
 (update-load-path)
+
 
 (when (eq system-type 'darwin)
   (defvar brew-parent-dir "/opt/homebrew/")
@@ -889,10 +891,14 @@
     "r" 'dired-rsync
     ))
 
-;; folding your code
-(use-package origami
+;; folding your code based on tree sitter
+(use-package ts-fold
+  :straight (ts-fold :type git :host github :repo "emacs-tree-sitter/ts-fold")
+  :hook
+  (tree-sitter-mode . global-ts-fold-mode)
+  (tree-sitter-mode . global-ts-fold-indicators-mode)
   :bind
-  ("<f5>" . origami-toggle-node))
+  ("<f5>" . ts-fold-toggle))
 
 ;; adjust font size
 (setq-default text-scale-mode-step 1.1)
@@ -1158,6 +1164,7 @@
 ;; lazy-load default theme
 (setq custom-safe-themes t)
 
+
 ;; use modus-operandi as default theme
 (use-package modus-themes
   :config
@@ -1231,11 +1238,14 @@
   :straight nil
   :if (treesit-available-p)
   :config
+  (global-tree-sitter-mode t)
   ;; treesit language definition
   (setq treesit-extra-load-path '("/usr/local/lib/tree-sitter-module/dist"))
-  ;; use  python-ts(i.e., treesit)-mode
-  (if (treesit-ready-p 'python)
-      (push '(python-mode . python-ts-mode) major-mode-remap-alist)))
+  :hook
+  (tree-sitter-hl-mode . python-mode))
+
+;; language-specific dynamic libraries
+(use-package tree-sitter-langs)
 
 ;;==============================
 ;;           Python           ;;
