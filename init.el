@@ -419,11 +419,12 @@
 ;; insert template
 ;; change trigger key!
 (use-package yasnippet
-  :straight yasnippet-snippets ;; Collection of snippets
   :hook
   (after-init . yas-global-mode)
   :bind
   ("C-c i" . yas-insert-snippet))
+
+(use-package yasnippet-snippets)
 
 (use-package consult-yasnippet
   :after (consult yasnippet))
@@ -473,6 +474,25 @@
   :config
   (setq ctrlf-default-search-style 'fuzzy))
 
+;; front-end of fzf
+(use-package fzf
+  ;; Don't forget to set keybinds!
+  :config
+  (setq fzf/args "-x --color bw --print-query --margin=1,0 --no-hscroll"
+	fzf/executable "fzf"
+	fzf/git-grep-args "-i --line-number %s"
+	;; command used for `fzf-grep-*` functions
+	;; example usage for ripgrep:
+	;; fzf/grep-command "rg --no-heading -nH"
+	fzf/grep-command "grep -nrH"
+	;; If nil, the fzf buffer will appear at the top of the window
+	fzf/position-bottom t
+	fzf/window-height 15)
+  :bind
+  ("C-x b" . fzf-switch-buffer)
+  ("<f3>" . fzf-recentf))
+
+
 ;; completion UI
 (use-package vertico
   :hook
@@ -521,7 +541,7 @@
   :hook
   (after-init . global-corfu-mode)
   :custom
-  (corfu-auto t)
+  (corfu-auto nil)
   (corfu-auto-delay 0.75)
   (corfu-preview-current t)
   :bind
@@ -637,7 +657,8 @@
 	 ("C-c m" . consult-mode-command)
 
 	 ;; C-x bindings (ctl-x-map)
-	 ("C-x b" . consult-buffer)	;; orig. switch-to-buffer
+	 ;; ("C-x b" . consult-buffer)
+	 ;; orig. switch-to-buffer
 	 ("C-x r b" . consult-bookmark) ;; orig. bookmark-jump
 
 	 ;; Other custom bindings
@@ -664,7 +685,7 @@
 	 ("M-s m" . consult-multi-occur)
 	 ("M-s k" . consult-keep-lines)
 	 ("M-s u" . consult-focus-lines)
-	 ("<f3>" . consult-recent-file)
+	 ;; ("<f3>" . consult-recent-file)
 	 ("M-s e" . consult-isearch-history)
 	 :map isearch-mode-map
 	 ("M-e" . consult-isearch-history) ;; orig. isearch-edit-string
@@ -741,6 +762,7 @@
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 (global-set-key (kbd "C-x ,") 'beginning-of-buffer)
 (global-set-key (kbd "C-x .") 'end-of-buffer)
+
 ;; globally go to previous position; "C-u C-SPC" to do same locally
 (global-set-key (kbd "C-c C-SPC") 'pop-global-mark)
 ;; repeat command
@@ -838,6 +860,7 @@
     "p b" '(consult-projectile :which-key "project buffer/file")
     "p i" '(consult-imenu :which-key "project imenu")
     "p f" '(projectile-find-file :which-key "project find file")
+    "p z" '(projectile-find-file :which-key "project find file but fuzzy")
     "p c" '(projectile-compile-project :which-key "project compile")
     "p p" '(projectile-switch-project :which-key "project switch")
     "p v" '(projectile-run-vterm :which-key "project vterm")
@@ -1239,20 +1262,57 @@
   :straight (topsy :fetcher github :repo "alphapapa/topsy.el")
   :hook (prog-mode . topsy-mode))
 
-;; (1) brew install treesit
-;; (2) build extra treesit language definition
+;; Install treesit C-library first: `brew install tree-sitter'
 (use-package treesit
-  :straight nil
-  :if (treesit-available-p)
+  :straight (:type built-in)
+  :when (and (fboundp 'treesit-available-p)
+	     (treesit-available-p))
+  :custom (major-mode-remap-alist
+	   '((c-mode . c-ts-mode)
+	     (c++-mode . c++-ts-mode)
+	     (cmake-mode . cmake-ts-mode)
+	     (conf-toml-mode . toml-ts-mode)
+	     (css-mode . css-ts-mode)
+	     (js-mode . js-ts-mode)
+	     (js-json-mode . json-ts-mode)
+	     (python-mode . python-ts-mode)
+	     (sh-mode . bash-ts-mode)
+	     (typescript-mode . typescript-ts-mode)))
   :config
-  (global-tree-sitter-mode t)
-  ;; treesit language definition
-  (setq treesit-extra-load-path '("/usr/local/lib/tree-sitter-module/dist"))
-  :hook
-  (tree-sitter-hl-mode . tree-sitter-mode))
+  ;; install separate language grammar, run `treesit-install-grammar'
+  (add-to-list
+   'treesit-language-source-alist
+   '(python "https://github.com/tree-sitter/tree-sitter-python.git")))
 
-;; language-specific dynamic libraries
-(use-package tree-sitter-langs)
+;; ts-mode fontification
+(defun python-ts-mode-setup ()
+  (treesit-font-lock-recompute-features
+   '(function variable) '(definition)))
+(add-hook 'python-ts-mode-hook #'python-ts-mode-setup)
+
+(use-package eglot
+  :straight (:type built-in)
+  :hook ((python-ts-mode . eglot-ensure)
+	 (c-mode . eglot-ensure)
+	 (ess-r-mode . eglot-ensure)
+	 (fortran-mode . eglot-ensure))
+  :bind (:map eglot-mode-map
+	      ("C-c r" . eglot-rename)
+	      ("C-c h" . eldoc)
+	      ("C-c f" . eglot-format)
+	      ("C-c F" . eglot-format-buffer))
+  :config
+  (setq read-process-output-max (* 512 1024))
+  (add-to-list 'eglot-server-programs '(f90-mode . "fortls"))
+  (add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))
+  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+  (add-to-list 'eglot-server-programs '(ess-r-mode . ("R" "--slave" "-e" "languageserver::run()"))))
+
+;; use flycheck checker in flymake
+(use-package flymake-flycheck
+  :config
+  (setq-local flymake-diagnostic-functions
+	      (list (flymake-flycheck-diagnostic-function-for 'python-pyright))))
 
 ;;==============================
 ;;           Python           ;;
