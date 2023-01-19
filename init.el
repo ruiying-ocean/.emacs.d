@@ -262,7 +262,23 @@
 ;; C-M-SPC also does same on Mac
 (use-package expand-region
   :bind
-  ("C-=" . er/expand-region))
+  ("C-=" . er/expand-region)
+  :config
+  ;; treesit integration  
+  (defun treesit-mark-bigger-node ()
+    (let* ((root (treesit-buffer-root-node))
+	   (node (treesit-node-descendant-for-range root (region-beginning) (region-end)))
+	   (node-start (treesit-node-start node))
+	   (node-end (treesit-node-end node)))
+      ;; Node fits the region exactly. Try its parent node instead.
+      (when (and (= (region-beginning) node-start) (= (region-end) node-end))
+	(when-let ((node (treesit-node-parent node)))
+	  (setq node-start (treesit-node-start node)
+		node-end (treesit-node-end node))))
+      (set-mark node-end)
+      (goto-char node-start)))
+
+  (add-to-list 'er/try-expand-list 'treesit-mark-bigger-node))
 
 ;; assign every marked line a cursor
 (use-package multiple-cursors
@@ -475,38 +491,30 @@
 ;; front-end of fzf
 (use-package fzf
   :if window-system
-  ;; Don't forget to set keybinds!
   :config
   (setq fzf/args "-x --print-query --margin=1,0 --no-hscroll"
 	fzf/executable "fzf"
-	fzf/git-grep-args "-i --line-number %s"
-	;; command used for `fzf-grep-*` functions
-	;; example usage for ripgrep:
-	;; fzf/grep-command "rg --no-heading -nH"
-	fzf/grep-command "grep -nrH"
 	;; If nil, the fzf buffer will appear at the top of the window
-	fzf/position-bottom t
+	fzf/position-bottom nil
 	fzf/window-height 15)
   :bind
-  ("C-x b" . fzf-switch-buffer)
   ("<f3>" . fzf-recentf))
-
 
 ;; completion UI
 (use-package vertico
   :hook
   (after-init . vertico-mode))
 
-;; displays current match and total matches in search
-(use-package anzu
-  :hook
-  (prog-mode . global-anzu-mode))
-
 ;; use posframe (in the centre of buffer) for vertico
 (use-package vertico-posframe
   :if window-system
   :hook
   (vertico-mode . vertico-posframe-mode))
+
+;; displays current match and total matches in search
+(use-package anzu
+  :hook
+  (prog-mode . global-anzu-mode))
 
 ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
 ;; Vertico commands are hidden in normal buffers.
@@ -611,33 +619,6 @@
 
   (add-to-list 'completion-at-point-functions #'cape-symbol)
   (add-to-list 'completion-at-point-functions #'cape-line))
-
-(use-package embark
-  :bind
-  (("<f6>" . embark-act)	;; pick some comfortable binding
-   ("C-;" . embark-dwim)	;; good alternative: M-.
-   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
-
-  :init
-  ;; Optionally replace the key help with a completing-read interface
-  (setq prefix-help-command #'embark-prefix-help-command)
-
-  :config
-  ;; Hide the mode line of the Embark live/completions buffers
-  (add-to-list 'display-buffer-alist
-	       '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                 nil
-                 (window-parameters (mode-line-format . none)))))
-
-
-(use-package embark-consult
-  :after (embark consult)
-  :demand t ; only necessary if you have the hook below
-  ;; if you want to have consult previews as you move around an
-  ;; auto-updating embark collect buffer
-  :hook
-  (embark-collect-mode . consult-preview-at-point-mode))
-
 
 ;; jump to definition
 (use-package dumb-jump
@@ -767,10 +748,6 @@
 ;; repeat command
 (global-set-key (kbd "<f4>") #'repeat)
 
-(use-package goto-last-change
-  :bind
-  ("C-x C-x" . goto-last-change))
-
 ;; M-up/down to move text
 (use-package move-text
   :config
@@ -814,21 +791,9 @@
   (rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include")
   (rime-librime-root "~/.emacs.d/librime/dist"))
 
-;; history across buffers
-(use-package dogears
-  :straight (:host github :repo "alphapapa/dogears.el")
-  ;; These bindings are optional, of course:
-  :hook
-  (after-init . dogears-mode)
-  :bind (:map dogears-mode
-	      ("M-g d" . dogears-go)
-	      ("M-g b" . dogears-back)
-	      ("M-g f" . dogears-forward)
-	      ("M-g D" . dogears-list)))
-
 ;; Mark set
-;; C-x C-x -> set mark and move back to previous position
 ;; C-x h to select all
+;; C-u C-SPC to go back (mark ring)
 
 (use-package general
   :config
@@ -850,21 +815,26 @@
     "g l" '(avy-goto-line :which-key "goto-line")
     "g g" '(goto-line :which-key "goto-line-number")
     "g m" '(exchange-point-and-mark :which-key "go-back-and-mark")
-    ;; "g b" '(goto-last-change :which-key "go-back")
-    "g b" '(dogears-back :which-key "go-back")
+    ;; mark ring
+    "g b" '(consult-global-mark :which-key "go-back")
 
-    "m" '(indent-rigidly :which-key "move code")
-    
+    ;; change  indent
+    "<tab>" '(indent-rigidly :which-key "move code")
+
+    ;; project level operations
+    "p p" '(projectile-switch-project :which-key "project switch")
+    ;; search file/buffer/text
     "p s" '(consult-ripgrep :which-key "project search text")
     "p b" '(consult-projectile :which-key "project buffer/file")
-    "p i" '(consult-imenu :which-key "project imenu")
     "p f" '(projectile-find-file :which-key "project find file")
-    "p z" '(projectile-find-file :which-key "project find file but fuzzy")
-    "p c" '(projectile-compile-project :which-key "project compile")
-    "p p" '(projectile-switch-project :which-key "project switch")
+    "p F" '(fzf-find-file-in-dir :which-key "project fuzzy find file")
+    "p i" '(consult-imenu :which-key "project imenu")
+    
+    ;; shell/terminal
     "p v" '(projectile-run-vterm :which-key "project vterm")
     "p x" '(projectile-run-shell :which-key "project shell")
     "p e" '(projectile-run-eshell :which-key "project eshell")
+    "p c" '(projectile-compile-project :which-key "project compile")    
 
     "e b" '(ediff-buffers :which-key "compare buffers")
     "e f" '(ediff-files :which-key "compare files")
@@ -882,6 +852,7 @@
 
     "f" 'find-file
     "k" 'kill-this-buffer
+    "r" 'restart-emacs
     "q" 'save-buffers-kill-terminal)
 
   ;; ------ Mode-specific Keybindings ------
