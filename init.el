@@ -456,6 +456,10 @@
   (setq exec-path-from-shell-arguments nil) ;;read non-interactive shell config
   (exec-path-from-shell-initialize))
 
+
+(when (display-graphic-p)
+  (add-to-list 'exec-path "~/mambaforge/bin/"))
+
 (use-package use-package-ensure-system-package
   :defer t
   :after exec-path-from-shell) ;;extend use-package, put after exec-path-from-shell
