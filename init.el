@@ -1,12 +1,12 @@
-;;; init.el --- Emacs configuration -*- lexical-binding: t -*-
+;;;; init.el --- Emacs configuration -*- lexical-binding: t -*-
 
-;; This file contains my customized configuration codes, which
-;; are divided into multiple sections by ^L character.
-;; Author: Rui Ying
-;; Email: rui.ying@bristol.ac.uk
+;;; This file contains my customized configuration codes, which
+;;; are divided into multiple sections by ^L character.
+;;; Author: Rui Ying
+;;; Email: rui.ying@bristol.ac.uk
 
 ;;; DEPENDENCIES
-;; LSP servers:
+;; LSP servers
 ;;       pylsp, clangd, fortls, texlab/digestif
 ;; Spell checker:
 ;;       grammaly
@@ -22,8 +22,6 @@
 ;;; Code:
 
 ;;; FUNDEMENTAL 
-
-
 ;; Customize when to check package modification (much much faster)
 (setq-default straight-check-for-modifications '(check-on-save find-when-checking))
 
@@ -220,7 +218,7 @@
 	      sp-forward-sexp		; Moves across lines
 	      mosey-goto-end-of-code
 	      mosey-goto-beginning-of-comment-text)
-    :prefix "lisp"))
+	    :prefix "lisp"))
 
 ;;; Auto-save buffer
 (use-package real-auto-save
@@ -478,7 +476,7 @@
 (use-package fzf
   ;; Don't forget to set keybinds!
   :config
-  (setq fzf/args "-x --color bw --print-query --margin=1,0 --no-hscroll"
+  (setq fzf/args "-x --print-query --margin=1,0 --no-hscroll"
 	fzf/executable "fzf"
 	fzf/git-grep-args "-i --line-number %s"
 	;; command used for `fzf-grep-*` functions
@@ -630,7 +628,7 @@
                  nil
                  (window-parameters (mode-line-format . none)))))
 
-;; Consult users will also want the embark-consult package.
+
 (use-package embark-consult
   :after (embark consult)
   :demand t ; only necessary if you have the hook below
@@ -657,7 +655,7 @@
 	 ("C-c m" . consult-mode-command)
 
 	 ;; C-x bindings (ctl-x-map)
-	 ;; ("C-x b" . consult-buffer)
+	 ("C-x b" . consult-buffer)
 	 ;; orig. switch-to-buffer
 	 ("C-x r b" . consult-bookmark) ;; orig. bookmark-jump
 
@@ -811,9 +809,9 @@
   (setq rime-inline-ascii-trigger 'shift-l)
   :custom
   (default-input-method "rime")
-  (rime-emacs-module-header-root "/opt/homebrew/Cellar/emacs-plus@29/29.0.60/Emacs.app/Contents/Resources/include/")
-  (rime-librime-root "~/.emacs.d/librime/dist")
-  )
+  ;; the path of emacs_module.h
+  (rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include")
+  (rime-librime-root "~/.emacs.d/librime/dist"))
 
 ;; history across buffers
 (use-package dogears
@@ -914,22 +912,10 @@
     "r" 'dired-rsync
     ))
 
-;; folding your code based on tree sitter
-(use-package ts-fold
-  :straight (ts-fold :type git :host github :repo "emacs-tree-sitter/ts-fold")
-  :hook
-  (tree-sitter-mode . global-ts-fold-mode)
-  (tree-sitter-mode . global-ts-fold-indicators-mode)
-  :bind
-  ("<f5>" . ts-fold-toggle))
-
 ;; adjust font size
 (setq-default text-scale-mode-step 1.1)
 
 (use-package helpful
-  :config
-  (setq counsel-describe-function-function #'helpful-callable)
-  (setq counsel-describe-variable-function #'helpful-variable)
   :bind
   ("C-h f" . helpful-callable)
   ("C-h v" . helpful-variable)
@@ -1287,7 +1273,7 @@
 ;; ts-mode fontification
 (defun python-ts-mode-setup ()
   (treesit-font-lock-recompute-features
-   '(function variable) '(definition)))
+   '(function variable class) '(definition)))
 (add-hook 'python-ts-mode-hook #'python-ts-mode-setup)
 
 (use-package eglot
@@ -1662,88 +1648,6 @@
 (setq org-directory "~/Documents")
 (setq org-default-notes-file (concat org-directory "/TODO.org"))
 (global-set-key (kbd "C-c r") 'org-capture)
-
-;; ==============================
-;;             LATEX           ;;
-;; ==============================
-;; First, add TeX distribution to path
-(use-package tex ;;not auctex instead!
-  :straight auctex
-  :mode ("\\.tex\\'" . latex-mode)
-  ;; one command to compile and view
-  :bind (:map latex-mode-map
-	      ("C-c C-a" . Tex-command-run-all))
-  :hook
-  (LaTeX-mode . rainbow-delimiters-mode)
-  (LaTeX-mode . LaTeX-math-mode)
-  (LaTeX-mode . visual-line-mode)
-  (LaTeX-mode . flycheck-mode)
-  ;; sync TeX and PDF
-  (LaTeX-mode . TeX-source-correlate-mode)
-
-  :config
-  ;; enable document parsing
-  (setq TeX-auto-save t
-	TeX-parse-self t)
-  ;; tex directory structure
-  (setq-default TeX-master nil)
-  (setq-default TeX-engine 'latex) ;;default engine
-  (setq-default TeX-PDF-mode t)	   ;;PDF output
-  (setq-default TeX-master nil)
-
-  ;;sync latex <-> pdf
-  (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer) ;;auto revert PDF buffer
-
-  ;;C-c C-v to sync forward, double click to sync backward
-  (setq TeX-view-program-selection '((output-pdf "PDF Tools")
-				     (output-dvi "DVI Viewer"))
-	TeX-source-correlate-start-server t
-	TeX-source-correlate-method 'auto) ;;Method to use for enabling forward and inverse search
-  )
-
-(use-package magic-latex-buffer
-  :hook
-  (LaTeX-mode . magic-latex-buffer)
-  :config
-  (setq magic-latex-enable-block-highlight nil
-	magic-latex-enable-suscript t
-	magic-latex-enable-pretty-symbols t
-	magic-latex-enable-block-align nil
-	magic-latex-enable-inline-image nil
-	magic-latex-enable-minibuffer-echo nil))
-
-;;; PDF READER
-
-;;allow you to view pdf continuously
-(use-package pdf-continuous-scroll-mode
-  :straight (:host github :repo "dalanicolai/pdf-continuous-scroll-mode.el")
-  :hook
-  (pdf-view-mode-hook . pdf-continuous-scroll-mode))
-
-;; Compile and install: https://github.com/politza/pdf-tools
-;; Install dependencies: cask, poppler, automake and setenv
-;; Download source code and compile
-;; (pdf-tools-install)
-(use-package pdf-tools
-  :commands (pdf-view-mode pdf-loader-install)
-  :mode ("\\.[pP][dD][fF]\\'" . pdf-view-mode)
-  :magic ("%PDF" . pdf-view-mode)
-  :config
-  (pdf-tools-install :no-query)
-  (define-pdf-cache-function pagelables)
-  ;;In case of high-resolution screen like Mac
-  (setq pdf-view-use-scaling t
-	pdf-view-use-imagemagick nil)
-  :hook
-  (pdf-view-mode . (lambda ()
-		     (display-line-numbers-mode -1)))
-  (pdf-view-mode . pdf-tools-enable-minor-modes)
-  (pdf-view-mode . pdf-view-themed-minor-mode)
-  :bind
-  (:map pdf-view-mode-map
-	("C-s" . isearch-forward-regexp)
-	("j" . pdf-view-next-line-or-next-page)
-	("k" . pdf-view-previous-line-or-previous-page)))
 
 
 ;;; Final cook up
