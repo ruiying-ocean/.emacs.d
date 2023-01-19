@@ -456,10 +456,6 @@
   (setq exec-path-from-shell-arguments nil) ;;read non-interactive shell config
   (exec-path-from-shell-initialize))
 
-
-(when (display-graphic-p)
-  (add-to-list 'exec-path "~/mambaforge/bin/"))
-
 (use-package use-package-ensure-system-package
   :defer t
   :after exec-path-from-shell) ;;extend use-package, put after exec-path-from-shell
@@ -478,6 +474,7 @@
 
 ;; front-end of fzf
 (use-package fzf
+  :if window-system
   ;; Don't forget to set keybinds!
   :config
   (setq fzf/args "-x --print-query --margin=1,0 --no-hscroll"
