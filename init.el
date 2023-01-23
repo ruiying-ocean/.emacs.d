@@ -121,6 +121,9 @@
     (setq use-short-answers t)
   (fset 'yes-or-no-p 'y-or-n-p))
 
+;; keep .emacs.d clean
+(use-package no-littering)
+
 ;;No more backup files~
 (setq-default make-backup-files nil)
 
@@ -452,6 +455,12 @@
 (use-package forge
   :after magit)
 
+;; brew install git-delta
+(use-package magit-delta
+  :hook (magit-mode . magit-delta-mode)
+  :config
+  (setq magit-delta-hide-plus-minus-markers nil))
+
 ;;This package reads proper environment variable in MacOS GUI version
 ;;To speed up this package, (1) separate configuration into
 ;;non-interactive (.zshenv) and interactive (.zshrc) part;
@@ -520,6 +529,24 @@
 (use-package savehist
   :config
   (savehist-mode))
+
+;; save the cursor location
+(use-package saveplace
+  :ensure nil
+  :hook (after-init . save-place-mode))
+
+(use-package crux
+  :bind (("C-a" . crux-move-beginning-of-line)
+         ("C-x 4 t" . crux-transpose-windows)
+         ("C-x K" . crux-kill-other-buffers)
+         ("C-k" . crux-smart-kill-line)
+         ("C-c r" . crux-rename-file-and-buffer)
+         ("C-x DEL" . crux-kill-line-backwards))
+  :config
+  (crux-with-region-or-buffer indent-region)
+  (crux-with-region-or-buffer untabify)
+  (crux-with-region-or-point-to-eol kill-ring-save)
+  (defalias 'rename-file-and-buffer #'crux-rename-file-and-buffer))
 
 ;; completion strategy
 (use-package orderless
