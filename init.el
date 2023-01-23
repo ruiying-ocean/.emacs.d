@@ -831,11 +831,11 @@
     "" nil
     "\\" 'quote-backslash
 
-    "g l" '(avy-goto-line :which-key "goto-line")
-    "g g" '(goto-line :which-key "goto-line-number")
-    "g m" '(exchange-point-and-mark :which-key "go-back-and-mark")
+    "m l" '(avy-goto-line :which-key "goto-line")
+    "m g" '(goto-line :which-key "goto-line-number")
+    "m m" '(exchange-point-and-mark :which-key "go-back-and-mark")
     ;; mark ring
-    "g b" '(consult-global-mark :which-key "go-back")
+    "m b" '(consult-global-mark :which-key "go-back")
 
     ;; change  indent
     "<tab>" '(indent-rigidly :which-key "move code")
@@ -848,7 +848,6 @@
     "p f" '(projectile-find-file :which-key "project find file")
     "p F" '(fzf-find-file-in-dir :which-key "project fuzzy find file")
     "p i" '(consult-imenu :which-key "project imenu")
-    "p g" '(magit-status :which-key "project git")
     
     ;; shell/terminal
     "p v" '(projectile-run-vterm :which-key "project vterm")
@@ -869,7 +868,7 @@
 
     "v" 'vterm
     "s" 'shell
-
+    "g" '(magit-status :which-key "git")
     "f" 'find-file
     "k" 'kill-this-buffer
     "r" 'restart-emacs
@@ -879,8 +878,7 @@
   (my/leader-def prog-mode-map
     "b" 'consult-imenu
     "s" 'shell
-    "t" 'vterm
-    "d" 'ediff-buffers
+    "v" 'vterm
     "c" 'consult-flycheck
     "%" 'query-replace)
 
