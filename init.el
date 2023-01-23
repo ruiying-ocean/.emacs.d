@@ -8,8 +8,6 @@
 ;;; DEPENDENCIES
 ;; LSP servers
 ;;       pylsp, clangd, fortls, texlab/digestif
-;; Spell checker:
-;;       grammaly
 ;; Lint checker:
 ;;       pyflakes, shell checker (brew)
 ;; Fonts:
@@ -68,7 +66,6 @@
 (advice-add #'package-initialize :after #'update-load-path)
 (update-load-path)
 
-
 (when (eq system-type 'darwin)
   (defvar brew-parent-dir "/opt/homebrew/")
   (defvar brew-bin-dir (expand-file-name "bin/" brew-parent-dir))
@@ -119,7 +116,6 @@
 (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
 (setq scroll-step 1) ;; keyboard scroll one line at a time
 
-
 ;; abbreviaiont of yes/no
 (if (> emacs-major-version 27)
     (setq use-short-answers t)
@@ -131,12 +127,11 @@
 ;;No more strange ring bell
 (setq ring-bell-function 'ignore)
 
-(setq confirm-kill-processes t)
+;; Don't ask for killing
+(setq confirm-kill-processes nil)
 
 ;; Delete selection
 (delete-selection-mode t)
-
-;; (global-set-key (kbd "M-w ") 'duplicate-dwim)
 
 ;; right key
 (context-menu-mode 1)
@@ -238,10 +233,6 @@
   (global-set-key [remap kill-ring-save] 'easy-kill)
   (global-set-key [remap mark-sexp] 'easy-mark))
 
-;; Smartly clean whitespace
-;; (use-package whitespace-cleanup-mode
-;;   :hook
-;;   (prog-mode . whitespace-mode))
 
 ;; Automatically add spacing around operators
 ;; use C-v to next page
@@ -290,7 +281,8 @@
   ("M-<mouse-1>" . mc/add-cursor-on-click))
 
 (use-package ediff
-  :defer 1
+  :straight (:type built-in)
+  :defer t
   :config
   (setq ediff-split-window-function 'split-window-horizontally)
   (setq ediff-highlight-all-diffs t)
@@ -492,7 +484,7 @@
 (use-package fzf
   :if window-system
   :config
-  (setq fzf/args "-x --print-query --margin=1,0 --no-hscroll"
+  (setq fzf/args "--color bw -x --print-query --margin=1,0 --no-hscroll"
 	fzf/executable "fzf"
 	;; If nil, the fzf buffer will appear at the top of the window
 	fzf/position-bottom nil
@@ -1122,7 +1114,7 @@
   (if (display-graphic-p)
       (progn
 	;; English font
-	(set-face-attribute 'default nil :font (format "%s:pixelsize=%d" "Iosevka" 15))
+	(set-face-attribute 'default nil :font (format "%s:pixelsize=%d" "SF Mono" 14))
 	;; CJK font
 	(dolist (charset '(kana han symbol cjk-misc bopomofo))
 	  (set-fontset-font (frame-parameter nil 'font)
