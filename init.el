@@ -839,7 +839,7 @@
 
     ;; change  indent
     "<tab>" '(indent-rigidly :which-key "move code")
-
+    
     ;; project level operations
     "p p" '(projectile-switch-project :which-key "project switch")
     ;; search file/buffer/text
@@ -848,6 +848,7 @@
     "p f" '(projectile-find-file :which-key "project find file")
     "p F" '(fzf-find-file-in-dir :which-key "project fuzzy find file")
     "p i" '(consult-imenu :which-key "project imenu")
+    "p g" '(magit-status :which-key "project git")
     
     ;; shell/terminal
     "p v" '(projectile-run-vterm :which-key "project vterm")
@@ -1517,6 +1518,49 @@
 ;; Org-mode
 ;;===========
 
+(use-package org
+  :custom
+  ;; set default note file
+  (org-directory "~/Documents")
+  (org-default-notes-file (concat org-directory "/TODO.org"))
+
+  :custom-face
+  ;; source code block line
+  (org-block-begin-line ((t (:underline t :background unspecified))))
+  (org-block-end-line ((t (:overline t :underline nil :background unspecified))))
+
+  :config
+  (setq org-todo-keywords
+	'((sequence "TODO(t)" "DOING(s)" "|" "DONE(d!/!)")))
+
+  ;; capture TODOs: %U -> dat; %i -> current selection;
+  (setq org-capture-templates
+	'(("t" "Todo" entry (file+headline "~/Documents/TODO.org" "Tasks")
+	   "* TODO [#A] %? %i %U"
+	   :empty-lines 1)))
+
+  :bind
+  ("C-c r" . org-capture)
+  (:map org-mode-map
+	("C-c s" . org-insert-structure-template))
+
+  :hook
+  ;; pretty symbol for org-mode
+  (org-mode . (lambda ()
+		;; tickboxes
+		(push '("[ ]" . "🞎") prettify-symbols-alist)
+		(push '("[X]" . "☑") prettify-symbols-alist)
+		(push '("[-]" . "◫") prettify-symbols-alist)
+		;; arrows
+		(push '("->" . "→") prettify-symbols-alist)
+		(push '("<-" . "←") prettify-symbols-alist)
+		(push '("=>" . "⇒") prettify-symbols-alist)
+		(push '("<=" . "⇐") prettify-symbols-alist)
+		(push '("\\->" . "↳") prettify-symbols-alist)
+		(push '("<-/" . "↵") prettify-symbols-alist)
+		(prettify-symbols-mode))))
+
+
 ;; Beautify org-mode
 (use-package org-superstar
   :hook
@@ -1604,41 +1648,11 @@
 
   :hook org-mode)
 
-;; pretty symbol for org-mode
-(add-hook 'org-mode-hook
-	  (lambda ()
-	    ;; tickboxes
-	    (push '("[ ]" . "🞎") prettify-symbols-alist)
-	    (push '("[X]" . "☑") prettify-symbols-alist)
-	    (push '("[-]" . "◫") prettify-symbols-alist)
-	    ;; arrows
-	    (push '("->" . "→") prettify-symbols-alist)
-	    (push '("<-" . "←") prettify-symbols-alist)
-	    (push '("=>" . "⇒") prettify-symbols-alist)
-	    (push '("<=" . "⇐") prettify-symbols-alist)
-	    (push '("\\->" . "↳") prettify-symbols-alist)
-	    (push '("<-/" . "↵") prettify-symbols-alist)
-	    (prettify-symbols-mode)))
-
-(setq org-todo-keywords
-      '((sequence "TODO(t)" "DOING(s)" "|" "DONE(d!/!)")))
-
 ;; Perfectly alian English/CJK fonts in the same table
 (use-package valign
   :hook (org-mode . valign-mode)
   :config
   (setq valign-fancy-bar t))
-
-;; capture TODOs
-;; %U -> dat; %i -> current selection;
-(setq org-capture-templates
-      '(("t" "Todo" entry (file+headline "~/Documents/TODO.org" "Tasks")
-	 "* TODO [#A] %? %i %U"
-	 :empty-lines 1)))
-
-(setq org-directory "~/Documents")
-(setq org-default-notes-file (concat org-directory "/TODO.org"))
-(global-set-key (kbd "C-c r") 'org-capture)
 
 
 ;;; Final cook up
