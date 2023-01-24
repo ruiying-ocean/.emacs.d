@@ -317,7 +317,6 @@
   :bind
   ("C-x s" . shell)
   (:map shell-mode-map
-	("C-k" . comint-kill-whole-line)
 	("<up>" . comint-previous-input)
 	("C-p" . comint-previous-input)
 	("<down>" . comint-next-input)
