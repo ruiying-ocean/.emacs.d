@@ -61,7 +61,7 @@
 ;; Optimize: Force "lisp" at the head to reduce the startup time.
 (defun update-load-path (&rest _)
   "Update `load-path`"
-  (dolist (dir '("extra-lisp"))
+  (dolist (dir '("extra-lisp" "elpa"))
     (push (expand-file-name dir user-emacs-directory) load-path)))
 (advice-add #'package-initialize :after #'update-load-path)
 (update-load-path)
@@ -444,7 +444,9 @@
   ("C-x c" . magit-checkout)
   :config
   ;; for verbose
-  (setq magit-refresh-verbose t))
+  (setq magit-refresh-verbose t)
+  :custom
+  (magit-git-executable "/usr/bin/git"))
 
 ;;a magit prefix help page
 (use-package transient
@@ -489,16 +491,17 @@
   (setq ctrlf-default-search-style 'fuzzy))
 
 ;; front-end of fzf
-(use-package fzf
-  :if window-system
-  :config
-  (setq fzf/args "--color bw -x --print-query --margin=1,0 --no-hscroll"
-	fzf/executable "fzf"
-	;; If nil, the fzf buffer will appear at the top of the window
-	fzf/position-bottom nil
-	fzf/window-height 15)
-  :bind
-  ("<f3>" . fzf-recentf))
+;; (use-package fzf
+;;   :if window-system
+;;   :config
+;;   (setq fzf/args "--color bw -x --print-query --margin=1,0 --no-hscroll"
+;; 	fzf/executable "fzf"
+;; 	;; If nil, the fzf buffer will appear at the top of the window
+;; 	fzf/position-bottom nil
+;; 	fzf/window-height 15)
+;;   :bind
+;;   ("<f3>" . fzf-recentf)
+;;   ("C-x b" . fzf-switch-buffer))
 
 ;; completion UI
 (use-package vertico
@@ -683,7 +686,7 @@
 	 ("M-s m" . consult-multi-occur)
 	 ("M-s k" . consult-keep-lines)
 	 ("M-s u" . consult-focus-lines)
-	 ;; ("<f3>" . consult-recent-file)
+	 ("<f3>" . consult-recent-file)
 	 ("M-s e" . consult-isearch-history)
 	 :map isearch-mode-map
 	 ("M-e" . consult-isearch-history) ;; orig. isearch-edit-string
@@ -1030,7 +1033,7 @@
   :straight (:type git :host github
 		   :repo "jasonjckn/pulsing-cursor")
   :hook
-  (after-init . pulsing-cursor-mode))
+  (prog-mode . pulsing-cursor-mode))
 
 ;;--------------------------------------------------
 ;; Matching parenthesis
