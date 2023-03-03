@@ -1307,44 +1307,6 @@
 (setq python-indent-guess-indent nil)
 (setq indent-tabs-mode t) ;; whether tabs are used for indentation
 
-;;debug setting
-(setq python-shell-completion-native-enable nil) ;;or pip3 install pyreadline to avoid warning
-(setq python-shell-prompt-detect-failure-warning nil)
-(setq python-shell-enable-font-lock nil) ;;make printing fast
-
-;;A dirty solution of showing inferior-python input codes
-;;from https://github.com/jorgenschaefer/elpy/issues/924
-(defun python-shell-append-to-output (string)
-  (let ((buffer (current-buffer)))
-    (set-buffer (process-buffer (python-shell-get-process)))
-    (let ((oldpoint (point)))
-      (goto-char (process-mark (python-shell-get-process)))
-      (insert string)
-      (set-marker (process-mark (python-shell-get-process)) (point))
-      (goto-char oldpoint))
-    (set-buffer buffer)))
-
-(defadvice python-shell-send-string
-    (around advice-python-shell-send-string activate)
-  (interactive)
-  (let* ((append-string1
-          (if (string-match "import codecs, os;__pyfile = codecs.open.*$" string)
-              (replace-match "" nil nil string)
-            string))
-         (append-string2
-          (if (string-match "^# -\\*- coding: utf-8 -\\*-\n*$" append-string1)
-              (replace-match "" nil nil append-string1)
-            append-string1))
-         (append-string
-          (if (string-match "^\n*$" append-string2)
-              (replace-match "" nil nil append-string2)
-            append-string2)))
-    (python-shell-append-to-output
-     (concat (string-trim-right append-string) "\n")))
-  (if (called-interactively-p 'any)
-      (call-interactively (ad-get-orig-definition 'python-shell-send-string))
-    ad-do-it))
-
 ;;python-mode local keybinding
 (with-eval-after-load 'python
   (defun python-run-current-line ()
@@ -1358,6 +1320,10 @@
   (define-key inferior-python-mode-map (kbd "C-p") 'comint-previous-input)
   ;; (define-key inferior-python-mode-map (kbd "<down>") 'comint-next-input)
   (define-key inferior-python-mode-map (kbd "C-n") 'comint-next-input))
+
+(use-package elpy
+  :config
+  (elpy-enable))
 
 ;; use jupyter text to pair format
 ;; jupytext --set-formats ipynb,py notebook.ipynb
