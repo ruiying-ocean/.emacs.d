@@ -444,7 +444,14 @@
   ("C-x c" . magit-checkout)
   :config
   ;; for verbose
-  (setq magit-refresh-verbose t)
+  ;; (setq magit-refresh-verbose t)
+  ;; improve performance
+
+  (remove-hook 'magit-revision-sections-hook 'magit-insert-unpushed-to-upstream-or-recent)
+
+  ;; status
+  (remove-hook 'magit-status-sections-hook 'magit-insert-tags-header)
+  (remove-hook 'magit-status-sections-hook 'magit-insert-status-headers)
   :custom
   (magit-git-executable "/usr/bin/git"))
 
@@ -1504,6 +1511,17 @@
 	'(("t" "Todo" entry (file+headline "~/Documents/TODO.org" "Tasks")
 	   "* TODO [#A] %? %i %U"
 	   :empty-lines 1)))
+
+  (custom-set-faces
+   '(org-level-1 ((t (:inherit outline-1 :weight normal))))
+   '(org-level-2 ((t (:inherit outline-2 :weight normal))))
+   '(org-level-3 ((t (:inherit outline-3 :weight normal))))
+   '(org-level-4 ((t (:inherit outline-4 :weight normal))))
+   '(org-level-5 ((t (:inherit outline-5 :weight normal))))
+   '(org-level-6 ((t (:inherit outline-6 :weight normal))))
+   '(org-level-7 ((t (:inherit outline-7 :weight normal))))
+   '(org-level-8 ((t (:inherit outline-8 :weight normal)))))
+
 
   :bind
   ("C-c r" . org-capture)
