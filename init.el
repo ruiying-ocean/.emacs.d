@@ -497,19 +497,6 @@
   :config
   (setq ctrlf-default-search-style 'fuzzy))
 
-;; front-end of fzf
-;; (use-package fzf
-;;   :if window-system
-;;   :config
-;;   (setq fzf/args "--color bw -x --print-query --margin=1,0 --no-hscroll"
-;; 	fzf/executable "fzf"
-;; 	;; If nil, the fzf buffer will appear at the top of the window
-;; 	fzf/position-bottom nil
-;; 	fzf/window-height 15)
-;;   :bind
-;;   ("<f3>" . fzf-recentf)
-;;   ("C-x b" . fzf-switch-buffer))
-
 ;; completion UI
 (use-package vertico
   :hook
@@ -698,7 +685,6 @@
 	 :map isearch-mode-map
 	 ("M-e" . consult-isearch-history) ;; orig. isearch-edit-string
 	 ("M-s e" . consult-isearch-history) ;; orig. isearch-edit-string
-	 ("M-s l" . consult-line) ;; needed by consult-line to detect isearch
 	 ("M-s L" . consult-line-multi) ;; needed by consult-line to detect isearch
 	 ;; Minibuffer history
 	 :map minibuffer-local-map
@@ -791,11 +777,11 @@
 
 (global-set-key (kbd "C-l") 'select-current-line)
 
-(defun open-init-file()
+(defun self/open-init-file()
   "Open my init.el."
   (interactive)
   (find-file "~/.emacs.d/init.el"))
-(global-set-key (kbd "<f2>") 'open-init-file)
+(global-set-key (kbd "<f2>") 'self/open-init-file)
 
 ;; deleting a whitespace character will delete all whitespace
 (use-package hungry-delete
@@ -817,7 +803,9 @@
   (default-input-method "rime")
   ;; the path of emacs_module.h
   (rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include")
-  (rime-librime-root "~/.emacs.d/librime/dist"))
+  (rime-librime-root "~/.emacs.d/librime/dist")
+  ;; configuration path
+  (rime-user-data-dir "~/.emacs.d/rime/"))
 
 ;; Mark set
 ;; C-x h to select all
@@ -1021,6 +1009,11 @@
 	("o" . dired-display-file)
 	("<mouse-2>" . dired-mouse-find-file)))
 
+(defun hide-dired-mode-info ()
+  "show less information in dired buffers"
+  (dired-hide-details-mode 1))
+(add-hook 'dired-mode-hook 'hide-dired-mode-info)
+
 (use-package dired-hacks-utils
   :hook
   (dired-mode . dired-utils-format-information-line-mode)
@@ -1137,7 +1130,7 @@
 
 ;;; FONT, THEME & COLOR SCHEME
 
-;;English font: Iosevka/Inconsolata/Juliamono/Jetbrains Mono/Roboto Mono/Monaco/Fira Code/SF Mono/Operator Mono
+;;English font: Iosevka/Inconsolata/Juliamono/Jetbrains Mono/Roboto Mono/Monaco/Fira Code/SF Mono/IBM Plex Mono/Anonymous Pro
 ;;Chinese font: Wenquanyi Micro Hei Mono/Sarasa UI SC Mono/Sarasa Mono SC Nerd/Noto Sans CJK SC Mono/LXGW WenKai (work perfectly with Iosevka/Inconsolata)
 ;;Variable-pitch font, ETBembo/New York
 ;;Unicode: Symbola
@@ -1149,7 +1142,7 @@
   (if (display-graphic-p)
       (progn
 	;; English font
-	(set-face-attribute 'default nil :font (format "%s:pixelsize=%d" "SF Mono" 14))
+	(set-face-attribute 'default nil :font (format "%s:pixelsize=%d" "IBM Plex Mono" 14))
 	;; CJK font
 	(dolist (charset '(kana han symbol cjk-misc bopomofo))
 	  (set-fontset-font (frame-parameter nil 'font)
@@ -1157,8 +1150,8 @@
 			    (font-spec :family "LXWG WenKai"))))))
 
 ;; Use emacs daemon, put following lines to shell config file
-;; alias emacs=/path_2_miniconda3/bin/emacs
-;; alias emacsclient=/path_2_miniconda/bin/emacsclient
+;; alias emacs=/path_to_miniconda3/bin/emacs
+;; alias emacsclient=/path_to_miniconda/bin/emacsclient
 ;; alias ed="emacs --daemon"
 ;; alias ec="emacsclient -c"
 ;; alias eq="emacsclient -e '(save-buffers-kill-emacs)'"
@@ -1179,20 +1172,10 @@
 ;; lazy-load default theme
 (setq custom-safe-themes t)
 
-
-;; use modus-operandi as default theme
-(use-package modus-themes
+(use-package ef-themes
   :config
-  ;; mode line, style, padding & height
-  (setq modus-themes-mode-line '(accented borderless))
-  ;; syntax style
-  (setq modus-themes-syntax '(alt-syntax green-strings yellow-comments))
-  (setq modus-themes-italic-constructs t
-	modus-themes-bold-constructs nil
-	modus-themes-region '(accented bg-only no-extend))
-  (setq modus-themes-links '(neutral-underline background))
   ;; finally load the theme
-  (load-theme 'modus-operandi))
+  (load-theme 'ef-light))
 
 ;; mode line
 (use-package mood-line
@@ -1226,22 +1209,9 @@
  '(fixed-pitch ((t ( :family " Iosevka" :height 160)))))
 
 
+;;==============================
 ;;; PROGRAMMING LANGUAGES & LSP
 ;;==============================
-;; requires install `sbcl`
-;; REPL for lisp
-;; (use-package slime
-;;   :config
-;;   (setq inferior-lisp-program "sbcl"))
-
-(use-package stan-mode
-  :mode ("\\.stan\\'" . stan-mode)
-  :hook (stan-mode . stan-mode-setup)
-  ;;
-  :config
-  ;; The officially recommended offset is 2.
-  (setq stan-indentation-offset 2))
-
 ;; sticky header of code block
 (use-package topsy
   :straight (topsy :fetcher github :repo "alphapapa/topsy.el")
@@ -1269,29 +1239,44 @@
    'treesit-language-source-alist
    '(python "https://github.com/tree-sitter/tree-sitter-python.git")))
 
+;; treesit-auto
+(use-package treesit-auto
+  :config
+  (global-treesit-auto-mode))
+
 ;; ts-mode fontification
 (defun python-ts-mode-setup ()
   (treesit-font-lock-recompute-features
    '(function variable class) '(definition)))
 (add-hook 'python-ts-mode-hook #'python-ts-mode-setup)
 
-(use-package eglot
-  :straight (:type built-in)
-  :hook ((python-ts-mode . eglot-ensure)
-	 (c-mode . eglot-ensure)
-	 (ess-r-mode . eglot-ensure)
-	 (fortran-mode . eglot-ensure))
-  :bind (:map eglot-mode-map
-	      ("C-c r" . eglot-rename)
-	      ("C-c h" . eldoc)
-	      ("C-c f" . eglot-format)
-	      ("C-c F" . eglot-format-buffer))
+;; lsp-bridge: faster lsp server
+(use-package lsp-bridge
+  :straight (lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge"
+			:files ("*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources"))
+  :hook (prog-mode . lsp-bridge-mode))
+
+(use-package copilot
+  :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
+  :hook
+  (prog-mode . copilot-mode)
   :config
-  (setq read-process-output-max (* 512 1024))
-  (add-to-list 'eglot-server-programs '(f90-mode . "fortls"))
-  (add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))
-  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
-  (add-to-list 'eglot-server-programs '(ess-r-mode . ("R" "--slave" "-e" "languageserver::run()"))))
+  (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
+  (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
+
+(use-package gptel
+  :straight (:host github :repo "karthink/gptel")
+  :config
+  (setq gptel-api-key "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"))
+
+
+;; show tree-like structure of current position
+(use-package breadcrumb
+  :straight (breadcrumb :type git
+			:host github
+			:repo "joaotavora/breadcrumb")
+  :hook
+  (prog-mode . breadcrumb-mode))
 
 ;; use flycheck checker in flymake
 (use-package flymake-flycheck
@@ -1306,7 +1291,6 @@
 ;; Interpreter choice
 (setq python-shell-interpreter "ipython"
       python-shell-interpreter-args "-i --simple-prompt --InteractiveShell.display_page=True")
-;;(setq python-shell-interpreter "python3.9")
 
 ;;python-style indent
 (setq python-indent-offset 4)
@@ -1503,6 +1487,20 @@
   (org-block-end-line ((t (:overline t :underline nil :background unspecified))))
 
   :config
+  (setq org-hide-block-startup t)
+  ;; learn from: https://github.com/Elilif/.elemacs
+  (defun eli-hide-org-block-begin-line (orig from to flag spec)
+    (if (eq spec 'org-hide-block)
+	(let* ((beg-of-line (save-excursion
+			      (beginning-of-line)
+			      (point)))
+	       (lang (car (org-babel-get-src-block-info)))
+	       (beg (+ beg-of-line 12 (length lang))))
+	  (funcall orig beg to flag spec))
+      (funcall orig from to flag spec)))
+
+  (advice-add 'org-flag-region :around #'eli-hide-org-block-begin-line)
+
   (setq org-todo-keywords
 	'((sequence "TODO(t)" "DOING(s)" "|" "DONE(d!/!)")))
 
@@ -1511,6 +1509,12 @@
 	'(("t" "Todo" entry (file+headline "~/Documents/TODO.org" "Tasks")
 	   "* TODO [#A] %? %i %U"
 	   :empty-lines 1)))
+
+  (setq org-fontify-quote-and-verse-blocks t)
+
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((python . t)))
 
   (custom-set-faces
    '(org-level-1 ((t (:inherit outline-1 :weight normal))))
@@ -1521,6 +1525,30 @@
    '(org-level-6 ((t (:inherit outline-6 :weight normal))))
    '(org-level-7 ((t (:inherit outline-7 :weight normal))))
    '(org-level-8 ((t (:inherit outline-8 :weight normal)))))
+
+  ;; emphasize
+  (defface org-bold
+    '((t :foreground "#d2268b"
+	 :background "#fefefe"
+	 :weight bold
+	 :underline t
+	 :overline t))
+    "Face for org-mode bold."
+    :group 'org-faces)
+
+  (setq org-emphasis-alist
+	'(("*" org-bold)
+	  ("/" italic)
+	  ("_" underline)
+	  ("=" ;; (:background "maroon" :foreground "white")
+	   org-verbatim verbatim)
+	  ("~" ;; (:background "deep sky blue" :foreground "MidnightBlue")
+	   org-code verbatim)
+	  ("+" (:strike-through t))))
+
+  (set-face-background 'org-bold "#fefefe")
+  (set-face-background 'org-verbatim "#fefefe")
+
 
 
   :bind
@@ -1535,6 +1563,7 @@
 		(push '("[ ]" . "🞎") prettify-symbols-alist)
 		(push '("[X]" . "☑") prettify-symbols-alist)
 		(push '("[-]" . "◫") prettify-symbols-alist)
+		(push '("!=" . "≠") prettify-symbols-alist)
 		;; arrows
 		(push '("->" . "→") prettify-symbols-alist)
 		(push '("<-" . "←") prettify-symbols-alist)
@@ -1551,11 +1580,37 @@
   (org-mode . org-superstar-mode))
 
 (use-package svg-tag-mode
-  :init
-  (defconst date-re "[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}")
-  (defconst time-re "[0-9]\\{2\\}:[0-9]\\{2\\}")
-  (defconst day-re "[A-Za-z]\\{3\\}")
-  (defconst day-time-re (format "\\(%s\\)? ?\\(%s\\)?" day-re time-re))
+  :hook (org-mode . svg-tag-mode)
+  :config
+  (defun mk/svg-checkbox-empty ()
+    (let* ((svg (svg-create 14 14)))
+      (svg-rectangle svg 0 0 14 14 :fill 'white :rx 2 :stroke-width 2.5 :stroke-color 'black)
+      (svg-image svg :ascent 'center)))
+
+  (defun mk/svg-checkbox-filled ()
+    (let* ((svg (svg-create 14 14)))
+      (svg-rectangle svg 0 0 14 14 :fill "#FFFFFF" :rx 2)
+      (svg-polygon svg '((5.5 . 11) (12 . 3.5) (11 . 2) (5.5 . 9) (1.5 . 5) (1 . 6.5))
+		   :stroke-color 'black :stroke-width 1 :fill 'black)
+      (svg-image svg :ascent 'center)))
+
+  (defun mk/svg-checkbox-toggle ()
+    (interactive)
+    (save-excursion
+      (let* ((start-pos (line-beginning-position))
+	     (end-pos (line-end-position))
+	     (text (buffer-substring-no-properties start-pos end-pos))
+	     (case-fold-search t)  ; Let X and x be the same in search
+	     )
+	(beginning-of-line)
+	(cond ((string-match-p "\\[X\\]" text)
+	       (progn
+		 (re-search-forward "\\[X\\]" end-pos)
+		 (replace-match "[ ]")))
+	      ((string-match-p "\\[ \\]" text)
+	       (progn
+		 (search-forward "[ ]" end-pos)
+		 (replace-match "[X]")))))))
 
   (defun svg-progress-percent (value)
     (svg-image (svg-lib-concat
@@ -1574,12 +1629,27 @@
 		  (svg-lib-tag value nil
 			       :stroke 0 :margin 0)) :ascent 'center)))
 
+  (defconst date-re "[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}")
+  (defconst time-re "[0-9]\\{2\\}:[0-9]\\{2\\}")
+  (defconst day-re "[A-Za-z]\\{3\\}")
+  (defconst day-time-re (format "\\(%s\\)? ?\\(%s\\)?" day-re time-re))
+
+  (setq svg-tag-action-at-point 'edit)
+
+  (setq svg-lib-icon-collections
+	`(("bootstrap" .
+	   "https://icons.getbootstrap.com/assets/icons/%s.svg")
+	  ("simple" .
+	   "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/%s.svg")
+	  ("material" .
+	   "https://raw.githubusercontent.com/Templarian/MaterialDesign/master/svg/%s.svg")
+	  ("octicons" .
+	   "https://raw.githubusercontent.com/primer/octicons/master/icons/%s-24.svg")
+	  ("boxicons" .
+	   "https://boxicons.com/static/img/svg/regular/bx-%s.svg")))
+
   (setq svg-tag-tags
 	`(
-	  ;; Org tags
-	  (":\\([A-Za-z0-9]+\\)" . ((lambda (tag) (svg-tag-make tag))))
-	  (":\\([A-Za-z0-9]+[ \-]\\)" . ((lambda (tag) tag)))
-
 	  ;; Task priority
 	  ("\\[#[A-Z]\\]" . ((lambda (tag)
 			       (svg-tag-make tag :face 'org-priority
@@ -1591,22 +1661,13 @@
 	  ("\\(\\[[0-9]+/[0-9]+\\]\\)" . ((lambda (tag)
 					    (svg-progress-count (substring tag 1 -1)))))
 
-	  ;; TODO / DONE
-	  ("TODO" . ((lambda (tag) (svg-tag-make "TODO" :face 'org-todo :inverse t :margin 0))))
-	  ("DONE" . ((lambda (tag) (svg-tag-make "DONE" :face 'org-done :margin 0))))
-
-
-	  ;; Citation of the form [cite:@Knuth:1984]
-	  ("\\(\\[cite:@[A-Za-z]+:\\)" . ((lambda (tag)
-					    (svg-tag-make tag
-							  :inverse t
-							  :beg 7 :end -1
-							  :crop-right t))))
-	  ("\\[cite:@[A-Za-z]+:\\([0-9]+\\]\\)" . ((lambda (tag)
-						     (svg-tag-make tag
-								   :end -1
-								   :crop-left t))))
-
+	  ;; Checkbox
+	  ("\\[ \\]" . ((lambda (_tag) (mk/svg-checkbox-empty))
+			(lambda () (interactive) (mk/svg-checkbox-toggle))
+			"Click to toggle."))
+	  ("\\(\\[[Xx]\\]\\)" . ((lambda (_tag) (mk/svg-checkbox-filled))
+				 (lambda () (interactive) (mk/svg-checkbox-toggle))
+				 "Click to toggle."))
 
 	  ;; Active date (with or without day name, with or without time)
 	  (,(format "\\(<%s>\\)" date-re) .
@@ -1628,9 +1689,22 @@
 	      (svg-tag-make tag :beg 1 :inverse nil :crop-right t :margin 0 :face 'org-date))))
 	  (,(format "\\[%s \\(%s\\]\\)" date-re day-time-re) .
 	   ((lambda (tag)
-	      (svg-tag-make tag :end -1 :inverse t :crop-left t :margin 0 :face 'org-date))))))
+	      (svg-tag-make tag :end -1 :inverse t :crop-left t :margin 0 :face 'org-date))))
 
-  :hook org-mode)
+	  ;; Keywords
+	  ("TODO" . ((lambda (tag) (svg-tag-make tag :height 0.8 :inverse t
+						 :face 'org-todo :margin 0 :radius 5))))
+	  ("WORK" . ((lambda (tag) (svg-tag-make tag :height 0.8
+						 :face 'org-todo :margin 0 :radius 5))))
+	  ("DONE" . ((lambda (tag) (svg-tag-make tag :height 0.8 :inverse t
+						 :face 'org-done :margin 0 :radius 5))))
+
+	  ("FIXME\\b" . ((lambda (tag) (svg-tag-make "FIXME" :face 'org-todo :inverse t :margin 0 :crop-right t))))
+
+	  ;; beautify pagebreak in orgmode
+	  ("\\\\pagebreak" . ((lambda (tag) (svg-lib-icon "file-break" nil :collection "bootstrap"
+							  :stroke 0 :scale 1 :padding 0)))))))
+    
 
 ;; Perfectly alian English/CJK fonts in the same table
 (use-package valign
