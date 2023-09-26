@@ -79,3 +79,6 @@
   (add-hook 'emacs-startup-hook (lambda ()
                                   (when (display-graphic-p)
                                     (self/show-welcome-buffer)))))
+
+(setq read-process-output-max (* 1024 1024))
+(setq process-adaptive-read-buffering nil)

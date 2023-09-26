@@ -802,10 +802,11 @@
   :custom
   (default-input-method "rime")
   ;; the path of emacs_module.h
-  (rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include")
-  (rime-librime-root "~/.emacs.d/librime/dist")
+  (rime-emacs-module-header-root (concat emacs-path "include"))
   ;; configuration path
-  (rime-user-data-dir "~/.emacs.d/rime/"))
+  (rime-librime-root (concat user-emacs-directory "librime/dist"))
+  (rime-user-data-dir (concat user-emacs-directory "rime"))
+  )
 
 ;; Mark set
 ;; C-x h to select all
