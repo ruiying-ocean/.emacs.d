@@ -1265,12 +1265,6 @@
   (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
 
-(use-package gptel
-  :straight (:host github :repo "karthink/gptel")
-  :config
-  (setq gptel-api-key "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"))
-
-
 ;; show tree-like structure of current position
 (use-package breadcrumb
   :straight (breadcrumb :type git
