@@ -390,16 +390,41 @@
 
 ;; insert template
 ;; change trigger key!
-(use-package yasnippet
-  :hook
-  (after-init . yas-global-mode)
-  :bind
-  ("C-c i" . yas-insert-snippet))
+;; Configure Tempel
+(use-package tempel
+  ;; Require trigger prefix before template name when completing.
+  ;; :custom
+  ;; (tempel-trigger-prefix "<")
 
-(use-package yasnippet-snippets)
+  :bind (("C-c i" . tempel-insert))
+  :config
 
-(use-package consult-yasnippet
-  :after (consult yasnippet))
+  ;; Setup completion at point
+  (defun tempel-setup-capf ()
+    ;; Add the Tempel Capf to `completion-at-point-functions'.
+    ;; `tempel-expand' only triggers on exact matches. Alternatively use
+    ;; `tempel-complete' if you want to see all matches, but then you
+    ;; should also configure `tempel-trigger-prefix', such that Tempel
+    ;; does not trigger too often when you don't expect it. NOTE: We add
+    ;; `tempel-expand' *before* the main programming mode Capf, such
+    ;; that it will be tried first.
+    (setq-local completion-at-point-functions
+                (cons #'tempel-expand
+                      completion-at-point-functions)))
+
+  (add-hook 'conf-mode-hook 'tempel-setup-capf)
+  (add-hook 'prog-mode-hook 'tempel-setup-capf)
+  (add-hook 'text-mode-hook 'tempel-setup-capf)
+
+  ;; Optionally make the Tempel templates available to Abbrev,
+  ;; either locally or globally. `expand-abbrev' is bound to C-x '.
+  ;; (add-hook 'prog-mode-hook #'tempel-abbrev-mode)
+  ;; (global-tempel-abbrev-mode)
+)
+
+;; Optional: Add tempel-collection.
+;; The package is young and doesn't have comprehensive coverage.
+(use-package tempel-collection)
 
 ;;Git + Emacs = boom!
 (use-package magit
@@ -1177,10 +1202,6 @@
 ;;==============================
 ;;; PROGRAMMING LANGUAGES & LSP
 ;;==============================
-;; sticky header of code block
-(use-package topsy
-  :straight (topsy :fetcher github :repo "alphapapa/topsy.el")
-  :hook (prog-mode . topsy-mode))
 
 ;; Install treesit C-library first: `brew install tree-sitter'
 (use-package treesit
@@ -1345,11 +1366,6 @@
   ;; (define-key inferior-ess-r-mode-map (kbd "<down>") 'comint-next-input)
   )
 
-;; view R data frame
-;; https://github.com/ShuguangSun/ess-view-data
-(use-package ess-view-data
-  :defer t)
-
 ;;C-c C-a to turn on csv-align-fields
 (use-package csv-mode
   :mode
@@ -1361,16 +1377,6 @@
   :hook
   (ess-r-mode . rainbow-mode)
   (js-mode . rainbow-mode))
-
-;;;;;;;;;;;;
-;; Matlab ;;
-;;;;;;;;;;;;
-
-;; cd /path/to/matlab-emacs -> make
-;; Homepage: https://sourceforge.net/p/matlab-emacs/src/ci/documentation/tree/
-(use-package matlab-mode
-  :defer t
-  :mode "\\.[mM]\\'")
 
 ;;;;;;;;;;
 ;; Yaml ;;
