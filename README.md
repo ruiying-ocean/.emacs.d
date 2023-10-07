@@ -1,12 +1,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # About
- This is my Emacs configuration file(s) to implement a *self-use* cross-platform editor/IDE. It has been tested for Emacs 27.2/28.0.05/29.0.05 (with native-compilation feature) on MacOS (Monterey), Linux (Ubuntu 20). Windows may not be well supported because of possible limitations from cygwin/MSYS2. WSL2 is recommended instead.
-
-# Screenshot
-![](screenshot-light.png)
-![](screenshot-dark.png)
-The splash is downloaded from [the free png image website](https://www.freepngimg.com)
+ This is my Emacs configuration file(s) to implement a *self-use* cross-platform editor/IDE. It has been tested for Emacs 27.2/28.0.05/29.1 on MacOS (Monterey, Sonoma), Linux (Ubuntu LTS 20). Windows may not be well supported because of possible limitations from cygwin/MSYS2. WSL2 is recommended instead.
 
 # Quick-start
 
@@ -16,28 +11,6 @@ cd ~
 git clone https://github.com/ruiying-ocean/.emacs.d.git
 ```
 Then have some beverage and wait for downloading :smile:
-
-# Features
-
-> *All features collected from the community*
-
-- Fast start-up
-- Modern UI
-- Multiple languages support
-- IntelliSense
-- Go-to definition
-- Shell/terminal
-- Snippets
-- Quick documentation
-- Spell and lint checker
-- Efficient editor
-- Project management
-- Fuzzy finding and ripgrep intergration
-- Git integration
-- Easy remote file operation
-- Org-mode as lightweight markup language and todo manager
-- PDF support
-- Email client
 
 # License
 The project uses [MIT license](LICENSE).
