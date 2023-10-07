@@ -69,7 +69,7 @@
 (when (eq system-type 'darwin)
   (defvar brew-parent-dir "/opt/homebrew/")
   (defvar brew-bin-dir (expand-file-name "bin/" brew-parent-dir))
-  (defvar emacs-path "/opt/homebrew/bin/emacs"))
+  (defvar emacs-path "/opt/homebrew/Cellar/emacs-mac/emacs-29.1-mac-10.0/"))
 
 ;; Avoid matching file name with regrex list during startup
 (let ((file-name-handler-alist nil)) "~/.emacs.d/init.el")
@@ -204,20 +204,6 @@
 	("C-M-b" . winner-undo)
 	("C-M-f" . winner-redo)))
 
-;; move within buffers
-(use-package mosey
-  :bind
-  ("C-a" . mosey-backward-bounce)
-  ("C-e" . mosey-forward-bounce)
-  :config
-  (defmosey '(beginning-of-line
-	      back-to-indentation
-	      sp-backward-sexp		; Moves across lines
-	      sp-forward-sexp		; Moves across lines
-	      mosey-goto-end-of-code
-	      mosey-goto-beginning-of-comment-text)
-	    :prefix "lisp"))
-
 ;;; Auto-save buffer
 (use-package real-auto-save
   :hook
@@ -250,29 +236,7 @@
   :config
   (smart-newline-mode 1)
   :bind
-  ("C-j" . smart-newline))
-
-;; smartly select region, press until it selects what you want
-;; C-M-SPC also does same on Mac
-(use-package expand-region
-  :bind
-  ("C-=" . er/expand-region)
-  :config
-  ;; treesit integration  
-  (defun treesit-mark-bigger-node ()
-    (let* ((root (treesit-buffer-root-node))
-	   (node (treesit-node-descendant-for-range root (region-beginning) (region-end)))
-	   (node-start (treesit-node-start node))
-	   (node-end (treesit-node-end node)))
-      ;; Node fits the region exactly. Try its parent node instead.
-      (when (and (= (region-beginning) node-start) (= (region-end) node-end))
-	(when-let ((node (treesit-node-parent node)))
-	  (setq node-start (treesit-node-start node)
-		node-end (treesit-node-end node))))
-      (set-mark node-end)
-      (goto-char node-start)))
-
-  (add-to-list 'er/try-expand-list 'treesit-mark-bigger-node))
+  ("C-m" . smart-newline))
 
 ;; assign every marked line a cursor
 (use-package multiple-cursors
@@ -507,11 +471,6 @@
   :if window-system
   :hook
   (vertico-mode . vertico-posframe-mode))
-
-;; displays current match and total matches in search
-(use-package anzu
-  :hook
-  (prog-mode . global-anzu-mode))
 
 ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
 ;; Vertico commands are hidden in normal buffers.
@@ -912,15 +871,28 @@
   ("C-h C" . helpful-command)
   ("C-h F" . helpful-function))
 
-;; find and replace
-(global-set-key (kbd "C-c %") 'query-replace)
-(global-set-key (kbd "C-c R") 'query-replace-regexp)
-
 ;; select one and edit all (https://github.com/victorhge/iedit)
 ;; iedit is also dependency of lispy, use M-i to toggle
 (use-package iedit
   :bind
   ("M-i" . iedit-mode))
+
+;; displays current match and total matches in search
+;; e.g., anzu-query-replace: same but displace selection
+(use-package anzu
+  :hook
+  (prog-mode . global-anzu-mode)
+  :bind
+  ("C-c %" . anzu-query-replace)
+  ("C-c r" . anzu-query-replace-regexp))
+
+(use-package highlight-symbol
+  ;; highlight the other symbols matching current cursor   
+  :bind
+  ("C-<f9>" . highlight-symbol)
+  ("<f9>" . highlight-symbol-next)
+  ("S-<f9>" . highlight-symbol-prev)
+  ("M-<f9>" . highlight-symbol-query-replace))
 
 ;;; WINDOW, UI & APPEARANCE
 
@@ -1095,14 +1067,6 @@
   :custom
   (highlight-indent-guides-method 'character))
 
-(use-package highlight-symbol
-  ;; An alternative package is highlight-thing
-  :bind
-  ("C-<f9>" . highlight-symbol)
-  ("<f9>" . highlight-symbol-next)
-  ("S-<f9>" . highlight-symbol-prev)
-  ("M-<f9>" . highlight-symbol-query-replace))
-
 (use-package all-the-icons
   :if (display-graphic-p)
   :config
@@ -1240,7 +1204,7 @@
    'treesit-language-source-alist
    '(python "https://github.com/tree-sitter/tree-sitter-python.git")))
 
-;; treesit-auto
+;; Automatically install and use tree-sitter major modes in Emacs 29+
 (use-package treesit-auto
   :config
   (global-treesit-auto-mode))
@@ -1272,6 +1236,9 @@
 			:repo "joaotavora/breadcrumb")
   :hook
   (prog-mode . breadcrumb-mode))
+
+(use-package expand-region
+  :bind ("C-=" . er/expand-region))
 
 ;; use flycheck checker in flymake
 (use-package flymake-flycheck
@@ -1534,19 +1501,15 @@
     :group 'org-faces)
 
   (setq org-emphasis-alist
-	'(("*" org-bold)
-	  ("/" italic)
-	  ("_" underline)
-	  ("=" ;; (:background "maroon" :foreground "white")
-	   org-verbatim verbatim)
-	  ("~" ;; (:background "deep sky blue" :foreground "MidnightBlue")
-	   org-code verbatim)
-	  ("+" (:strike-through t))))
+      '(("*" org-bold)
+        ("/" italic)
+        ("_" underline)
+        ("=" (:background "maroon" :foreground "white") org-verbatim)
+        ("~" (:background "deep sky blue" :foreground "MidnightBlue") org-code)
+        ("+" (:strike-through t) org-code)))
 
   (set-face-background 'org-bold "#fefefe")
   (set-face-background 'org-verbatim "#fefefe")
-
-
 
   :bind
   ("C-c r" . org-capture)
