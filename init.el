@@ -389,6 +389,9 @@
   (setq define-word-default-service 'webster))
 
 (use-package tempel
+  :custom
+  (tempel-path "~/.config/emacs/templates")
+  
   ;; Require trigger prefix before template name when completing.
   :bind (("C-c i" . tempel-insert)
 	 ("<tab>" . tempel-complete)))
