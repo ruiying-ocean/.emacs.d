@@ -388,15 +388,10 @@
   :config
   (setq define-word-default-service 'webster))
 
-;; insert template
-;; change trigger key!
-;; Configure Tempel
 (use-package tempel
   ;; Require trigger prefix before template name when completing.
-  ;; :custom
-  ;; (tempel-trigger-prefix "<")
-
-  :bind (("C-c i" . tempel-insert))
+  :bind (("C-c i" . tempel-insert)
+	 ("<tab>" . tempel-complete)))
   :config
 
   ;; Setup completion at point
@@ -414,17 +409,10 @@
 
   (add-hook 'conf-mode-hook 'tempel-setup-capf)
   (add-hook 'prog-mode-hook 'tempel-setup-capf)
-  (add-hook 'text-mode-hook 'tempel-setup-capf)
+  (add-hook 'text-mode-hook 'tempel-setup-capf))
 
-  ;; Optionally make the Tempel templates available to Abbrev,
-  ;; either locally or globally. `expand-abbrev' is bound to C-x '.
-  ;; (add-hook 'prog-mode-hook #'tempel-abbrev-mode)
-  ;; (global-tempel-abbrev-mode)
-)
-
-;; Optional: Add tempel-collection.
-;; The package is young and doesn't have comprehensive coverage.
-(use-package tempel-collection)
+(use-package tempel-collection
+  :after tempel)
 
 ;;Git + Emacs = boom!
 (use-package magit
