@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: tidyverse
-# key: tidy
-# --
-library(tidyverse)

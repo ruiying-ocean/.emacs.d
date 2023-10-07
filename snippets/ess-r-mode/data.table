@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: data.table
-# key: dt
-# --
-library(data.table)

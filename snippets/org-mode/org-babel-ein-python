@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: org-babel-ein-python
-# key: ein
-# --
-
-#+begin_src ein-python :session localhost:8889
-%matplotlib inline
-#+end_src
