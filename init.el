@@ -394,7 +394,7 @@
   
   ;; Require trigger prefix before template name when completing.
   :bind (("C-c i" . tempel-insert)
-	 ("<tab>" . tempel-complete)))
+	 ("M-+" . tempel-complete))
   :config
 
   ;; Setup completion at point
@@ -1195,37 +1195,10 @@
 ;;==============================
 
 ;; Install treesit C-library first: `brew install tree-sitter'
-(use-package treesit
-  :straight (:type built-in)
-  :when (and (fboundp 'treesit-available-p)
-	     (treesit-available-p))
-  :custom (major-mode-remap-alist
-	   '((c-mode . c-ts-mode)
-	     (c++-mode . c++-ts-mode)
-	     (cmake-mode . cmake-ts-mode)
-	     (conf-toml-mode . toml-ts-mode)
-	     (css-mode . css-ts-mode)
-	     (js-mode . js-ts-mode)
-	     (js-json-mode . json-ts-mode)
-	     (python-mode . python-ts-mode)
-	     (sh-mode . bash-ts-mode)
-	     (typescript-mode . typescript-ts-mode)))
-  :config
-  ;; install separate language grammar, run `treesit-install-grammar'
-  (add-to-list
-   'treesit-language-source-alist
-   '(python "https://github.com/tree-sitter/tree-sitter-python.git")))
-
 ;; Automatically install and use tree-sitter major modes in Emacs 29+
 (use-package treesit-auto
   :config
   (global-treesit-auto-mode))
-
-;; ts-mode fontification
-(defun python-ts-mode-setup ()
-  (treesit-font-lock-recompute-features
-   '(function variable class) '(definition)))
-(add-hook 'python-ts-mode-hook #'python-ts-mode-setup)
 
 ;; lsp-bridge: faster lsp server
 (use-package lsp-bridge
