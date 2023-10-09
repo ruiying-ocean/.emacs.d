@@ -231,12 +231,12 @@
   ;; (emacs-lisp-mode . electric-operator-mode)
   (ess-r-mode . electric-operator-mode))
 
-(use-package smart-newline
-  :straight (:host github :repo "ainame/smart-newline.el")
-  :config
-  (smart-newline-mode 1)
-  :bind
-  ("C-m" . smart-newline))
+;; (use-package smart-newline
+;;   :straight (:host github :repo "ainame/smart-newline.el")
+;;   :config
+;;   (smart-newline-mode 1)
+;;   :bind
+;;   ("C-m" . smart-newline))
 
 ;; assign every marked line a cursor
 (use-package multiple-cursors
@@ -472,7 +472,6 @@
   ("C-s" . ctrlf-forward-fuzzy-regexp)
   ("C-r" . ctrlf-backward-fuzzy-regexp))
   
-
 ;; completion UI
 (use-package vertico
   :hook
@@ -534,6 +533,8 @@
   :hook
   (after-init . global-corfu-mode)
   :custom
+  ;; turn off the atuo completion
+  ;; use AI or LSP-based solution
   (corfu-auto nil)
   (corfu-auto-delay 0.75)
   (corfu-preview-current t)
@@ -605,15 +606,6 @@
 
   (add-to-list 'completion-at-point-functions #'cape-symbol)
   (add-to-list 'completion-at-point-functions #'cape-line))
-
-;; jump to definition
-(use-package dumb-jump
-  :config
-  (setq dumb-jump-prefer-searcher 'rg)
-  ;; xref as backend
-  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
-  ;; customized xref to use `completing-read' to select a target
-  (setq xref-show-definitions-function #'xref-show-definitions-completing-read))
 
 ;; a bunch of advanced commands: buffer switching, imenu, search commands etc.
 (use-package consult
@@ -748,10 +740,11 @@
 
 (global-set-key (kbd "C-l") 'select-current-line)
 
+(defvar self/init-file-path (expand-file-name (concat user-emacs-directory "init.el")))
 (defun self/open-init-file()
   "Open my init.el."
   (interactive)
-  (find-file "~/.emacs.d/init.el"))
+  (find-file self/init-file-path))
 (global-set-key (kbd "<f2>") 'self/open-init-file)
 
 ;; deleting a whitespace character will delete all whitespace
@@ -761,7 +754,6 @@
   :config
   ;; left one last whitespace
   (setq hungry-delete-join-reluctantly t))
-
 
 ;; dynamic module required
 (use-package rime
@@ -776,8 +768,7 @@
   (rime-emacs-module-header-root (concat emacs-path "include"))
   ;; configuration path
   (rime-librime-root (concat user-emacs-directory "librime/dist"))
-  (rime-user-data-dir (concat user-emacs-directory "rime"))
-  )
+  (rime-user-data-dir (concat user-emacs-directory "rime")))
 
 ;; Mark set
 ;; C-x h to select all
@@ -1200,7 +1191,9 @@
 (use-package lsp-bridge
   :straight (lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge"
 			:files ("*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources"))
-  :hook (prog-mode . lsp-bridge-mode))
+  :hook (prog-mode . lsp-bridge-mode)
+  ;; replace dumb-jump
+  :bind ("M-." . lsp-bridge-find-def))
 
 (use-package copilot
   :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
