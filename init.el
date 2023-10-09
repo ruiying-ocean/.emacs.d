@@ -1263,27 +1263,6 @@
   :config
   (elpy-enable))
 
-;; use jupyter text to pair format
-;; jupytext --set-formats ipynb,py notebook.ipynb
-;; jupytext --sync notebook.ipynb
-(use-package conda
-  :config
-  (conda-env-initialize-interactive-shells)
-  (cond ((file-directory-p "~/miniconda3")
-	 (setq conda-anaconda-home (expand-file-name "~/miniconda3")
-	       conda-env-home-directory (expand-file-name "~/miniconda3")))
-	((file-directory-p "~/miniforge3")
-	 (setq conda-anaconda-home (expand-file-name "~/miniforge3")
-	       conda-env-home-directory (expand-file-name "~/miniforge3")))
-	(((eq system-type 'darwin))
-	 (setq conda-anaconda-home "/opt/homebrew/Caskroom/miniforge"
-	       conda-env-home-directory "/opt/homebrew/Caskroom/miniforge")))
-
-  ;; when in conda-project-env-name or has environmental.yml auto activate
-  (conda-env-autoactivate-mode t)
-  :bind
-  ("C-c c a" . conda-env-activate)
-  ("C-c c d" . conda-env-deactivate))
 
 ;;==============================
 ;;           Rlang            ;;
