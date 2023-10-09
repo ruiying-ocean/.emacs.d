@@ -1319,7 +1319,7 @@
 (use-package rainbow-mode
   :hook
   (ess-r-mode . rainbow-mode)
-  (js-mode . rainbow-mode))
+  (prog-mode . rainbow-mode))
 
 ;;;;;;;;;;
 ;; Yaml ;;
