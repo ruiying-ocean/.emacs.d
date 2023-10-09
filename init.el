@@ -373,14 +373,6 @@
   :hook
   (flycheck-mode . flycheck-inline-mode))
 
-(use-package flycheck-grammarly
-  :config
-  ;; (with-eval-after-load 'flycheck
-  ;;   (flycheck-grammarly-setup))
-  (setq flycheck-grammarly-check-time 0.8)
-  :hook
-  (flycheck-mode . flycheck-grammarly-setup))
-
 ;; A dictionary inside Emacs, by abo-abo!
 (use-package define-word
   :bind
