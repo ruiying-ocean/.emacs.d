@@ -467,7 +467,11 @@
   :hook
   (after-init . ctrlf-mode)
   :config
-  (setq ctrlf-default-search-style 'fuzzy))
+  (setq ctrlf-default-search-style 'fuzzy)
+  :bind
+  ("C-s" . ctrlf-forward-fuzzy-regexp)
+  ("C-r" . ctrlf-backward-fuzzy-regexp))
+  
 
 ;; completion UI
 (use-package vertico
@@ -641,7 +645,7 @@
 	 ;; M-s bindings (search-map)
 	 ;; ("M-s l" . consult-line)
 	 ;; use consult-line to replac
-	 ("C-s" . consult-line)
+	 ;; ("C-s" . consult-line)
 	 ("M-s r" . consult-ripgrep)
 	 ("M-s L" . consult-line-multi)
 	 ("M-s m" . consult-multi-occur)
