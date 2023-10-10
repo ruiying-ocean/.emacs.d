@@ -342,37 +342,6 @@
   :hook
   (after-init . which-key-mode))
 
-;; on-the-fly syntax checker,  use C-c ! as prefix, e.g., C-c ! v to verify the checkers
-;; use M-g n/p to navigate error, or use C-c e (counsel-flycheck)
-
-;; python flycheck depdencies
-;; pip install pyflakes -> fast and don't check code style
-
-(use-package flycheck-pyflakes
-  :after python)
-
-;; shell -> shell-checker
-;; python -> pyflakes
-;; R -> disabled
-;; Elisp -> default
-(use-package flycheck
-  :hook
-  (prog-mode . flycheck-mode)
-  :config
-  (setq-default flycheck-emacs-lisp-load-path 'inherit)
-  (setq-default flycheck-disabled-checkers '(sh-posix-dash
-					     sh-posix-bash
-					     python-flake8
-					     python-pylint
-					     python-mypy
-					     python-pyright
-					     python-pycompile
-					     emacs-lisp-checkdoc)))
-
-(use-package flycheck-inline
-  :hook
-  (flycheck-mode . flycheck-inline-mode))
-
 ;; A dictionary inside Emacs, by abo-abo!
 (use-package define-word
   :bind
@@ -839,7 +808,7 @@
     "b" 'consult-imenu
     "s" 'shell
     "v" 'vterm
-    "c" 'consult-flycheck
+    "c" 'lsp-bridge-diagnostic-list
     "%" 'query-replace)
 
   (my/leader-def text-mode-map
@@ -1191,9 +1160,19 @@
 (use-package lsp-bridge
   :straight (lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge"
 			:files ("*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources"))
-  :hook (prog-mode . lsp-bridge-mode)
-  ;; replace dumb-jump
-  :bind ("M-." . lsp-bridge-find-def))
+  :hook
+  (prog-mode . lsp-bridge-mode)
+  :bind
+  ("M-." . lsp-bridge-find-def)
+  ("C-c r" . lsp-bridge-rename)
+  :custom
+  (lsp-bridge-python-command python-shell-interpreter)
+  (acm-enable-yas nil)
+  (acm-enable-tabnine nil)
+  (acm-enable-copilot t)
+  (lsp-bridge-c-lsp-server "clangd")
+  (lsp-bridge-python-lsp-server "pyright")
+  (lsp-bridge-tex-lsp-server "texlab"))
 
 (use-package copilot
   :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
@@ -1214,18 +1193,13 @@
 (use-package expand-region
   :bind ("C-=" . er/expand-region))
 
-;; use flycheck checker in flymake
-(use-package flymake-flycheck
-  :config
-  (setq-local flymake-diagnostic-functions
-	      (list (flymake-flycheck-diagnostic-function-for 'python-pyright))))
 
 ;;==============================
 ;;           Python           ;;
 ;;==============================
 
-;; Interpreter choice
-(setq python-shell-interpreter "ipython"
+;; Interpreter choice, use `run-python' to find current interpreter`
+(setq python-shell-interpreter (expand-file-name "bin/ipython" conda-dir)
       python-shell-interpreter-args "-i --simple-prompt --InteractiveShell.display_page=True")
 
 ;;python-style indent
