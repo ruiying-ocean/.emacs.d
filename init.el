@@ -66,6 +66,7 @@
 (advice-add #'package-initialize :after #'update-load-path)
 (update-load-path)
 
+(defvar conda-dir "~/miniforge3/envs/workspace")
 (when (eq system-type 'darwin)
   (defvar brew-parent-dir "/opt/homebrew/")
   (defvar brew-bin-dir (expand-file-name "bin/" brew-parent-dir))
@@ -77,11 +78,6 @@
 ;; Custom file
 (setq-default custom-file (concat user-emacs-directory "extra-lisp/custom.el"))
 (load custom-file :noerror)
-
-;; Benchmark init time
-(use-package esup
-  :custom
-  (esup-depth 0))
 
 ;; restart emacs
 (use-package restart-emacs)
@@ -218,21 +214,13 @@
   (global-set-key [remap kill-ring-save] 'easy-kill)
   (global-set-key [remap mark-sexp] 'easy-mark))
 
-
 ;; Automatically add spacing around operators
 ;; use C-v to next page
 (use-package electric-operator
   :hook
-  ;; (python-mode . electric-operator-mode)
-  ;; (emacs-lisp-mode . electric-operator-mode)
+  (python-mode . electric-operator-mode)
   (ess-r-mode . electric-operator-mode))
 
-;; (use-package smart-newline
-;;   :straight (:host github :repo "ainame/smart-newline.el")
-;;   :config
-;;   (smart-newline-mode 1)
-;;   :bind
-;;   ("C-m" . smart-newline))
 
 ;; assign every marked line a cursor
 (use-package multiple-cursors
@@ -762,7 +750,13 @@
     "p v" '(projectile-run-vterm :which-key "project vterm")
     "p x" '(projectile-run-shell :which-key "project shell")
     "p e" '(projectile-run-eshell :which-key "project eshell")
-    "p c" '(projectile-compile-project :which-key "project compile")    
+    "p c" '(projectile-compile-project :which-key "project compile")
+
+    ;; bookmark
+    "b m" '(bookmark-set :which-key "bookmark set")
+    "b l" '(bookmark-bmenu-list :which-key "bookmark list")
+    "b g" '(bookmark-jump :which-key "bookmark GO!")
+    
 
     "e b" '(ediff-buffers :which-key "compare buffers")
     "e f" '(ediff-files :which-key "compare files")
@@ -785,7 +779,7 @@
 
   ;; ------ Mode-specific Keybindings ------
   (my/leader-def prog-mode-map
-    "b" 'consult-imenu
+    "m" 'consult-imenu
     "s" 'shell
     "v" 'vterm
     "c" 'lsp-bridge-diagnostic-list
@@ -1165,6 +1159,9 @@
   :config
   (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
+
+;; required by other packages
+(use-package yasnippet)
 
 ;; show tree-like structure of current position
 (use-package breadcrumb
