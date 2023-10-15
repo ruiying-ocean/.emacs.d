@@ -43,8 +43,8 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-;; Intergration with use-package
-(straight-use-package 'use-package)
+(require 'use-package)
+
 (setq-default straight-use-package-by-default t)
 (setq use-package-enable-imenu-support t)
 
@@ -188,13 +188,9 @@
   :hook
   (after-init . global-undo-tree-mode)
   :config
-  (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
-  :bind
-  ("C-c u" . undo-tree-visualize)
-  ("M-/" . undo-tree-redo)
-  ("C-/" . undo-tree-undo))
+  (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo"))))
 
-;; undo and redo changes in the *window configuration*
+;; undo and redo between 'buffers'
 (use-package winner
   :straight (:type built-in)
   :hook
@@ -306,37 +302,21 @@
   :custom
   (vterm-kill-buffer-on-exit t)
   (vterm-always-compile-module t)
-  (vterm-max-scrollback 100000))
+  (vterm-max-scrollback 100000)
+  :config
+  (setq vterm-shell "zsh"))
+
+;; switch between vterm and the buffer you were editing
+(use-package vterm-toggle
+  :straight (:host github :repo "jixiuf/vterm-toggle")
+  :bind
+  ("C-x t" . vterm-toggle))
 
 ;; a comint extension, e.g., :view *.jpg to view a plot in shell
 ;; other useful cmd: :e (edit), :ssh,
 (use-package shx
   :hook
   (shell-mode . shx-global-mode))
-
-;;To specify new version of git on remote machine so I can run magit locally
-;;add ~/.ssh/config and ~/.ssh/known_hosts first
-;;then ssh-keygen -t rsa => ssh-copy-id name@host_name
-;; .inputrc file may trigger bug of "timeout reached"
-(use-package tramp
-  :defer 1
-  :straight (:type built-in)
-  :if (memq system-type '(gnu/linux darwin))
-  :config
-  (add-to-list 'tramp-remote-path "/usr/local/bin/git")
-  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
-  ;;tramp mode to cache password
-  (setq password-cache-expiry nil)
-  ;; version control backends
-  (setq vc-handled-backends '(Git))
-
-  (setq remote-file-name-inhibit-cache nil)
-  (setq vc-ignore-dir-regexp
-	(format "%s\\|%s"
-		vc-ignore-dir-regexp
-		tramp-file-name-regexp))
-  ;; turn off projectile-mode if experience slow
-  (setq tramp-verbose 1))
 
 (use-package which-key
   :hook
@@ -1156,17 +1136,21 @@
   :config
   (global-treesit-auto-mode))
 
-;; lsp-bridge: faster lsp server
+;; require `epc` libary
 (use-package lsp-bridge
   :straight (lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge"
 			:files ("*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources"))
   :hook
   (prog-mode . lsp-bridge-mode)
+  (latex-mode . lsp-bridge-mode)
+  :config
+  (setq lsp-bridge-python-command python-shell-interpreter)
+  (setq lsp-bridge-user-langserver-dir (expand-file-name "langserver" user-emacs-directory))
   :bind
-  ("M-." . lsp-bridge-find-def)
-  ("C-c r" . lsp-bridge-rename)
+  (:map lsp-bridge-mode-map
+	("C-c r" . lsp-bridge-rename)
+	("M-." . lsp-bridge-find-def))
   :custom
-  (lsp-bridge-python-command python-shell-interpreter)
   (acm-enable-yas nil)
   (acm-enable-tabnine nil)
   (acm-enable-copilot t)
