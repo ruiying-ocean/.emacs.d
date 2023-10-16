@@ -465,43 +465,6 @@
   :hook
   (after-init . marginalia-mode))
 
-;; auto completion
-(use-package corfu
-  :hook
-  (after-init . global-corfu-mode)
-  :custom
-  ;; turn off the atuo completion
-  ;; use AI or LSP-based solution
-  (corfu-auto nil)
-  (corfu-auto-delay 0.75)
-  (corfu-preview-current t)
-  :bind
-  (:map corfu-map
-	("C-n" . corfu-next)
-	("C-p" . corfu-previous)
-	("C-m" . corfu-insert)
-	("<return>" . corfu-insert)
-	("RET" . corfu-insert)
-	("C-M-i" . corfu-complete)))
-
-
-;; documentation
-(use-package corfu-doc
-  :straight (:type git :host github
-		   :repo "galeo/corfu-doc")
-  :hook
-  (corfu-mode . corfu-doc-mode))
-
-;; icon like all-the-icons
-(use-package kind-icon
-  :straight (:type git :host github
-		   :repo "jdtsmith/kind-icon")
-  :after corfu
-  :custom
-  (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
-  :config
-  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
-
 (use-package emojify
   :config
   (when (member "Segoe UI Emoji" (font-family-list))
@@ -756,7 +719,6 @@
     "b m" '(bookmark-set :which-key "bookmark set")
     "b l" '(bookmark-bmenu-list :which-key "bookmark list")
     "b g" '(bookmark-jump :which-key "bookmark GO!")
-    
 
     "e b" '(ediff-buffers :which-key "compare buffers")
     "e f" '(ediff-files :which-key "compare files")
@@ -1161,7 +1123,8 @@
   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
 
 ;; required by other packages
-(use-package yasnippet)
+(use-package yasnippet
+  :defer t)
 
 ;; show tree-like structure of current position
 (use-package breadcrumb
