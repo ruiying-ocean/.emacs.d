@@ -66,11 +66,11 @@
 (advice-add #'package-initialize :after #'update-load-path)
 (update-load-path)
 
-(defvar conda-dir "~/miniforge3/envs/workspace")
 (when (eq system-type 'darwin)
   (defvar brew-parent-dir "/opt/homebrew/")
   (defvar brew-bin-dir (expand-file-name "bin/" brew-parent-dir))
-  (defvar emacs-path "/opt/homebrew/Cellar/emacs-mac/emacs-29.1-mac-10.0/"))
+  (defvar emacs-app-dir "/Applications/Emacs.app/")
+  (defvar conda-dir "~/miniforge3/envs/workspace/"))
 
 ;; Avoid matching file name with regrex list during startup
 (let ((file-name-handler-alist nil)) "~/.emacs.d/init.el")
@@ -263,9 +263,23 @@
   (add-hook 'comint-preoutput-filter-functions
 	    (lambda (text)
 	      (propertize text 'read-only t)))
+  ;; kill shell buffer on exit
+  (defun my-shell-exit-and-kill-buffer ()
+    "Exit the shell process and kill the buffer."
+    (interactive)
+    (comint-send-eof)
+    (let ((shell-buffer (current-buffer)))
+      (run-at-time "0.1 sec" nil
+		   (lambda ()
+		     (when (buffer-live-p shell-buffer)
+		       (kill-buffer shell-buffer))))))
+  (add-hook 'shell-mode-hook
+	    (lambda ()
+	      (local-set-key (kbd "C-d") 'my-shell-exit-and-kill-buffer)))
   :bind
   ("C-x s" . shell)
   (:map shell-mode-map
+	("C-c" . comint-interrupt-subjob)
 	("<up>" . comint-previous-input)
 	("C-p" . comint-previous-input)
 	("<down>" . comint-next-input)
@@ -666,7 +680,7 @@
   :custom
   (default-input-method "rime")
   ;; the path of emacs_module.h
-  (rime-emacs-module-header-root (concat emacs-path "include"))
+  (rime-emacs-module-header-root (concat emacs-app-dir "Contents/Resources/include"))
   ;; configuration path
   (rime-librime-root (concat user-emacs-directory "librime/dist"))
   (rime-user-data-dir (concat user-emacs-directory "rime")))
@@ -1388,7 +1402,7 @@
      (shell . t)))
 
   (custom-set-faces
-   '(org-level-1 ((t (:inherit outline-1 :weight normal))))
+   '(org-level-1 ((t (:inherit outline-1 :weight bold))))
    '(org-level-2 ((t (:inherit outline-2 :weight normal))))
    '(org-level-3 ((t (:inherit outline-3 :weight normal))))
    '(org-level-4 ((t (:inherit outline-4 :weight normal))))
@@ -1419,7 +1433,6 @@
   (set-face-background 'org-verbatim "#fefefe")
 
   :bind
-  ("C-c r" . org-capture)
   (:map org-mode-map
 	("C-c s" . org-insert-structure-template))
 
@@ -1439,7 +1452,6 @@
 		(push '("\\->" . "↳") prettify-symbols-alist)
 		(push '("<-/" . "↵") prettify-symbols-alist)
 		(prettify-symbols-mode))))
-
 
 ;; Beautify org-mode
 (use-package org-superstar
