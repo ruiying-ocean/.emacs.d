@@ -210,6 +210,7 @@
 ;; `s` (expression), `l` (list), `f` (file)
 ;; `d` (defun), '+', '-'
 (use-package easy-kill
+  :defer t 
   :config
   (global-set-key [remap kill-ring-save] 'easy-kill)
   (global-set-key [remap mark-sexp] 'easy-mark))
@@ -1167,6 +1168,7 @@
   (define-key inferior-python-mode-map (kbd "C-n") 'comint-next-input))
 
 (use-package elpy
+  :after python
   :config
   (elpy-enable))
 
