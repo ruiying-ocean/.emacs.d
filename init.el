@@ -156,6 +156,13 @@
   :custom
   (so-long-action 'so-long-minor-mode))
 
+;; turn off non-essential reordering of bidirectional text
+(setq-default bidi-display-reordering nil)
+(setq bidi-inhibit-bpa t
+      long-line-threshold 1000
+      large-hscroll-threshold 1000
+      syntax-wholeline-max 1000)
+
 ;; auto revert buffer
 (use-package autorevert
   :straight (:type built-in)
