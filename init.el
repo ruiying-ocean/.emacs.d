@@ -490,6 +490,16 @@
   :bind
   ("C-c ." . emojify-insert-emoji))
 
+(use-package corfu
+  :hook
+  (after-init . corfu-mode))
+
+;; language spell checker
+(use-package jinx
+  :hook (text-mode . jinx-mode)
+  :bind (("M-$" . jinx-correct)
+         ("C-M-$" . jinx-languages)))
+
 ;; completion-at-point extensions for corfu
 (use-package cape
   ;; Bind dedicated completion commands
@@ -877,8 +887,7 @@
 ;;Disable line number for certain modes
 (dolist (mode '(org-mode-hook
 		term-mode-hook
-		eshell-mode-hook
-		LaTeX-mode-hook))
+		eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 
