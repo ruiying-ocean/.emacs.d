@@ -1154,6 +1154,9 @@
   :config
   (global-treesit-auto-mode))
 
+(use-package yasnippet
+  :after elpy)
+
 ;; require `epc` libary
 (use-package lsp-bridge
   :straight (lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge"
@@ -1187,7 +1190,7 @@
   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
 
 ;; show tree-like structure of current position
-(use-package breadcrumb
+(use-package breadcrumb  
   :straight (breadcrumb :type git
 			:host github
 			:repo "joaotavora/breadcrumb")
@@ -1197,15 +1200,12 @@
 (use-package expand-region
   :bind ("C-=" . er/expand-region))
 
-
 ;;==============================
 ;;           Python           ;;
 ;;==============================
 
 ;; Interpreter choice, use `run-python' to find current interpreter`
-(setq python-shell-interpreter (expand-file-name "bin/python" conda-dir)
-      ;;       python-shell-interpreter-args "-i --simple-prompt --InteractiveShell.display_page=True"
-      )
+(setq python-shell-interpreter (expand-file-name "bin/python" conda-dir))
 
 ;;python-style indent
 (setq python-indent-offset 4)
@@ -1402,6 +1402,7 @@
 ;;===========
 
 (use-package org
+  :straight (:type built-in)
   :custom
   ;; set default note file
   (org-directory "~/Documents")
@@ -1465,12 +1466,12 @@
     :group 'org-faces)
 
   (setq org-emphasis-alist
-      '(("*" org-bold)
-        ("/" italic)
-        ("_" underline)
-        ("=" (:background "maroon" :foreground "white") org-verbatim)
-        ("~" (:background "deep sky blue" :foreground "MidnightBlue") org-code)
-        ("+" (:strike-through t) org-code)))
+	'(("*" org-bold)
+          ("/" italic)
+          ("_" underline)
+          ("=" (:background "maroon" :foreground "white") org-verbatim)
+          ("~" (:background "deep sky blue" :foreground "MidnightBlue") org-code)
+          ("+" (:strike-through t) org-code)))
 
   (set-face-background 'org-bold "#fefefe")
   (set-face-background 'org-verbatim "#fefefe")
