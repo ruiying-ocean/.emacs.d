@@ -5,17 +5,33 @@
 ;;; Author: Rui Ying
 ;;; Email: rui.ying@bristol.ac.uk
 
+;;; First principal: build on demand
+
 ;;; DEPENDENCIES
 ;; LSP servers
 ;;       pylsp, clangd, fortls, texlab/digestif
-;; Lint checker:
-;;       pyflakes, shell checker (brew)
-;; Fonts:
-;;       all-the-icons, Roboto Mono, Iosevka, SF Mono
+
 ;; Others:
-;;       ripgrep, libvterm, PDF tools, multimarkdown (brew),
+;;       ripgrep, libvterm, multimarkdown (brew),
 ;;       npm package `livedown`
 
+;; python flycheck depdencies
+;; pip install pyflakes -> fast and don't check code style
+
+;; shell checker
+;; brew install shellcheck
+
+;; (defun self/install-external-dependencies
+;;     "Install external dependencies including
+;;     - ripgrep
+;;     - libvterm
+;;     - shellchecker
+;;     - py")
+
+;; TODO
+;;  - [ ] add a function to install external dependencies
+;;  - [ ] configure lsp lint checker
+;;  - [ ] configure tex
 
 ;;; Code:
 
@@ -80,7 +96,12 @@
 (load custom-file :noerror)
 
 ;; restart emacs
-(use-package restart-emacs)
+(use-package restart-emacs
+  :commands (restart-emacs))
+
+(use-package esup
+  :config
+  (setq esup-depth 0))
 
 ;;; EDITOR
 
@@ -157,6 +178,7 @@
   (so-long-action 'so-long-minor-mode))
 
 ;; turn off non-essential reordering of bidirectional text
+;; this can improve performance when dealing with large text file
 (setq-default bidi-display-reordering nil)
 (setq bidi-inhibit-bpa t
       long-line-threshold 1000
@@ -396,6 +418,7 @@
 
 ;; brew install git-delta
 (use-package magit-delta
+  :if window-system
   :hook (magit-mode . magit-delta-mode)
   :config
   (setq magit-delta-hide-plus-minus-markers nil))
@@ -421,7 +444,7 @@
   :hook
   (after-init . popwin-mode))
 
-;; better isearch, choose this or consult-line
+;; better isearch
 (use-package ctrlf
   :hook
   (after-init . ctrlf-mode)
@@ -481,9 +504,6 @@
 
 ;; rich annotations of minibuffer
 (use-package marginalia
-  ;; change more or less info
-  :bind (:map minibuffer-local-map
-	      ("M-A" . marginalia-cycle))
   :hook
   (after-init . marginalia-mode))
 
@@ -501,11 +521,25 @@
   :hook
   (after-init . corfu-mode))
 
+(use-package corfu-terminal
+  :if (not window-system)
+  :hook
+  (after-init . corfu-terminal-mode))
+
+(use-package kind-icon
+  :after corfu
+  :custom
+  (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
+  :config
+  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+
 ;; language spell checker
-(use-package jinx
-  :hook (text-mode . jinx-mode)
-  :bind (("M-$" . jinx-correct)
-         ("C-M-$" . jinx-languages)))
+(use-package jit-spell
+  :hook
+  (text-mode . jit-spell-mode)
+  :bind
+  (:map jit-spell-mode-map
+	("C-;" . jit-spell-correct-word)))
 
 ;; completion-at-point extensions for corfu
 (use-package cape
@@ -566,10 +600,6 @@
 	 ("M-g i" . consult-imenu)
 	 ("M-g I" . consult-imenu-multi)
 
-	 ;; M-s bindings (search-map)
-	 ;; ("M-s l" . consult-line)
-	 ;; use consult-line to replac
-	 ;; ("C-s" . consult-line)
 	 ("M-s r" . consult-ripgrep)
 	 ("M-s L" . consult-line-multi)
 	 ("M-s m" . consult-multi-occur)
@@ -723,18 +753,17 @@
     "" nil
     "\\" 'quote-backslash
 
+    ;; move cursor
     "m l" '(avy-goto-line :which-key "goto-line")
     "m g" '(goto-line :which-key "goto-line-number")
     "m m" '(exchange-point-and-mark :which-key "go-back-and-mark")
-    ;; mark ring
     "m b" '(consult-global-mark :which-key "go-back")
 
     ;; change  indent
     "<tab>" '(indent-rigidly :which-key "move code")
     
-    ;; project level operations
+    ;; project operations 
     "p p" '(projectile-switch-project :which-key "project switch")
-    ;; search file/buffer/text
     "p s" '(consult-ripgrep :which-key "project search text")
     "p b" '(consult-projectile :which-key "project buffer/file")
     "p f" '(projectile-find-file :which-key "project find file")
@@ -751,6 +780,9 @@
     "b m" '(bookmark-set :which-key "bookmark set")
     "b l" '(bookmark-bmenu-list :which-key "bookmark list")
     "b g" '(bookmark-jump :which-key "bookmark GO!")
+
+    ;; org mode
+    "o c" '(org-capture :which-key "org capture")
 
     "e b" '(ediff-buffers :which-key "compare buffers")
     "e f" '(ediff-files :which-key "compare files")
@@ -773,7 +805,7 @@
 
   ;; ------ Mode-specific Keybindings ------
   (my/leader-def prog-mode-map
-    "m" 'consult-imenu
+    "i" 'consult-imenu
     "s" 'shell
     "v" 'vterm
     "c" 'lsp-bridge-diagnostic-list
@@ -865,8 +897,7 @@
 
 ;; highlight cursor when scroll window
 (use-package beacon
-  :straight (:host github
-		   :repo "Malabarba/beacon")
+  :straight (:host github :repo "Malabarba/beacon")
   :hook
   (after-init . beacon-mode))
 
@@ -1046,7 +1077,7 @@
   (if (display-graphic-p)
       (progn
 	;; English font
-	(set-face-attribute 'default nil :font (format "%s:pixelsize=%d" "IBM Plex Mono" 14))
+	(set-face-attribute 'default nil :font (format "%s:pixelsize=%d" "Monaco" 13.5))
 	;; CJK font
 	(dolist (charset '(kana han symbol cjk-misc bopomofo))
 	  (set-fontset-font (frame-parameter nil 'font)
@@ -1130,13 +1161,15 @@
   :hook
   (prog-mode . lsp-bridge-mode)
   (latex-mode . lsp-bridge-mode)
+  (LaTeX-mode . lsp-bridge-mode)
   :config
   (setq lsp-bridge-python-command python-shell-interpreter)
   (setq lsp-bridge-user-langserver-dir (expand-file-name "langserver" user-emacs-directory))
   :bind
   (:map lsp-bridge-mode-map
 	("C-c r" . lsp-bridge-rename)
-	("M-." . lsp-bridge-find-def))
+	("M-." . lsp-bridge-find-def)
+	("<return>" . acm-complete))
   :custom
   (acm-enable-yas nil)
   (acm-enable-tabnine nil)
@@ -1152,10 +1185,6 @@
   :config
   (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
-
-;; required by other packages
-(use-package yasnippet
-  :defer t)
 
 ;; show tree-like structure of current position
 (use-package breadcrumb
@@ -1174,8 +1203,9 @@
 ;;==============================
 
 ;; Interpreter choice, use `run-python' to find current interpreter`
-(setq python-shell-interpreter (expand-file-name "bin/ipython" conda-dir)
-      python-shell-interpreter-args "-i --simple-prompt --InteractiveShell.display_page=True")
+(setq python-shell-interpreter (expand-file-name "bin/python" conda-dir)
+      ;;       python-shell-interpreter-args "-i --simple-prompt --InteractiveShell.display_page=True"
+      )
 
 ;;python-style indent
 (setq python-indent-offset 4)
@@ -1199,9 +1229,9 @@
 
 (use-package elpy
   :after python
+  :requires yasnippet
   :config
   (elpy-enable))
-
 
 ;;==============================
 ;;           Rlang            ;;
@@ -1221,9 +1251,6 @@
     (just-one-space 1)
     ;;(reindent-then-newline-and-indent)
     )
-
-  ;; disable flycheck because lsp has linter already
-  (add-hook 'ess-r-mode-hook (lambda () (flycheck-mode -1)))
 
   (defun ess-clear-REPL-buffer ()
     "Clear outputs in the REPL buffer"
