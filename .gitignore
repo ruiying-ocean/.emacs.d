@@ -12,3 +12,5 @@ pyim/
 emojis/
 viper
 flycheck_init.el
+var/
+undo/
