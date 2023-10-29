@@ -678,7 +678,6 @@
   (interactive)
   (move-beginning-of-line 1)
   (push-mark nil nil t)
-  ;;(forward-line 1)
   (end-of-line 1))
 
 (global-set-key (kbd "C-l") 'select-current-line)
@@ -1176,7 +1175,7 @@
   :custom
   (acm-enable-yas nil)
   (acm-enable-tabnine nil)
-  (acm-enable-copilot t)
+  (acm-enable-copilot nil)
   (lsp-bridge-c-lsp-server "clangd")
   (lsp-bridge-python-lsp-server "pyright")
   (lsp-bridge-tex-lsp-server "texlab"))
