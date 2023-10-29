@@ -399,7 +399,8 @@
   (setq magit-refresh-status-buffer nil)
   (setq projectile-git-submodule-command nil)
   (setq inhibit-compacting-font-cache t)
-  
+
+  ;; remove hooks to speed up magit
   (remove-hook 'magit-status-sections-hook 'magit-insert-tags-header)
   (remove-hook 'magit-status-sections-hook 'magit-insert-status-headers)
   (remove-hook 'magit-status-sections-hook 'magit-insert-unpushed-to-pushremote)
@@ -409,6 +410,11 @@
   (remove-hook 'magit-revision-sections-hook 'magit-insert-unpushed-to-upstream-or-recent)
   (remove-hook 'magit-status-sections-hook 'magit-insert-tags-header)
   (remove-hook 'magit-status-sections-hook 'magit-insert-status-headers)
+
+  ;; remove magit-commit-diff
+  (remove-hook 'server-switch-hook 'magit-commit-diff)
+  (remove-hook 'with-editor-filter-visit-hook 'magit-commit-diff)
+
   :custom
   (magit-git-executable "/usr/bin/git"))
 
