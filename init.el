@@ -396,13 +396,18 @@
   ("C-x g" . magit-status)
   ("C-x c" . magit-checkout)
   :config
-  ;; for verbose
-  ;; (setq magit-refresh-verbose t)
-  ;; improve performance
-
+  (setq magit-refresh-verbose t)
+  (setq magit-refresh-status-buffer nil)
+  (setq projectile-git-submodule-command nil)
+  (setq inhibit-compacting-font-cache t)
+  
+  (remove-hook 'magit-status-sections-hook 'magit-insert-tags-header)
+  (remove-hook 'magit-status-sections-hook 'magit-insert-status-headers)
+  (remove-hook 'magit-status-sections-hook 'magit-insert-unpushed-to-pushremote)
+  (remove-hook 'magit-status-sections-hook 'magit-insert-unpulled-from-pushremote)
+  (remove-hook 'magit-status-sections-hook 'magit-insert-unpulled-from-upstream)
+  (remove-hook 'magit-status-sections-hook 'magit-insert-unpushed-to-upstream-or-recent)
   (remove-hook 'magit-revision-sections-hook 'magit-insert-unpushed-to-upstream-or-recent)
-
-  ;; status
   (remove-hook 'magit-status-sections-hook 'magit-insert-tags-header)
   (remove-hook 'magit-status-sections-hook 'magit-insert-status-headers)
   :custom
@@ -587,26 +592,7 @@
 
 	 ;; Other custom bindings
 	 ("M-y" . consult-yank-pop)	;; orig. yank-pop
-	 ("<help> a" . consult-apropos) ;; orig. apropos-command
-
-	 ;; M-g bindings (goto-map)
-	 ("M-g e" . consult-compile-error)
-	 ;; ("M-g f" . consult-flycheck) ;; Alternative: consult-flycheck
-	 ("M-g g" . consult-goto-line)	 ;; orig. goto-line
-	 ("M-g M-g" . consult-goto-line) ;; orig. goto-line
-	 ("M-g o" . consult-outline) ;; Alternative: consult-org-heading
-	 ("M-g m" . consult-mark)
-	 ("M-g k" . consult-global-mark)
-	 ("M-g i" . consult-imenu)
-	 ("M-g I" . consult-imenu-multi)
-
-	 ("M-s r" . consult-ripgrep)
-	 ("M-s L" . consult-line-multi)
-	 ("M-s m" . consult-multi-occur)
-	 ("M-s k" . consult-keep-lines)
-	 ("M-s u" . consult-focus-lines)
-	 ("<f3>" . consult-recent-file)
-	 ("M-s e" . consult-isearch-history)
+	 
 	 :map isearch-mode-map
 	 ("M-e" . consult-isearch-history) ;; orig. isearch-edit-string
 	 ("M-s e" . consult-isearch-history) ;; orig. isearch-edit-string
@@ -656,10 +642,8 @@
 
 ;;Faster cursor movement - go to anywhere
 (use-package avy
-  :bind
-  ("C-\"" . avy-goto-char)		;input: one character
-  ("C-'" . avy-goto-char-2)		;input: two characters
-  ("M-g w" . avy-goto-word-1)
+  :bind 
+  ("C-'" . avy-goto-char-2)		;; input: two characters
   ("M-g l" . avy-goto-line))
 
 (use-package ace-window
