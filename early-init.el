@@ -39,8 +39,10 @@
 
 (setq byte-compile-warnings '(cl-functions))
 
-;; disable package.el
-(setq package-enable-at-startup nil)
+;; disable package.el if version is greater than 27.0
+(when (version< emacs-version "27.0")
+  (package-initialize)
+  (setq package-enable-at-startup nil))
 
 ;; fancy splash
 (defun self/show-welcome-buffer ()

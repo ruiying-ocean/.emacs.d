@@ -48,17 +48,20 @@
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
+      (bootstrap-version 6))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
         (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
          'silent 'inhibit-cookies)
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-(require 'use-package)
+;; use build-in use-package (emacs > 29)
+(if (version< emacs-version "29.1")
+    (straight-use-package 'use-package)
+  (require 'use-package))
 
 (setq-default straight-use-package-by-default t)
 (setq use-package-enable-imenu-support t)
@@ -416,6 +419,7 @@
   (remove-hook 'with-editor-filter-visit-hook 'magit-commit-diff)
 
   :custom
+  ;; this improve the performance of magit in MacOS
   (magit-git-executable "/usr/bin/git"))
 
 ;;a magit prefix help page
@@ -439,7 +443,6 @@
   (exec-path-from-shell-initialize))
 
 (use-package use-package-ensure-system-package
-  :defer t
   :after exec-path-from-shell) ;;extend use-package, put after exec-path-from-shell
 
 ;; pop up window management
