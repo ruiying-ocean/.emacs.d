@@ -1139,8 +1139,10 @@
 (use-package yasnippet
   :after elpy)
 
-;; require `epc` libary
+;; Language Server Protocol Implementation
+;; require `epc` python libary
 (use-package lsp-bridge
+  :if (window-system)
   :straight (lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge"
 			:files ("*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources"))
   :hook
@@ -1163,6 +1165,7 @@
   (lsp-bridge-python-lsp-server "pyright")
   (lsp-bridge-tex-lsp-server "texlab"))
 
+;; AI assisted completion
 (use-package copilot
   :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
   :hook
@@ -1621,13 +1624,13 @@
 ;;; Final cook up
 
 ;; Back to normal GC level
-(defun my-cleanup-gc ()
+(defun self/cleanup-gc ()
   "Clean up gc.  From user redguardtoo."
   (setq gc-cons-threshold 100000000)
   (setq gc-cons-percentage 0.1))
 
 ;; Collect gc during free time
-(run-with-idle-timer 4 nil #'my-cleanup-gc)
+(run-with-idle-timer 4 nil #'self/cleanup-gc)
 
 (setq max-specpdl-size 32000
       max-lisp-eval-depth 16000)
