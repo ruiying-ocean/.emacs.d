@@ -31,7 +31,6 @@
 ;; TODO
 ;;  - [ ] add a function to install external dependencies
 ;;  - [ ] configure lsp lint checker
-;;  - [ ] configure tex
 
 ;;; Code:
 
@@ -421,13 +420,6 @@
 (use-package forge
   :after magit)
 
-;; brew install git-delta
-(use-package magit-delta
-  :if window-system
-  :hook (magit-mode . magit-delta-mode)
-  :config
-  (setq magit-delta-hide-plus-minus-markers nil))
-
 ;;This package reads proper environment variable in MacOS GUI version
 ;;To speed up this package, (1) separate configuration into
 ;;non-interactive (.zshenv) and interactive (.zshrc) part;
@@ -582,6 +574,7 @@
 (use-package consult
   ;; Replace bindings. Lazily loaded due by `use-package'.
   :bind (;; C-c bindings (mode-specific-map)
+	 ("<f3>" . consult-recent-file)
 	 ("C-c h" . consult-history)
 	 ("C-c m" . consult-mode-command)
 
@@ -591,7 +584,7 @@
 	 ("C-x r b" . consult-bookmark) ;; orig. bookmark-jump
 
 	 ;; Other custom bindings
-	 ("M-y" . consult-yank-pop)	;; orig. yank-pop
+	 ("M-y" . consult-yank-pop) ;; orig. yank-pop
 	 
 	 :map isearch-mode-map
 	 ("M-e" . consult-isearch-history) ;; orig. isearch-edit-string
