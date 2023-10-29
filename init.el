@@ -605,10 +605,6 @@
   (setq xref-show-xrefs-function #'consult-xref
 	xref-show-definitions-function #'consult-xref))
 
-;; consult extensions
-(use-package consult-flycheck
-  :after (consult flycheck))
-
 ;; project buffer/file
 (use-package consult-projectile
   :after (consult projectile))
@@ -1159,6 +1155,7 @@
   :after elpy)
 
 ;; Language Server Protocol Implementation
+;; remove flymake/flycheck
 ;; require `epc` python libary
 (use-package lsp-bridge
   :if (window-system)
