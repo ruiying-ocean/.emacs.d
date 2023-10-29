@@ -97,15 +97,8 @@
 (setq-default custom-file (concat user-emacs-directory "extra-lisp/custom.el"))
 (load custom-file :noerror)
 
-;; restart emacs
-(use-package restart-emacs
-  :commands (restart-emacs))
-
-(use-package esup
-  :config
-  (setq esup-depth 0))
 
-;;; EDITOR
+;;; BUILT-IN PACKAGES
 
 ;;Coding system
 ;; In some old machines, you might need specify these in .bashrc
@@ -414,6 +407,7 @@
   (remove-hook 'server-switch-hook 'magit-commit-diff)
   (remove-hook 'with-editor-filter-visit-hook 'magit-commit-diff)
 
+  (setq magit-show-long-lines-warning nil)
   :custom
   ;; this improve the performance of magit in MacOS
   (magit-git-executable "/usr/bin/git"))
@@ -648,6 +642,15 @@
   :bind
   ("M-o" . ace-window)
   ("C-x o" . ace-swap-window))
+
+;; restart emacs
+(use-package restart-emacs
+  :commands (restart-emacs))
+
+(use-package esup
+  :config
+  (setq esup-depth 0))
+
 
 
 ;;; KEYBINDING
@@ -914,10 +917,12 @@
 ;; code formatting, require third-party formatter
 (use-package format-all
   :hook
+  ;; turn on format-all-mode which
+  ;; automatically format code on save
   (prog-mode . format-all-mode))
 
-;; built-int choices:
-;; (electric-indent-mode 1)
+;; stop automatically indents the line
+(electric-indent-mode nil)
 
 (setq frame-inhibit-implied-resize nil)
 
@@ -1019,6 +1024,21 @@
   :custom
   (highlight-indent-guides-method 'character))
 
+;; (use-package indent-bars
+;;   :straight (indent-bars :type git :host github :repo "jdtsmith/indent-bars")
+;;   :custom
+;;   (indent-bars-treesit-support t)
+;;   (indent-bars-no-descend-string t)
+;;   (indent-bars-treesit-ignore-blank-lines-types '("module"))
+;;   :hook ((prog-mode) . indent-bars-mode)
+;;   :config
+;;   (setq
+;;    indent-bars-color '(highlight :face-bg t :blend 0.3)
+;;    indent-bars-pattern " . . . . ." ; play with the number of dots for your usual font size
+;;    indent-bars-width-frac 0.25
+;;    indent-bars-pad-frac 0.1)
+;;   )
+
 (use-package all-the-icons
   :if (display-graphic-p)
   :config
@@ -1091,7 +1111,6 @@
 
 (use-package ef-themes
   :config
-  ;; finally load the theme
   (load-theme 'ef-light))
 
 ;; mode line
