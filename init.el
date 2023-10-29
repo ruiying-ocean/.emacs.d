@@ -236,15 +236,11 @@
   ;; configure time gap (in sec)
   (real-auto-save-interval 1))
 
-;; auto select and cut/copy
-;; manual control: press another `w` (word),
-;; `s` (expression), `l` (list), `f` (file)
-;; `d` (defun), '+', '-'
+;; M-w + w/l to copy/cut the word/line
 (use-package easy-kill
-  :defer t 
-  :config
-  (global-set-key [remap kill-ring-save] 'easy-kill)
-  (global-set-key [remap mark-sexp] 'easy-mark))
+  :bind
+  ([remap kill-ring-save] . easy-kill)
+  ([remap mark-sexp] . easy-mark))
 
 ;; Automatically add spacing around operators
 ;; use C-v to next page
