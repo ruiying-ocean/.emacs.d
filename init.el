@@ -1147,7 +1147,8 @@
 ;; Automatically install and use tree-sitter major modes in Emacs 29+
 (use-package treesit-auto
   :config
-  (global-treesit-auto-mode))
+  (global-treesit-auto-mode)
+  (setq treesit-auto-install 'prompt))
 
 (use-package yasnippet
   :after elpy)
