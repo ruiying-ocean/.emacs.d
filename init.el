@@ -110,6 +110,7 @@
 (defvar default-buffer-file-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
+(setq default-process-coding-system '(utf-8 . utf-8))
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 
@@ -911,10 +912,7 @@
 
 ;; code formatting, require third-party formatter
 (use-package format-all
-  :hook
-  ;; turn on format-all-mode which
-  ;; automatically format code on save
-  (prog-mode . format-all-mode))
+  :commands format-all-buffer)
 
 ;; stop automatically indents the line
 (electric-indent-mode nil)
@@ -1013,44 +1011,45 @@
   :bind
   ([S-down-mouse-3] . minions-minor-modes-menu))
 
-(use-package highlight-indent-guides
-  :hook
-  (prog-mode . highlight-indent-guides-mode)
-  :custom
-  (highlight-indent-guides-method 'character))
-
-;; (use-package indent-bars
-;;   :straight (indent-bars :type git :host github :repo "jdtsmith/indent-bars")
+;; (use-package highlight-indent-guides
+;;   :hook
+;;   (prog-mode . highlight-indent-guides-mode)
 ;;   :custom
-;;   (indent-bars-treesit-support t)
-;;   (indent-bars-no-descend-string t)
-;;   (indent-bars-treesit-ignore-blank-lines-types '("module"))
-;;   :hook ((prog-mode) . indent-bars-mode)
-;;   :config
-;;   (setq
-;;    indent-bars-color '(highlight :face-bg t :blend 0.3)
-;;    indent-bars-pattern " . . . . ." ; play with the number of dots for your usual font size
-;;    indent-bars-width-frac 0.25
-;;    indent-bars-pad-frac 0.1)
-;;   )
+;;   (highlight-indent-guides-method 'character))
 
-(use-package all-the-icons
-  :if (display-graphic-p)
+(use-package indent-bars
+  :straight (indent-bars :type git :host github :repo "jdtsmith/indent-bars")
+  :custom
+  (indent-bars-treesit-support t)
+  (indent-bars-no-descend-string t)
+  (indent-bars-treesit-ignore-blank-lines-types '("module"))
+  :hook ((prog-mode) . indent-bars-mode)
   :config
-  (setq inhibit-compacting-font-caches t))
+  (setq
+   indent-bars-color '(highlight :face-bg t :blend 0.3)
+   indent-bars-pattern " . . . . ." ; play with the number of dots for your usual font size
+   indent-bars-width-frac 0.25
+   indent-bars-pad-frac 0.1)
+  )
 
-(use-package all-the-icons-dired
+(use-package nerd-icons
+  :custom
+  (nerd-icons-font-family "Inconsolata Nerd Font Mono")
+  (nerd-icons-scale-factor 1.5))
+
+(use-package nerd-icons-dired
   :if window-system
-  ;;need to run all-the-icons-install-fonts first to avoid grabled icon
   :hook
-  (dired-mode . all-the-icons-dired-mode))
+  (dired-mode . nerd-icons-dired-mode))
 
-;; all the icons for completion framework (e.g. vertico)
-(use-package all-the-icons-completion
-  :hook
-  (after-init . all-the-icons-completion-mode)
+(use-package nerd-icons-completion
   :config
-  (add-hook 'marginalia-mode-hook #'all-the-icons-completion-marginalia-setup))
+  (nerd-icons-completion-mode))
+
+(use-package nerd-icons-ibuffer
+  :hook (ibuffer-mode . nerd-icons-ibuffer-mode)
+  :config
+  (setq nerd-icons-ibuffer-icon t))
 
 ;; (global-tab-line-mode t)
 
@@ -1074,7 +1073,7 @@
   (if (display-graphic-p)
       (progn
 	;; English font
-	(set-face-attribute 'default nil :font (format "%s:pixelsize=%d" "Monaco" 13.5))
+	(set-face-attribute 'default nil :font (format "%s:pixelsize=%d" "Inconsolata Nerd Font Mono" 16))
 	;; CJK font
 	(dolist (charset '(kana han symbol cjk-misc bopomofo))
 	  (set-fontset-font (frame-parameter nil 'font)
