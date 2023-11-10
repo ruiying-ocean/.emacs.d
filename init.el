@@ -90,6 +90,8 @@
   (defvar emacs-app-dir "/Applications/Emacs.app/")
   (defvar conda-dir "~/miniforge3/envs/workspace/"))
 
+(defvar global-font "Monego Nerd Font Fix")
+
 ;; Avoid matching file name with regrex list during startup
 (let ((file-name-handler-alist nil)) "~/.emacs.d/init.el")
 
@@ -1034,8 +1036,8 @@
 
 (use-package nerd-icons
   :custom
-  (nerd-icons-font-family "Inconsolata Nerd Font Mono")
-  (nerd-icons-scale-factor 1.5))
+  (nerd-icons-font-family global-font)
+  (nerd-icons-scale-factor 1.2))
 
 (use-package nerd-icons-dired
   :if window-system
@@ -1073,7 +1075,7 @@
   (if (display-graphic-p)
       (progn
 	;; English font
-	(set-face-attribute 'default nil :font (format "%s:pixelsize=%d" "Inconsolata Nerd Font Mono" 16))
+	(set-face-attribute 'default nil :font (format "%s:pixelsize=%d" global-font 14))
 	;; CJK font
 	(dolist (charset '(kana han symbol cjk-misc bopomofo))
 	  (set-fontset-font (frame-parameter nil 'font)
@@ -1146,6 +1148,7 @@
 ;; Install treesit C-library first: `brew install tree-sitter'
 ;; Automatically install and use tree-sitter major modes in Emacs 29+
 (use-package treesit-auto
+  :demand t
   :config
   (global-treesit-auto-mode)
   (setq treesit-auto-install 'prompt))
