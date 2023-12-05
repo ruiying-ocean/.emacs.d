@@ -298,7 +298,7 @@
 		       (kill-buffer shell-buffer))))))
   (add-hook 'shell-mode-hook
 	    (lambda ()
-	      (local-set-key (kbd "C-d") 'my-shell-exit-and-kill-buffer)))
+	      (local-set-key (kbd "C-x k") 'my-shell-exit-and-kill-buffer)))
   :bind
   ("C-x s" . shell)
   (:map shell-mode-map
