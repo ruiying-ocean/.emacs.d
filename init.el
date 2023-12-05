@@ -1037,7 +1037,7 @@
 (use-package nerd-icons
   :custom
   (nerd-icons-font-family global-font)
-  (nerd-icons-scale-factor 1.2))
+  (nerd-icons-scale-factor 1.5))
 
 (use-package nerd-icons-dired
   :if window-system
@@ -1075,7 +1075,7 @@
   (if (display-graphic-p)
       (progn
 	;; English font
-	(set-face-attribute 'default nil :font (format "%s:pixelsize=%d" global-font 14))
+	(set-face-attribute 'default nil :font (format "%s:pixelsize=%d" global-font 16))
 	;; CJK font
 	(dolist (charset '(kana han symbol cjk-misc bopomofo))
 	  (set-fontset-font (frame-parameter nil 'font)
@@ -1151,7 +1151,8 @@
   :demand t
   :config
   (global-treesit-auto-mode)
-  (setq treesit-auto-install 'prompt))
+  (setq treesit-auto-install 'prompt)
+  (setq treesit-font-lock-level 4))
 
 (use-package yasnippet
   :after elpy)
