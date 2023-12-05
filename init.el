@@ -90,7 +90,7 @@
   (defvar emacs-app-dir "/Applications/Emacs.app/")
   (defvar conda-dir "~/miniforge3/envs/workspace/"))
 
-(defvar global-font "Monego Nerd Font Fix")
+(defvar global-font "Inconsolata Nerd Font Mono")
 
 ;; Avoid matching file name with regrex list during startup
 (let ((file-name-handler-alist nil)) "~/.emacs.d/init.el")
@@ -110,9 +110,9 @@
 ;; export LC_CTYPE=en_US.UTF-8
 
 (defvar default-buffer-file-coding-system 'utf-8)
+(setq default-process-coding-system '(utf-8 . utf-8))
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
-(setq default-process-coding-system '(utf-8 . utf-8))
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 
