@@ -1242,7 +1242,7 @@
 ;; require ESS installed
 ;;Lazy load ess-r-mode (ESS doesn't like use-package pretty much)
 (use-package ess
-  :defer t)
+  :commands (ess-r-mode))
 
 (add-to-list 'auto-mode-alist '("\\.R\\'" . ess-r-mode))
 (with-eval-after-load 'ess-r-mode
@@ -1255,6 +1255,10 @@
     ;;(reindent-then-newline-and-indent)
     )
 
+  ;; R official style
+  (ess-set-style 'RRR 'quiet)
+  (setq ess-nuke-trailing-whitespace-p 'ask)
+  
   (defun ess-clear-REPL-buffer ()
     "Clear outputs in the REPL buffer"
     (interactive)
@@ -1266,8 +1270,8 @@
 	    (comint-clear-buffer))
 	(user-error "No R REPL buffers found"))))
 
-  (define-key ess-r-mode-map (kbd "C-l") 'ess-clear-REPL-buffer)
-  (define-key inferior-ess-r-mode-map (kbd "C-l") 'ess-clear-REPL-buffer) ;;inferior-* is the shell one
+  (define-key ess-r-mode-map (kbd "C-l") 'comint-clear-buffer)
+  (define-key inferior-ess-r-mode-map (kbd "C-l") 'comint-clear-buffer) ;;inferior-* is the shell one
   (define-key ess-r-mode-map (kbd "M--") 'ess-insert-assign)
   (define-key inferior-ess-r-mode-map (kbd "M--") 'ess-insert-assign)
   (define-key ess-r-mode-map (kbd "M-p") 'ess-insert-pipe)
@@ -1280,7 +1284,7 @@
 
 ;;C-c C-a to turn on csv-align-fields
 (use-package csv-mode
-  :mode
+:mode
   "\\.csv\\'"
   "\\.CSV\\'")
 
