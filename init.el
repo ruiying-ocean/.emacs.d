@@ -520,11 +520,6 @@
   :hook
   (after-init . corfu-mode))
 
-(use-package corfu-terminal
-  :if (not window-system)
-  :hook
-  (after-init . corfu-terminal-mode))
-
 (use-package kind-icon
   :after corfu
   :custom
@@ -1148,6 +1143,8 @@
 ;; Install treesit C-library first: `brew install tree-sitter'
 ;; Automatically install and use tree-sitter major modes in Emacs 29+
 (use-package treesit-auto
+  :straight (treesit-auto :type git :host github :repo "ubolonton/emacs-tree-sitter"
+			  :files ("*.el" "*.c" "*.h" "langs"))
   :demand t
   :config
   (global-treesit-auto-mode)
