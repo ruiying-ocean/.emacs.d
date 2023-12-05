@@ -1008,13 +1008,15 @@
   :bind
   ([S-down-mouse-3] . minions-minor-modes-menu))
 
-;; (use-package highlight-indent-guides
-;;   :hook
-;;   (prog-mode . highlight-indent-guides-mode)
-;;   :custom
-;;   (highlight-indent-guides-method 'character))
+(use-package highlight-indent-guides
+  :if (not window-system)
+  :hook
+  (prog-mode . highlight-indent-guides-mode)
+  :custom
+  (highlight-indent-guides-method 'character))
 
 (use-package indent-bars
+  :if window-system
   :straight (indent-bars :type git :host github :repo "jdtsmith/indent-bars")
   :custom
   (indent-bars-treesit-support t)
