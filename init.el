@@ -697,6 +697,7 @@
 
 ;; dynamic module required
 (use-package rime
+  :if (window-system)
   :config
   (setq rime-show-candidate 'posframe)
   (setq rime-posframe-properties
