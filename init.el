@@ -950,12 +950,6 @@
   (:map dired-mode-map
 	("C-c C-r" . dired-rsync)))
 
-(use-package pulsing-cursor
-  :straight (:type git :host github
-		   :repo "jasonjckn/pulsing-cursor")
-  :hook
-  (prog-mode . pulsing-cursor-mode))
-
 ;;--------------------------------------------------
 ;; Matching parenthesis
 ;;--------------------------------------------------
