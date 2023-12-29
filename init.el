@@ -3,7 +3,7 @@
 ;;; This file contains my customized configuration codes, which
 ;;; are divided into multiple sections by ^L character.
 ;;; Author: Rui Ying
-;;; Email: rui.ying@bristol.ac.uk
+;;; Email: ying.rui@outlook.com
 
 ;;; First principal: build on demand
 
@@ -117,14 +117,18 @@
 (set-keyboard-coding-system 'utf-8)
 
 ;; Improved global minor mode for scrolling in Emacs 29
-(if (> emacs-major-version 28)
-    (pixel-scroll-precision-mode)
-  ;; else use third-party package
-  (use-package good-scroll
+;; (if (> emacs-major-version 28)
+;;     (pixel-scroll-precision-mode)
+;;   ;; otherwise use the following
+;;   )
+
+(use-package ultra-scroll-mac
+    :straight (:host github :repo "jdtsmith/ultra-scroll-mac")
+    :if (eq window-system 'mac)
+    :init
+    (setq scroll-conservatively 101)	; important for jumbo images
     :config
-    (good-scroll-mode 1)
-    (global-set-key [next] #'good-scroll-up-full-screen)
-    (global-set-key [prior] #'good-scroll-down-full-screen)))
+    (ultra-scroll-mac-mode 1))
 
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
 (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
@@ -1099,7 +1103,7 @@
 
 (use-package ef-themes
   :config
-  (load-theme 'ef-light))
+  (load-theme 'ef-maris-light))
 
 ;; mode line
 (use-package mood-line
@@ -1299,6 +1303,13 @@
   (:map yaml-mode-map
 	("\C-m" . newline-and-indent)))
 
+;; Toml
+(use-package toml-mode
+  :mode "\\.toml\\'")
+
+;; julia-mode
+(use-package julia-mode)
+
 (use-package cmake-mode
   :mode ("\\.cmake\\'" "CMakeLists\\.txt\\'"))
 
@@ -1480,7 +1491,9 @@
 
   :bind
   (:map org-mode-map
-	("C-c s" . org-insert-structure-template))
+	("C-c s" . org-insert-structure-template)
+	;; Create the new heading
+	("C-c C-w" . org-refile))
 
   :hook
   ;; pretty symbol for org-mode
