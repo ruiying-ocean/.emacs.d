@@ -12,11 +12,9 @@
 ;;       pylsp, clangd, fortls, texlab/digestif
 
 ;; Others:
-;;       ripgrep, libvterm, multimarkdown (brew),
+;;       ripgrep, multimarkdown (brew),
 ;;       npm package `livedown`
 
-;; python flycheck depdencies
-;; pip install pyflakes -> fast and don't check code style
 
 ;; shell checker
 ;; brew install shellcheck
@@ -30,7 +28,6 @@
 
 ;; TODO
 ;;  - [ ] add a function to install external dependencies
-;;  - [ ] configure lsp lint checker
 
 ;;; Code:
 
@@ -87,7 +84,7 @@
 (when (eq system-type 'darwin)
   (defvar brew-parent-dir "/opt/homebrew/")
   (defvar brew-bin-dir (expand-file-name "bin/" brew-parent-dir))
-  (defvar emacs-app-dir "/Applications/Emacs.app/")
+  (defvar emacs-app-dir "/opt/homebrew/Cellar/emacs-mac/emacs-29.1-mac-10.0/")
   (defvar conda-dir "~/miniforge3/envs/workspace/"))
 
 (defvar global-font "Inconsolata Nerd Font Mono")
@@ -347,6 +344,8 @@
 (use-package shx
   :hook
   (shell-mode . shx-global-mode))
+
+(use-package nushell-mode)
 
 (use-package which-key
   :hook
@@ -710,10 +709,11 @@
   :custom
   (default-input-method "rime")
   ;; the path of emacs_module.h
-  (rime-emacs-module-header-root (concat emacs-app-dir "Contents/Resources/include"))
+  (rime-emacs-module-header-root (concat emacs-app-dir "include"))
   ;; configuration path
-  (rime-librime-root (concat user-emacs-directory "librime/dist"))
-  (rime-user-data-dir (concat user-emacs-directory "rime")))
+  ;; (rime-librime-root (concat user-emacs-directory "librime/dist"))
+  ;; (rime-user-data-dir (concat user-emacs-directory "rime"))
+  )
 
 ;; Mark set
 ;; C-x h to select all
@@ -1143,14 +1143,14 @@
 
 ;; Install treesit C-library first: `brew install tree-sitter'
 ;; Automatically install and use tree-sitter major modes in Emacs 29+
-(use-package treesit-auto
-  :straight (treesit-auto :type git :host github :repo "ubolonton/emacs-tree-sitter"
-			  :files ("*.el" "*.c" "*.h" "langs"))
-  :demand t
-  :config
-  (global-treesit-auto-mode)
-  (setq treesit-auto-install 'prompt)
-  (setq treesit-font-lock-level 4))
+;; (use-package treesit-auto
+;;   :straight (treesit-auto :type git :host github :repo "ubolonton/emacs-tree-sitter"
+;; 			  :files ("*.el" "*.c" "*.h" "langs"))
+;;   :demand t
+;;   :config
+;;   (global-treesit-auto-mode)
+;;   (setq treesit-auto-install 'prompt)
+;;   (setq treesit-font-lock-level 4))
 
 (use-package yasnippet
   :after elpy)
@@ -1241,9 +1241,11 @@
 ;; require ESS installed
 ;;Lazy load ess-r-mode (ESS doesn't like use-package pretty much)
 (use-package ess
-  :commands (ess-r-mode))
+  :commands (ess-r-mode)
+  :config
+  (setq ess-use-julia nil)
+  (add-to-list 'auto-mode-alist '("\\.R\\'" . ess-r-mode)))
 
-(add-to-list 'auto-mode-alist '("\\.R\\'" . ess-r-mode))
 (with-eval-after-load 'ess-r-mode
   (defun ess-insert-pipe ()
     "Insert a R pipe (%>%)"
@@ -1281,9 +1283,13 @@
   ;; (define-key inferior-ess-r-mode-map (kbd "<down>") 'comint-next-input)
   )
 
+(use-package julia-snail
+  :hook
+  (julia-mode . julia-snail-mode))
+
 ;;C-c C-a to turn on csv-align-fields
 (use-package csv-mode
-:mode
+  :mode
   "\\.csv\\'"
   "\\.CSV\\'")
 
@@ -1511,6 +1517,17 @@
 		(push '("\\->" . "↳") prettify-symbols-alist)
 		(push '("<-/" . "↵") prettify-symbols-alist)
 		(prettify-symbols-mode))))
+
+
+;; paste from clipboard
+;; require: brew install pngpaste poppler
+(use-package org-mac-image-paste
+  :straight (:host github :repo "jdtsmith/org-mac-image-paste")
+  :config (org-mac-image-paste-mode 1)
+  :hook
+  (org-mode . org-mac-image-paste-mode))
+
+(use-package org-download)
 
 ;; Beautify org-mode
 (use-package org-superstar
