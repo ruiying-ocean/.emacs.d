@@ -1,9 +1,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-# About
- This is my Emacs configuration file(s). It aims to be robust, simple, and few-dependencies.
+## About
 
-# Quick-start
+This is my Emacs configuration file(s). It aims to be robust, working scenario-oriented with only necessary dependencies so that it can be used in both local and remote environment.
 
 Install Emacs and download the init files in your `$HOME` directory:
 ```bash
