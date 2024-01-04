@@ -56,6 +56,7 @@
 (require 'editor)
 (require 'programming)
 (require 'theme)
-(require 'markup)
-(when (display-graphic-p)
+
+(when (display-graphic-p)  
+  (require 'markup)
   (require 'extra))
