@@ -521,6 +521,8 @@
 ;; Automatically install and use tree-sitter major modes in Emacs 29+
 (use-package treesit-auto
   :straight (:type git :host github :repo "renzmann/treesit-auto")
+  :if (display-graphic-p)
+  :ensure-system-package tree-sitter
   :config
   (global-treesit-auto-mode)
   (setq treesit-auto-install 'prompt)
