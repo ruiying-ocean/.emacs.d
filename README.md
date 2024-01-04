@@ -9,6 +9,3 @@ Install Emacs and download the init files in your `$HOME` directory:
 ```bash
 git clone https://github.com/ruiying-ocean/.emacs.d.git ~/.emacs.d/
 ```
-
-# License
-The project uses [MIT license](LICENSE).
