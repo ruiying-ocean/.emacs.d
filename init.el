@@ -1,15 +1,10 @@
-					; ;;; Author: Rui Ying
-					; ;;; Email: ying.rui@outlook.com
+;;; init.el -*- lexical-binding: t; -*-
 
-					; ;; first order: basic, ui, editing (must work in both GUI and TUI), try to use built-in packages
-					; ;; second order: IDE features (work in both GUI and TUI if possible)
-					; ;; least order: nice but non-essential setting, usually related to third-party software (GUI only)
+;; Author: Rui Ying
+;; Email: ying.rui@outlook.com
 
 
-					; ;;; Code:
-
-					; ;;; FUNDEMENTAL
-					; ;; Customize when to check package modification (much much faster)
+;; Customize when to check package modification (much much faster)
 (setq-default straight-check-for-modifications '(check-on-save find-Hfwhen-checking))
 
 ;; Cause straight.el to cache the autoloads of all used packages in a single
