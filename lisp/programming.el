@@ -484,7 +484,6 @@
 ;; Language Server Protocol Implementation
 ;; require `epc` python libary
 (use-package lsp-bridge
-  :ensure-system-package (epc . "pip3 install epc")
   :if (window-system)
   :straight (lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge"
 			:files ("*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources"))
