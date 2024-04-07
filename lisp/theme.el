@@ -34,7 +34,7 @@
 
 
 ;;Font Setting
-(defvar myfont "Monaco Nerd Font Mono")
+(defvar myfont "Inconsolata Nerd Font Mono")
 (defun self/setup-font ()
   "Set English and CJK font for Emacs."
   (interactive)
@@ -42,7 +42,7 @@
   (if (display-graphic-p)
       (progn
 	;; English font
-	(set-face-attribute 'default nil :font (format "%s:pixelsize=%d" myfont 14))
+	(set-face-attribute 'default nil :font (format "%s:pixelsize=%d" myfont 16))
 	;; CJK font
 	(dolist (charset '(kana han symbol cjk-misc bopomofo))
 	  (set-fontset-font (frame-parameter nil 'font)

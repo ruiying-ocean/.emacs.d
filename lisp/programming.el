@@ -32,9 +32,8 @@
   ;; this improve the performance of magit in MacOS
   (magit-git-executable "/usr/bin/git"))
 
-;;a magit prefix help page
-(use-package transient
-  :after magit)
+;;a prefix help page
+(use-package transient)
 
 ;; git-forge support: fetches issues, pull-requests etc.
 (use-package forge
