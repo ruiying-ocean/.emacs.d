@@ -8,13 +8,6 @@
 (global-display-line-numbers-mode t) ;;the linum-mode has been obsolete
 (setq display-line-numbers-width 0)
 
-;; Line annotation for changed and saved lines.
-(use-package line-reminder
-  :hook
-  (after-init . global-line-reminder-mode)
-  :config
-  (setq line-reminder-show-option 'indicators))
-
 ;; show tree-like structure of current position
 (use-package breadcrumb
   :straight (breadcrumb :type git
@@ -23,6 +16,7 @@
   :hook
   (prog-mode . breadcrumb-mode))
 
+;; quick selection of the region
 (use-package expreg
   :bind
   ("C-=" . expreg-expand)
@@ -59,7 +53,7 @@
   :config
   (setq highlight-parentheses-highlight-adjacent t))
 
-;;--> Option 1 (built-in)
+;; insert matching pair of delimiters
 (electric-pair-mode t)
 (setq electric-pair-pairs '((?\" . ?\")
 			    (?\` . ?\`)
@@ -137,16 +131,16 @@
   (funcall orig-fun beg end region))
 (advice-add 'kill-ring-save :around #'self/kill-ring-save)
 
-(use-package pixel-scroll
-  :straight (:type built-in)
-  :if (> emacs-major-version 28)
-  :bind
-  ([remap scroll-up-command]   . pixel-scroll-interpolate-down)
-  ([remap scroll-down-command] . pixel-scroll-interpolate-up)
-  :custom
-  (pixel-scroll-precision-interpolate-page t)
-  :init
-  (pixel-scroll-precision-mode 1))
+;; (use-package pixel-scroll
+;;   :straight (:type built-in)
+;;   :if (> emacs-major-version 28)
+;;   :bind
+;;   ([remap scroll-up-command]   . pixel-scroll-interpolate-down)
+;;   ([remap scroll-down-command] . pixel-scroll-interpolate-up)
+;;   :custom
+;;   (pixel-scroll-precision-interpolate-page t)
+;;   :init
+;;   (pixel-scroll-precision-mode 1))
 
 ;; ---Edit keybinding style---
 ;; A better undo/redo mode
@@ -274,7 +268,7 @@
   (ediff-keep-variants nil)
   (ediff-window-setup-function 'ediff-setup-windows-plain))
 
-;; language spell checker setting
+;; English spell checker
 (use-package jit-spell
   :bind
   ("C-;" . jit-spell-correct-word)

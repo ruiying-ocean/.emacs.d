@@ -1,4 +1,5 @@
-;; this includes built-in customisations
+;; this file includes the most fundamental customisations
+;; e.g., coding system
 
 (when (eq system-type 'darwin)
   (defvar brew-parent-dir "/opt/homebrew/")
