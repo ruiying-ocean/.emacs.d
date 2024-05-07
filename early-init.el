@@ -1,5 +1,7 @@
 ;;; early-init.el --- early bird  -*- no-byte-compile: t -*-
 
+(setq gc-cons-threshold most-positive-fixnum)
+
 ;; Increase read max limit to 3 mb
 (setq read-process-output-max (* 3 1024 1024))
 

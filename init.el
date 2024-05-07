@@ -3,7 +3,6 @@
 ;; Author: Rui Ying
 ;; Email: ying.rui@outlook.com
 
-
 ;; Customize when to check package modification (much much faster)
 (setq-default straight-check-for-modifications '(check-on-save find-Hfwhen-checking))
 
@@ -58,6 +57,11 @@
 (require 'theme)
 
 (when (display-graphic-p)  
-  (require 'markup)
-  (require 'extra))
+  (require 'extra)
+  (require 'markup))
 
+(defun my-cleanup-gc ()
+  "Clean up gc."
+  (setq gc-cons-threshold  67108864)
+  (garbage-collect))
+(run-with-idle-timer 4 nil #'my-cleanup-gc)

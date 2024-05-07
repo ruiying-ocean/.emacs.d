@@ -111,10 +111,6 @@
 ;; keep .emacs.d clean
 (use-package no-littering)
 
-(use-package gcmh
-  :config
-  (gcmh-mode 1))
-
 ;;This package reads proper environment variable in MacOS GUI version
 ;;To speed up this package, (1) separate configuration into
 ;;non-interactive (.zshenv) and interactive (.zshrc) part;
