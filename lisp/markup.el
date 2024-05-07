@@ -13,7 +13,10 @@
 	 ("\\.markdown\\'" . markdown-mode)
 	 ("\\.Rmarkdown\\'" . markdown-mode)
 	 )
-  :init (setq markdown-command "multimarkdown")
+  :custom
+  (markdown-enable-math t)
+  :init
+  (setq markdown-command "multimarkdown")
   :hook
   (markdown-mode . (lambda ()
 		     (display-line-numbers-mode -1)
@@ -46,6 +49,13 @@
   :config
   (global-set-key (kbd "\C-c\C-o") 'toc-org-markdown-follow-thing-at-point)
   (add-to-list 'org-tag-alist '("TOC" . ?T)))
+
+;; quarto support
+;; Or, with use-package:
+(use-package quarto-mode
+  :mode ("\\.qmd\\'" . quarto-mode))
+
+
 
 ;;===========
 ;; Org-mode
@@ -92,8 +102,9 @@
 
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((python . t)
+   '((python . t)     
      (shell . t)))
+
 
   (custom-set-faces
    '(org-level-1 ((t (:inherit outline-1 :weight bold))))
@@ -388,5 +399,66 @@
   ("C-c d" . define-word-at-point)
   :config
   (setq define-word-default-service 'webster))
+
+(use-package org-modern
+  :custom
+  (org-modern-hide-stars nil)		; adds extra indentation
+  (org-modern-table nil)
+  (org-modern-list 
+   '(;; (?- . "-")
+     (?* . "•")
+     (?+ . "‣")))
+  (org-modern-block-name '("" . "")) ; or other chars; so top bracket is drawn promptly
+  :hook
+  (org-mode . org-modern-mode)
+  (org-agenda-finalize . org-modern-agenda))
+
+(use-package org-modern-indent
+  :straight (org-modern-indent :type git :host github :repo "jdtsmith/org-modern-indent")
+  :hook
+  (org-mode . org-modern-indent-mode))
+
+;; AUCTeX
+(use-package tex
+  :straight (:type built-in)
+  :ensure auctex
+  :config
+  (setq TeX-auto-save t)
+  (setq TeX-parse-self t) 
+  (setq TeX-engine 'xetex) ;; Use xetex by default.
+  (setq TeX-save-query nil) ;; Save without asking.
+  (setq TeX-master nil) ;; Query for master file.
+  
+  (setq TeX-source-correlate-method 'synctex
+	TeX-view-program-list
+	'(("Skim" "/Applications/Skim.app/Contents/SharedSupport/displayline -g -b %n %o %b"))
+	TeX-view-program-selection '((output-pdf "Skim"))
+	)
+  )
+
+;; CDLaTeX
+;; https://karthinks.com/software/latex-input-for-impatient-scholars/#step-2-cdlatex
+(use-package cdlatex
+  :hook (LaTeX-mode . cdlatex-mode))
+
+(use-package citar
+  :custom
+  (citar-bibliography '("/Users/yingrui/Library/ZoteroLibrary/library.bib"))
+  :hook
+  (LaTeX-mode . citar-capf-setup)
+  (org-mode . citar-capf-setup))
+
+(use-package auctex-latexmk
+  :after tex
+  :custom
+  (auctex-latexmk-inherit-TeX-PDF-mode t)
+  :config
+  (auctex-latexmk-setup))
+
+;; support for quarto
+(use-package quarto-mode
+  :mode (("\\.qmd" . poly-quarto-mode))
+;;  :hook (visual-line-mode . poly-quarto-mode)
+  )
 
 (provide 'markup)
