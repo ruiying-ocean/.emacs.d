@@ -157,7 +157,7 @@
 
 (use-package tempel
   :custom
-  (tempel-path "~/.config/emacs/templates")
+  (tempel-path (expand-file-name "templates" user-emacs-directory))
 
   ;; Require trigger prefix before template name when completing.
   :bind (("C-c i" . tempel-insert)
