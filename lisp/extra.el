@@ -58,4 +58,13 @@
   :bind
   ("C-x t" . vterm-toggle))
 
+(use-package easy-hugo
+  :init
+  (setq easy-hugo-postdir "content/posts")
+  (setq easy-hugo-basedir "~/blog/")
+  :config
+  (setq easy-hugo-default-ext ".org")
+  (setq easy-hugo-org-header nil)
+  )
+
 (provide 'extra)
