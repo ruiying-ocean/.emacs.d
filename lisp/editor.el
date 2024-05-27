@@ -210,6 +210,21 @@
   ("C-M-<up>" . mc/mark-previous-like-this)
   ("M-<mouse-1>" . mc/add-cursor-on-click))
 
+;; set rectangle selection
+(use-package rectangle-mark
+  :straight (:type built-in)
+  :bind
+  ("C-x SPC" . rectangle-mark-mode)
+  ;; string rectangle
+  ("C-x r t" . string-rectangle)
+  ("C-x r k" . kill-rectangle)
+  ("C-x r y" . yank-rectangle)
+  ("C-x r o" . open-rectangle)
+  ("C-x r c" . clear-rectangle)
+  ("C-x r d" . delete-rectangle)
+  ("C-x r N" . rectangle-number-lines)
+  )
+
 ;; better isearch
 (use-package ctrlf
   :hook
