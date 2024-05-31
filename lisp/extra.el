@@ -75,6 +75,8 @@
     ;; Path to the librime library
     (rime-librime-root "~/.emacs.d/librime/dist")
     ;; Path to the rime configuration file
-    (rime-user-data-dir "~/Library/rime"))
+    (rime-user-data-dir "~/Library/rime")
+    ;; Style of showing candidate
+    (rime-show-candidate 'posframe))
 
 (provide 'extra)
