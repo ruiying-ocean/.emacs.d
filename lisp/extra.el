@@ -79,4 +79,10 @@
     ;; Style of showing candidate
     (rime-show-candidate 'posframe))
 
+;; copy from https://eason0210.github.io/post/make-emacs-rime-smart/
+;; change cursor color when rime input method is active
+(with-eval-after-load 'rime
+  (require 'im-cursor-chg)
+  (cursor-chg-mode 1))
+
 (provide 'extra)

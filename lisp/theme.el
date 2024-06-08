@@ -3,9 +3,9 @@
 ;; lazy-load default theme
 (setq custom-safe-themes t)
 
-(use-package ef-themes
+(use-package doom-themes
   :config
-  (load-theme 'ef-maris-light))
+  (load-theme 'doom-one-light t))
 
 ;; mode line
 (use-package mood-line
@@ -35,6 +35,7 @@
 
 ;;Font Setting
 (defvar myfont "Inconsolata Nerd Font Mono")
+
 (defun self/setup-font ()
   "Set English and CJK font for Emacs."
   (interactive)
@@ -42,19 +43,19 @@
   (if (display-graphic-p)
       (progn
 	;; English font
-	(set-face-attribute 'default nil :font (format "%s:pixelsize=%d" myfont 16))
+	(set-face-attribute 'default nil :font (format "%s:pixelsize=%d" myfont 18))
 	;; CJK font
 	(dolist (charset '(kana han symbol cjk-misc bopomofo))
 	  (set-fontset-font (frame-parameter nil 'font)
 			    charset
-			    (font-spec :family "LXWG WenKai"))))))
+			    (font-spec :family "LXWG WenKai" :size 16))))))
 
 (setq inhibit-compacting-font-caches t)
 
 ;;Varialble/fixed pictch font setting, essential for org-mode
 (custom-theme-set-faces
  'user
- '(variable-pitch ((t (:family "LXWG WenKai " :height 160))))
- '(fixed-pitch ((t ( :family " Iosevka" :height 160)))))
+ '(variable-pitch ((t (:family "LXGW WenKai" :height 160))))
+ '(fixed-pitch ((t ( :family " Inconsolata" :height 160)))))
 
 (provide 'theme)
