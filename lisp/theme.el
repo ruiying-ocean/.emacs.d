@@ -3,9 +3,13 @@
 ;; lazy-load default theme
 (setq custom-safe-themes t)
 
-(use-package doom-themes
+(use-package leuven-theme
   :config
-  (load-theme 'doom-one-light t))
+  (load-theme 'leuven t)
+  :custom
+  (leuven-scale-outline-headlines nil)
+  (leuven-scale-outline-headlines nil)
+  (leuven-scale-org-document-title nil))
 
 ;; mode line
 (use-package mood-line
@@ -34,7 +38,7 @@
 
 
 ;;Font Setting
-(defvar myfont "Inconsolata Nerd Font Mono")
+(defvar myfont "RobotoMono Nerd Font")
 
 (defun self/setup-font ()
   "Set English and CJK font for Emacs."
@@ -43,12 +47,12 @@
   (if (display-graphic-p)
       (progn
 	;; English font
-	(set-face-attribute 'default nil :font (format "%s:pixelsize=%d" myfont 18))
+	(set-face-attribute 'default nil :font (format "%s:pixelsize=%d" myfont 15))
 	;; CJK font
 	(dolist (charset '(kana han symbol cjk-misc bopomofo))
 	  (set-fontset-font (frame-parameter nil 'font)
 			    charset
-			    (font-spec :family "LXWG WenKai" :size 16))))))
+			    (font-spec :family "Noto Serif SC" :size 16))))))
 
 (setq inhibit-compacting-font-caches t)
 
