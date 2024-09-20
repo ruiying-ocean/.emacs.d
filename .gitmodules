@@ -1,3 +1,144 @@
-[submodule "packages/auctex-latexmk"]
-	path = packages/auctex-latexmk
-	url = https://github.com/tom-tan/auctex-latexmk
+[submodule "packages/no-littering"]
+	path = packages/no-littering
+	url = https://github.com/emacscollective/no-littering
+[submodule "packages/exec-path-from-shell"]
+	path = packages/exec-path-from-shell
+	url = https://github.com/purcell/exec-path-from-shell
+[submodule "packages/restart-emacs"]
+	path = packages/restart-emacs
+	url = https://github.com/iqbalansari/restart-emacs
+[submodule "packages/popwin"]
+	path = packages/popwin
+	url = https://github.com/emacsorphanage/popwin
+[submodule "packages/use-package-ensure-system-package"]
+	path = packages/use-package-ensure-system-package
+	url = https://github.com/waymondo/use-package-ensure-system-package
+[submodule "packages/lin"]
+	path = packages/lin
+	url = https://github.com/protesilaos/lin
+[submodule "packages/breadcrumb"]
+	path = packages/breadcrumb
+	url = https://github.com/joaotavora/breadcrumb
+[submodule "packages/expreg"]
+	path = packages/expreg
+	url = https://github.com/casouri/expreg
+[submodule "packages/indent-bars"]
+	path = packages/indent-bars
+	url = https://github.com/jdtsmith/indent-bars
+[submodule "packages/vertico"]
+	path = packages/vertico
+	url = https://github.com/minad/vertico
+[submodule "packages/vertico-posframe"]
+	path = packages/vertico-posframe
+	url = https://github.com/tumashu/vertico-posframe
+[submodule "packages/orderless"]
+	path = packages/orderless
+	url = https://github.com/oantolin/orderless
+[submodule "packages/marginalia"]
+	path = packages/marginalia
+	url = https://github.com/minad/marginalia
+[submodule "packages/move-text"]
+	path = packages/move-text
+	url = https://github.com/emacsfodder/move-text
+[submodule "packages/emacs-smart-hungry-delete"]
+	path = packages/emacs-smart-hungry-delete
+	url = https://github.com/hrehfeld/emacs-smart-hungry-delete
+[submodule "packages/dired-hacks"]
+	path = packages/dired-hacks
+	url = https://github.com/Fuco1/dired-hacks
+[submodule "packages/mood-line"]
+	path = packages/mood-line
+	url = https://github.com/jessiehildebrandt/mood-line
+[submodule "packages/auto-dim-other-buffers.el"]
+	path = packages/auto-dim-other-buffers.el
+	url = https://github.com/mina86/auto-dim-other-buffers.el
+[submodule "packages/emacs-leuven-theme"]
+	path = packages/emacs-leuven-theme
+	url = https://github.com/fniessen/emacs-leuven-theme
+[submodule "packages/magit"]
+	path = packages/magit
+	url = https://github.com/magit/magit
+[submodule "packages/forge"]
+	path = packages/forge
+	url = https://github.com/magit/forge
+[submodule "packages/corfu"]
+	path = packages/corfu
+	url = https://github.com/minad/corfu
+[submodule "packages/emacs-emojify"]
+	path = packages/emacs-emojify
+	url = https://github.com/iqbalansari/emacs-emojify
+[submodule "packages/cape"]
+	path = packages/cape
+	url = https://github.com/minad/cape
+[submodule "packages/consult"]
+	path = packages/consult
+	url = https://github.com/minad/consult
+[submodule "packages/consult-projectile"]
+	path = packages/consult-projectile
+	url = https://github.com/emacsmirror/consult-projectile
+[submodule "packages/projectile"]
+	path = packages/projectile
+	url = https://github.com/bbatsov/projectile
+[submodule "packages/find-file-in-project"]
+	path = packages/find-file-in-project
+	url = https://github.com/redguardtoo/find-file-in-project
+[submodule "packages/avy"]
+	path = packages/avy
+	url = https://github.com/abo-abo/avy
+[submodule "packages/ace-window"]
+	path = packages/ace-window
+	url = https://github.com/abo-abo/ace-window
+[submodule "packages/tempel"]
+	path = packages/tempel
+	url = https://github.com/minad/tempel
+[submodule "packages/tempel-collection"]
+	path = packages/tempel-collection
+	url = https://github.com/Crandel/tempel-collection
+[submodule "packages/general.el"]
+	path = packages/general.el
+	url = https://github.com/noctuid/general.el
+[submodule "packages/helpful"]
+	path = packages/helpful
+	url = https://github.com/Wilfred/helpful
+[submodule "packages/iedit"]
+	path = packages/iedit
+	url = https://github.com/victorhge/iedit
+[submodule "packages/anzu"]
+	path = packages/anzu
+	url = https://github.com/emacsorphanage/anzu
+[submodule "packages/highlight-symbol.el"]
+	path = packages/highlight-symbol.el
+	url = https://github.com/nschum/highlight-symbol.el
+[submodule "packages/emacs-format-all-the-code"]
+	path = packages/emacs-format-all-the-code
+	url = https://github.com/lassik/emacs-format-all-the-code
+[submodule "packages/elpy"]
+	path = packages/elpy
+	url = https://github.com/jorgenschaefer/elpy
+[submodule "packages/ESS"]
+	path = packages/ESS
+	url = https://github.com/emacs-ess/ESS
+[submodule "packages/rainbow-mode"]
+	path = packages/rainbow-mode
+	url = https://github.com/emacsmirror/rainbow-mode
+[submodule "packages/auctex"]
+	path = packages/auctex
+	url = https://github.com/emacsmirror/auctex
+[submodule "packages/yasnippet"]
+	path = packages/yasnippet
+	url = https://github.com/joaotavora/yasnippet
+[submodule "packages/lsp-bridge"]
+	path = packages/lsp-bridge
+	url = https://github.com/manateelazycat/lsp-bridge
+[submodule "packages/treesit-auto"]
+	path = packages/treesit-auto
+	url = https://github.com/renzmann/treesit-auto
+[submodule "packages/copilot.el"]
+	path = packages/copilot.el
+	url = https://github.com/zerolfx/copilot.el
+[submodule "packages/eshell-syntax-highlighting"]
+	path = packages/eshell-syntax-highlighting
+	url = https://github.com/akreisher/eshell-syntax-highlighting
+[submodule "packages/emacs-libvterm"]
+	path = packages/emacs-libvterm
+	url = https://github.com/akermu/emacs-libvterm
