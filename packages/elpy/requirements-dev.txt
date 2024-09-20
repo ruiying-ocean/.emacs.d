@@ -1,8 +1,0 @@
-bumpversion
-coverage
-mock
-nose
-twine
-wheel
-virtualenv
-toml

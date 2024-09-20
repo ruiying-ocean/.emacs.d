@@ -1,8 +1,0 @@
-{
-  "name": "che-che4z-lsp-for-cobol",
-  "languageId": "cobol",
-  "command": [
-    "cobol-language-support"
-  ],
-  "settings": {}
-}

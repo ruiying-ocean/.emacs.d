@@ -1,6 +1,0 @@
-{
-  "name": "vale-ls",
-  "languageId": "markdown",
-  "command": ["vale-ls"],
-  "settings": {}
-}

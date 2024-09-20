@@ -1,8 +1,0 @@
-{
-  "name": "che-che4z-lsp-for-hlasm",
-  "languageId": "hlasm",
-  "command": [
-    "hlasm-language-support"
-  ],
-  "settings": {}
-}

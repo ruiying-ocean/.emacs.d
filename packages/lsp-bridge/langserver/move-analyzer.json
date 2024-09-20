@@ -1,6 +1,0 @@
-{
-  "name": "move-analyzer",
-  "languageId": "move",
-  "command": ["move-analyzer"],
-  "settings": {}
-}

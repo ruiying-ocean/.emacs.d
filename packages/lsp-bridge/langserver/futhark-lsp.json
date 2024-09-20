@@ -1,9 +1,0 @@
-{
-  "name": "futhark-lsp",
-  "languageId": "futhark",
-  "command": [
-    "futhark",
-    "lsp"
-  ],
-  "settings": {}
-}

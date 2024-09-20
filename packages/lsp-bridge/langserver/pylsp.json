@@ -1,6 +1,0 @@
-{
-  "name": "pylsp",
-  "languageId": "python",
-  "command": ["pylsp"],
-  "settings": {}
-}

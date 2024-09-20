@@ -1,6 +1,0 @@
-{
-  "name": "lua-lsp",
-  "languageId": "lua",
-  "command": ["lua-lsp"],
-  "settings": {}
-}

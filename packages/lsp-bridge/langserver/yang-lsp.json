@@ -1,8 +1,0 @@
-{
-  "name": "yang-lsp",
-  "languageId": "yang",
-  "command": [
-    "yang-lsp"
-  ],
-  "settings": {}
-}

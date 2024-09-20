@@ -1,7 +1,0 @@
-{
-  "name": "tailwindcss",
-  "languageId": "",
-  "command": ["tailwindcss-language-server", "--stdio"],
-  "settings": {},
-  "support-single-file": false
-}
