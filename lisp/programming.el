@@ -568,4 +568,30 @@
   ;; Enable in all Eshell buffers.
   (eshell-mode . eshell-syntax-highlighting-mode))
 
+(use-package vterm
+  :bind
+  ("C-x t" . vterm)
+  ("C-x s" . vterm-shell)
+  (:map vterm-mode-map
+	("C-c C-t" . vterm-copy-mode)
+	("C-y" . vterm-yank))
+  :custom
+  (vterm-kill-buffer-on-exit t)
+  (vterm-always-compile-module t)
+  (vterm-max-scrollback 100000)
+  :config
+  (setq vterm-shell "zsh"))
+
+
+(use-package easy-hugo
+  :init
+  (setq easy-hugo-postdir "content/posts")
+  (setq easy-hugo-basedir "~/blog/")
+  :config
+  (setq easy-hugo-default-ext ".org")
+  (setq easy-hugo-org-header nil)
+  )
+
 (provide 'programming)
+
+

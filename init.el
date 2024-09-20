@@ -53,11 +53,10 @@
 
 (require 'basic)
 (require 'editor)
-(require 'programming)
 (require 'theme)
+(require 'programming)
 
-(when (display-graphic-p)  
-  (require 'extra)
+(when (display-graphic-p)
   (require 'markup))
 
 (defun my-cleanup-gc ()

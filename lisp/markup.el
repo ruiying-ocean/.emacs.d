@@ -102,7 +102,7 @@
 
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((python . t)     
+   '((python . t)
      (shell . t)))
 
 
@@ -404,7 +404,7 @@
   :custom
   (org-modern-hide-stars nil)		; adds extra indentation
   (org-modern-table nil)
-  (org-modern-list 
+  (org-modern-list
    '(;; (?- . "-")
      (?* . "•")
      (?+ . "‣")))
@@ -420,24 +420,25 @@
 
 ;; AUCTeX
 (use-package tex
-  :straight (:type built-in)
+  :straight nil 
+  :load-path ("~/.emacs.d/lisp/auctex")
   :ensure auctex
   :config
   (setq TeX-auto-save t)
-  (setq TeX-parse-self t) 
+  (setq TeX-parse-self t)
   (setq TeX-engine 'xetex) ;; Use xetex by default.
   (setq TeX-save-query nil) ;; Save without asking.
   (setq TeX-master nil) ;; Query for master file.
-  
+
   (setq TeX-source-correlate-method 'synctex
 	TeX-view-program-list
 	'(("Skim" "/Applications/Skim.app/Contents/SharedSupport/displayline -g -b %n %o %b"))
-	TeX-view-program-selection '((output-pdf "Skim"))
-	)
+	TeX-view-program-selection '((output-pdf "Skim")))
 
   ;; enable outline, C-c @ to toggle outline
   (add-hook 'LaTeX-mode-hook #'outline-minor-mode)  
   )
+
 
 (add-hook 'latex-mode-hook
           (lambda ()
@@ -494,7 +495,7 @@
 ;; support for quarto
 (use-package quarto-mode
   :mode (("\\.qmd" . poly-quarto-mode))
-;;  :hook (visual-line-mode . poly-quarto-mode)
+  ;;  :hook (visual-line-mode . poly-quarto-mode)
   )
 
 (provide 'markup)
