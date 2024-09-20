@@ -438,44 +438,6 @@
 ;; LaTeX    ;;
 ;;;;;;;;;;;;;;
 
-;; AUCTEX
-;; all in one: C-c C-c
-(use-package auctex
-  :ensure t
-  :no-require t
-  :config
-  ;; get support for many of the LaTeX packages in your documents
-  (setq TeX-auto-save t)
-  (setq TeX-parse-self t)
-
-  ;; pdf viewer: Skim
-  (setq TeX-view-program-list
-	'(("Skim" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))
-
-  (setq TeX-view-program-selection '((output-pdf "Skim")))
-  ;; Forward search happens automatically upon calling the viewer,
-  (setq TeX-source-correlate-method 'synctex)
-  :hook
-  ;; SyncTeX setup
-  (LaTeX-mode . TeX-source-correlate-mode)
-  :bind
-  (:map LaTeX-mode-map
-	("C-c C-a" . TeX-command-run-all)
-	("M-<mouse-1>" . TeX-view)))
-
-;; Enable RefTeX for managing cross-references, citations, and labels
-;; (use-package reftex
-;;   :commands (turn-on-reftex)
-;;   :init
-;;   (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
-;;   (setq reftex-plug-into-AUCTeX t))
-
-;; for fast insertion symbols
-;; C-c $, or ` to insert math symbol
-;; (use-package cdlatex
-;;   :hook
-;;   (LaTeX-mode . turn-on-cdlatex))
-
 
 (use-package yasnippet
   :after elpy)
