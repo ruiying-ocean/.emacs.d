@@ -3,26 +3,6 @@
 ;; lazy-load default theme
 (setq custom-safe-themes t)
 
-(use-package leuven-theme
-  :config
-  (load-theme 'leuven t)
-  :custom
-  (leuven-scale-outline-headlines nil)
-  (leuven-scale-outline-headlines nil)
-  (leuven-scale-org-document-title nil))
-
-;; mode line
-(use-package mood-line
-  :hook
-  (after-init . mood-line-mode))
-
-;; dim inactive buffer
-(use-package auto-dim-other-buffers
-  :hook
-  (after-init . auto-dim-other-buffers-mode)
-  :custom
-  (auto-dim-other-buffers-face "white smoke"))
-
 ;;Transprancy setting
 (set-frame-parameter (selected-frame) 'alpha '(97 100))
 (add-to-list 'default-frame-alist '(alpha 97 100))

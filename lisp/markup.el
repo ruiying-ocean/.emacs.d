@@ -7,6 +7,7 @@
 ;; Major mode for markdown
 ;; preview included but reply on multimarkdown
 (use-package markdown-mode
+  
   :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
 	 ("\\.md\\'" . markdown-mode)
@@ -50,19 +51,12 @@
   (global-set-key (kbd "\C-c\C-o") 'toc-org-markdown-follow-thing-at-point)
   (add-to-list 'org-tag-alist '("TOC" . ?T)))
 
-;; quarto support
-;; Or, with use-package:
-(use-package quarto-mode
-  :mode ("\\.qmd\\'" . quarto-mode))
-
-
-
 ;;===========
 ;; Org-mode
 ;;===========
 
 (use-package org
-  :straight (:type built-in)
+  :ensure nil
   :custom
   ;; set default note file
   (org-directory "~/Documents")
@@ -400,18 +394,6 @@
   :config
   (setq define-word-default-service 'webster))
 
-(use-package org-modern
-  :custom
-  (org-modern-hide-stars nil)		; adds extra indentation
-  (org-modern-table nil)
-  (org-modern-list
-   '(;; (?- . "-")
-     (?* . "•")
-     (?+ . "‣")))
-  (org-modern-block-name '("" . "")) ; or other chars; so top bracket is drawn promptly
-  :hook
-  (org-mode . org-modern-mode)
-  (org-agenda-finalize . org-modern-agenda))
 
 (use-package org-modern-indent
   :straight (org-modern-indent :type git :host github :repo "jdtsmith/org-modern-indent")
@@ -491,11 +473,5 @@
   (auctex-latexmk-inherit-TeX-PDF-mode t)
   :config
   (auctex-latexmk-setup))
-
-;; support for quarto
-(use-package quarto-mode
-  :mode (("\\.qmd" . poly-quarto-mode))
-  ;;  :hook (visual-line-mode . poly-quarto-mode)
-  )
 
 (provide 'markup)

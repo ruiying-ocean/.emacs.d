@@ -141,6 +141,7 @@
   ("C-x f" . find-file-in-project-at-point))
 
 (use-package recentf
+  :ensure nil
   :hook
   (after-init . recentf-mode))
 
@@ -398,16 +399,6 @@
   ;; (define-key inferior-ess-r-mode-map (kbd "<down>") 'comint-next-input)
   )
 
-(use-package julia-snail
-  :hook
-  (julia-mode . julia-snail-mode))
-
-;;C-c C-a to turn on csv-align-fields
-(use-package csv-mode
-  :mode
-  "\\.csv\\'"
-  "\\.CSV\\'")
-
 ;;display color of RGB code
 (use-package rainbow-mode
   :hook
@@ -428,8 +419,6 @@
 (use-package toml-mode
   :mode "\\.toml\\'")
 
-;; julia-mode
-(use-package julia-mode)
 
 (use-package cmake-mode
   :mode ("\\.cmake\\'" "CMakeLists\\.txt\\'"))
@@ -581,7 +570,6 @@
   (vterm-max-scrollback 100000)
   :config
   (setq vterm-shell "zsh"))
-
 
 (use-package easy-hugo
   :init

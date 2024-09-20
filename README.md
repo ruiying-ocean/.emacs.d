@@ -8,3 +8,19 @@ Install Emacs and download the init files in your `$HOME` directory:
 ```bash
 git clone https://github.com/ruiying-ocean/.emacs.d.git ~/.emacs.d/
 ```
+
+## Package management
+
+1. Install
+```bash
+chmod +x install.sh
+./install.sh
+
+## set up the configuration
+git submodule init
+
+## update the configuration
+git submodule update
+```
+
+

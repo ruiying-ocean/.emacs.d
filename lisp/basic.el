@@ -108,34 +108,6 @@
 (setq-default cursor-type 'bar)
 (blink-cursor-mode 0)
 
-;; keep .emacs.d clean
-(use-package no-littering)
-
-;;This package reads proper environment variable in MacOS GUI version
-;;To speed up this package, (1) separate configuration into
-;;non-interactive (.zshenv) and interactive (.zshrc) part;
-;;(2) set explicit path in .zshenv (which is what we will use, you should
-;;put your PATH variable like /usr/local/bin/python3.9 in this file)
-;;Find out more in https://github.com/purcell/exec-path-from-shell
-(use-package exec-path-from-shell
-  :if (memq window-system '(mac ns x))
-  :config
-  (setq exec-path-from-shell-arguments nil) ;;read non-interactive shell config
-  (exec-path-from-shell-initialize))
-
-;; Emacs 28: Hide commands in M-x which do not work in the current mode.
-;; Vertico commands are hidden in normal buffers.
-(setq read-extended-command-predicate
-      #'command-completion-default-include-p)
-
-;; restart emacs
-(use-package restart-emacs
-  :commands (restart-emacs))
-
-;; pop up window management
-(use-package popwin
-  :hook
-  (after-init . popwin-mode))
 
 ;; Enable recursive minibuffers
 (setq enable-recursive-minibuffers t)
@@ -147,10 +119,6 @@
 (setq x-underline-at-descent-line t)
 
 (setq frame-inhibit-implied-resize nil)
-
-;; provide a command to ensure the third-party packages are installed
-(use-package use-package-ensure-system-package
-  :after exec-path-from-shell) ;;extend use-package, put after exec-path-from-shell
 
 
 ;; Use emacs daemon, put following lines to shell config file
