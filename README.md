@@ -14,7 +14,7 @@ git clone https://github.com/ruiying-ocean/.emacs.d.git ~/.emacs.d/
 1. Install
 ```bash
 chmod +x install.sh
-./install.sh
+./install_packages.sh
 
 ## set up the configuration
 git submodule init
