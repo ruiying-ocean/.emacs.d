@@ -62,3 +62,4 @@ https://github.com/Malabarba/latex-extra
 https://github.com/emacs-citar/citar
 https://github.com/tom-tan/auctex-latexmk
 https://github.com/cdominik/cdlatex
+https://github.com/radian-software/ctrlf

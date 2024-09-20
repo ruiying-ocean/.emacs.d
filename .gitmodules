@@ -142,3 +142,6 @@
 [submodule "packages/emacs-libvterm"]
 	path = packages/emacs-libvterm
 	url = https://github.com/akermu/emacs-libvterm
+[submodule "packages/ctrlf"]
+	path = packages/ctrlf
+	url = https://github.com/radian-software/ctrlf

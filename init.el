@@ -10,15 +10,6 @@
 
 (setq use-package-enable-imenu-support t)
 
-;; Emacs Native Compilation Feature support
-(when (and (fboundp 'native-comp-available-p)
-	   (native-comp-available-p))
-  (progn
-    (setq-default native-comp-async-report-warnings-errors nil)
-    (setq-default comp-deferred-compilation t)
-    (add-to-list 'native-comp-eln-load-path (expand-file-name "eln-cache/" user-emacs-directory))
-    (setq package-native-compile t)))
-
 ;; Update user load path
 ;; Optimize: Force "lisp" at the head to reduce the startup time.
 (defun update-load-path (&rest _)
@@ -28,13 +19,16 @@
 (advice-add #'package-initialize :after #'update-load-path)
 (update-load-path)
 
+(let ((default-directory "~/.emacs.d/packages/"))
+  (normal-top-level-add-subdirs-to-load-path))
+
 (require 'basic)
 (require 'editor)
 (require 'theme)
 (require 'programming)
 
-(when (display-graphic-p)
-  (require 'markup))
+;; (when (display-graphic-p)
+;;   (require 'markup))
 
 (defun my-cleanup-gc ()
   "Clean up gc."
