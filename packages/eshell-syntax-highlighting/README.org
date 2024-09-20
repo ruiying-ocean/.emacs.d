@@ -1,0 +1,47 @@
+* =Eshell Syntax Highlighting=
+[[https://melpa.org/#/eshell-syntax-highlighting][file:https://melpa.org/packages/eshell-syntax-highlighting-badge.svg]]
+** Introduction
+
+This package adds syntax highlighting to the Emacs [[https://www.gnu.org/software/emacs/manual/html_node/eshell/][Eshell]]. It highlights user commands at the interactive prompt to provide feedback on the validity of commands and syntax.
+
+[[./img/eshell-syntax-highlighting.gif]]
+
+This package is inspired by [[https://github.com/zsh-users/zsh-syntax-highlighting][zsh-syntax-highlighting]] and the native highlighting of [[https://fishshell.com/][fish]].
+
+** Installation
+
+This package is installable through [[https://melpa.org/#/getting-started][MELPA]]. After setting up the MELPA package archive, install with
+
+#+BEGIN_SRC emacs-lisp
+M-x package-install RET eshell-syntax-highlighting RET
+#+END_SRC
+
+
+Alternatively, with [[https://github.com/jwiegley/use-package][use-package]]:
+
+#+BEGIN_SRC emacs-lisp
+(use-package eshell-syntax-highlighting
+  :after eshell-mode
+  :ensure t ;; Install if not already installed.
+  :config
+  ;; Enable in all Eshell buffers.
+  (eshell-syntax-highlighting-global-mode +1))
+#+END_SRC
+
+** Usage
+
+Use ~(eshell-syntax-highlighting-global-mode)~ to toggle highlighting in all future Eshell buffers.
+
+You can toggle highlighting in an existing buffer with ~(eshell-syntax-highlighting-mode)~.
+
+** Remote Directories
+
+Since elisp in remote directories will run locally, high-latency [[https://www.gnu.org/software/tramp/][TRAMP]] connections can cause significant typing delays while the local Emacs session makes requests of the remote machine (such as searching the remote PATH, checking if remote files exist, etc.). Therefore, highlighting in remote directories is disabled by default. It can be enabled by setting ~eshell-syntax-highlighting-highlight-in-remote-dirs~ to ~t~.
+
+** Customization
+
+Faces in this package inherit from standard faces to match your theming. If this results in ambiguous highlighting (e.g. your ~font-lock-function-name-face~ is red), or if you just want to customize the coloring, you can use
+
+    ~M-x customize-group eshell-syntax-highlighting~
+
+to customize the faces used by this package.

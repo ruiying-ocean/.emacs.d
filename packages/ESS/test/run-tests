@@ -1,0 +1,59 @@
+#!/usr/bin/env -S emacs --script
+;; -*- mode: emacs-lisp -*-
+
+;; This script must be run from the test directory
+;; With no argument, run all tests. Otherwise run only mentioned tests.
+;; Possible arguments: --r --r-indent etc.
+
+(let ((current-directory (file-name-directory load-file-name)))
+  (setq ess-root-path (expand-file-name "../lisp/" current-directory))
+  (setq ess-test-path (expand-file-name "." current-directory))
+  (setq etest-path (expand-file-name "etest/" ess-test-path)))
+
+(add-to-list 'load-path ess-root-path)
+(add-to-list 'load-path ess-test-path)
+(add-to-list 'load-path etest-path)
+
+(require 'ess-test-r-utils)
+(setq ess-inhibit-message-in-tests t)
+(setq ert-batch-backtrace-right-margin 130)
+
+;; lintr probably isn't installed in the test suite and flymake will
+;; complain about that. Disable it during tests.
+(setq ess-use-flymake nil)
+
+(when (= (length argv) 0)
+  (setq argv '("--ess" "--inf" "--org" "--r-core" "--r-indent" "--r-pkg")))
+
+;; Enable file-local variables while loading
+(defun ess-test-load-locally (name &optional dir)
+  (let ((file (expand-file-name name dir)))
+    (unless (assoc file load-history)
+      (with-current-buffer (find-file-noselect file)
+        (load file nil t)))))
+
+(put 'etest-local-config 'safe-local-variable #'symbolp)
+
+(when (member "--ess" argv)
+  (ess-test-load-locally "ess-test.el" ess-test-path))
+(when (member "--inf" argv)
+  (ess-test-load-locally "ess-test-inf.el" ess-test-path))
+(when (member "--org" argv)
+  (ess-test-load-locally "ess-test-org.el" ess-test-path))
+(when (member "--r-core" argv)
+  (ess-test-load-locally "ess-test-r-eval.el" ess-test-path)
+  (ess-test-load-locally "ess-test-r-package.el" ess-test-path)
+  (ess-test-load-locally "ess-test-r-edit.el" ess-test-path)
+  (ess-test-load-locally "ess-test-r-fontification.el" ess-test-path)
+  (ess-test-load-locally "ess-test-r-syntax.el" ess-test-path)
+  (ess-test-load-locally "ess-test-r-token.el" ess-test-path)
+  (ess-test-load-locally "ess-test-r.el" ess-test-path)
+  (ess-test-load-locally "ess-test-roxy.el" ess-test-path)
+  (ess-test-load-locally "ess-test-rd.el" ess-test-path))
+(when (member "--r-indent" argv)
+  (ess-test-load-locally "ess-test-indentation.el" ess-test-path))
+(when (member "--r-pkg" argv)
+  (ess-test-load-locally "ess-test-r-package.el" ess-test-path))
+
+;; run tests
+(ert-run-tests-batch-and-exit t)
