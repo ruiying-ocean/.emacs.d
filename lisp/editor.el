@@ -331,11 +331,18 @@
   (:map dired-mode-map
 	("C-c C-r" . dired-rsync)))
 
-;; bookmark is for quickly jumping to a file/location
-(use-package bookmark
-  :defer t
-  :straight (:type built-in)
-  :config
-  (bookmark-bmenu-list))
+(use-package ferret
+  :straight nil
+  :load-path (lambda () (expand-file-name "lisp/ferret.el" user-emacs-directory))
+  ;; extension: jnl
+  :mode ("\\.jnl\\'" . ferret-mode))
+
+(use-package conf-mode
+  :straight nil
+  ;; .dat/.config
+  :mode
+  ("\\.dat\\'" . conf-mode)
+  ("\\.config\\'" . conf-mode))
+
 
 (provide 'editor)

@@ -56,6 +56,7 @@
 (require 'theme)
 (require 'programming)
 
+
 (when (display-graphic-p)
   (require 'markup))
 
