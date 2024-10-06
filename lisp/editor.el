@@ -22,21 +22,21 @@
   ("C-=" . expreg-expand)
   ("C--" . expreg-contract))
 
-(use-package indent-bars
-  :if window-system
-  :straight (indent-bars :type git :host github :repo "jdtsmith/indent-bars")
-  :custom
-  (indent-bars-treesit-support nil)
-  (indent-bars-no-descend-string t)
-  (indent-bars-treesit-ignore-blank-lines-types '("module"))
-  :hook ((prog-mode) . indent-bars-mode)
-  :config
-  (setq
-   indent-bars-color '(highlight :face-bg t :blend 0.3)
-   indent-bars-pattern " . . . . ." ; play with the number of dots for your usual font size
-   indent-bars-width-frac 0.25
-   indent-bars-pad-frac 0.1)
-  )
+;; (use-package indent-bars
+;;   :if window-system
+;;   :straight (indent-bars :type git :host github :repo "jdtsmith/indent-bars")
+;;   :custom
+;;   (indent-bars-treesit-support nil)
+;;   (indent-bars-no-descend-string t)
+;;   (indent-bars-treesit-ignore-blank-lines-types '("module"))
+;;   :hook ((prog-mode) . indent-bars-mode)
+;;   :config
+;;   (setq
+;;    indent-bars-color '(highlight :face-bg t :blend 0.3)
+;;    indent-bars-pattern " . . . . ." ; play with the number of dots for your usual font size
+;;    indent-bars-width-frac 0.25
+;;    indent-bars-pad-frac 0.1)
+;;   )
 
 ;; ensure pasted (yanked) text has the correct indentation level.
 (use-package yank-indent

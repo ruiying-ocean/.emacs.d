@@ -1,4 +1,35 @@
 ;;; IDE FEATURES
+(use-package tramp
+  :straight nil
+  :config
+  ;; Use SSH controlmaster for connection sharing
+  (setq tramp-use-ssh-controlmaster-options t)
+  
+  ;; Use more efficient default method
+  (setq tramp-default-method "ssh")
+  
+  ;; Disable version control completely
+  (setq vc-ignore-dir-regexp
+        (format "%s\\|%s"
+                vc-ignore-dir-regexp
+                tramp-file-name-regexp))
+  (setq tramp-use-version-control nil)
+
+  ;; Aggressive performance settings
+  (setq tramp-chunksize 500)         ; Larger chunk size for copying
+  (setq remote-file-name-inhibit-cache nil)
+  (setq tramp-completion-reread-directory-timeout nil)
+  
+  ;; Disable slow operations
+  (setq tramp-auto-save-directory temporary-file-directory)
+  (setq tramp-verbose 1)             ; Minimize verbosity
+  (setq tramp-default-proxies-alist nil)
+  
+  ;; Keep connections alive
+  (setq tramp-ssh-controlmaster-options
+        "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=yes")
+  )
+
 
 ;;Git + Emacs = boom!
 (use-package magit
