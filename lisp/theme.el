@@ -3,13 +3,9 @@
 ;; lazy-load default theme
 (setq custom-safe-themes t)
 
-(use-package leuven-theme
+(use-package color-theme-sanityinc-tomorrow
   :config
-  (load-theme 'leuven t)
-  :custom
-  (leuven-scale-outline-headlines nil)
-  (leuven-scale-outline-headlines nil)
-  (leuven-scale-org-document-title nil))
+  (load-theme 'sanityinc-tomorrow-day t))
 
 ;; mode line
 (use-package mood-line

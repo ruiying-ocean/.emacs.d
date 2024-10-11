@@ -14,3 +14,4 @@ viper
 flycheck_init.el
 var/
 undo/
+.aider*
