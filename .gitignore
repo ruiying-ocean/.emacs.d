@@ -15,3 +15,7 @@ flycheck_init.el
 var/
 undo/
 .aider*
+.env
+tree-sitter/
+history
+packages/
