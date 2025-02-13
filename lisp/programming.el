@@ -27,8 +27,7 @@
   
   ;; Keep connections alive
   (setq tramp-ssh-controlmaster-options
-        "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=yes")
-  )
+        "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=yes"))
 
 
 ;;Git + Emacs = boom!
@@ -61,7 +60,10 @@
   (setq magit-show-long-lines-warning nil)
   :custom
   ;; this improve the performance of magit in MacOS
-  (magit-git-executable "/usr/bin/git"))
+  (magit-git-executable "/usr/bin/git")
+
+  ;; remote git
+  (magit-remote-git-executable "~/miniforge3/bin/git"))
 
 ;;a prefix help page
 (use-package transient)
