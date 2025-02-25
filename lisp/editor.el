@@ -16,6 +16,12 @@
   :hook
   (prog-mode . breadcrumb-mode))
 
+;; kill current buffer to C-x k
+(use-package kill-buffer
+  :straight (:type built-in)
+  :bind
+  ("C-x k" . kill-current-buffer))
+
 ;; quick selection of the region
 (use-package expreg
   :bind
@@ -242,7 +248,6 @@
 
 ;; use posframe (in the centre of buffer) for vertico
 (use-package vertico-posframe
-  :if window-system
   :hook
   (vertico-mode . vertico-posframe-mode))
 
@@ -343,6 +348,5 @@
   :mode
   ("\\.dat\\'" . conf-mode)
   ("\\.config\\'" . conf-mode))
-
 
 (provide 'editor)

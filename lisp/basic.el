@@ -63,7 +63,6 @@
 (if (eq system-type 'darwin)
     (setq mac-command-modifier 'meta))
 
-(global-set-key (kbd "C-x k") 'kill-this-buffer)
 (global-set-key (kbd "C-M-;") 'comment-box)
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 (global-set-key (kbd "C-x ,") 'beginning-of-buffer)
