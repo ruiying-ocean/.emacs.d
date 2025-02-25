@@ -86,6 +86,15 @@
   :hook
   (after-init . corfu-mode))
 
+(use-package completion-preview
+  :ensure nil
+  :hook (prog-mode . completion-preview-mode)
+  :bind
+  ( :map completion-preview-active-mode-map
+    ("M-n" . completion-preview-next-candidate)
+    ("M-p" . completion-preview-prev-candidate)))
+
+
 ;; completion-at-point extensions for corfu
 (use-package cape
   ;; Bind dedicated completion commands
