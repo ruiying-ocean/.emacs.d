@@ -598,19 +598,6 @@
   (setq easy-hugo-org-header nil)
   )
 
-;; (use-package compile-angel
-;;   :straight (:host github :repo "jamescherti/compile-angel.el" :files ("compile-angel.el"))
-;;   :config
-;;   ;; Set `compile-angel-verbose' to nil to disable compile-angel messages.
-;;   ;; (When set to nil, the minibuffer won't show which file is being compiled.)
-;;   (setq compile-angel-verbose t)
-
-;;   ;; Uncomment the line below to compile automatically when an Elisp file is saved
-;;   ;; (add-hook 'emacs-lisp-mode-hook #'compile-angel-on-save-local-mode)
-
-;;   ;; Compiles .el files before they are loaded.
-;;   (compile-angel-on-load-mode))
-
 (provide 'programming)
 
 
