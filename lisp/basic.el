@@ -147,11 +147,6 @@
 
 (setq frame-inhibit-implied-resize nil)
 
-;; provide a command to ensure the third-party packages are installed
-(use-package use-package-ensure-system-package
-  :after exec-path-from-shell) ;;extend use-package, put after exec-path-from-shell
-
-
 ;; Use emacs daemon, put following lines to shell config file
 ;; alias emacs=/path_to_miniconda3/bin/emacs
 ;; alias emacsclient=/path_to_miniconda/bin/emacsclient
