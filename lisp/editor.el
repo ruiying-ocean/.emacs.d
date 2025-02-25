@@ -80,9 +80,9 @@
 ;; this can improve performance when dealing with large text file
 (setq-default bidi-display-reordering nil)
 (setq bidi-inhibit-bpa t
-      long-line-threshold 1000
-      large-hscroll-threshold 1000
-      syntax-wholeline-max 1000)
+      long-line-threshold 500
+      large-hscroll-threshold 500
+      syntax-wholeline-max 500)
 
 ;; minimal columns for Emacs to split window horizontally
 (setq split-width-threshold 130)
