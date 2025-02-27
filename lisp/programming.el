@@ -510,27 +510,6 @@
   (lsp-bridge-python-lsp-server "pyright")
   (lsp-bridge-tex-lsp-server "texlab"))
 
-;; AI assisted completion
-(use-package copilot
-  :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
-  :hook
-  (prog-mode . copilot-mode)
-  :config
-  (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
-  (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
-
-;; another AI assistance
-(use-package aider
-  :straight (:host github :repo "tninja/aider.el" :files ("aider.el"))
-  :config
-  (setq aider-args '("--model" "claude-3-5-sonnet-20240620"))  
-  (setenv "ANTHROPIC_API_KEY" 
-          (with-temp-buffer
-            (insert-file-contents "~/.anthropic-api-key")
-            (string-trim (buffer-string))))
-  :bind
-  ("C-c a" . aider-transient-menu))
-
 ;; Install treesit C-library first: `brew install tree-sitter'
 ;; Automatically install and use tree-sitter major modes in Emacs 29+
 (use-package treesit-auto
