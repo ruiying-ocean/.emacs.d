@@ -173,8 +173,10 @@
   (prog-mode . projectile-mode)
   :config
   ;; to avoid slowness over tramp
-  (defadvice projectile-project-root (around ignore-remote first activate)
-    (unless (file-remote-p default-directory) ad-do-it))
+  (define-advice projectile-project-root (:around (orig-fun &rest args) ignore-remote)
+    (unless (file-remote-p default-directory)
+      (apply orig-fun args)))
+
   (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map))
 
 ;; robust find file (at point) in project
