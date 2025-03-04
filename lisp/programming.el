@@ -493,7 +493,7 @@
   :straight (lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge"
 			:files ("*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources"))
   :hook
-  (prog-mode . lsp-bridge-mode)
+  (python-mode . lsp-bridge-mode)
   (latex-mode . lsp-bridge-mode)
   (LaTeX-mode . lsp-bridge-mode)
   :config
