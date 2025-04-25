@@ -86,15 +86,6 @@
   :hook
   (after-init . corfu-mode))
 
-(use-package completion-preview
-  :ensure nil
-  :hook (prog-mode . completion-preview-mode)
-  :bind
-  ( :map completion-preview-active-mode-map
-    ("M-n" . completion-preview-next-candidate)
-    ("M-p" . completion-preview-prev-candidate)))
-
-
 ;; completion-at-point extensions for corfu
 (use-package cape
   ;; Bind dedicated completion commands
@@ -486,42 +477,29 @@
 (use-package yasnippet
   :after elpy)
 
-;; Language Server Protocol Implementation
-;; require `epc` python libary
-(use-package lsp-bridge
-  :if (window-system)
-  :straight (lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge"
-			:files ("*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources"))
-  :hook
-  (python-mode . lsp-bridge-mode)
-  (latex-mode . lsp-bridge-mode)
-  (LaTeX-mode . lsp-bridge-mode)
+;; ;; Language Server Protocol Implementation
+(use-package eglot
+  :ensure nil
+  :hook ((prog-mode . eglot-ensure))
   :config
-  (setq lsp-bridge-python-command python-shell-interpreter)
-  (setq lsp-bridge-user-langserver-dir (expand-file-name "langserver" user-emacs-directory))
-  :bind
-  (:map lsp-bridge-mode-map
-	("C-c r" . lsp-bridge-rename)
-	("M-." . lsp-bridge-find-def)
-	("<return>" . acm-complete))
-  :custom
-  (acm-enable-yas nil)
-  (acm-enable-tabnine nil)
-  (acm-enable-copilot nil)
-  (lsp-bridge-c-lsp-server "clangd")
-  (lsp-bridge-python-lsp-server "pyright")
-  (lsp-bridge-tex-lsp-server "texlab"))
+  ;; Set M-. to jump to definition
+  (define-key eglot-mode-map (kbd "M-.") #'xref-find-definitions)
+  
+  (setq eglot-autoshutdown t)
 
-;; Install treesit C-library first: `brew install tree-sitter'
-;; Automatically install and use tree-sitter major modes in Emacs 29+
-(use-package treesit-auto
-  :straight (:type git :host github :repo "renzmann/treesit-auto")
-  :if (display-graphic-p)
-  :ensure-system-package tree-sitter
-  :config
-  (global-treesit-auto-mode)
-  (setq treesit-auto-install 'prompt)
-  (setq treesit-font-lock-level 4))
+  ;; don't use flymake
+  (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
+  )
+
+(use-package copilot
+  ;; use tab to accept suggestion  
+  :bind
+  (:map copilot-completion-map
+	("<tab>" . copilot-accept-completion))
+  :hook
+  (prog-mode . copilot-mode))
+
+
 
 (use-package shell
   :straight (:type built-in)
