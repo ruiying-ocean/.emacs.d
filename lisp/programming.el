@@ -562,9 +562,8 @@
   (setq easy-hugo-postdir "content/posts")
   (setq easy-hugo-basedir "~/blog/")
   :config
-  (setq easy-hugo-default-ext ".org")
-  (setq easy-hugo-org-header nil)
-  )
+  (setq easy-hugo-default-ext ".md")
+  (setq easy-hugo-org-header nil))
 
 (provide 'programming)
 
