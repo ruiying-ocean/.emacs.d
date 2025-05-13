@@ -497,7 +497,10 @@
   (:map copilot-completion-map
 	("<tab>" . copilot-accept-completion))
   :hook
-  (prog-mode . copilot-mode))
+  (prog-mode . copilot-mode)
+  :config
+  (setq copilot-max-char-warning-disabled t)
+  )
 
 
 
@@ -563,7 +566,10 @@
   (setq easy-hugo-basedir "~/blog/")
   :config
   (setq easy-hugo-default-ext ".md")
-  (setq easy-hugo-org-header nil))
+  (setq easy-hugo-org-header nil)
+  :bind
+  (:map easy-hugo-mode-map
+	("r" . easy-hugo-rg)))
 
 (provide 'programming)
 
