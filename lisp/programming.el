@@ -496,10 +496,11 @@
   :bind
   (:map copilot-completion-map
 	("<tab>" . copilot-accept-completion))
-  :hook
-  (prog-mode . copilot-mode)
+
   :config
-  (setq copilot-max-char-warning-disabled t)
+  (setq copilot-max-char-warning-disable t)
+  :hook
+  (prog-mode . copilot-mode)  
   )
 
 
@@ -570,6 +571,11 @@
   :bind
   (:map easy-hugo-mode-map
 	("r" . easy-hugo-rg)))
+
+(use-package reader
+  :straight '(reader :type git :host codeberg :repo "divyaranjan/emacs-reader"
+  		     :files ("*.el" "render-core.so")
+  		     :pre-build ("make" "all")))
 
 (provide 'programming)
 
