@@ -2,33 +2,45 @@
 (use-package tramp
   :straight nil
   :config
-  ;; Use SSH controlmaster for connection sharing
-  (setq tramp-use-ssh-controlmaster-options t)
-  
-  ;; Use more efficient default method
-  (setq tramp-default-method "ssh")
-  
-  ;; Disable version control completely
+  ;; Use SSH ControlMaster for connection sharing
+  (setq tramp-use-ssh-controlmaster-options t
+        tramp-ssh-controlmaster-options
+        "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=yes")
+
+  ;; Prefer 'ssh' method and avoid proxying
+  (setq tramp-default-method "ssh"
+        tramp-default-proxies-alist nil)
+
+  ;; Disable version control on remote files
   (setq vc-ignore-dir-regexp
-        (format "%s\\|%s"
-                vc-ignore-dir-regexp
-                tramp-file-name-regexp))
-  (setq tramp-use-version-control nil)
+        (format "%s\\|%s" vc-ignore-dir-regexp tramp-file-name-regexp)
+        tramp-use-version-control nil)
 
-  ;; Aggressive performance settings
-  (setq tramp-chunksize 500)         ; Larger chunk size for copying
-  (setq remote-file-name-inhibit-cache nil)
-  (setq tramp-completion-reread-directory-timeout nil)
-  
-  ;; Disable slow operations
-  (setq tramp-auto-save-directory temporary-file-directory)
-  (setq tramp-verbose 1)             ; Minimize verbosity
-  (setq tramp-default-proxies-alist nil)
-  
-  ;; Keep connections alive
-  (setq tramp-ssh-controlmaster-options
-        "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=yes"))
+  ;; Performance improvements
+  (setq tramp-chunksize 1000                          ; Larger chunk size for copying
+        tramp-copy-size-limit (* 1024 1024)           ; 1MB inline copy limit
+        tramp-inline-compress-start-size (* 1024 1024) ; Avoid compressing small files
+        remote-file-name-inhibit-cache nil
+        tramp-completion-reread-directory-timeout nil
+        tramp-verbose 1                               ; Reduce log spam
+        tramp-auto-save-directory temporary-file-directory
+        tramp-use-scp-direct-remote-copying t         ; Prefer direct SCP
+        remote-file-name-inhibit-locks t              ; No lock files remotely
+        remote-file-name-inhibit-auto-save-visited t) ; Disable auto-save
 
+  ;; Enable async processes using single SSH channel (TRAMP 2.7+)
+  (when (fboundp 'connection-local-set-profile-variables)
+    (connection-local-set-profile-variables
+     'remote-direct-async-process
+     '((tramp-direct-async-process . t)))
+    (connection-local-set-profiles
+     '(:application tramp)
+     'remote-direct-async-process))
+
+  ;; Prevent TRAMP from breaking SSH sharing during compile
+  (with-eval-after-load 'compile
+    (remove-hook 'compilation-mode-hook
+                 #'tramp-compile-disable-ssh-controlmaster-options)))
 
 ;;Git + Emacs = boom!
 (use-package magit
