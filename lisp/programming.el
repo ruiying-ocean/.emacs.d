@@ -510,6 +510,11 @@
 
   :config
   (setq copilot-max-char-warning-disable t)
+  (setq copilot-indent-offset-alist
+        '((python-mode . 4)
+          (js-mode . 2)
+          (typescript-mode . 2)
+          ))  
   :hook
   (prog-mode . copilot-mode)  
   )
