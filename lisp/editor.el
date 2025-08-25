@@ -99,15 +99,6 @@
   ;; wrap long line
   (visual-fill-column-width 140))
 
-;;; Auto-save buffer
-(use-package real-auto-save
-  :hook
-  (prog-mode . real-auto-save-mode)
-  (text-mode . real-auto-save-mode)
-  :custom
-  ;; configure time gap (in sec)
-  (real-auto-save-interval 1))
-
 ;; Automatically add spacing around operators
 ;; use C-v to next page
 (use-package electric-operator
