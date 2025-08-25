@@ -489,19 +489,18 @@
 (use-package yasnippet
   :after elpy)
 
-;; ;; Language Server Protocol Implementation
 (use-package eglot
   :ensure nil
   :hook ((prog-mode . eglot-ensure))
   :config
-  ;; Set M-. to jump to definition
-  (define-key eglot-mode-map (kbd "M-.") #'xref-find-definitions)
-  
   (setq eglot-autoshutdown t)
-
-  ;; don't use flymake
+  
+  ;; Disable flymake if you prefer other error checking
   (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
-  )
+  
+  ;; Configure pyright for Python
+  (add-to-list 'eglot-server-programs
+               '((python-mode python-ts-mode) . ("pyright-langserver" "--stdio"))))
 
 (use-package copilot
   ;; use tab to accept suggestion  
