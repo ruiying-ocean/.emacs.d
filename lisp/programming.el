@@ -80,10 +80,6 @@
 ;;a prefix help page
 (use-package transient)
 
-;; git-forge support: fetches issues, pull-requests etc.
-(use-package forge
-  :after magit)
-
 (use-package emojify
   :config
   (when (member "Segoe UI Emoji" (font-family-list))
@@ -178,12 +174,7 @@
   ;; to avoid slowness over tramp
   (define-advice projectile-project-root (:around (orig-fun &rest args) ignore-remote)
     (unless (file-remote-p default-directory)
-      (apply orig-fun args)))
-
-    (setq projectile-git-command "git ls-files -zco --exclude-standard")
-    (setq projectile-indexing-method 'alien)
-    (setq projectile-enable-caching t)
-    )
+      (apply orig-fun args))))
 
   (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map))
 
@@ -505,7 +496,11 @@
   
   ;; Configure pyright for Python
   (add-to-list 'eglot-server-programs
-               '((python-mode python-ts-mode) . ("pyright-langserver" "--stdio"))))
+               '((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))
+  
+  ;; Configure matlab-language-server for MATLAB
+  (add-to-list 'eglot-server-programs
+	       '(matlab-mode . ("matlab-ls"))))
 
 (use-package copilot
   ;; use tab to accept suggestion  
@@ -593,10 +588,9 @@
   (:map easy-hugo-mode-map
 	("r" . easy-hugo-rg)))
 
-(use-package reader
-  :straight '(reader :type git :host codeberg :repo "divyaranjan/emacs-reader"
-  		     :files ("*.el" "render-core.so")
-  		     :pre-build ("make" "all")))
+;; Make sure octave-mode is available (it’s built into Emacs)
+(use-package octave
+  :mode ("\\.m\\'" . octave-mode))
 
 (provide 'programming)
 
