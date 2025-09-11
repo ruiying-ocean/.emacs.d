@@ -280,15 +280,8 @@
 (use-package cdlatex
   :hook (LaTeX-mode . cdlatex-mode))
 
-(use-package citar
-  :custom
-  (citar-bibliography '("/Users/yingrui/Library/ZoteroLibrary/library.bib"))
-  :hook
-  (LaTeX-mode . citar-capf-setup)
-  (org-mode . citar-capf-setup))
-
 (use-package auctex-latexmk
-  :after tex
+  ;; :after tex
   :custom
   (auctex-latexmk-inherit-TeX-PDF-mode t)
   :config
