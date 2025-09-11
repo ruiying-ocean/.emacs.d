@@ -180,6 +180,11 @@
     (unless (file-remote-p default-directory)
       (apply orig-fun args)))
 
+    (setq projectile-git-command "git ls-files -zco --exclude-standard")
+    (setq projectile-indexing-method 'alien)
+    (setq projectile-enable-caching t)
+    )
+
   (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map))
 
 ;; robust find file (at point) in project
