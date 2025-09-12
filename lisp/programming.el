@@ -51,7 +51,6 @@
   :config
   (setq magit-refresh-verbose t)
   (setq magit-refresh-status-buffer nil)
-  (setq projectile-git-submodule-command nil)
   (setq inhibit-compacting-font-cache t)
 
   ;; remove hooks to speed up magit
@@ -174,9 +173,19 @@
   ;; to avoid slowness over tramp
   (define-advice projectile-project-root (:around (orig-fun &rest args) ignore-remote)
     (unless (file-remote-p default-directory)
-      (apply orig-fun args))))
+      (apply orig-fun args)))
+  (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
 
-  (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map))
+  (setq projectile-git-submodule-command nil)
+  (setq projectile-generic-command "fd . -0 --type f --color=never")  
+  )
+
+(use-package treesit-auto
+  :config
+  (setq treesit-auto-install 'prompt)
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode))
+
 
 ;; robust find file (at point) in project
 (use-package find-file-in-project
@@ -485,22 +494,13 @@
 (use-package yasnippet
   :after elpy)
 
-(use-package eglot
-  :ensure nil
-  :hook ((prog-mode . eglot-ensure))
-  :config
-  (setq eglot-autoshutdown t)
-  
-  ;; Disable flymake if you prefer other error checking
-  (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
-  
-  ;; Configure pyright for Python
-  (add-to-list 'eglot-server-programs
-               '((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))
-  
-  ;; Configure matlab-language-server for MATLAB
-  (add-to-list 'eglot-server-programs
-	       '(matlab-mode . ("matlab-ls"))))
+;; lsp-bridge for enhanced LSP performance
+(add-to-list 'load-path "~/.emacs.d/lsp-bridge")
+
+(require 'lsp-bridge)
+(setq lsp-bridge-python-lsp-server "pyright")
+(setq lsp-bridge-python-multi-lsp-server "pyright_ruff")
+(global-lsp-bridge-mode)
 
 (use-package copilot
   ;; use tab to accept suggestion  
@@ -519,7 +519,18 @@
   (prog-mode . copilot-mode)  
   )
 
-
+(use-package reader
+  :straight (:host github :repo "divyaranjan1905/emacs-reader"
+                   :files (:defaults "*.el" "*.so" "*.dylib" "render-core")
+                   :pre-build (("make" "all") ("ln" "-sf" "render-core.dylib" "render-core")))
+  :hook ((pdf-view-mode . reader-mode)
+         (doc-view-mode . reader-mode))
+  :config
+  (global-set-key (kbd "C-c r") 'reader-mode)
+  ;; Auto-open supported formats with reader-mode
+  (add-to-list 'auto-mode-alist '("\\.pdf\\'" . reader-mode))
+  (add-to-list 'auto-mode-alist '("\\.epub\\'" . reader-mode))
+  (add-to-list 'auto-mode-alist '("\\.djvu\\'" . reader-mode)))
 
 (use-package shell
   :straight (:type built-in)

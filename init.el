@@ -54,10 +54,8 @@
 (require 'basic)
 (require 'editor)
 (require 'theme)
+(require 'markup)
 (require 'programming)
-
-(when (display-graphic-p)
-  (require 'markup))
 
 (defun my-cleanup-gc ()
   "Clean up gc."
