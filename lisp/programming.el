@@ -495,12 +495,13 @@
   :after elpy)
 
 ;; lsp-bridge for enhanced LSP performance
-(add-to-list 'load-path "~/.emacs.d/lsp-bridge")
-
-(require 'lsp-bridge)
-(setq lsp-bridge-python-lsp-server "pyright")
-(setq lsp-bridge-python-multi-lsp-server "pyright_ruff")
-(global-lsp-bridge-mode)
+(use-package lsp-bridge
+  :straight nil
+  :load-path "lsp-bridge"
+  :hook (prog-mode . lsp-bridge-mode)
+  :config
+  (setq lsp-bridge-python-lsp-server "pyright")
+  (setq lsp-bridge-python-multi-lsp-server "pyright_ruff"))
 
 (use-package copilot
   ;; use tab to accept suggestion  
