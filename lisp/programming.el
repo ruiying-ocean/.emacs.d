@@ -501,7 +501,15 @@
   :hook (prog-mode . lsp-bridge-mode)
   :config
   (setq lsp-bridge-python-lsp-server "pyright")
-  (setq lsp-bridge-python-multi-lsp-server "pyright_ruff"))
+  (setq lsp-bridge-python-multi-lsp-server "pyright_ruff")
+  :bind
+  (:map lsp-bridge-mode-map
+	("M-." . lsp-bridge-find-def)
+	("M-," . lsp-bridge-jump-back)
+	("C-c l" . lsp-bridge-diagnostic-list))
+  :custom
+  (lsp-bridge-enable-with-tramp nil)
+  )
 
 (use-package copilot
   ;; use tab to accept suggestion  
@@ -512,10 +520,10 @@
   :config
   (setq copilot-max-char-warning-disable t)
   (setq copilot-indent-offset-alist
-        '((python-mode . 4)
+	'((python-mode . 4)
           (js-mode . 2)
           (typescript-mode . 2)
-          ))  
+          (prog-mode . 4))) ;; default for everything else
   :hook
   (prog-mode . copilot-mode)  
   )
