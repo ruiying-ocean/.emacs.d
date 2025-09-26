@@ -180,13 +180,6 @@
   (setq projectile-generic-command "fd . -0 --type f --color=never")  
   )
 
-(use-package treesit-auto
-  :config
-  (setq treesit-auto-install 'prompt)
-  (treesit-auto-add-to-auto-mode-alist 'all)
-  (global-treesit-auto-mode))
-
-
 ;; robust find file (at point) in project
 (use-package find-file-in-project
   :bind
