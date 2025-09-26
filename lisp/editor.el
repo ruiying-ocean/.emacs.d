@@ -340,4 +340,12 @@
   ("\\.dat\\'" . conf-mode)
   ("\\.config\\'" . conf-mode))
 
+(defun unfill-paragraph ()
+  "Turn a filled paragraph into a single line."
+  (interactive)
+  (let ((fill-column (point-max)))
+    (fill-paragraph nil)))
+(global-set-key (kbd "M-Q") 'unfill-paragraph)
+
+
 (provide 'editor)
