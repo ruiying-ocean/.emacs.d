@@ -495,14 +495,13 @@
   :config
   (setq lsp-bridge-python-lsp-server "pyright")
   (setq lsp-bridge-python-multi-lsp-server "pyright_ruff")
+  (setq lsp-bridge-fortrann-lsp-server "fortls")
   (setq lsp-bridge-enable-with-tramp nil)  
   :bind
   (:map lsp-bridge-mode-map
 	("M-." . lsp-bridge-find-def)
 	("M-," . lsp-bridge-jump-back)
 	("C-c l" . lsp-bridge-diagnostic-list))
-
-
   )
 
 (use-package copilot

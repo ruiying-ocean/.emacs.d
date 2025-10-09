@@ -71,6 +71,34 @@ install-lsp:
 	fi
 	@echo "Note: Language servers are installed automatically by lsp-bridge"
 
+# install forlts for Fortran support using pip or uv tool
+	@echo "Installing fortran language servers..."
+	@if command -v uv >/dev/null 2>&1; then \
+		uv tool install forlts; \
+	elif command -v python3 >/dev/null 2>&1; then \
+		python3 -m pip install forlts; \
+	else \
+		echo "Neither uv nor python3 found. Please install one of them first"; \
+		exit 1; \
+	fi
+
+
+## install yaml language server
+	@if command -v npm >/dev/null 2>&1; then \
+		npm install -g yaml-language-server; \
+	else \
+		echo "npm not found. Please install Node.js first"; \
+		exit 1; \
+	fi
+
+# install prettier for formatting
+	@if command -v npm >/dev/null 2>&1; then \
+		npm install -g prettier; \
+	else \
+		echo "npm not found. Please install Node.js first"; \
+		exit 1; \
+	fi
+
 # Initialize and update git submodules
 install-submodules:
 	@echo "Initializing and updating git submodules..."
