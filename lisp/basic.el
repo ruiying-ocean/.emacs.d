@@ -12,7 +12,7 @@
 (let ((file-name-handler-alist nil)) "~/.emacs.d/init.el")
 
 ;; Custom file
-(setq-default custom-file (concat user-emacs-directory "extra-lisp/custom.el"))
+(setq-default custom-file (concat user-emacs-directory "lisp/custom.el"))
 (load custom-file :noerror)
 
 ;;Coding system

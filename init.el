@@ -57,6 +57,12 @@
 (require 'markup)
 (require 'programming)
 
+;; Restore GC threshold immediately after init
+(add-hook 'after-init-hook
+          (lambda ()
+            (setq gc-cons-threshold 67108864))) ; 64MB
+
+;; Additional GC cleanup on idle
 (defun my-cleanup-gc ()
   "Clean up gc."
   (setq gc-cons-threshold  67108864)
