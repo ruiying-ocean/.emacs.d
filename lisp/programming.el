@@ -597,9 +597,17 @@
   :config
   (setq easy-hugo-default-ext ".md")
   (setq easy-hugo-org-header nil)
+  ;; Custom function to create posts as page bundles (directory/index.md)
+  (defun my/easy-hugo-newpost-bundle ()
+    "Create a new Hugo post as a page bundle with date prefix."
+    (interactive)
+    (let* ((date-prefix (format-time-string "%Y-%m-%d-"))
+           (post-name (read-string "Post name: " date-prefix)))
+      (easy-hugo-newpost (concat post-name "/index.md"))))
   :bind
   (:map easy-hugo-mode-map
-	("r" . easy-hugo-rg)))
+	("r" . easy-hugo-rg)
+	("N" . my/easy-hugo-newpost-bundle)))
 
 ;; Make sure octave-mode is available (it’s built into Emacs)
 (use-package octave
