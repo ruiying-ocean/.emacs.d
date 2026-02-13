@@ -177,7 +177,13 @@
   (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
 
   (setq projectile-git-submodule-command nil)
-  (setq projectile-generic-command "fd . -0 --type f --color=never")  
+  (setq projectile-generic-command "fd . -0 --type f --color=never")
+  (setq projectile-ignored-projects '("~/" "/tmp" "/"))
+  (setq projectile-project-root-functions
+        '(projectile-root-local
+          projectile-root-marked
+          projectile-root-top-down
+          projectile-root-bottom-up))
   )
 
 ;; robust find file (at point) in project
