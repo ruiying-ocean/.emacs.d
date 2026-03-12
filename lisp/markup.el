@@ -293,4 +293,30 @@
   ;;  :hook (visual-line-mode . poly-quarto-mode)
   )
 
+;;===========
+;; PDF/EPUB reader (emacs-reader via MuPDF)
+;;===========
+
+;; Depends on MuPDF: brew install mupdf
+;;
+;; The straight :pre-build runs `make all` which compiles render-core.so against
+;; the Homebrew MuPDF headers. The repo ships a pre-built binary but it may be
+;; compiled against a different MuPDF version than what's installed locally.
+;; MuPDF does a strict header/library version check at runtime — a mismatch
+;; causes "Loading document failed" with a (wrong-type-argument overlayp nil)
+;; error (the overlay is never created because the load fails).
+;;
+;; If that happens after a `brew upgrade mupdf`, rebuild manually:
+;;   cd ~/.emacs.d/straight/repos/emacs-reader && make clean && make all
+;;
+;; Note: the build always produces render-core.so (even on macOS), so the
+;; :files spec uses "render-core.so", not "render-core.dylib".
+(use-package reader
+  :straight '(reader :type git :host codeberg :repo "MonadicSheep/emacs-reader"
+                     :files ("*.el" "render-core.so")
+                     :pre-build ("make" "all"))
+  :mode (("\\.pdf\\'" . reader-mode)
+         ("\\.epub\\'" . reader-mode)
+         ("\\.cbz\\'" . reader-mode)))
+
 (provide 'markup)
