@@ -37,6 +37,9 @@
 ;;No more backup files~
 (setq-default make-backup-files nil)
 
+;; Only use Git for vc-mode (avoid slow SVN/Hg/etc scans on large dirs like ~/)
+(setq vc-handled-backends '(Git))
+
 ;;No more strange ring bell
 (setq ring-bell-function 'ignore)
 

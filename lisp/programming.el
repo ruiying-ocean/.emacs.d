@@ -170,20 +170,24 @@
   :hook
   (prog-mode . projectile-mode)
   :config
-  ;; to avoid slowness over tramp
-  (define-advice projectile-project-root (:around (orig-fun &rest args) ignore-remote)
-    (unless (file-remote-p default-directory)
+  ;; Prevent projectile from freezing Emacs in home dir or over tramp
+  (define-advice projectile-project-root (:around (orig-fun &rest args) ignore-problematic-dirs)
+    (unless (or (file-remote-p default-directory)
+                (string= (expand-file-name default-directory) (expand-file-name "~/"))
+                (string= default-directory "~/"))
       (apply orig-fun args)))
   (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
 
   (setq projectile-git-submodule-command nil)
   (setq projectile-generic-command "fd . -0 --type f --color=never")
-  (setq projectile-ignored-projects '("~/" "/tmp" "/"))
+  (setq projectile-indexing-method 'alien)
+  (setq projectile-project-root-files-bottom-up nil)
+  (setq projectile-ignored-projects
+        `("~/" ,(expand-file-name "~/") "/tmp" "/"))
   (setq projectile-project-root-functions
         '(projectile-root-local
           projectile-root-marked
-          projectile-root-top-down
-          projectile-root-bottom-up))
+          projectile-root-top-down))
   )
 
 ;; robust find file (at point) in project
