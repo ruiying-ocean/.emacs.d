@@ -42,6 +42,11 @@
     (remove-hook 'compilation-mode-hook
                  #'tramp-compile-disable-ssh-controlmaster-options)))
 
+;; High-performance RPC-based TRAMP backend (2-38x faster remote file ops)
+(use-package tramp-rpc
+  :straight (:host github :repo "ArthurHeymans/emacs-tramp-rpc" :files ("lisp/*.el"))
+  :after tramp)
+
 ;;Git + Emacs = boom!
 (use-package magit
   :ensure-system-package git
