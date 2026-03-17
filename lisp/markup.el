@@ -319,4 +319,11 @@
          ("\\.epub\\'" . reader-mode)
          ("\\.cbz\\'" . reader-mode)))
 
+;;===========
+;; Appine: native macOS views inside Emacs (WebKit, PDF, Word/Excel)
+;;===========
+(use-package appine
+  :straight (:host github :repo "chaoswork/appine")
+  :commands (appine-open-web-split appine-open-file-split appine-close))
+
 (provide 'markup)
