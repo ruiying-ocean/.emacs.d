@@ -232,13 +232,17 @@
   (setq TeX-save-query nil) ;; Save without asking.
   (setq TeX-master nil) ;; Query for master file.
 
+  ;; SyncTeX with Skim:
+  ;; - Forward search (Emacs -> Skim): C-c C-v
+  ;; - Reverse search (Skim -> Emacs): Shift-Cmd-click in Skim
   (setq TeX-source-correlate-method 'synctex
 	TeX-view-program-list
-	'(("Skim" "/Applications/Skim.app/Contents/SharedSupport/displayline -g -b %n %o %b"))
+	'(("Skim" "/Applications/Skim.app/Contents/SharedSupport/displayline -b %n %o %b"))
 	TeX-view-program-selection '((output-pdf "Skim")))
+  (add-hook 'LaTeX-mode-hook #'TeX-source-correlate-mode)
 
   ;; enable outline, C-c @ to toggle outline
-  (add-hook 'LaTeX-mode-hook #'outline-minor-mode)  
+  (add-hook 'LaTeX-mode-hook #'outline-minor-mode)
   )
 
 
