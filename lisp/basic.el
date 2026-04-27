@@ -98,6 +98,59 @@
     (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
     (add-to-list 'default-frame-alist '(ns-appearance . light))))
 
+(when (eq system-type 'darwin)
+  (defun self/macos-cloud-file-p (filename)
+    "Return non-nil when FILENAME looks like a macOS cloud-backed file."
+    (when (stringp filename)
+      (let ((expanded (expand-file-name filename)))
+        (or (string-prefix-p (expand-file-name "~/Library/Mobile Documents/") expanded)
+            (string-prefix-p (expand-file-name "~/Library/CloudStorage/") expanded)
+            (string-prefix-p (expand-file-name "~/Documents/") expanded)
+            (string-prefix-p (expand-file-name "~/Desktop/") expanded)
+            (string-suffix-p ".icloud" expanded)))))
+
+  (defun self/macos-icloud-original-file-name (filename)
+    "Return the real filename represented by an iCloud placeholder FILENAME."
+    (let* ((directory (file-name-directory filename))
+           (base (file-name-nondirectory filename)))
+      (if (and (string-prefix-p "." base)
+               (string-suffix-p ".icloud" base))
+          (expand-file-name (substring base 1 (- (length ".icloud"))) directory)
+        filename)))
+
+  (defun self/macos-download-cloud-file (filename)
+    "Ask macOS to download FILENAME if it is a cloud placeholder.
+The returned path is the real file path Emacs should visit."
+    (if (not (stringp filename))
+        filename
+      (let* ((expanded (expand-file-name filename))
+             (target (self/macos-icloud-original-file-name expanded))
+             (placeholder-p (not (string= target expanded))))
+        (when (and (not (file-remote-p target))
+                   (self/macos-cloud-file-p expanded))
+          (cond
+           ((and (executable-find "fileproviderctl")
+                 (file-exists-p target))
+            (unless (zerop (call-process "fileproviderctl" nil nil nil
+                                         "materialize" target))
+              (when (executable-find "brctl")
+                (call-process "brctl" nil nil nil "download" target))))
+           ((executable-find "brctl")
+            (call-process "brctl" nil nil nil "download" target)))
+          (when placeholder-p
+            (let ((deadline (+ (float-time) 30)))
+              (while (and (not (file-exists-p target))
+                          (< (float-time) deadline))
+                (accept-process-output nil 0.2)))))
+        target)))
+
+  (defun self/macos-download-cloud-file-before-visit (orig filename &rest args)
+    "Materialize macOS cloud files before `find-file-noselect' reads them."
+    (apply orig (self/macos-download-cloud-file filename) args))
+
+  (advice-add #'find-file-noselect
+              :around #'self/macos-download-cloud-file-before-visit))
+
 (defun auto-max-frame ()
   "Maxize/full screen the frame according to the OS type."
   (interactive)
