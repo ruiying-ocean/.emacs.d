@@ -92,6 +92,8 @@
   (find-file self/init-file-path))
 (global-set-key (kbd "<f2>") 'self/open-init-file)
 
+(setq dired-clean-confirm-killing-deleted-buffers nil)
+
 (when (eq system-type 'darwin)
   (progn
     (setq dired-use-ls-dired nil) ;;to avoid error "ls does not support --dired" in MacOS
