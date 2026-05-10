@@ -307,6 +307,14 @@
 	("o" . dired-display-file)
 	("<mouse-2>" . dired-mouse-find-file)))
 
+(use-package dired-x
+  :straight (:type built-in)
+  :after dired
+  :hook (dired-mode . dired-omit-mode)
+  :config
+  ;; omit lock files and .DS_Store, but keep . and .. visible
+  (setq dired-omit-files "\\`[.]?#\\|\\`\\.DS_Store\\'"))
+
 (defun hide-dired-mode-info ()
   "show less information in dired buffers"
   (dired-hide-details-mode 1))
