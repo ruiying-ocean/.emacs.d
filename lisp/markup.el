@@ -313,11 +313,11 @@
 ;; If that happens after a `brew upgrade mupdf`, rebuild manually:
 ;;   cd ~/.emacs.d/straight/repos/emacs-reader && make clean && make all
 ;;
-;; Note: the build always produces render-core.so (even on macOS), so the
-;; :files spec uses "render-core.so", not "render-core.dylib".
+;; Note: the Makefile picks the module extension per OS (render-core.so on
+;; Linux, render-core.dylib on macOS), so :files must accept both.
 (use-package reader
   :straight '(reader :type git :host codeberg :repo "MonadicSheep/emacs-reader"
-                     :files ("*.el" "render-core.so")
+                     :files ("*.el" "render-core.so" "render-core.dylib")
                      :pre-build ("make" "all"))
   :mode (("\\.pdf\\'" . reader-mode)
          ("\\.epub\\'" . reader-mode)
