@@ -536,19 +536,6 @@
   (prog-mode . copilot-mode)  
   )
 
-(use-package reader
-  :straight (:host github :repo "divyaranjan1905/emacs-reader"
-                   :files (:defaults "*.el" "*.so" "*.dylib" "render-core")
-                   :pre-build (("make" "all") ("ln" "-sf" "render-core.dylib" "render-core")))
-  :hook ((pdf-view-mode . reader-mode)
-         (doc-view-mode . reader-mode))
-  :config
-  (global-set-key (kbd "C-c r") 'reader-mode)
-  ;; Auto-open supported formats with reader-mode
-  (add-to-list 'auto-mode-alist '("\\.pdf\\'" . reader-mode))
-  (add-to-list 'auto-mode-alist '("\\.epub\\'" . reader-mode))
-  (add-to-list 'auto-mode-alist '("\\.djvu\\'" . reader-mode)))
-
 (use-package shell
   :straight (:type built-in)
   :config
