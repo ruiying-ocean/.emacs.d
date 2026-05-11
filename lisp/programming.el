@@ -279,7 +279,7 @@
     "p i" '(consult-imenu :which-key "project imenu")
 
     ;; shell/terminal
-    "p v" '(projectile-run-vterm :which-key "project vterm")
+    "p v" '(ghostel-project :which-key "project terminal")
     "p x" '(projectile-run-shell :which-key "project shell")
     "p e" '(projectile-run-eshell :which-key "project eshell")
     "p c" '(projectile-compile-project :which-key "project compile")
@@ -303,7 +303,7 @@
     "1" 'beginning-of-buffer
     "2" 'end-of-buffer
 
-    "v" 'vterm
+    "v" 'ghostel
     "s" 'shell
     "g" '(magit-status :which-key "git")
     "f" 'find-file
@@ -315,7 +315,7 @@
   (my/leader-def prog-mode-map
     "i" 'consult-imenu
     "s" 'shell
-    "v" 'vterm
+    "v" 'ghostel
     "c" 'lsp-bridge-diagnostic-list
     "%" 'query-replace)
 
@@ -590,19 +590,19 @@
   ;; Enable in all Eshell buffers.
   (eshell-mode . eshell-syntax-highlighting-mode))
 
-(use-package vterm
+(use-package ghostel
+  :straight (:host github :repo "dakra/ghostel"
+             :files ("lisp/*.el" ("etc" "etc/*")))
   :bind
-  ("C-x t" . vterm)
-  ("C-x s" . vterm-shell)
-  (:map vterm-mode-map
-	("C-c C-t" . vterm-copy-mode)
-	("C-y" . vterm-yank))
+  ("C-x t" . ghostel)
+  ("C-x s" . ghostel-other)
+  (:map ghostel-mode-map
+	("C-c C-t" . ghostel-copy-mode)
+	("C-y" . ghostel-paste))
   :custom
-  (vterm-kill-buffer-on-exit t)
-  (vterm-always-compile-module t)
-  (vterm-max-scrollback 100000)
-  :config
-  (setq vterm-shell "zsh"))
+  (ghostel-kill-buffer-on-exit t)
+  (ghostel-max-scrollback (* 100000 1024))
+  (ghostel-shell "zsh"))
 
 
 (use-package easy-hugo
