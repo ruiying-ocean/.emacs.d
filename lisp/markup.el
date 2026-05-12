@@ -169,7 +169,8 @@
   :hook
   (org-mode . org-mac-image-paste-mode))
 
-(use-package org-download)
+(use-package org-download
+  :after org)
 
 ;; Beautify org-mode
 (use-package org-superstar
@@ -222,9 +223,11 @@
 ;; 	("M-<mouse-1>" . TeX-view)))
 
 (use-package tex
-  :straight nil 
+  :straight nil
   ;; :load-path ("~/.emacs.d/lisp/auctex")
   :ensure auctex
+  :defer t
+  :mode ("\\.tex\\'" . LaTeX-mode)
   :config
   (setq TeX-auto-save t)
   (setq TeX-parse-self t)
@@ -285,7 +288,7 @@
   :hook (LaTeX-mode . cdlatex-mode))
 
 (use-package auctex-latexmk
-  ;; :after tex
+  :after tex
   :custom
   (auctex-latexmk-inherit-TeX-PDF-mode t)
   :config

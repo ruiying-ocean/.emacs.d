@@ -1,6 +1,7 @@
 ;;; IDE FEATURES
 (use-package tramp
   :straight nil
+  :defer t
   :config
   ;; Use SSH ControlMaster for connection sharing
   (setq tramp-use-ssh-controlmaster-options t
@@ -201,8 +202,12 @@
   ("C-x f" . find-file-in-project-at-point))
 
 (use-package recentf
-  :hook
-  (after-init . recentf-mode))
+  :hook (after-init . recentf-mode)
+  :custom
+  (recentf-auto-cleanup 'never)
+  (recentf-max-saved-items 100)
+  :config
+  (add-to-list 'recentf-exclude "^/[^/]+:"))
 
 ;;Faster cursor movement - go to anywhere
 (use-package avy
@@ -459,8 +464,8 @@
   )
 
 (use-package julia-snail
-  :hook
-  (julia-mode . julia-snail-mode))
+  :commands julia-snail-mode
+  :hook (julia-mode . julia-snail-mode))
 
 ;;C-c C-a to turn on csv-align-fields
 (use-package csv-mode
@@ -489,7 +494,8 @@
   :mode "\\.toml\\'")
 
 ;; julia-mode
-(use-package julia-mode)
+(use-package julia-mode
+  :mode "\\.jl\\'")
 
 (use-package cmake-mode
   :mode ("\\.cmake\\'" "CMakeLists\\.txt\\'"))
