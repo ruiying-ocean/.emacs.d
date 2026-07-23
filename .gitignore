@@ -19,3 +19,6 @@ undo/
 tree-sitter/
 history
 packages/
+tramp-rpc/
+CLAUDE.md
+AGENTS.md
