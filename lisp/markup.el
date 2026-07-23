@@ -301,47 +301,12 @@
   )
 
 ;;===========
-;; EPUB/CBZ reader (emacs-reader via MuPDF)
-;;===========
-
-;; Depends on MuPDF: brew install mupdf
-;;
-;; The fork's crash-safety branch guards against incomplete PDF render state.
-;; The straight :pre-build runs `make all` to compile render-core against the
-;; installed MuPDF headers.  The repo ships a pre-built binary, but it may
-;; target a different MuPDF version.
-;; MuPDF does a strict header/library version check at runtime — a mismatch
-;; causes "Loading document failed" with a (wrong-type-argument overlayp nil)
-;; error (the overlay is never created because the load fails).
-;;
-;; If that happens after a `brew upgrade mupdf`, rebuild manually:
-;;   cd ~/.emacs.d/straight/repos/emacs-reader && make clean && make all
-;;
-;; Note: the Makefile picks the module extension per OS (render-core.so on
-;; Linux, render-core.dylib on macOS), so :files must accept both.
-(use-package reader
-  :straight '(reader :type git :host codeberg :repo "ruiying/emacs-reader"
-                     :branch "crash-safety"
-                     :files ("*.el" "render-core.so" "render-core.dylib")
-                     :pre-build ("make" "all"))
-  :mode (("\\.epub\\'" . reader-mode)
-         ("\\.cbz\\'" . reader-mode)))
-
-;;===========
 ;; Minimal native macOS PDF reader (Apple PDFKit)
 ;;===========
 (use-package pdfkit-reader
   :straight nil
   :load-path "lisp/pdfkit-reader"
-  :mode ("\\.pdf\\'" . pdfkit-reader-mode)
-  :init
-  ;; emacs-reader's generated autoloads also claim PDF.  If reader is
-  ;; loaded later for an EPUB/CBZ, keep PDFKit at the front.
-  (with-eval-after-load 'reader
-    (setq auto-mode-alist
-          (cons '("\\.pdf\\'" . pdfkit-reader-mode)
-                (delete '("\\.pdf\\'" . pdfkit-reader-mode)
-                        auto-mode-alist)))))
+  :mode ("\\.pdf\\'" . pdfkit-reader-mode))
 
 ;;===========
 ;; Appine: native macOS views inside Emacs (WebKit, PDF, Word/Excel)
