@@ -301,7 +301,7 @@
   )
 
 ;;===========
-;; PDF/EPUB reader (emacs-reader via MuPDF)
+;; EPUB/CBZ reader (emacs-reader via MuPDF)
 ;;===========
 
 ;; Depends on MuPDF: brew install mupdf
@@ -324,9 +324,24 @@
                      :branch "crash-safety"
                      :files ("*.el" "render-core.so" "render-core.dylib")
                      :pre-build ("make" "all"))
-  :mode (("\\.pdf\\'" . reader-mode)
-         ("\\.epub\\'" . reader-mode)
+  :mode (("\\.epub\\'" . reader-mode)
          ("\\.cbz\\'" . reader-mode)))
+
+;;===========
+;; Minimal native macOS PDF reader (Apple PDFKit)
+;;===========
+(use-package pdfkit-reader
+  :straight nil
+  :load-path "lisp/pdfkit-reader"
+  :mode ("\\.pdf\\'" . pdfkit-reader-mode)
+  :init
+  ;; emacs-reader's generated autoloads also claim PDF.  If reader is
+  ;; loaded later for an EPUB/CBZ, keep PDFKit at the front.
+  (with-eval-after-load 'reader
+    (setq auto-mode-alist
+          (cons '("\\.pdf\\'" . pdfkit-reader-mode)
+                (delete '("\\.pdf\\'" . pdfkit-reader-mode)
+                        auto-mode-alist)))))
 
 ;;===========
 ;; Appine: native macOS views inside Emacs (WebKit, PDF, Word/Excel)
