@@ -306,9 +306,10 @@
 
 ;; Depends on MuPDF: brew install mupdf
 ;;
-;; The straight :pre-build runs `make all` which compiles render-core.so against
-;; the Homebrew MuPDF headers. The repo ships a pre-built binary but it may be
-;; compiled against a different MuPDF version than what's installed locally.
+;; The fork's crash-safety branch guards against incomplete PDF render state.
+;; The straight :pre-build runs `make all` to compile render-core against the
+;; installed MuPDF headers.  The repo ships a pre-built binary, but it may
+;; target a different MuPDF version.
 ;; MuPDF does a strict header/library version check at runtime — a mismatch
 ;; causes "Loading document failed" with a (wrong-type-argument overlayp nil)
 ;; error (the overlay is never created because the load fails).
@@ -319,7 +320,8 @@
 ;; Note: the Makefile picks the module extension per OS (render-core.so on
 ;; Linux, render-core.dylib on macOS), so :files must accept both.
 (use-package reader
-  :straight '(reader :type git :host codeberg :repo "MonadicSheep/emacs-reader"
+  :straight '(reader :type git :host codeberg :repo "ruiying/emacs-reader"
+                     :branch "crash-safety"
                      :files ("*.el" "render-core.so" "render-core.dylib")
                      :pre-build ("make" "all"))
   :mode (("\\.pdf\\'" . reader-mode)
@@ -331,6 +333,8 @@
 ;;===========
 (use-package appine
   :straight (:host github :repo "chaoswork/appine")
-  :commands (appine-open-web-split appine-open-file-split appine-close))
+  :commands (appine appine-open-url appine-open-file appine-close appine-kill)
+  :bind (("C-x a a" . appine)
+         ("C-x a o" . appine-open-file)))
 
 (provide 'markup)
