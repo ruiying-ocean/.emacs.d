@@ -187,12 +187,13 @@
   (setq projectile-git-submodule-command nil)
   (setq projectile-generic-command "fd . -0 --type f --color=never")
   (setq projectile-indexing-method 'alien)
-  (setq projectile-project-root-files-bottom-up nil)
+  (setq projectile-project-root-files-bottom-up '(".git"))
   (setq projectile-ignored-projects
         `("~/" ,(expand-file-name "~/") "/tmp" "/"))
   (setq projectile-project-root-functions
         '(projectile-root-local
           projectile-root-marked
+          projectile-root-bottom-up
           projectile-root-top-down))
   )
 
@@ -615,12 +616,11 @@
   :bind
   (:map easy-hugo-mode-map
 	("r" . easy-hugo-rg)
-	("N" . my/easy-hugo-newpost-bundle)))
+	("n" . my/easy-hugo-newpost-bundle)
+	("N" . easy-hugo-newpost)))
 
 ;; Make sure octave-mode is available (it’s built into Emacs)
 (use-package octave
   :mode ("\\.m\\'" . octave-mode))
 
 (provide 'programming)
-
-
