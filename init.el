@@ -4,7 +4,7 @@
 ;; Email: ying.rui@outlook.com
 
 ;; Customize when to check package modification (much much faster)
-(setq-default straight-check-for-modifications '(check-on-save find-Hfwhen-checking))
+(setq-default straight-check-for-modifications '(check-on-save find-when-checking))
 
 ;; Cause straight.el to cache the autoloads of all used packages in a single
 ;; file on disk thus reduce IO operations
@@ -38,7 +38,6 @@
 	   (native-comp-available-p))
   (progn
     (setq-default native-comp-async-report-warnings-errors nil)
-    (setq-default comp-deferred-compilation t)
     (add-to-list 'native-comp-eln-load-path (expand-file-name "eln-cache/" user-emacs-directory))
     (setq package-native-compile t)))
 

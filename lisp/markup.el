@@ -1,4 +1,4 @@
-;;; Text-mode: Markdown/org-mode/TeX
+;;; markup.el --- Markdown, Org and TeX settings -*- lexical-binding: nil; -*-
 
 ;;;;;;;;;;;;;;
 ;; Markdown ;;

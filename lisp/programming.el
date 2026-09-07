@@ -1,4 +1,4 @@
-;;; IDE FEATURES
+;;; programming.el --- IDE features -*- lexical-binding: nil; -*-
 (use-package tramp
   :straight nil
   :defer t

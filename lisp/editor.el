@@ -1,3 +1,5 @@
+;;; editor.el --- Editing customisations -*- lexical-binding: nil; -*-
+
 ;;Highlight current line, based on default hl-line-mode
 (use-package lin
   :hook

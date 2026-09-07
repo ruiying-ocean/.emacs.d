@@ -1,4 +1,4 @@
-;;; ferret.el --- Ferret mode for GNU Emacs
+;;; ferret.el --- Ferret mode for GNU Emacs -*- lexical-binding: nil; -*-
 
 ;; Copyright (c) 1999 by Mark A. Verschell <verschell@neptune.gsfc.nasa.gov>
 

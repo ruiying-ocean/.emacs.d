@@ -1,3 +1,5 @@
+;;; theme.el --- User interface settings -*- lexical-binding: nil; -*-
+
 ;; necessary user interface settings
 
 ;; lazy-load default theme

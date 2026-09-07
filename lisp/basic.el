@@ -1,3 +1,5 @@
+;;; basic.el --- Fundamental customisations -*- lexical-binding: nil; -*-
+
 ;; this file includes the most fundamental customisations
 ;; e.g., coding system
 

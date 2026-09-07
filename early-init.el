@@ -1,4 +1,4 @@
-;;; early-init.el --- early bird  -*- no-byte-compile: t -*-
+;;; early-init.el --- early bird  -*- lexical-binding: nil; no-byte-compile: t; -*-
 
 (setq gc-cons-threshold most-positive-fixnum)
 
