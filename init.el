@@ -38,6 +38,13 @@
 	   (native-comp-available-p))
   (progn
     (setq-default native-comp-async-report-warnings-errors nil)
+    ;; The bundled libgccjit maps Darwin N to macOS N-9, which is wrong since
+    ;; macOS 26 and makes clang reject the link step.  Pass the real version.
+    (when (eq system-type 'darwin)
+      (setq native-comp-driver-options
+            (list (concat "-mmacosx-version-min="
+                          (string-trim
+                           (shell-command-to-string "sw_vers -productVersion"))))))
     (add-to-list 'native-comp-eln-load-path (expand-file-name "eln-cache/" user-emacs-directory))
     (setq package-native-compile t)))
 
