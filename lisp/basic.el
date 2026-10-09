@@ -153,7 +153,11 @@ The returned path is the real file path Emacs should visit."
     (apply orig (self/macos-download-cloud-file filename) args))
 
   (advice-add #'find-file-noselect
-              :around #'self/macos-download-cloud-file-before-visit))
+              :around #'self/macos-download-cloud-file-before-visit)
+
+  ;; AD-bound Mac: "~" completion offers every directory-service account and
+  ;; stats each ~user/ home; one autofs network home stalls Emacs for seconds.
+  (advice-add 'system-users :override (lambda () (list (user-login-name)))))
 
 (defun auto-max-frame ()
   "Maxize/full screen the frame according to the OS type."
