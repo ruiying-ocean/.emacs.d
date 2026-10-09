@@ -176,11 +176,9 @@
   :hook
   (prog-mode . projectile-mode)
   :config
-  ;; Prevent projectile from freezing Emacs in home dir or over tramp
-  (define-advice projectile-project-root (:around (orig-fun &rest args) ignore-problematic-dirs)
-    (unless (or (file-remote-p default-directory)
-                (string= (expand-file-name default-directory) (expand-file-name "~/"))
-                (string= default-directory "~/"))
+  ;; Skip project detection over tramp; home is handled by projectile-ignored-projects
+  (define-advice projectile-project-root (:around (orig-fun &rest args) ignore-remote)
+    (unless (file-remote-p default-directory)
       (apply orig-fun args)))
   (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
 
