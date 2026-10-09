@@ -14,6 +14,9 @@
 ;;-----------Dired setting/replacement-------------
 (require 'dired)
 (setq dired-listing-switches "-alFhv")
+;; macOS ls -F appends @ to symlink names; exclude it from the filename.
+(when (eq system-type 'darwin)
+  (setq dired-ls-F-marks-symlinks t))
 (setq dired-dwim-target t)
 (setq dired-dwim-target t)
 
