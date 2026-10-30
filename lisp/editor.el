@@ -9,6 +9,8 @@
 ;;Display line number
 (global-display-line-numbers-mode t) ;;the linum-mode has been obsolete
 (setq display-line-numbers-width 0)
+;; image-mode fits images to the full window width, so the line-number column pushes the right edge off-screen
+(add-hook 'image-mode-hook (lambda () (display-line-numbers-mode -1)))
 
 ;; show tree-like structure of current position
 (use-package breadcrumb
